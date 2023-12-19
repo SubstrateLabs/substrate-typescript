@@ -27,7 +27,7 @@ async function main() {
 
     // Create a `Mistral` node that can summarize your input text
     const mistral = new Mistral({ id: "summary" })
-        .withArgs({ input_prompts: [`Summarize the following: ${text}`] })
+        .setArgs({ input_prompts: [`Summarize the following: ${text}`] })
         .setOutput()
         .setAdapters([
             Adapter.Get.path("completions[0].text", "texts"),
