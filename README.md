@@ -1,6 +1,6 @@
-# `substrate` (working title)
+# Substrate TypeScript SDK
 
-Welcome to the **Substrate SDK for TypeScript & JavaScript**!
+Welcome to the [**Substrate SDK for TypeScript & JavaScript**]()!
 
 This library provides code to allow for simple integrations of the [Substrate API]() into your applications.
 
