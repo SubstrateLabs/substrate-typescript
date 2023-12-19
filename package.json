@@ -1,0 +1,43 @@
+{
+  "name": "substrate",
+  "version": "0.1.0",
+  "description": "The official SDK for the Substrate API",
+  "keywords": [],
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "dist/**/*",
+    "src/**/*"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc -noEmit",
+    "test": "vitest",
+    "prepare": "npm run build"
+  },
+  "author": {
+    "name": "Substrate Team",
+    "email": "support@substrate.com"
+  },
+  "license": "TBD",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "import": "./dist/index.js",
+    "require": "./dist/index.cjs",
+    "types": "./dist/index.d.ts"
+  },
+  "devDependencies": {
+    "@types/uuid": "^9.0.7",
+    "prettier": "^3.1.1",
+    "tsup": "^8.0.1",
+    "typescript": "^5.3.3",
+    "vite-tsconfig-paths": "^4.2.2",
+    "vitest": "^1.0.4"
+  },
+  "dependencies": {
+    "uuid": "^9.0.1",
+    "zod": "^3.22.4"
+  }
+}

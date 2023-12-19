@@ -1,0 +1,10 @@
+# build
+dist/
+
+# dependencies
+node_modules/
+
+# logs, dev environment
+npm-debug.log
+.DS_Store
+tmp/
