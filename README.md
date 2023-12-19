@@ -8,9 +8,7 @@ This library provides code to allow for simple integrations of the [Substrate AP
 
 ```sh
 npm install substrate --save
-
 # or
-
 yarn add substrate
 ```
 
@@ -19,14 +17,13 @@ yarn add substrate
 See our [Guides]() and [API Reference]() for more examples and use cases.
 
 ```typescript
-# TypeScript
-
 import { Substrate, Adapter, Graph, Mistral, Jina } from "substrate";
 
+// Create a Substrate API client using your API Key
 const substrate = new Substrate({ apiKey: "SUBSTRATE_API_KEY" });
 
 async function main() {
-    const text = "Something you want to summaize...";
+    const text = "Something you want to summarize...";
 
     // Create a `Mistral` node that can summarize your input text
     const mistral = new Mistral({ id: "summary" })
