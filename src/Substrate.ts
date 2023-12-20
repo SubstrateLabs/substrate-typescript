@@ -46,7 +46,11 @@ export class Substrate {
       "https://api.substrate.run/compose",
       requestOptions,
     );
-    const json = await response.json();
-    return json;
+    if (response.ok) {
+      const json = await response.text();
+      return json;
+    } else {
+      console.log(response);
+    }
   }
 }

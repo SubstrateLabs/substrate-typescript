@@ -158,30 +158,34 @@ export const MistralSchema = ModelNodeSchema.omit({ class: true })
   .strict();
 export type Mistral = z.infer<typeof MistralSchema>;
 
-// export const BakllavaSchema = ModelNodeSchema.omit({ class: true }).extend({
-//   class: z.literal("Bakllava"),
-//   args: z.object({
-//     prompt: z.string(),
-//     image_url: z.string(),
-//     history: z
-//       .array(
-//         z.object({
-//           role: z.string(),
-//           content: z.array(
-//             z.object({
-//               type: z.string(),
-//               image_url: z.string(),
-//             }),
-//           ),
-//         }),
-//       )
-//       .length(1)
-//       .optional(),
-//   }),
-//   extra_args: z.object({
-//     model: z.enum(["BakLLaVA-1-Q4_K_M.gguf"]),
-//   }),
-// });
+export const BakllavaArgsSchema = z.object({
+  prompt: z.string(),
+  image_url: z.string(),
+  history: z
+    .array(
+      z.object({
+        role: z.string(),
+        content: z.array(
+          z.object({
+            type: z.string(),
+            image_url: z.string(),
+          }),
+        ),
+      }),
+    )
+    .length(1)
+    .optional(),
+});
+export type BakllavaInput = z.infer<typeof BakllavaArgsSchema>;
+
+export const BakllavaSchema = ModelNodeSchema.omit({ class: true }).extend({
+  class: z.literal("Bakllava"),
+  args: BakllavaArgsSchema.partial(),
+  extra_args: z.object({
+    model: z.enum(["bakllava-1"]),
+  }),
+});
+export type Bakllava = z.infer<typeof BakllavaSchema>;
 
 export const JinaArgsSchema = z
   .object({
@@ -215,7 +219,7 @@ export const StableDiffusionArgsSchema = z.object({
   run_safety_check: z.boolean().optional().default(false),
   return_bytes: z.boolean().optional().default(false),
   use_refiner: z.boolean().optional().default(false),
-  return_base64: z.boolean().optional().default(false)
+  return_base64: z.boolean().optional().default(false),
 });
 export type StableDiffusionInput = z.infer<typeof StableDiffusionArgsSchema>;
 
@@ -273,7 +277,7 @@ export const NodeSchema = z.discriminatedUnion("class", [
   MistralSchema,
   JinaSchema,
   StableDiffusionSchema,
-  // BakllavaSchema,
+  BakllavaSchema,
   // SDXLSchema,
   // SAMSchema,
   // SeamlessSchema,
@@ -317,9 +321,7 @@ export const EmbeddingRowSchema = z.object({
   doc: z.object({}),
 });
 
-export const EmbeddingGenerationSchema = z.array(
-  z.array(EmbeddingRowSchema)
-);
+export const EmbeddingGenerationSchema = z.array(z.array(EmbeddingRowSchema));
 export type EmbeddingGeneration = z.infer<typeof EmbeddingGenerationSchema>;
 
 export const ImageGenerationSchema = z.object({

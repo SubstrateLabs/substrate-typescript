@@ -24,7 +24,7 @@ async function main() {
   const graph = new Graph().withNode(sdxl);
 
   const result = await substrate.compose(graph);
-  console.log(result);
+  console.log(JSON.stringify(result));
 }
 
 main();
