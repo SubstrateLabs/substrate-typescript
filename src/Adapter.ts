@@ -6,13 +6,20 @@ abstract class AbstractAdapter {
   readonly transform: string;
   transform_args: Object;
 
-  constructor(source_key: string | null, dest_key: string | null, args: Object) {
+  constructor(
+    source_key: string | null,
+    dest_key: string | null,
+    args: Object,
+  ) {
     this.source_key = source_key;
     this.dest_key = dest_key;
     this.transform_args = args;
   }
 
-  writeTo(dest_key: string) {
+  /**
+   * Optionally write the output of this operation to a new key.
+   */
+  to(dest_key: string) {
     this.dest_key = dest_key;
     return this;
   }

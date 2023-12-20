@@ -13,7 +13,7 @@ import * as Schema from "substrate/Schema";
 describe("Adapter", () => {
   describe("Get", () => {
     test(".path", () => {
-      const a = Get.path("a.b.c").writeTo("b");
+      const a = Get.path("a.b.c").to("b");
       expect(a).toBeInstanceOf(Get);
       expect(Schema.GetAdapterSchema.parse(a)).toEqual({
         source_key: "a",
@@ -52,7 +52,7 @@ describe("Adapter", () => {
 
   describe("Pop", () => {
     test(".key", () => {
-      const a = Pop.key("a").writeTo("b");
+      const a = Pop.key("a").to("b");
       expect(a).toBeInstanceOf(Pop);
       expect(Schema.PopAdapterSchema.parse(a)).toEqual({
         source_key: "a",
