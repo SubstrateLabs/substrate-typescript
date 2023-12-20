@@ -27,6 +27,11 @@ export abstract class AbstractNode {
    */
   _to_adapters?: Adapter.Adapter[];
 
+  /**
+   * List of `Adapter` steps used to transform the node input.
+   */
+  _from_adapters?: Adapter.Adapter[];
+
   constructor(id: string = uuidv4()) {
     Schema.IdSchema.parse(id);
     this.id = id;
@@ -59,8 +64,16 @@ export abstract class AbstractNode {
    * Set the `_to_adapters` that are used to transform the output of this node so that
    * it can be used as inputs for nodes connected via outgoing edges.
    */
-  setAdapters(adapters: Adapter.Adapter[]) {
+  setToAdapters(adapters: Adapter.Adapter[]) {
     this._to_adapters = adapters;
+    return this;
+  }
+
+  /**
+   * Set the `_from_adapters` that are used to transform the input to this node.
+   */
+  setFromAdapters(adapters: Adapter.Adapter[]) {
+    this._from_adapters = adapters;
     return this;
   }
 }

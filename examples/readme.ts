@@ -14,7 +14,7 @@ async function main() {
   const mistral = new Mistral({ id: "summary" })
     .setArgs({ input_prompts: [`Summarize the following: ${text}`] })
     .setOutput()
-    .setAdapters([
+    .setToAdapters([
       Adapter.Get.path("completions[0].text", "texts"),
       Adapter.WrapInList.key("texts"),
       Adapter.Pick.keys(["texts"]),
