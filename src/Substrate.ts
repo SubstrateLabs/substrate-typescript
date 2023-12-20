@@ -7,7 +7,7 @@ type Configuration = {
    *
    * Used to authenticate requests made to the Substrate API.
    */
-  apiKey: string;
+  apiKey?: string | undefined
 };
 
 /**

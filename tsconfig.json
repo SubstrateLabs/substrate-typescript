@@ -43,10 +43,22 @@
     "skipLibCheck": true,                                /* Skip type checking all .d.ts files. */
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
 
-    /* Internal-use package paths */
+    /* Internal-use: package paths */
     "paths": {
       "substrate/*": ["./src/*"],
       "substrate": ["./src/index.ts"]
+    }
+  },
+
+  /* Internal-use: running example scripts */
+  "ts-node": {
+    "esm": true,
+    "compilerOptions": {
+      /* Internal-use: package paths */
+      "paths": {
+        "substrate/*": ["./src/*"],
+        "substrate": ["./src/index.ts"]
+      }
     }
   }
 }

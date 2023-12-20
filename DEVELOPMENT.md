@@ -4,21 +4,17 @@
 
 ## Up and Running
 
-```
+```sh
 # ensure you're using the correct node version (see .node-version)
 
 # install deps
 npm i
 
-# run tests (using vitest)
-npm test                    # watch mode
-# or
-npm test -- run             # run once
+# run tests
+npm test
 
-# build (using tsup/esbuild)
-npm run build               # run once
-# or
-npm run build -- --watch    # watch mode
+# build
+npm run build
 ```
 
 ## Releasing (TBD)
