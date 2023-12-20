@@ -14,7 +14,7 @@ const mistral = new Mistral({ id: "summary" })
   .setArgs({ input_prompts: [`Summarize the following: ${text}`] })
   .setOutput()
   .setToAdapters([
-    Adapter.Get.path("completions[0].text", "texts"),
+    Adapter.Get.path("completions[0].text").writeTo("texts"),
     Adapter.WrapInList.key("texts"),
     Adapter.Pick.keys(["texts"]),
   ]);

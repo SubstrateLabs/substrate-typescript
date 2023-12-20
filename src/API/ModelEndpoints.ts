@@ -1,7 +1,7 @@
 import { Substrate, Jina, Mistral, Bakllava, StableDiffusion } from "..";
 import { APIResponse } from "./APIResponse";
 
-// TBD: this interface may change.
+// TBD: this interface may change, a lot.
 /**
  *  `ModelEndpoints` provides a methods for interacting directly with
  *  single models hosted on the Substrate platform.

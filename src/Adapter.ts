@@ -1,10 +1,22 @@
 import * as Schema from "./Schema";
 
-/**
- * `Node` items within a `Graph` will accept input as a string-indexed object and their output
- * will also be a string-indexed object.
- */
-type IO = { [key: string]: any };
+abstract class AbstractAdapter {
+  source_key: string | null;
+  dest_key: string | null;
+  readonly transform: string;
+  transform_args: Object;
+
+  constructor(source_key: string | null, dest_key: string | null, args: Object) {
+    this.source_key = source_key;
+    this.dest_key = dest_key;
+    this.transform_args = args;
+  }
+
+  writeTo(dest_key: string) {
+    this.dest_key = dest_key;
+    return this;
+  }
+}
 
 /**
  * `Get` adapter will select some data by `path` in an input object at `source_key` and produce a new output object with the selected data available at `dest_key`.
@@ -13,43 +25,23 @@ type IO = { [key: string]: any };
  *
  *    Given some input like: `{ a: { b: ["c"] } }`
  *
- *    And a `Get` adapter like: `new Get({ source: "a", dest: "x", path: "a.b[0]" })`
- *    Alternatively like: `Get.path("a.b[0]", "x")`
+ *    And a `Get` adapter like: `Get.path("a.b[0]", "x")`
  *
  *    We'll produce an output like: `{ a: { b: ["c"] }, x: "c" }`
  */
-export class Get<In extends IO, Out extends IO> implements Adapter.GetAdapter {
-  source_key: Extract<keyof In, string>;
-  dest_key: Extract<keyof Out, string> | null;
-  readonly transform = "get" as const;
-  transform_args: Adapter.GetAdapterArgs;
+export class Get extends AbstractAdapter implements Adapter.GetAdapter {
+  declare source_key: string;
+  override readonly transform = "get" as const;
+  declare transform_args: Adapter.GetAdapterArgs;
 
-  // TBD:
-  static path<In extends IO, Out extends IO>(
-    path: Adapter.GetAdapterArgs["path"],
-    dest: Extract<keyof Out, string> | null = null,
-  ) {
+  static path(path: Adapter.GetAdapterArgs["path"]) {
     // NOTE: source_key will always be the first part of the path.
     // eg.
     //    "a.b.c" => "a"
     //    "a[0].b.c" => "a"
     //    "a" => "a"
-    const source = path.split(/[.\[]/)[0] as Extract<keyof In, string>;
-    return new Get<In, Out>({ source, path, dest });
-  }
-
-  constructor({
-    source,
-    dest = null,
-    path,
-  }: {
-    source: Extract<keyof In, string>;
-    dest?: Extract<keyof Out, string> | null;
-    path: string;
-  }) {
-    this.source_key = source;
-    this.dest_key = dest;
-    this.transform_args = { path };
+    const source = path.split(/[.\[]/)[0] as string;
+    return new Get(source, null, { path });
   }
 }
 
@@ -60,32 +52,18 @@ export class Get<In extends IO, Out extends IO> implements Adapter.GetAdapter {
  *
  *    Given some input like: `{ a: { b: 1 }, c: 2, d: 3 }`
  *
- *    And a `Pick` adapter like: `new Pick({ keys: ["c", "d"] })`
- *    Alternatively like: `Pick.keys(["c", "d"])`
+ *    And a `Pick` adapter like: `Pick.keys(["c", "d"])`
  *
  *    We'll produce an output like: `{ c: 2, d: 3 }`
  */
-export class Pick<In extends IO, Out extends IO>
-  implements Adapter.PickAdapter
-{
-  source_key = null;
-  dest_key = null;
-  readonly transform = "pick" as const;
-  transform_args: Adapter.PickAdapterArgs;
+export class Pick extends AbstractAdapter implements Adapter.PickAdapter {
+  declare source_key: null;
+  declare dest_key: null;
+  override readonly transform = "pick" as const;
+  declare transform_args: Adapter.PickAdapterArgs;
 
-  // TBD:
-  static keys<In extends IO, Out extends IO>(
-    keys: (Extract<keyof In, string> & Extract<keyof Out, string>)[],
-  ) {
-    return new Pick<In, Out>({ keys });
-  }
-
-  constructor({
-    keys,
-  }: {
-    keys: (Extract<keyof In, string> & Extract<keyof Out, string>)[];
-  }) {
-    this.transform_args = { keys };
+  static keys(keys: string[]) {
+    return new Pick(null, null, { keys });
   }
 }
 
@@ -96,36 +74,63 @@ export class Pick<In extends IO, Out extends IO>
  *
  *    Given some input like: `{ a: 1, b: 2 }`
  *
- *    And a `WrapInList` adapter like: `new WrapInList({ source: "b", dest: "c" })`
- *    Alternatively like: `WrapInList.key("b", "c")`
+ *    And a `WrapInList` adapter like: `WrapInList.key("b", "c")`
  *
  *    We'll produce an output like: `{ a: 1, b: 2, c: [2] }`
  */
-export class WrapInList<In extends IO, Out extends IO>
+export class WrapInList
+  extends AbstractAdapter
   implements Adapter.WrapInListAdapter
 {
-  source_key: Extract<keyof In, string>;
-  dest_key: Extract<keyof Out, string> | null;
-  readonly transform = "wrap_in_list" as const;
-  transform_args: Adapter.WrapInListAdapterArgs = {};
+  declare source_key: string;
+  override readonly transform = "wrap_in_list" as const;
+  declare transform_args: Adapter.WrapInListAdapterArgs;
 
-  // TBD:
-  static key<In extends IO, Out extends IO>(
-    source: Extract<keyof In, string>,
-    dest: Extract<keyof Out, string> | null = null,
-  ) {
-    return new WrapInList<In, Out>({ source, dest });
+  static key(source_key: string) {
+    return new WrapInList(source_key, null, {});
   }
+}
 
-  constructor({
-    source,
-    dest = null,
-  }: {
-    source: Extract<keyof In, string>;
-    dest?: Extract<keyof Out, string> | null;
-  }) {
-    this.source_key = source;
-    this.dest_key = dest;
+export class Pop extends AbstractAdapter implements Adapter.PopAdapter {
+  declare source_key: string;
+  override readonly transform = "pop" as const;
+  declare transform_args: Adapter.PopAdapterArgs;
+
+  static key(source_key: string) {
+    return new Pop(source_key, null, {});
+  }
+}
+
+export class Concat extends AbstractAdapter implements Adapter.ConcatAdapter {
+  declare source_key: string;
+  override readonly transform = "concat" as const;
+  declare transform_args: Adapter.ConcatAdapterArgs;
+
+  static key(source_key: string, target: string) {
+    return new Concat(source_key, null, { target });
+  }
+}
+
+export class Prepend extends AbstractAdapter implements Adapter.PrependAdapter {
+  declare source_key: string;
+  override readonly transform = "prepend" as const;
+  declare transform_args: Adapter.ConcatAdapterArgs;
+
+  static key(source_key: string, target: string) {
+    return new Prepend(source_key, null, { target });
+  }
+}
+
+export class WrapInDict
+  extends AbstractAdapter
+  implements Adapter.WrapInDictAdapter
+{
+  declare source_key: string;
+  override readonly transform = "wrap_in_dict" as const;
+  declare transform_args: Adapter.WrapInDictAdapterArgs;
+
+  static key(source_key: string, key: string) {
+    return new WrapInDict(source_key, null, { key });
   }
 }
 
@@ -141,4 +146,17 @@ export namespace Adapter {
 
   export type PickAdapter = Schema.PickAdapter;
   export type PickAdapterArgs = Schema.PickAdapter["transform_args"];
+
+  export type PopAdapter = Schema.PopAdapter;
+  export type PopAdapterArgs = Schema.PopAdapter["transform_args"];
+
+  export type ConcatAdapter = Schema.ConcatAdapter;
+  export type ConcatAdapterArgs = Schema.ConcatAdapter["transform_args"];
+
+  export type PrependAdapter = Schema.PrependAdapter;
+  export type PrependAdapterArgs = Schema.PrependAdapter["transform_args"];
+
+  export type WrapInDictAdapter = Schema.WrapInDictAdapter;
+  export type WrapInDictAdapterArgs =
+    Schema.WrapInDictAdapter["transform_args"];
 }

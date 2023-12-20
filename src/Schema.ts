@@ -56,48 +56,71 @@ export const StoreInfoSchema = z
   })
   .strict();
 
-export const GetAdapterSchema = z
-  .object({
-    source_key: z.string(),
-    dest_key: z.string().nullable(),
-    transform: z.literal("get"),
-    transform_args: z
-      .object({
-        path: z.string(),
-      })
-      .strict(),
-  })
-  .strict();
+const BaseAdapterSchema = z.object({
+  source_key: z.string().nullable(),
+  dest_key: z.string().nullable(),
+  transform: z.string(),
+  transform_args: z.object({}),
+});
+
+export const GetAdapterSchema = BaseAdapterSchema.extend({
+  source_key: z.string(),
+  transform: z.literal("get"),
+  transform_args: z
+    .object({ path: z.string(), map: z.boolean().optional() })
+    .strict(),
+}).strict();
 export type GetAdapter = z.infer<typeof GetAdapterSchema>;
 
-export const WrapInListAdapterSchema = z
-  .object({
-    source_key: z.string(),
-    dest_key: z.string().nullable(),
-    transform: z.literal("wrap_in_list"),
-    transform_args: z.object({}).strict(),
-  })
-  .strict();
+export const WrapInListAdapterSchema = BaseAdapterSchema.extend({
+  source_key: z.string(),
+  transform: z.literal("wrap_in_list"),
+  transform_args: z.object({}).strict(),
+}).strict();
 export type WrapInListAdapter = z.infer<typeof WrapInListAdapterSchema>;
 
-export const PickAdapterSchema = z
-  .object({
-    source_key: z.string().nullable(),
-    dest_key: z.string().nullable(),
-    transform: z.literal("pick"),
-    transform_args: z
-      .object({
-        keys: z.array(z.string()).min(1),
-      })
-      .strict(),
-  })
-  .strict();
+export const PickAdapterSchema = BaseAdapterSchema.extend({
+  transform: z.literal("pick"),
+  transform_args: z.object({ keys: z.array(z.string()).min(1) }).strict(),
+}).strict();
 export type PickAdapter = z.infer<typeof PickAdapterSchema>;
+
+export const PopAdapterSchema = BaseAdapterSchema.extend({
+  source_key: z.string(),
+  transform: z.literal("pop"),
+  transform_args: z.object({}).strict(),
+}).strict();
+export type PopAdapter = z.infer<typeof PopAdapterSchema>;
+
+export const ConcatAdapterSchema = BaseAdapterSchema.extend({
+  source_key: z.string(),
+  transform: z.literal("concat"),
+  transform_args: z.object({ target: z.string() }).strict(),
+}).strict();
+export type ConcatAdapter = z.infer<typeof ConcatAdapterSchema>;
+
+export const PrependAdapterSchema = BaseAdapterSchema.extend({
+  source_key: z.string(),
+  transform: z.literal("prepend"),
+  transform_args: z.object({ target: z.string() }).strict(),
+}).strict();
+export type PrependAdapter = z.infer<typeof PrependAdapterSchema>;
+
+export const WrapInDictAdapterSchema = BaseAdapterSchema.extend({
+  source_key: z.string(),
+  transform: z.literal("wrap_in_dict"),
+  transform_args: z.object({ key: z.string() }).strict(),
+}).strict();
+export type WrapInDictAdapter = z.infer<typeof WrapInDictAdapterSchema>;
 
 export const AdapterSchema = z.discriminatedUnion("transform", [
   GetAdapterSchema,
   WrapInListAdapterSchema,
   PickAdapterSchema,
+  PopAdapterSchema,
+  ConcatAdapterSchema,
+  PrependAdapterSchema,
+  WrapInDictAdapterSchema,
 ]);
 export type Adapter = z.infer<typeof AdapterSchema>;
 

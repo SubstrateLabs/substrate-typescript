@@ -36,6 +36,9 @@ export class Substrate {
     this.userAgent = userAgent ?? `substrate-typescript/${VERSION}`;
   }
 
+  /**
+   *  [models](https://www.substrate.run/api-ref#models).
+   */
   models = new ModelEndpoints(this);
 
   /**
