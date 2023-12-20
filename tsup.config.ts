@@ -7,6 +7,7 @@ export default defineConfig({
   keepNames: true,
   cjsInterop: true,
   splitting: true,
+  minify: false,
   clean: true,
   sourcemap: true,
 });

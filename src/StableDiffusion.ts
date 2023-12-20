@@ -14,7 +14,7 @@ type Props = {
 export class StableDiffusion extends AbstractNode implements StableDiffusion.Node {
   override args: StableDiffusion.Args = {};
   readonly class = "SDXL" as const;
-  readonly extra_args = { model: "sdxl-onnx" as const };
+  readonly extra_args = { model: "sdxl" as const };
 
   constructor(props: Props = {}) {
     super(props?.id);

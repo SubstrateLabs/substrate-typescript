@@ -9,7 +9,7 @@ type Props = {
 /**
  * [Bakllava](https://www.substrate.run/docs/api-ref#Bakllava)
  *
- * Generates ...
+ * Generates text from image and prompt.
  */
 export class Bakllava extends AbstractNode implements Bakllava.Node {
   override args: Bakllava.Args = {};

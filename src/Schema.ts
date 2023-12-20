@@ -192,7 +192,7 @@ export const JinaArgsSchema = z
     texts: z.array(z.string()),
     embed_metadata_keys: z.array(z.string()).optional(),
     provider_ids: z.array(z.string()).optional(),
-    split: z.boolean().default(false),
+    split: z.boolean().optional(), // false
     store_info: StoreInfoSchema.optional(),
   })
   .strict();
@@ -209,17 +209,22 @@ export type Jina = z.infer<typeof JinaSchema>;
 
 export const StableDiffusionArgsSchema = z.object({
   prompt: z.string(),
-  steps: z.number().optional().default(40),
-  num_images: z.number().optional().default(1),
+  steps: z.number().optional(), // .default(40),
+  num_images: z.number().optional(), // .default(1),
   height: z.number().optional(),
   width: z.number().optional(),
   manual_seed: z.number().optional(),
   negative_prompt: z.string().optional(),
-  high_noise_frac: z.number().optional().default(0.8),
-  run_safety_check: z.boolean().optional().default(false),
-  return_bytes: z.boolean().optional().default(false),
-  use_refiner: z.boolean().optional().default(false),
-  return_base64: z.boolean().optional().default(false),
+  high_noise_frac: z.number().optional(), // .default(0.8),
+  run_safety_check: z.boolean().optional(), // .default(false),
+  return_bytes: z.boolean().optional(), // .default(false),
+  use_refiner: z.boolean().optional(), // .default(false),
+  return_base64: z.boolean().optional(), // .default(false),
+  use_hosted_url: z.boolean().optional(), // .default(false),
+  use_turbo: z.boolean().optional(), // .default(false),
+  use_llm: z.boolean().optional(), // .default(false),
+  use_ssd: z.boolean().optional(), // .default(false),
+  guidance_scale: z.number().optional(),
 });
 export type StableDiffusionInput = z.infer<typeof StableDiffusionArgsSchema>;
 
@@ -229,7 +234,7 @@ export const StableDiffusionSchema = ModelNodeSchema.omit({
   class: z.literal("SDXL"),
   args: StableDiffusionArgsSchema.partial(),
   extra_args: z.object({
-    model: z.enum(["sdxl-onnx"]),
+    model: z.enum(["sdxl"]),
   }),
 });
 export type StableDiffusion = z.infer<typeof StableDiffusionSchema>;
