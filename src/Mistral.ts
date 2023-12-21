@@ -11,8 +11,7 @@ type Props = {
  *
  * Generates text.
  */
-export class Mistral extends AbstractNode implements Mistral.Node {
-  override args: Mistral.Args = {};
+export class Mistral extends AbstractNode<Mistral.Node> implements Mistral.Node {
   readonly class = "Mistral" as const;
   readonly extra_args = { model: "mistral-7b-instruct" as const };
 

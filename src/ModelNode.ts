@@ -9,8 +9,7 @@ type Props = {
 /**
  * Base node that supports running models.
  */
-export class ModelNode extends AbstractNode implements ModelNode.Node {
-  override args: ModelNode.Args = {};
+export class ModelNode extends AbstractNode<ModelNode.Node> implements ModelNode.Node {
   readonly class = "ModelNode" as const;
   extra_args: { model: string } = { model: "" };
 

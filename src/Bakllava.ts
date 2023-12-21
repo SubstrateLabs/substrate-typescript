@@ -11,8 +11,7 @@ type Props = {
  *
  * Generates text from image and prompt.
  */
-export class Bakllava extends AbstractNode implements Bakllava.Node {
-  override args: Bakllava.Args = {};
+export class Bakllava extends AbstractNode<Bakllava.Node> implements Bakllava.Node {
   readonly class = "Bakllava" as const;
   readonly extra_args = { model: "bakllava-1" as const };
 

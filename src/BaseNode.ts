@@ -9,8 +9,7 @@ type Props = {
 /**
  * `Node` used in Substrate graph executions.
  */
-export class BaseNode extends AbstractNode implements BaseNode.Node {
-  override args: BaseNode.Args = {};
+export class BaseNode extends AbstractNode<BaseNode.Node> implements BaseNode.Node {
   readonly class = "Node" as const;
   extra_args: Object = {};
 

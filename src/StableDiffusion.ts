@@ -11,8 +11,7 @@ type Props = {
  *
  * Generates images.
  */
-export class StableDiffusion extends AbstractNode implements StableDiffusion.Node {
-  override args: StableDiffusion.Args = {};
+export class StableDiffusion extends AbstractNode<StableDiffusion.Node> implements StableDiffusion.Node {
   readonly class = "SDXL" as const;
   readonly extra_args = { model: "sdxl" as const };
 

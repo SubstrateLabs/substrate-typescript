@@ -11,8 +11,7 @@ type Props = {
  *
  * Generates embeddings.
  */
-export class Jina extends AbstractNode implements Jina.Node {
-  override args: Jina.Args = {};
+export class Jina extends AbstractNode<Jina.Node> implements Jina.Node {
   readonly class = "Jina" as const;
   readonly extra_args = { model: "jina-base-v2" as const };
 

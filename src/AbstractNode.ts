@@ -6,21 +6,21 @@ import { Adapter } from "substrate/Adapter";
  * @internal
  * `AbstractNode` is an abstract class that defines the minumum functionality for implementing other `Node`-classes.
  */
-export abstract class AbstractNode {
+export abstract class AbstractNode<T extends Schema.Node> {
   /**
    * `Node` identifier, must be unique within a `Graph`. `id` is used to as a key to identify node outputs in `GraphResult`.
    */
-  id: Schema.Id;
+  id: T["id"];
 
   /**
    * Default arguments passed as inputs to the `Node` when it is executed.
    */
-  args: Object = {};
+  args: T["args"] = {};
 
   /**
    * When `true` the output of this node will be included in the final `GraphResult`. Default: `false`.
    */
-  _should_output_globally?: boolean;
+  _should_output_globally?: T["_should_output_globally"];
 
   /**
    * List of `Adapter` steps used to transform the node output.
@@ -40,7 +40,7 @@ export abstract class AbstractNode {
   /**
    * Set the `args` that are passed as default inputs to the `Node` when it is executed.
    */
-  setArgs(args: Object) {
+  setArgs(args: T["args"]) {
     // TODO: I'm undecided here about whether this should allow the user
     // to "build up" args with multiple calls to `setArgs` or if this
     // method shoud "replace" the internal args state with the new state.
