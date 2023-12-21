@@ -1,6 +1,6 @@
-import * as Schema from "./Schema";
 import { v4 as uuidv4 } from "uuid";
-import { Adapter } from "./Adapter";
+import * as Schema from "substrate/Schema";
+import { Adapter } from "substrate/Adapter";
 
 /**
  * @internal

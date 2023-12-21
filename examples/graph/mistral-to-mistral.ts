@@ -12,10 +12,10 @@ const story = new Mistral({ id: "story" })
 
 const summary = new Mistral({ id: "summary", args: { max_tokens: 100 } })
   .setFromAdapters([
-    Adapter.Get.path("completions[0].text").to("input_prompts"),
-    Adapter.Prepend.key("input_prompts", "Summarize the following story:\n\n"),
-    Adapter.WrapInList.key("input_prompts"),
-    Adapter.Pick.keys(["input_prompts"]),
+    Adapter.get({ path: "completions[0].text" }).to("input_prompts"),
+    Adapter.prepend("input_prompts", { target: "Summarize the following story:\n\n" }),
+    Adapter.wrapInList("input_prompts"),
+    Adapter.pick({ keys: ["input_prompts"] }),
   ])
   .setOutput();
 

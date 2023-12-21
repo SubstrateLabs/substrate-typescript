@@ -12,5 +12,5 @@ const args: Bakllava.Input = {
     "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/TheCheethcat.jpg/800px-TheCheethcat.jpg",
 };
 
-const result = await substrate.models.Bakllava(args);
+const result = await substrate.models.bakllava(args);
 console.log(result.data.message);

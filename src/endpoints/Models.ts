@@ -1,5 +1,5 @@
-import { Substrate, Jina, Mistral, Bakllava, StableDiffusion } from "..";
-import { APIResponse } from "./APIResponse";
+import { Substrate, Jina, Mistral, Bakllava, StableDiffusion } from "substrate";
+import { APIResponse } from "substrate/APIResponse";
 
 // TBD: this interface may change, a lot.
 /**
@@ -16,28 +16,28 @@ export class ModelEndpoints {
   /**
    *  [Jina](https://www.substrate.run/api-ref#Jina).
    */
-  async Jina(args: Jina.Input) {
+  async jina(args: Jina.Input) {
     return this.#request("/jina-base-v2", args);
   }
 
   /**
    *  [Mistral](https://www.substrate.run/api-ref#Mistral).
    */
-  async Mistral(args: Mistral.Input) {
+  async mistral(args: Mistral.Input) {
     return this.#request("/mistral-7b-instruct", args);
   }
 
   /**
    *  [Bakllava](https://www.substrate.run/api-ref#Bakllava).
    */
-  async Bakllava(args: Bakllava.Input) {
+  async bakllava(args: Bakllava.Input) {
     return this.#request("/bakllava-1", args);
   }
 
   /**
    *  [StableDiffusion](https://www.substrate.run/api-ref#StableDiffusion).
    */
-  async StableDiffusion(args: StableDiffusion.Input) {
+  async stableDiffusion(args: StableDiffusion.Input) {
     return this.#request("/stablediffusion", args);
   }
 

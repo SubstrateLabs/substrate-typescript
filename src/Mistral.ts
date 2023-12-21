@@ -1,5 +1,5 @@
-import * as Schema from "./Schema";
-import { AbstractNode } from "./AbstractNode";
+import * as Schema from "substrate/Schema";
+import { AbstractNode } from "substrate/AbstractNode";
 
 type Props = {
   id?: Schema.Id;

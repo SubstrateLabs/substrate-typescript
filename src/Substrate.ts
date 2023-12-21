@@ -1,8 +1,8 @@
-import { SubstrateError } from "./Error";
-import { VERSION } from "./version";
-import { ModelEndpoints } from "./API/ModelEndpoints";
-import { GraphEndpoints } from "./API/GraphEndpoints";
-import { Graph } from "./Graph";
+import { SubstrateError } from "substrate/Error";
+import { VERSION } from "substrate/version";
+import { ModelEndpoints } from "substrate/endpoints/Models";
+import { Graph } from "substrate/Graph";
+import { APIResponse } from "substrate/APIResponse";
 
 type Configuration = {
   /**
@@ -29,7 +29,7 @@ export class Substrate {
   constructor({ apiKey, userAgent }: Configuration) {
     if (!apiKey) {
       throw new SubstrateError(
-        "An API Key is required. Specify it when instatiating the Substrate client: `new Substrate({ apiKey: 'API_KEY' })`",
+        "An API Key is required. Specify it when constructing the Substrate client: `new Substrate({ apiKey: 'API_KEY' })`",
       );
     }
     this.apiKey = apiKey;
@@ -44,8 +44,19 @@ export class Substrate {
   /**
    *  [compose](https://www.substrate.run/api-ref#compose).
    */
-  compose(graph: Graph) {
-    return new GraphEndpoints(this).compose(graph);
+  async compose(graph: Graph): Promise<any> {
+    const url = this.baseUrl + "/compose";
+
+    const response = await fetch(url, this.requestOptions({ dag: graph }));
+
+    if (response.ok) {
+      const json = await response.text();
+      return json;
+    } else {
+      const res = new APIResponse(response);
+      res.debug();
+      return;
+    }
   }
 
   requestOptions(body: any) {

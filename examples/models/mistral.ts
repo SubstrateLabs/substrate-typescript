@@ -14,5 +14,5 @@ const args: Mistral.Input = {
   frequency_penalty: 0.5,
 };
 
-const result = await substrate.models.Mistral(args);
+const result = await substrate.models.mistral(args);
 console.log(JSON.stringify(result));

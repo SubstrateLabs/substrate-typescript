@@ -22,5 +22,5 @@ const args: StableDiffusion.Input = {
   return_base64: true,
 };
 
-const result = await substrate.models.StableDiffusion(args);
+const result = await substrate.models.stableDiffusion(args);
 console.log(JSON.stringify(result));

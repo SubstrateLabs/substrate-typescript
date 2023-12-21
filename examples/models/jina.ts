@@ -12,5 +12,5 @@ const args: Jina.Input = {
   ],
 };
 
-const result = await substrate.models.Jina(args);
+const result = await substrate.models.jina(args);
 console.log(JSON.stringify(result));

@@ -1,6 +1,6 @@
-import { DiGraph } from "./DiGraph";
-import * as Schema from "./Schema";
-import { SubstrateError } from "./Error";
+import { DiGraph } from "substrate/DiGraph";
+import * as Schema from "substrate/Schema";
+import { SubstrateError } from "substrate/Error";
 
 /**
  * `Graph` is used to construct computation graphs to execute on the Substrate platform.

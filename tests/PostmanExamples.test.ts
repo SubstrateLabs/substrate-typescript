@@ -16,9 +16,9 @@ describe("Postman Examples", () => {
         frequency_penalty: 0.2,
       })
       .setToAdapters([
-        Adapter.Get.path("completions[0].text", "texts"),
-        Adapter.WrapInList.key("texts"),
-        Adapter.Pick.keys(["texts"]),
+        Adapter.get({ path: "completions[0].text" }).to("texts"),
+        Adapter.wrapInList("texts"),
+        Adapter.pick({ keys: ["texts"] }),
       ])
       .setOutput();
 
