@@ -13,10 +13,10 @@ const text = "Something you want to summarize...";
 const mistral = new Mistral({ id: "summary" })
   .setArgs({ input_prompts: [`Summarize the following: ${text}`] })
   .setOutput()
-  .setToAdapters([
-    Adapter.Get.path("completions[0].text").to("texts"),
-    Adapter.WrapInList.key("texts"),
-    Adapter.Pick.keys(["texts"]),
+  .adaptTo([
+    Adapter.get({ path: "completions[0].text" }).to("texts"),
+    Adapter.wrapInList("texts"),
+    Adapter.pick({ keys: ["texts"] }),
   ]);
 
 // Create a Jina embedding node

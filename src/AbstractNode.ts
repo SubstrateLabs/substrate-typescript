@@ -64,7 +64,7 @@ export abstract class AbstractNode<T extends Schema.Node> {
    * Set the `_to_adapters` that are used to transform the output of this node so that
    * it can be used as inputs for nodes connected via outgoing edges.
    */
-  setToAdapters(adapters: Adapter.Adapter[]) {
+  adaptTo(adapters: Adapter.Adapter[]) {
     this._to_adapters = adapters;
     return this;
   }
@@ -72,7 +72,7 @@ export abstract class AbstractNode<T extends Schema.Node> {
   /**
    * Set the `_from_adapters` that are used to transform the input to this node.
    */
-  setFromAdapters(adapters: Adapter.Adapter[]) {
+  adaptFrom(adapters: Adapter.Adapter[]) {
     this._from_adapters = adapters;
     return this;
   }

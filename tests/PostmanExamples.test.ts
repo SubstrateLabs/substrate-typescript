@@ -15,7 +15,7 @@ describe("Postman Examples", () => {
         max_tokens: 1200,
         frequency_penalty: 0.2,
       })
-      .setToAdapters([
+      .adaptTo([
         Adapter.get({ path: "completions[0].text" }).to("texts"),
         Adapter.wrapInList("texts"),
         Adapter.pick({ keys: ["texts"] }),
