@@ -315,7 +315,17 @@ export const NodeSchema = z.discriminatedUnion("class", [
 ]);
 export type Node = z.infer<typeof NodeSchema>;
 
-export const EdgeSchema = z.tuple([NodeSchema, NodeSchema, z.object({})]);
+export const RemoteCodeSchema = z.object({
+  code: z.string(),
+  runtime: z.enum(["node", "python"]),
+});
+export type RemoteCode = z.infer<typeof RemoteCodeSchema>;
+
+export const EdgeDataSchema = z.object({
+  adapter: RemoteCodeSchema.optional(),
+});
+
+export const EdgeSchema = z.tuple([NodeSchema, NodeSchema, EdgeDataSchema]);
 export type Edge = z.infer<typeof EdgeSchema>;
 
 const EdgeIdsSchema = z.tuple([IdSchema, IdSchema, z.object({})]);

@@ -1,0 +1,55 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Graph > .withEdge > edge with code > arrow functions are encoded as \`RemoteCode\` 1`] = `
+[
+  [
+    "a",
+    "b",
+    {
+      "adapter": RemoteCode {
+        "code": "(x) => ({ y: x })",
+        "runtime": "node",
+      },
+    },
+  ],
+  [
+    "b",
+    "c",
+    {
+      "adapter": RemoteCode {
+        "code": "(x) => ({ y: x })",
+        "runtime": "node",
+      },
+    },
+  ],
+]
+`;
+
+exports[`Graph > .withEdge > edge with code > functions are encoded as \`RemoteCode\` 1`] = `
+[
+  [
+    "a",
+    "b",
+    {
+      "adapter": RemoteCode {
+        "code": "function(x) {
+          return { y: x };
+        }",
+        "runtime": "node",
+      },
+    },
+  ],
+  [
+    "b",
+    "c",
+    {
+      "adapter": RemoteCode {
+        "code": "function(x) {
+            return { y: x };
+          }",
+        "runtime": "node",
+      },
+    },
+  ],
+]
+`;
