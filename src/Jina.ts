@@ -1,7 +1,7 @@
 import * as Schema from "substrate/Schema";
 import { AbstractNode } from "substrate/AbstractNode";
 
-type Props = {
+type Params = {
   id?: Schema.Id;
   args?: Jina.Args;
 };
@@ -15,9 +15,9 @@ export class Jina extends AbstractNode<Jina.Node> implements Jina.Node {
   readonly class = "Jina" as const;
   readonly extra_args = { model: "jina-base-v2" as const };
 
-  constructor(props: Props = {}) {
-    super(props?.id);
-    this.setArgs(props.args);
+  constructor(params: Params = {}) {
+    super(params?.id);
+    this.setArgs(params.args);
   }
 
   override setArgs(args: Jina.Args = {}) {

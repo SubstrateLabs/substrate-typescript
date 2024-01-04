@@ -1,7 +1,7 @@
 import * as Schema from "substrate/Schema";
 import { AbstractNode } from "substrate/AbstractNode";
 
-type Props = {
+type Params = {
   id?: Schema.Id;
   args?: Mistral.Args;
 };
@@ -15,9 +15,9 @@ export class Mistral extends AbstractNode<Mistral.Node> implements Mistral.Node 
   readonly class = "Mistral" as const;
   readonly extra_args = { model: "mistral-7b-instruct" as const };
 
-  constructor(props: Props = {}) {
-    super(props?.id);
-    this.setArgs(props.args);
+  constructor(params: Params = {}) {
+    super(params?.id);
+    this.setArgs(params.args);
   }
 
   override setArgs(args: Mistral.Args = {}) {

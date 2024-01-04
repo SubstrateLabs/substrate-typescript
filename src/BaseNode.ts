@@ -1,7 +1,7 @@
 import * as Schema from "substrate/Schema";
 import { AbstractNode } from "substrate/AbstractNode";
 
-type Props = {
+type Params = {
   id?: Schema.Id;
   args?: BaseNode.Args;
 };
@@ -13,9 +13,9 @@ export class BaseNode extends AbstractNode<BaseNode.Node> implements BaseNode.No
   readonly class = "Node" as const;
   extra_args: Object = {};
 
-  constructor(props: Props = {}) {
-    super(props?.id);
-    this.setArgs(props.args);
+  constructor(params: Params = {}) {
+    super(params?.id);
+    this.setArgs(params.args);
   }
 
   override setArgs(args: BaseNode.Args = {}) {
