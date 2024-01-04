@@ -315,14 +315,14 @@ export const NodeSchema = z.discriminatedUnion("class", [
 ]);
 export type Node = z.infer<typeof NodeSchema>;
 
-export const RemoteCodeSchema = z.object({
+export const AdapterCodeSchema = z.object({
   code: z.string(),
-  runtime: z.enum(["node", "python"]),
+  runtime: z.enum(["deno", "python"]),
 });
-export type RemoteCode = z.infer<typeof RemoteCodeSchema>;
+export type AdapterCode = z.infer<typeof AdapterCodeSchema>;
 
 export const EdgeDataSchema = z.object({
-  adapter: RemoteCodeSchema.optional(),
+  adapter: AdapterCodeSchema.optional(),
 });
 
 export const EdgeSchema = z.tuple([NodeSchema, NodeSchema, EdgeDataSchema]);

@@ -44,7 +44,7 @@ describe("Graph", () => {
     });
 
     describe("edge with code", () => {
-      test("functions are encoded as `RemoteCode`", () => {
+      test("functions are encoded as `AdapterCode`", () => {
         const a = new Node({ id: "a" });
         const b = new Node({ id: "b" });
         const c = new Node({ id: "c" });
@@ -66,7 +66,7 @@ describe("Graph", () => {
         expect(g.edges).toMatchSnapshot();
       });
 
-      test("arrow functions are encoded as `RemoteCode`", () => {
+      test("arrow functions are encoded as `AdapterCode`", () => {
         const a = new Node({ id: "a" });
         const b = new Node({ id: "b" });
         const c = new Node({ id: "c" });

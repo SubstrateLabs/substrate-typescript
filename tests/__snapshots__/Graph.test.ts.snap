@@ -1,14 +1,14 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Graph > .withEdge > edge with code > arrow functions are encoded as \`RemoteCode\` 1`] = `
+exports[`Graph > .withEdge > edge with code > arrow functions are encoded as \`AdapterCode\` 1`] = `
 [
   [
     "a",
     "b",
     {
-      "adapter": RemoteCode {
+      "adapter": AdapterCode {
         "code": "(x) => ({ y: x })",
-        "runtime": "node",
+        "runtime": "deno",
       },
     },
   ],
@@ -16,26 +16,26 @@ exports[`Graph > .withEdge > edge with code > arrow functions are encoded as \`R
     "b",
     "c",
     {
-      "adapter": RemoteCode {
+      "adapter": AdapterCode {
         "code": "(x) => ({ y: x })",
-        "runtime": "node",
+        "runtime": "deno",
       },
     },
   ],
 ]
 `;
 
-exports[`Graph > .withEdge > edge with code > functions are encoded as \`RemoteCode\` 1`] = `
+exports[`Graph > .withEdge > edge with code > functions are encoded as \`AdapterCode\` 1`] = `
 [
   [
     "a",
     "b",
     {
-      "adapter": RemoteCode {
+      "adapter": AdapterCode {
         "code": "function(x) {
           return { y: x };
         }",
-        "runtime": "node",
+        "runtime": "deno",
       },
     },
   ],
@@ -43,11 +43,11 @@ exports[`Graph > .withEdge > edge with code > functions are encoded as \`RemoteC
     "b",
     "c",
     {
-      "adapter": RemoteCode {
+      "adapter": AdapterCode {
         "code": "function(x) {
             return { y: x };
           }",
-        "runtime": "node",
+        "runtime": "deno",
       },
     },
   ],

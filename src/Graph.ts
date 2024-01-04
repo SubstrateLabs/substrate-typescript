@@ -1,7 +1,7 @@
 import { DiGraph } from "substrate/DiGraph";
 import * as Schema from "substrate/Schema";
 import { SubstrateError } from "substrate/Error";
-import { RemoteCode } from "./RemoteCode";
+import { AdapterCode } from "substrate/AdapterCode";
 
 /**
  * `Graph` is used to construct computation graphs to execute on the Substrate platform.
@@ -56,8 +56,8 @@ export class Graph implements Graph.SubstrateGraph {
    * Returns a new graph that includes provided edge.
    */
   withEdge([from, to, data = {}]: Graph.NewSubstrateEdge): Graph {
-    const remoteCode = RemoteCode.tryParse(data);
-    const edgeData = remoteCode ? { adapter: remoteCode } : {};
+    const adapter = AdapterCode.tryParse(data);
+    const edgeData = adapter ? { adapter } : {};
 
     Schema.EdgeSchema.parse([from, to, edgeData]);
 
