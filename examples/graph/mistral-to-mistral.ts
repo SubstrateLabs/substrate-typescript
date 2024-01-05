@@ -4,27 +4,19 @@ import { Substrate, Graph, Mistral } from "substrate";
 
 const SUBSTRATE_API_KEY = process.env["SUBSTRATE_API_KEY"];
 
-const substrate = new Substrate({ apiKey: SUBSTRATE_API_KEY });
+const substrate = new Substrate({
+  apiKey: SUBSTRATE_API_KEY,
+  baseUrl: "http://localhost:8787",
+});
 
 const story = new Mistral({ id: "story" })
-  .setArgs({ input_prompts: ["Write me a story about your favorite dream"] })
+  .setArgs({ input_prompts: ["Write me a story about that time we had to deliver pizzas to everyone in Times Square"] })
   .setOutput();
 
 const summary = new Mistral({
   id: "summary",
   args: { max_tokens: 100 },
 }).setOutput();
-
-// const summary = new Mistral({ id: "summary", args: { max_tokens: 100 } })
-//   .adaptFrom([
-//     Adapter.get({ path: "completions[0].text" }).to("input_prompts"),
-//     Adapter.prepend("input_prompts", {
-//       target: "Summarize the following story:\n\n",
-//     }),
-//     Adapter.wrapInList("input_prompts"),
-//     Adapter.pick({ keys: ["input_prompts"] }),
-//   ])
-//   .setOutput();
 
 const graph = new Graph().withEdge([
   story,

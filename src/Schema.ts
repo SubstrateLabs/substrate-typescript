@@ -328,7 +328,7 @@ export const EdgeDataSchema = z.object({
 export const EdgeSchema = z.tuple([NodeSchema, NodeSchema, EdgeDataSchema]);
 export type Edge = z.infer<typeof EdgeSchema>;
 
-const EdgeIdsSchema = z.tuple([IdSchema, IdSchema, z.object({})]);
+const EdgeIdsSchema = z.tuple([IdSchema, IdSchema, EdgeDataSchema]);
 export type EdgeIds = z.infer<typeof EdgeIdsSchema>;
 
 export const GraphSchema = z.object({

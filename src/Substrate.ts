@@ -13,6 +13,8 @@ type Configuration = {
   apiKey?: string | undefined;
 
   userAgent?: string;
+
+  baseUrl?: string;
 };
 
 /**
@@ -21,12 +23,12 @@ type Configuration = {
 export class Substrate {
   apiKey: string;
   userAgent: string;
-  baseUrl = "https://api.substrate.run" as const;
+  baseUrl: string;
 
   /**
    * API client for interacting with the [Substrate API](https://www.substrate.run/api-ref).
    */
-  constructor({ apiKey, userAgent }: Configuration) {
+  constructor({ apiKey, userAgent, baseUrl }: Configuration) {
     if (!apiKey) {
       throw new SubstrateError(
         "An API Key is required. Specify it when constructing the Substrate client: `new Substrate({ apiKey: 'API_KEY' })`",
@@ -34,6 +36,7 @@ export class Substrate {
     }
     this.apiKey = apiKey;
     this.userAgent = userAgent ?? `substrate-typescript/${VERSION}`;
+    this.baseUrl = baseUrl ?? "https://api.substrate.run";
   }
 
   /**
