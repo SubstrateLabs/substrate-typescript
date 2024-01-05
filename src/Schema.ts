@@ -181,34 +181,34 @@ export const MistralSchema = ModelNodeSchema.omit({ class: true })
   .strict();
 export type Mistral = z.infer<typeof MistralSchema>;
 
-export const BakllavaArgsSchema = z.object({
-  prompt: z.string(),
-  image_url: z.string(),
-  history: z
-    .array(
-      z.object({
-        role: z.string(),
-        content: z.array(
-          z.object({
-            type: z.string(),
-            image_url: z.string(),
-          }),
-        ),
-      }),
-    )
-    .length(1)
-    .optional(),
-});
-export type BakllavaInput = z.infer<typeof BakllavaArgsSchema>;
-
-export const BakllavaSchema = ModelNodeSchema.omit({ class: true }).extend({
-  class: z.literal("Bakllava"),
-  args: BakllavaArgsSchema.partial(),
-  extra_args: z.object({
-    model: z.enum(["bakllava-1"]),
-  }),
-});
-export type Bakllava = z.infer<typeof BakllavaSchema>;
+// export const BakllavaArgsSchema = z.object({
+//   prompt: z.string(),
+//   image_url: z.string(),
+//   history: z
+//     .array(
+//       z.object({
+//         role: z.string(),
+//         content: z.array(
+//           z.object({
+//             type: z.string(),
+//             image_url: z.string(),
+//           }),
+//         ),
+//       }),
+//     )
+//     .length(1)
+//     .optional(),
+// });
+// export type BakllavaInput = z.infer<typeof BakllavaArgsSchema>;
+//
+// export const BakllavaSchema = ModelNodeSchema.omit({ class: true }).extend({
+//   class: z.literal("Bakllava"),
+//   args: BakllavaArgsSchema.partial(),
+//   extra_args: z.object({
+//     model: z.enum(["bakllava-1"]),
+//   }),
+// });
+// export type Bakllava = z.infer<typeof BakllavaSchema>;
 
 export const JinaArgsSchema = z
   .object({
@@ -305,7 +305,7 @@ export const NodeSchema = z.discriminatedUnion("class", [
   MistralSchema,
   JinaSchema,
   StableDiffusionSchema,
-  BakllavaSchema,
+  // BakllavaSchema,
   // SDXLSchema,
   // SAMSchema,
   // SeamlessSchema,

@@ -1,4 +1,4 @@
-import { Substrate, Jina, Mistral, Bakllava, StableDiffusion } from "substrate";
+import { Substrate, Jina, Mistral, StableDiffusion } from "substrate";
 import { APIResponse } from "substrate/APIResponse";
 
 // TBD: this interface may change, a lot.
@@ -25,13 +25,6 @@ export class ModelEndpoints {
    */
   async mistral(args: Mistral.Input) {
     return this.#request("/mistral-7b-instruct", args);
-  }
-
-  /**
-   *  [Bakllava](https://www.substrate.run/api-ref#Bakllava).
-   */
-  async bakllava(args: Bakllava.Input) {
-    return this.#request("/bakllava-1", args);
   }
 
   /**

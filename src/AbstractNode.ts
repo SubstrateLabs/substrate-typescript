@@ -41,14 +41,7 @@ export abstract class AbstractNode<T extends Schema.Node> {
    * Set the `args` that are passed as default inputs to the `Node` when it is executed.
    */
   setArgs(args: T["args"]) {
-    // TODO: I'm undecided here about whether this should allow the user
-    // to "build up" args with multiple calls to `setArgs` or if this
-    // method shoud "replace" the internal args state with the new state.
-    //
-    // Given the fluent interface here, I'm inclined to allow multiple
-    // calls here as it might also make it easier at the call sites to
-    // conditionally/incrementally include args.
-    this.args = Object.assign(this.args, args);
+    this.args = args;
     return this;
   }
 

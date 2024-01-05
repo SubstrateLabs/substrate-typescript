@@ -1,7 +1,7 @@
 import * as Schema from "substrate/Schema";
 import { AbstractNode } from "substrate/AbstractNode";
 
-type Props = {
+type Params = {
   id?: Schema.Id;
   args?: StableDiffusion.Args;
 };
@@ -15,9 +15,9 @@ export class StableDiffusion extends AbstractNode<StableDiffusion.Node> implemen
   readonly class = "SDXL" as const;
   readonly extra_args = { model: "sdxl" as const };
 
-  constructor(props: Props = {}) {
-    super(props?.id);
-    this.setArgs(props.args);
+  constructor(params: Params = {}) {
+    super(params?.id);
+    this.setArgs(params.args);
   }
 
   override setArgs(args: StableDiffusion.Args = {}) {

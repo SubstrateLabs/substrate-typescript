@@ -1,7 +1,7 @@
 import * as Schema from "./Schema";
 import { AbstractNode } from "./AbstractNode";
 
-type Props = {
+type Params = {
   id?: Schema.Id;
   args?: ModelNode.Args;
 };
@@ -13,9 +13,9 @@ export class ModelNode extends AbstractNode<ModelNode.Node> implements ModelNode
   readonly class = "ModelNode" as const;
   extra_args: { model: string } = { model: "" };
 
-  constructor(props: Props = {}) {
-    super(props?.id);
-    this.setArgs(props.args);
+  constructor(params: Params = {}) {
+    super(params?.id);
+    this.setArgs(params.args);
   }
 
   override setArgs(args: ModelNode.Args = {}) {
