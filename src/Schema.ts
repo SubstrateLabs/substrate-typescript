@@ -81,7 +81,7 @@ export type WrapInListAdapter = z.infer<typeof WrapInListAdapterSchema>;
 
 export const PickAdapterSchema = BaseAdapterSchema.extend({
   transform: z.literal("pick"),
-  transform_args: z.object({ keys: z.array(z.string()).min(1) }).strict(),
+  transform_args: z.object({ keys: z.string().array().nonempty() }).strict(),
 }).strict();
 export type PickAdapter = z.infer<typeof PickAdapterSchema>;
 
@@ -156,7 +156,7 @@ export type ModelNode = z.infer<typeof ModelNodeSchema>;
 
 export const MistralArgsSchema = z
   .object({
-    input_prompts: z.union([z.string(), z.array(z.string()).min(1)]),
+    input_prompts: z.union([z.string(), z.string().array().nonempty()]),
     system: z.string().optional(),
     presence_penalty: z.number().optional().default(1.1),
     frequency_penalty: z.number().optional().default(0.0),
@@ -181,38 +181,9 @@ export const MistralSchema = ModelNodeSchema.omit({ class: true })
   .strict();
 export type Mistral = z.infer<typeof MistralSchema>;
 
-// export const BakllavaArgsSchema = z.object({
-//   prompt: z.string(),
-//   image_url: z.string(),
-//   history: z
-//     .array(
-//       z.object({
-//         role: z.string(),
-//         content: z.array(
-//           z.object({
-//             type: z.string(),
-//             image_url: z.string(),
-//           }),
-//         ),
-//       }),
-//     )
-//     .length(1)
-//     .optional(),
-// });
-// export type BakllavaInput = z.infer<typeof BakllavaArgsSchema>;
-//
-// export const BakllavaSchema = ModelNodeSchema.omit({ class: true }).extend({
-//   class: z.literal("Bakllava"),
-//   args: BakllavaArgsSchema.partial(),
-//   extra_args: z.object({
-//     model: z.enum(["bakllava-1"]),
-//   }),
-// });
-// export type Bakllava = z.infer<typeof BakllavaSchema>;
-
 export const JinaArgsSchema = z
   .object({
-    texts: z.array(z.string()),
+    texts: z.string().array().nonempty(),
     embed_metadata_keys: z.array(z.string()).optional(),
     provider_ids: z.array(z.string()).optional(),
     split: z.boolean().optional(), // false
@@ -374,7 +345,7 @@ export const TextCompletionSchema = z.object({
 });
 
 export const TextGenerationSchema = z.object({
-  completions: z.array(TextCompletionSchema),
+  completions:TextCompletionSchema.array().nonempty(),
   token_count: z.number(),
   token_input_count: z.number(),
 });

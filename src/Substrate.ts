@@ -53,7 +53,7 @@ export class Substrate {
     const response = await fetch(url, this.requestOptions({ dag: graph }));
 
     if (response.ok) {
-      const json = await response.text();
+      const json = await response.json();
       return json;
     } else {
       const res = new APIResponse(response);

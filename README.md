@@ -17,7 +17,7 @@ yarn add substrate
 See our [Guides]() and [API Reference]() for more examples and use cases.
 
 ```typescript
-import { Substrate, Adapter, Graph, Mistral, Jina } from "substrate";
+import { Substrate, Graph, Mistral, Jina } from "substrate";
 
 const SUBSTRATE_API_KEY = process.env["SUBSTRATE_API_KEY"];
 
@@ -29,18 +29,17 @@ const text = "Something you want to summarize...";
 // Create a Mistral summarization node
 const mistral = new Mistral({ id: "summary" })
   .setArgs({ input_prompts: [`Summarize the following: ${text}`] })
-  .setOutput()
-  .setToAdapters([
-    Adapter.Get.path("completions[0].text").to("texts"),
-    Adapter.WrapInList.key("texts"),
-    Adapter.Pick.keys(["texts"]),
-  ]);
+  .setOutput();
 
 // Create a Jina embedding node
 const jina = new Jina({ id: "embedding" }).setOutput();
 
 // Create a Graph that connects the two together
-const graph = new Graph().withEdge([mistral, jina, {}]);
+const graph = new Graph().withEdge([
+  mistral,
+  jina,
+  (out: Mistral.Output): Jina.Args => ({ texts: [out.completions[0].text] }),
+]);
 
 // Run the Graph and see print the result
 const result = await substrate.compose(graph);
