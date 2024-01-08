@@ -12,6 +12,13 @@ type Configuration = {
    */
   apiKey?: string | undefined;
 
+  /**
+   * Determines which [Version](https://www.substrate.run/api-ref#Versioning) of the Substrate API to use.
+   *
+   * Defaults to the latest compatible version with this library.
+   */
+  apiVersion?: string | undefined;
+
   userAgent?: string;
 
   baseUrl?: string;
@@ -24,11 +31,12 @@ export class Substrate {
   apiKey: string;
   userAgent: string;
   baseUrl: string;
+  apiVersion: string;
 
   /**
    * API client for interacting with the [Substrate API](https://www.substrate.run/api-ref).
    */
-  constructor({ apiKey, userAgent, baseUrl }: Configuration) {
+  constructor({ apiKey, userAgent, baseUrl, apiVersion }: Configuration) {
     if (!apiKey) {
       throw new SubstrateError(
         "An API Key is required. Specify it when constructing the Substrate client: `new Substrate({ apiKey: 'API_KEY' })`",
@@ -37,6 +45,7 @@ export class Substrate {
     this.apiKey = apiKey;
     this.userAgent = userAgent ?? `substrate-typescript/${VERSION}`;
     this.baseUrl = baseUrl ?? "https://api.substrate.run";
+    this.apiVersion = apiVersion ?? "2023-12-22";
   }
 
   /**
@@ -75,6 +84,7 @@ export class Substrate {
     headers.append("Content-Type", "application/json");
     headers.append("Authorization", `Bearer ${this.apiKey}`);
     headers.append("User-Agent", this.userAgent);
+    headers.append("X-Substrate-Version", this.apiVersion);
     return headers;
   }
 }
