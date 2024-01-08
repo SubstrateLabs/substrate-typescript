@@ -9,6 +9,7 @@ exports[`Graph > .withEdge > edge with code > arrow functions are encoded as \`A
       "adapter": AdapterCode {
         "code": "(x) => ({ y: x })",
         "runtime": "deno",
+        "runtime_version": "1.2.6",
       },
     },
   ],
@@ -19,6 +20,7 @@ exports[`Graph > .withEdge > edge with code > arrow functions are encoded as \`A
       "adapter": AdapterCode {
         "code": "(x) => ({ y: x })",
         "runtime": "deno",
+        "runtime_version": "1.2.6",
       },
     },
   ],
@@ -36,6 +38,7 @@ exports[`Graph > .withEdge > edge with code > functions are encoded as \`Adapter
           return { y: x };
         }",
         "runtime": "deno",
+        "runtime_version": "1.2.6",
       },
     },
   ],
@@ -48,6 +51,7 @@ exports[`Graph > .withEdge > edge with code > functions are encoded as \`Adapter
             return { y: x };
           }",
         "runtime": "deno",
+        "runtime_version": "1.2.6",
       },
     },
   ],

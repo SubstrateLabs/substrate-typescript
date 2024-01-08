@@ -289,6 +289,7 @@ export type Node = z.infer<typeof NodeSchema>;
 export const AdapterCodeSchema = z.object({
   code: z.string(),
   runtime: z.enum(["deno", "python"]),
+  runtime_version: z.string().optional(),
 });
 export type AdapterCode = z.infer<typeof AdapterCodeSchema>;
 
