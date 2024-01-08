@@ -42,6 +42,46 @@ describe("Graph", () => {
       expect(g.nodes).toEqual([a, b]);
       expect(g.edges).toEqual([["a", "b", {}]]);
     });
+
+    describe("edge with code", () => {
+      test("functions are encoded as `AdapterCode`", () => {
+        const a = new Node({ id: "a" });
+        const b = new Node({ id: "b" });
+        const c = new Node({ id: "c" });
+
+        const f = function (x: Node.Output) {
+          return { y: x };
+        };
+
+        const g = new Graph().withEdge([a, b, f]).withEdge([
+          b,
+          c,
+          function (x: Node.Output): Node.Input {
+            return { y: x };
+          },
+        ]);
+
+        // NOTE: we're matching on snapshots here because the exact whitespace/indentation
+        // of the toString() result of the functions can change as the code is reformatted.
+        expect(g.edges).toMatchSnapshot();
+      });
+
+      test("arrow functions are encoded as `AdapterCode`", () => {
+        const a = new Node({ id: "a" });
+        const b = new Node({ id: "b" });
+        const c = new Node({ id: "c" });
+
+        const f = (x: Node.Output): Node.Input => ({ y: x });
+
+        const g = new Graph()
+          .withEdge([a, b, f])
+          .withEdge([b, c, (x: Node.Output): Node.Input => ({ y: x })]);
+
+        // NOTE: we're matching on snapshots here because the exact whitespace/indentation
+        // of the toString() result of the functions can change as the code is reformatted.
+        expect(g.edges).toMatchSnapshot();
+      });
+    });
   });
 
   describe(".withEdges", () => {

@@ -1,0 +1,59 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Graph > .withEdge > edge with code > arrow functions are encoded as \`AdapterCode\` 1`] = `
+[
+  [
+    "a",
+    "b",
+    {
+      "adapter": AdapterCode {
+        "code": "(x) => ({ y: x })",
+        "runtime": "deno",
+        "runtime_version": "1.2.6",
+      },
+    },
+  ],
+  [
+    "b",
+    "c",
+    {
+      "adapter": AdapterCode {
+        "code": "(x) => ({ y: x })",
+        "runtime": "deno",
+        "runtime_version": "1.2.6",
+      },
+    },
+  ],
+]
+`;
+
+exports[`Graph > .withEdge > edge with code > functions are encoded as \`AdapterCode\` 1`] = `
+[
+  [
+    "a",
+    "b",
+    {
+      "adapter": AdapterCode {
+        "code": "function(x) {
+          return { y: x };
+        }",
+        "runtime": "deno",
+        "runtime_version": "1.2.6",
+      },
+    },
+  ],
+  [
+    "b",
+    "c",
+    {
+      "adapter": AdapterCode {
+        "code": "function(x) {
+            return { y: x };
+          }",
+        "runtime": "deno",
+        "runtime_version": "1.2.6",
+      },
+    },
+  ],
+]
+`;

@@ -1,6 +1,7 @@
 import { DiGraph } from "substrate/DiGraph";
 import * as Schema from "substrate/Schema";
 import { SubstrateError } from "substrate/Error";
+import { AdapterCode } from "substrate/AdapterCode";
 
 /**
  * `Graph` is used to construct computation graphs to execute on the Substrate platform.
@@ -54,20 +55,23 @@ export class Graph implements Graph.SubstrateGraph {
   /**
    * Returns a new graph that includes provided edge.
    */
-  withEdge([from, to, data = {}]: Graph.SubstrateEdge): Graph {
-    Schema.EdgeSchema.parse([from, to, data]);
+  withEdge([from, to, data = {}]: Graph.NewSubstrateEdge): Graph {
+    const adapter = AdapterCode.tryParse(data);
+    const edgeData = adapter ? { adapter } : {};
+
+    Schema.EdgeSchema.parse([from, to, edgeData]);
 
     const g = DiGraph.compose(this.graph);
     g.addNode([from.id, from]);
     g.addNode([to.id, to]);
-    g.addEdge([from.id, to.id, data]);
+    g.addEdge([from.id, to.id, edgeData]);
     return new Graph(this.initialArgs, g);
   }
 
   /**
    * Returns a new graph that includes provided edges.
    */
-  withEdges(edges: Graph.SubstrateEdge[]): Graph {
+  withEdges(edges: Graph.NewSubstrateEdge[]): Graph {
     return edges.reduce((graph, edge, _1, _2) => {
       return graph.withEdge(edge);
     }, this as Graph);
@@ -130,9 +134,13 @@ export namespace Graph {
   export type SubstrateNode = Schema.Node;
 
   /**
-   * `SubstrateEdge` represents the connection between two `Node` items. They are directed from left to right and may also contain `Attributes`.
+   * `SubstrateEdge` represents the connection between two `Node` items.
    */
   export type SubstrateEdge = Schema.Edge;
+  /**
+   * `NewSubstrateEdge` represents a new connection between two `Node` items. They are directed from left to right and may also contain `Attributes`.
+   */
+  export type NewSubstrateEdge = [Graph.SubstrateNode, Graph.SubstrateNode, Function | {}];
 
   /**
    * `EdgeIds` represents the connection between two `Node` items by `Id`. They are directed from left to right and may also contain `Attributes`.
