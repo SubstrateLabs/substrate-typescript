@@ -156,7 +156,7 @@ export type ModelNode = z.infer<typeof ModelNodeSchema>;
 
 export const MistralArgsSchema = z
   .object({
-    input_prompts: z.union([z.string(), z.string().array().nonempty()]),
+    input_prompts: z.union([z.string(), z.string().array()]),
     system: z.string().optional(),
     presence_penalty: z.number().optional().default(1.1),
     frequency_penalty: z.number().optional().default(0.0),
@@ -183,7 +183,7 @@ export type Mistral = z.infer<typeof MistralSchema>;
 
 export const JinaArgsSchema = z
   .object({
-    texts: z.string().array().nonempty(),
+    texts: z.string().array(),
     embed_metadata_keys: z.array(z.string()).optional(),
     provider_ids: z.array(z.string()).optional(),
     split: z.boolean().optional(), // false
