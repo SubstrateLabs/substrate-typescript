@@ -4,7 +4,7 @@ import { Substrate, Graph, Mistral, Jina } from "substrate";
 
 const SUBSTRATE_API_KEY = process.env["SUBSTRATE_API_KEY"];
 
-//Create a Substrate API client
+// Create a Substrate API client
 const substrate = new Substrate({ apiKey: SUBSTRATE_API_KEY });
 
 const text = "Something you want to summarize...";
@@ -21,7 +21,9 @@ const jina = new Jina({ id: "embedding" }).setOutput();
 const graph = new Graph().withEdge([
   mistral,
   jina,
-  (out: Mistral.Output): Jina.Args => ({ texts: [out.completions[0].text] }),
+  ({ completions }: Mistral.Output): Jina.Args => ({
+    texts: completions.map(({ text }) => text),
+  }),
 ]);
 
 // Run the Graph and see print the result

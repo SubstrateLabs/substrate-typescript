@@ -22,13 +22,15 @@ const summary = new Mistral({
 const graph = new Graph().withEdge([
   story,
   summary,
-  (out: Mistral.Output): Mistral.Args => ({
-    input_prompts: [`Summarize the following:\n\n${out.completions[0].text}`],
+  ({ completions }: Mistral.Output): Mistral.Args => ({
+    input_prompts: completions.map(
+      ({ text }) => `Summarize the following:\n\n${text}`,
+    ),
   }),
 ]);
 
 const result = await substrate.compose(graph);
-console.log("STORY:")
+console.log("STORY:");
 console.log(result.data.story.completions[0]?.text);
-console.log("SUMMARY:")
+console.log("SUMMARY:");
 console.log(result.data.summary.completions[0]?.text);
