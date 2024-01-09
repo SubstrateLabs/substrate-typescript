@@ -1,5 +1,6 @@
 import * as Schema from "substrate/Schema";
 import { AbstractNode } from "substrate/AbstractNode";
+import { Schema as NewSchema, OpenAPI } from "substrate/NewSchema";
 
 type Params = {
   id?: Schema.Id;
@@ -30,7 +31,7 @@ export namespace Mistral {
   /**
    * `Args` are the default inputs given to the `Node` when it executes. These values may be overridden by values coming from parent nodes in the `Graph`.
    */
-  export type Args = Schema.Mistral["args"];
+  export type Args = Partial<OpenAPI.components["schemas"]["MistralIn"]>;
 
   /**
    * `Node` is the structure this type of node must conform to.
@@ -40,10 +41,10 @@ export namespace Mistral {
   /**
    * `Input` is the required input for this node. It may be fulfilled by the intersection of `Args` and other `Node` outputs that become this node's input.
    */
-  export type Input = Schema.MistralInput;
+  export type Input = OpenAPI.components["schemas"]["MistralIn"];
 
   /**
    * `Output` is what this node will produce after it executes.
    */
-  export type Output = Schema.TextGeneration;
+  export type Output = OpenAPI.components["schemas"]["MistralOut"];
 }
