@@ -3,21 +3,7 @@ import { Graph } from "substrate/Graph";
 import { BaseNode as Node } from "substrate/BaseNode";
 
 describe("Graph", () => {
-  describe(".constructor", () => {
-    test("throws run time type errors", () => {
-      // @ts-expect-error
-      expect(() => new Graph({}, {})).toThrow();
-    });
-  });
-
   describe(".withNode", () => {
-    test("throws run time type errors", () => {
-      // @ts-expect-error
-      expect(() => new Graph().withNode()).toThrow();
-      // @ts-expect-error
-      expect(() => new Graph().withNode(1)).toThrow();
-    });
-
     test("returns a new graph that incldues the node", () => {
       const n = new Node();
       const g = new Graph().withNode(n);
@@ -26,15 +12,6 @@ describe("Graph", () => {
   });
 
   describe(".withEdge", () => {
-    test("throws run time type errors", () => {
-      // @ts-expect-error
-      expect(() => new Graph().withEdge([1, 2, 3])).toThrow();
-      // @ts-expect-error
-      expect(() => new Graph().withEdge([])).toThrow();
-      // @ts-expect-error
-      expect(() => new Graph().withEdge(1, 2, 3)).toThrow();
-    });
-
     test("returns a new graph that incldues the nodes and edges", () => {
       const a = new Node({ id: "a" });
       const b = new Node({ id: "b" });
@@ -85,15 +62,6 @@ describe("Graph", () => {
   });
 
   describe(".withEdges", () => {
-    test("throws run time type errors", () => {
-      // @ts-expect-error
-      expect(() => new Graph().withEdges([[1, 2, 3]])).toThrow();
-      // @ts-expect-error
-      expect(() => new Graph().withEdges([1])).toThrow();
-      // @ts-expect-error
-      expect(() => new Graph().withEdges(1)).toThrow();
-    });
-
     test("returns a new graph that incldues the nodes and edges", () => {
       const a = new Node({ id: "a" });
       const b = new Node({ id: "b" });

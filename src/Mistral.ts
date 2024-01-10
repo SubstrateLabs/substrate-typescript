@@ -22,7 +22,8 @@ export class Mistral extends AbstractNode<Mistral.Node> implements Mistral.Node 
   }
 
   override setArgs(args: Mistral.Args = {}) {
-    Schema.MistralSchema.shape.args.parse(args);
+    const result = Schema.MistralSchema.shape.args.safeParse(args);
+    if (!result.success) console.warn('Warning: Possibly incompatible Mistral.Args', args);
     return super.setArgs(args);
   }
 }

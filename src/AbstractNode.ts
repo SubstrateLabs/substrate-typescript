@@ -33,7 +33,8 @@ export abstract class AbstractNode<T extends Schema.Node> {
   _from_adapters?: Adapter.Adapter[];
 
   constructor(id: string = uuidv4()) {
-    Schema.IdSchema.parse(id);
+    const result = Schema.IdSchema.safeParse(id);
+    if (!result.success) console.warn('Warning: Possibly incompatible Id', id);
     this.id = id;
   }
 

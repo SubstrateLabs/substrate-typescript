@@ -25,7 +25,10 @@ export class Graph implements Graph.SubstrateGraph {
    * Returns a new graph that combines all provided graphs.
    */
   static compose(...graphs: [Graph, ...Graph[]]): Graph {
-    graphs.forEach((g) => Schema.GraphSchema.parse(g));
+    graphs.forEach((g) => {
+      const result = Schema.GraphSchema.safeParse(g);
+      if (!result.success) console.warn('Warning: Possibly incompatible Graph', g);
+    });
 
     const initialArgs = Object.assign({}, ...graphs.map((g) => g.initialArgs));
     const dag = DiGraph.compose(...graphs.map((graph) => graph.graph));
@@ -45,7 +48,8 @@ export class Graph implements Graph.SubstrateGraph {
    * Returns a new Graph that includes provided node.
    */
   withNode(node: Graph.SubstrateNode): Graph {
-    Schema.NodeSchema.parse(node);
+    const result = Schema.NodeSchema.safeParse(node);
+    if (!result.success) console.warn('Warning: Possibly incompatible Node', node);
 
     const g = DiGraph.compose(this.graph);
     g.addNode([node.id, node]);
@@ -59,7 +63,8 @@ export class Graph implements Graph.SubstrateGraph {
     const adapter = AdapterCode.tryParse(data);
     const edgeData = adapter ? { adapter } : {};
 
-    Schema.EdgeSchema.parse([from, to, edgeData]);
+    const result = Schema.EdgeSchema.safeParse([from, to, edgeData]);
+    if (!result.success) console.warn('Warning: Possibly incompatible Edge', [from, to, edgeData]);
 
     const g = DiGraph.compose(this.graph);
     g.addNode([from.id, from]);
