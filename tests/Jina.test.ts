@@ -1,6 +1,6 @@
 import { expect, describe, test } from "vitest";
 import { Jina } from "substrate/Jina";
-import * as Schema from "substrate/Schema";
+import * as Schema from "substrate/API/Schema";
 
 describe("Jina", () => {
   test("can construct a valid Jina", () => {

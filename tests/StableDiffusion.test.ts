@@ -1,6 +1,6 @@
 import { expect, describe, test } from "vitest";
 import { StableDiffusion } from "substrate/StableDiffusion";
-import * as Schema from "substrate/Schema";
+import * as Schema from "substrate/API/Schema";
 
 describe("StableDiffusion", () => {
   test("can construct a valid StableDiffusion", () => {

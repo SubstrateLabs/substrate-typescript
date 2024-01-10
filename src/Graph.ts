@@ -1,5 +1,5 @@
 import { DiGraph } from "substrate/DiGraph";
-import * as Schema from "substrate/Schema";
+import * as Schema from "substrate/API/Schema";
 import { SubstrateError } from "substrate/Error";
 import { AdapterCode } from "substrate/AdapterCode";
 

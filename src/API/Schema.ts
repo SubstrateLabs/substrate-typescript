@@ -1,51 +1,11 @@
 import { z } from "zod";
+import * as OpenAPIZod from "substrate/API/OpenAPIZod";
 
 export const IdSchema = z.string().min(1);
 export type Id = z.infer<typeof IdSchema>;
 
 export const AnySchema = z.any();
 export const UnknownSchema = z.unknown();
-
-export const LanguageCodeSchema = z.enum([
-  "arb",
-  "ben",
-  "cat",
-  "ces",
-  "cmn",
-  "cym",
-  "dan",
-  "deu",
-  "eng",
-  "est",
-  "fin",
-  "fra",
-  "hin",
-  "ind",
-  "ita",
-  "jpn",
-  "kan",
-  "kor",
-  "mlt",
-  "nld",
-  "pes",
-  "pol",
-  "por",
-  "ron",
-  "rus",
-  "slk",
-  "spa",
-  "swe",
-  "swh",
-  "tam",
-  "tel",
-  "tgl",
-  "tha",
-  "tur",
-  "ukr",
-  "urd",
-  "uzn",
-  "vie",
-]);
 
 export const StoreInfoSchema = z
   .object({
@@ -141,37 +101,16 @@ export const BaseNodeSchema = z
   .strict();
 export type BaseNode = z.infer<typeof BaseNodeSchema>;
 
-// // TBD: maybe this is still experimental?
-// export const AdapterNodeSchema = BaseNodeSchema.extend({
-//   class: z.literal("AdapterNode"),
-//   _adapters: z.array(AdapterSchema),
-// });
-// export type AdapterNode = z.infer<typeof AdapterNodeSchema>;
-
 export const ModelNodeSchema = BaseNodeSchema.extend({
   class: z.literal("ModelNode"),
 }).strict();
 export type ModelNodeInput = BaseNodeInput;
 export type ModelNode = z.infer<typeof ModelNodeSchema>;
 
-export const MistralArgsSchema = z
-  .object({
-    input_prompts: z.union([z.string(), z.string().array()]),
-    system: z.string().optional(),
-    presence_penalty: z.number().optional().default(1.1),
-    frequency_penalty: z.number().optional().default(0.0),
-    repetition_penalty: z.number().optional().default(1.0),
-    temperature: z.number().optional().default(0.75),
-    top_p: z.number().optional().default(1.0),
-    max_tokens: z.number().optional().default(800),
-  })
-  .strict();
-export type MistralInput = z.infer<typeof MistralArgsSchema>;
-
 export const MistralSchema = ModelNodeSchema.omit({ class: true })
   .extend({
     class: z.literal("Mistral"),
-    args: MistralArgsSchema.partial(),
+    args: OpenAPIZod.componentsSchema.shape.schemas.shape.MistralIn.partial(),
     extra_args: z
       .object({
         model: z.enum(["mistral-7b-instruct"]),
@@ -181,20 +120,9 @@ export const MistralSchema = ModelNodeSchema.omit({ class: true })
   .strict();
 export type Mistral = z.infer<typeof MistralSchema>;
 
-export const JinaArgsSchema = z
-  .object({
-    texts: z.string().array(),
-    embed_metadata_keys: z.array(z.string()).optional(),
-    provider_ids: z.array(z.string()).optional(),
-    split: z.boolean().optional(), // false
-    store_info: StoreInfoSchema.optional(),
-  })
-  .strict();
-export type JinaInput = z.infer<typeof JinaArgsSchema>;
-
 export const JinaSchema = ModelNodeSchema.omit({ class: true }).extend({
   class: z.literal("Jina"),
-  args: JinaArgsSchema.partial(),
+  args: OpenAPIZod.componentsSchema.shape.schemas.shape.JinaIn.partial(),
   extra_args: z.object({
     model: z.enum(["jina-base-v2"]),
   }),
@@ -233,41 +161,6 @@ export const StableDiffusionSchema = ModelNodeSchema.omit({
 });
 export type StableDiffusion = z.infer<typeof StableDiffusionSchema>;
 
-// export const SAMSchema = ModelNodeSchema.extend({
-//   class: z.literal("SAM"),
-//   args: z.object({
-//     // prompt: z.string(),
-//     image_url: z.string(),
-//     imgsz: z.number().optional().default(1024),
-//     text_prompt: z.string().optional(),
-//     point_prompt: z.array(z.array(z.number())).optional(),
-//   }),
-//   extra_args: z.object({
-//     model: z.enum(["FastSAM"]),
-//   }),
-// });
-
-// export const SeamlessSchema = ModelNodeSchema.extend({
-//   class: z.literal("Seamless"),
-//   args: z.object({
-//     input_audio: z.string(),
-//     target_language_code: LanguageCodeSchema,
-//     source_language_code: LanguageCodeSchema.optional().default("eng"),
-//   }),
-//   extra_args: z.object({
-//     model: z.enum(["FastSAM"]),
-//   }),
-// });
-
-// export const PythonNodeSchema = BaseNodeSchema.extend({
-//   class: z.literal("PythonNode"),
-//   code: z.string(),
-//   pip_deps: z.array(z.string()).optional(),
-//   apt_deps: z.array(z.string()).optional(),
-//   python_version: z.string().optional().default("3.10"),
-//   // attr: z.object({}).optional(), // ?
-// });
-
 // NOTE: may be deprecated soon.
 // see: https://github.com/colinhacks/zod/issues/2106
 export const NodeSchema = z.discriminatedUnion("class", [
@@ -276,13 +169,6 @@ export const NodeSchema = z.discriminatedUnion("class", [
   MistralSchema,
   JinaSchema,
   StableDiffusionSchema,
-  // BakllavaSchema,
-  // SDXLSchema,
-  // SAMSchema,
-  // SeamlessSchema,
-  // PythonNodeSchema,
-  // MapNodeSchema,
-  // AdapterNodeSchema,
 ]);
 export type Node = z.infer<typeof NodeSchema>;
 
@@ -351,71 +237,5 @@ export const TextGenerationSchema = z.object({
   token_input_count: z.number(),
 });
 export type TextGeneration = z.infer<typeof TextGenerationSchema>;
-
-export const AssistantChatCompletionSchema = z.object({
-  message: z.string(),
-  prompt_tokens: z.number(),
-  completion_tokens: z.number(),
-  total_tokens: z.number(),
-});
-
-export const SAMSegmentSchema = z.object({
-  image: z.string(),
-});
-
-export const SeamlessOutSchema = z.object({
-  audio_uri: z.string(),
-  text: z.string(),
-});
-
-// TBD: Input Args standardization
-//
-// export const ImageGenerationArgsSchema = z.object({
-//   prompt: z.string(),
-//   steps: z.number().optional(),
-//   num_images: z.number().optional(),
-//   width: z.number().optional(),
-//   height: z.number().optional(),
-//   manual_seed: z.number().optional(),
-//   negative_prompt: z.string().optional(),
-//   guidance_scale: z.number().optional(),
-//   init_img_url: z.string().url().optional(),
-//   mask_img_url: z.string().url().optional(),
-//   strength: z.number().optional(),
-//   use_refiner: z.boolean().default(false),
-//   use_lcm: z.boolean().default(false),
-//   use_ssd: z.boolean().default(true),
-//   use_turbo: z.boolean().default(false),
-//   use_hosted_url: z.boolean().default(false),
-// });
-//
-// export const EmbeddingArgsSchema = z.object({
-//   texts: z.array(z.string()),
-//   embed_metadata_keys: z.array(z.string()).optional(),
-//   collection: z.string().optional(),
-//   metadatas: z.array(z.object({})).optional(),
-//   ids: z.array(z.string()).optional(),
-//   split: z.boolean().optional().default(false),
-// });
-//
-// export const TextGenerationArgsSchema = z.object({
-//   prompts: z.array(z.string()).optional(),
-//   prompt: z.string().optional(),
-//   system: z.string().optional().default(""),
-//   temperature: z.number().optional().default(0.8),
-//   presence_penalty: z.number().optional().default(1.0),
-//   frequency_penalty: z.number().optional().default(0.3),
-//   repetition_penalty: z.number().optional().default(1.0),
-//   top_p: z.number().optional().default(1.0),
-//   max_tokens: z.number().optional(),
-// });
-//
-// export const QueryArgsSchema = z.object({
-//   texts: z.array(z.string()),
-//   collection: z.string(),
-//   limit: z.number().optional().default(10),
-//   ef_search: z.number().optional(),
-//   returning: z.array(z.string()).optional(),
-// });
 
 export type GraphResult = { [key: string]: any };

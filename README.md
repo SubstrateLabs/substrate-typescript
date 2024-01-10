@@ -21,14 +21,14 @@ import { Substrate, Graph, Mistral, Jina } from "substrate";
 
 const SUBSTRATE_API_KEY = process.env["SUBSTRATE_API_KEY"];
 
-//Create a Substrate API client
+// Create a Substrate API client
 const substrate = new Substrate({ apiKey: SUBSTRATE_API_KEY });
 
 const text = "Something you want to summarize...";
 
 // Create a Mistral summarization node
 const mistral = new Mistral({ id: "summary" })
-  .setArgs({ input_prompts: [`Summarize the following: ${text}`] })
+  .setArgs({ prompts: [{ prompt: `Summarize the following: ${text}` }] })
   .setOutput();
 
 // Create a Jina embedding node
@@ -38,7 +38,11 @@ const jina = new Jina({ id: "embedding" }).setOutput();
 const graph = new Graph().withEdge([
   mistral,
   jina,
-  (out: Mistral.Output): Jina.Args => ({ texts: [out.completions[0].text] }),
+  ({ data }: Mistral.Output): Jina.Args => ({
+    docs: data!.flatMap(({ completions }) =>
+      completions.map((completion) => ({ text: completion })),
+    ),
+  }),
 ]);
 
 // Run the Graph and see print the result

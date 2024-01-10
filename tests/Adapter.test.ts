@@ -1,6 +1,6 @@
 import { expect, describe, test } from "vitest";
 import * as Adapter from "substrate/Adapter";
-import * as Schema from "substrate/Schema";
+import * as Schema from "substrate/API/Schema";
 
 describe("Adapter", () => {
   test("get", () => {

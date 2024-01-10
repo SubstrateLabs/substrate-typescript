@@ -8,7 +8,7 @@ const substrate = new Substrate({ apiKey: SUBSTRATE_API_KEY });
 
 const text = "Text you want to embed...";
 
-const jina = new Jina().setArgs({ texts: [text] }).setOutput();
+const jina = new Jina().setArgs({ docs: [{ text }] }).setOutput();
 
 const graph = new Graph().withNode(jina);
 
