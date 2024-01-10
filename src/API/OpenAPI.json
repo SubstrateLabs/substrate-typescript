@@ -1,0 +1,663 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Substrate API",
+    "version": "2024-01-01",
+    "contact": { "email": "support@substrate.run"},
+    "description": "The Substrate API"
+  },
+  "servers": [
+    {
+      "url": "https://api.substrate.run/{basePath}",
+      "description": "The production Substrate API",
+      "variables": {
+        "basePath": {
+          "default": "v1"
+        }
+      }
+    }
+  ],
+  "components": {
+    "schemas": {
+      "ErrorOut": {
+        "title": "ErrorOut",
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["api_error", "invalid_request_error"],
+            "description": "The type of error returned."
+          },
+          "message": {
+            "type": "string",
+            "description": "A message providing more details about the error."
+          }
+        },
+        "required": ["type", "message"]
+      },
+      "StableDiffusionInputImage": {
+        "title": "StableDiffusionInputImage",
+        "type": "object",
+        "properties": {
+          "image_url": {
+            "type": "string",
+            "description": "Input image URL to modify with a text prompt."
+          },
+          "mask_image_url": {
+            "type": "string",
+            "description": "Mask of the input image to selectively modify."
+          },
+          "prompt_strength": {
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "Controls the influence of the input prompt on the generated output.",
+            "default": 0.6
+          }
+        },
+        "required": ["image_url"]
+      },
+      "StableDiffusionIn": {
+        "title": "StableDiffusionIn",
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "Input prompt."
+          },
+          "negative_prompt": {
+            "type": "string",
+            "description": "Negative input prompt."
+          },
+          "image": {
+            "description": "Image parameters to modify an existing image (image-to-image).",
+            "$ref": "#/components/schemas/StableDiffusionInputImage"
+          },
+          "store": {
+            "type": "boolean",
+            "description": "Return a hosted image URL instead of base64 encoded image data.",
+            "default": false
+          },
+          "width": {
+            "type": "integer",
+            "description": "Width of output image, in pixels."
+          },
+          "height": {
+            "type": "integer",
+            "description": "Height of output image, in pixels."
+          },
+          "steps": {
+            "type": "integer",
+            "description": "Number of diffusion steps to run."
+          },
+          "seed": {
+            "type": "integer",
+            "description": "Random noise seed. Default is a random seed."
+          },
+          "guidance_scale": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 35,
+            "description": "Controls the influence of the input prompt on the generated output."
+          },
+          "num_images": {
+            "type": "integer",
+            "description": "Number of images to generate.",
+            "default": 1
+          }
+        },
+        "required": ["prompt"]
+      },
+      "StableDiffusionImage": {
+        "title": "StableDiffusionImage",
+        "type": "object",
+        "properties": {
+          "uri": {
+            "type": "string",
+            "description": "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is enabled."
+          },
+          "seed": {
+            "type": "integer",
+            "description": "The random noise seed used for generation."
+          }
+        },
+        "required": ["uri", "seed"]
+      },
+      "StableDiffusionOut": {
+        "title": "StableDiffusionOut",
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/StableDiffusionImage"
+        }
+      },
+      "StableDiffusionResponse": {
+        "title": "StableDiffusionResponse",
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/StableDiffusionOut"
+          },
+          "error": {
+            "$ref": "#/components/schemas/ErrorOut"
+          }
+        }
+      },
+      "MistralPrompt": {
+        "title": "MistralPrompt",
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "Prompt to generate completions for."
+          }
+        },
+        "required": ["prompt"]
+      },
+      "MistralIn": {
+        "title": "MistralIn",
+        "type": "object",
+        "properties": {
+          "prompts": {
+            "type": "array",
+            "description": "Input prompts.",
+            "items": {
+              "$ref": "#/components/schemas/MistralPrompt"
+            }
+          },
+          "temperature": {
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "maximum": 2,
+            "description": "Sampling temperature to use. Higher values make the output more random; lower values make the output more deterministic.",
+            "default": 0.75
+          },
+          "max_tokens": {
+            "type": "integer",
+            "description": "Maximum number of tokens to generate.",
+            "default": 800
+          },
+          "num_completions": {
+            "type": "integer",
+            "description": "Number of completions to generate for each prompt.",
+            "default": 1
+          }
+        },
+        "required": ["prompts"]
+      },
+      "MistralResult": {
+        "title": "MistralResult",
+        "type": "object",
+        "properties": {
+          "completions": {
+            "type": "array",
+            "description": "Generated completion choices.",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": ["completions"]
+      },
+      "MistralOut": {
+        "title": "MistralOut",
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/MistralResult"
+        }
+      },
+      "MistralResponse": {
+        "title": "MistralResponse",
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/MistralOut"
+          },
+          "error": {
+            "$ref": "#/components/schemas/ErrorOut"
+          }
+        }
+      },
+      "WhisperIn": {
+        "title": "WhisperIn",
+        "type": "object",
+        "properties": {
+          "audio_url": {
+            "type": "string",
+            "description": "Input audio URL."
+          },
+          "prompt": {
+            "type": "string",
+            "description": "Prompt to guide model on contents of input audio and desired output."
+          },
+          "language": {
+            "type": "string",
+            "default": "en",
+            "description": "Language of input audio in ISO-639-1 format."
+          },
+          "align": {
+            "type": "boolean",
+            "default": false,
+            "description": "Align transcription to produce more accurate sentence-level timestamps and word-level timestamps. An array of word segments will be included in each sentence segment."
+          },
+          "diarize": {
+            "type": "boolean",
+            "default": false,
+            "description": "Identify speakers for each segment. Speaker IDs will be added to each output segment."
+          }
+        },
+        "required": ["audio_url"]
+      },
+      "WhisperWord": {
+        "title": "WhisperWord",
+        "type": "object",
+        "properties": {
+          "word": {
+            "type": "string",
+            "description": "Text of word."
+          },
+          "start": {
+            "type": "number",
+            "format": "float",
+            "description": "Start time of word, in seconds."
+          },
+          "end": {
+            "type": "number",
+            "format": "float",
+            "description": "End time of word, in seconds."
+          },
+          "speaker": {
+            "type": "string",
+            "description": "ID of speaker, if `diarize` is enabled."
+          }
+        },
+        "required": ["word", "start", "end"]
+      },
+      "WhisperSegment": {
+        "title": "WhisperSegment",
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "Text of segment."
+          },
+          "start": {
+            "type": "number",
+            "format": "float",
+            "description": "Start time of segment, in seconds."
+          },
+          "end": {
+            "type": "number",
+            "format": "float",
+            "description": "End time of segment, in seconds."
+          },
+          "speaker": {
+            "type": "string",
+            "description": "ID of speaker, if `diarize` is enabled."
+          },
+          "words": {
+            "type": "array",
+            "description": "Aligned words, if `align` is enabled.",
+            "items": {
+              "$ref": "#/components/schemas/WhisperWord"
+            }
+          }
+        },
+        "required": ["text", "start", "end"]
+      },
+      "WhisperOut": {
+        "title": "WhisperOut",
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/WhisperSegment"
+        }
+      },
+      "WhisperResponse": {
+        "title": "WhisperResponse",
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/WhisperOut"
+          },
+          "error": {
+            "$ref": "#/components/schemas/ErrorOut"
+          }
+        }
+      },
+      "JinaDoc": {
+        "title": "JinaDoc",
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "Text to embed."
+          },
+          "id": {
+            "type": "string",
+            "description": "Document id. Required when storing embedding."
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Additional metadata to store in embedding document."
+          },
+          "embed_metadata_keys": {
+            "type": "array",
+            "description": "Contents of `metadata` included to generate embedding.",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": ["text"]
+      },
+      "JinaIn": {
+        "title": "JinaIn",
+        "type": "object",
+        "properties": {
+          "docs": {
+            "type": "array",
+            "description": "Documents to embed.",
+            "items": {
+              "$ref": "#/components/schemas/JinaDoc"
+            }
+          },
+          "store": {
+            "type": "string",
+            "description": "Vector store ID in which embedding will be stored."
+          }
+        },
+        "required": ["docs"]
+      },
+      "JinaEmbedding": {
+        "title": "JinaEmbedding",
+        "type": "object",
+        "properties": {
+          "vector": {
+            "type": "string",
+            "description": "Embedding vector.",
+            "items": {
+              "type": "number",
+              "format": "float"
+            }
+          },
+          "id": {
+            "type": "string",
+            "description": "Document id."
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Additional metadata stored in embedding document."
+          }
+        },
+        "required": ["vector"]
+      },
+      "JinaOut": {
+        "title": "JinaOut",
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/JinaEmbedding"
+        }
+      },
+      "JinaResponse": {
+        "title": "JinaResponse",
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/JinaOut"
+          },
+          "error": {
+            "$ref": "#/components/schemas/ErrorOut"
+          }
+        }
+      },
+      "CLIPDoc": {
+        "title": "CLIPDoc",
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "Text to embed."
+          },
+          "image_url": {
+            "type": "string",
+            "description": "URL of image to embed."
+          },
+          "id": {
+            "type": "string",
+            "description": "Document id. Required when storing embedding."
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Additional metadata to store in embedding document."
+          },
+          "embed_metadata_keys": {
+            "type": "array",
+            "description": "Contents of `metadata` included to generate embedding.",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "CLIPIn": {
+        "title": "CLIPIn",
+        "type": "object",
+        "properties": {
+          "docs": {
+            "type": "array",
+            "description": "Documents to embed.",
+            "items": {
+              "$ref": "#/components/schemas/CLIPDoc"
+            }
+          },
+          "store": {
+            "type": "string",
+            "description": "Vector store ID in which embedding will be stored."
+          }
+        },
+        "required": ["docs"]
+      },
+      "CLIPEmbedding": {
+        "title": "CLIPEmbedding",
+        "type": "object",
+        "properties": {
+          "vector": {
+            "type": "string",
+            "description": "Embedding vector.",
+            "items": {
+              "type": "number",
+              "format": "float"
+            }
+          },
+          "id": {
+            "type": "string",
+            "description": "Document id."
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Additional metadata stored in embedding document."
+          }
+        },
+        "required": ["vector"]
+      },
+      "CLIPOut": {
+        "title": "CLIPOut",
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/CLIPEmbedding"
+        }
+      },
+      "CLIPResponse": {
+        "title": "CLIPResponse",
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/CLIPOut"
+          },
+          "error": {
+            "$ref": "#/components/schemas/ErrorOut"
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/stablediffusion": {
+      "post": {
+        "summary": "StableDiffusion",
+        "description": "Generate an image from a text prompt using the Stable Diffusion family of image models. Trained by [Stability AI](https://huggingface.co/docs/diffusers/api/pipelines/stable_diffusion/stable_diffusion_xl) and hosted on Substrate.",
+        "operationId": "StableDiffusion",
+        "tags": [
+          "models"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/StableDiffusionIn"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StableDiffusionResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mistral": {
+      "post": {
+        "summary": "Mistral",
+        "description": "Generate text using the Mistral family of language models. Trained by [Mistral AI](https://huggingface.co/docs/transformers/main/model_doc/mistral) and hosted on Substrate.",
+        "operationId": "Mistral",
+        "tags": [
+          "models"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/MistralIn"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MistralResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/whisper": {
+      "post": {
+        "summary": "Whisper",
+        "description": "Transcribe audio using the Whisper family of models. Includes sentence-level segmentation, word-level alignment and speaker diarization. Trained by [Open AI](https://huggingface.co/docs/transformers/model_doc/whisper) and hosted on Substrate.",
+        "operationId": "Whisper",
+        "tags": [
+          "models"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/WhisperIn"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WhisperResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/jina": {
+      "post": {
+        "summary": "Jina",
+        "description": "TODO. Trained by [Jina AI](https://huggingface.co/jinaai) and hosted on Substrate.",
+        "operationId": "Jina",
+        "tags": [
+          "models"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/JinaIn"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JinaResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/clip": {
+      "post": {
+        "summary": "CLIP",
+        "description": "TODO. Trained by [Open AI](https://huggingface.co/docs/transformers/model_doc/clip) and hosted on Substrate.",
+        "operationId": "CLIP",
+        "tags": [
+          "models"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/CLIPIn"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CLIPResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "models",
+      "description": "Models"
+    }
+  ]
+}

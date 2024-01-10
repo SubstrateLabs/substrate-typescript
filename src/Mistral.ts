@@ -1,6 +1,6 @@
-import * as Schema from "substrate/Schema";
+import * as Schema from "substrate/API/Schema";
+import * as OpenAPI from "substrate/API/OpenAPI";
 import { AbstractNode } from "substrate/AbstractNode";
-import { Schema as NewSchema, OpenAPI } from "substrate/NewSchema";
 
 type Params = {
   id?: Schema.Id;
@@ -46,5 +46,5 @@ export namespace Mistral {
   /**
    * `Output` is what this node will produce after it executes.
    */
-  export type Output = OpenAPI.components["schemas"]["MistralOut"];
+  export type Output = OpenAPI.components["schemas"]["MistralResponse"];
 }

@@ -1,4 +1,4 @@
-import * as Schema from "substrate/Schema";
+import * as Schema from "substrate/API/Schema";
 import { AbstractNode } from "substrate/AbstractNode";
 
 type Params = {

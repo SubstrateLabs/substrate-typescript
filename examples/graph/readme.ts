@@ -11,7 +11,7 @@ const text = "Something you want to summarize...";
 
 // Create a Mistral summarization node
 const mistral = new Mistral({ id: "summary" })
-  .setArgs({ input_prompts: [`Summarize the following: ${text}`] })
+  .setArgs({ prompts: [{ prompt: `Summarize the following: ${text}` }] })
   .setOutput();
 
 // Create a Jina embedding node
@@ -21,11 +21,13 @@ const jina = new Jina({ id: "embedding" }).setOutput();
 const graph = new Graph().withEdge([
   mistral,
   jina,
-  ({ completions }: Mistral.Output): Jina.Args => ({
-    texts: completions.map(({ text }) => text),
+  ({ data }: Mistral.Output): Jina.Args => ({
+    docs: data!.flatMap(({ completions }) =>
+      completions.map((completion) => ({ text: completion })),
+    ),
   }),
 ]);
 
 // Run the Graph and see print the result
 const result = await substrate.compose(graph);
-console.log(result);
+console.log(JSON.stringify(result));

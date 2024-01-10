@@ -33,7 +33,7 @@
     "noUncheckedIndexedAccess": true,                    /* Add 'undefined' to a type when accessed using an index. */
     "noPropertyAccessFromIndexSignature": true,          /* Enforces using indexed accessors for keys declared using an indexed type. */
     "noFallthroughCasesInSwitch": true,                  /* Enable error reporting for fallthrough cases in switch statements. */
-    "exactOptionalPropertyTypes": true,                  /* Interpret optional property types as written, rather than adding 'undefined'. */
+    // "exactOptionalPropertyTypes": true,               /* Interpret optional property types as written, rather than adding 'undefined'. */
     // "noUnusedParameters": true,                       /* Raise an error when a function parameter isn't read. */
     // "allowUnusedLabels": true,                        /* Disable error reporting for unused labels. */
     // "allowUnreachableCode": true,                     /* Disable error reporting for unreachable code. */
@@ -54,6 +54,11 @@
   "ts-node": {
     "esm": true,
     "compilerOptions": {
+      /* Internal-use: package paths */
+      "paths": {
+        "substrate/*": ["./src/*"],
+        "substrate": ["./src/index.ts"]
+      }
     }
   }
 }

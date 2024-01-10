@@ -1,4 +1,4 @@
-import * as Schema from "substrate/Schema";
+import * as Schema from "substrate/API/Schema";
 
 type Code = Schema.AdapterCode["code"];
 type Runtime = Schema.AdapterCode["runtime"];

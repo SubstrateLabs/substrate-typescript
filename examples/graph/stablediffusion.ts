@@ -13,9 +13,6 @@ const args: StableDiffusion.Args = {
     "(humanoid)1.3, anime, cartoon, graphic, text, painting, crayon, graphite, ugly, (nipples)1.5, woman, girl, female, oversaturated, blur, blurry",
   width: 1024,
   height: 1024,
-  use_refiner: true,
-  steps: 40,
-  return_base64: true,
 };
 
 const sdxl = new StableDiffusion({ args }).setOutput();

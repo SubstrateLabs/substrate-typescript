@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-import * as Schema from "substrate/Schema";
+import * as Schema from "substrate/API/Schema";
 import { Adapter } from "substrate/Adapter";
 
 /**

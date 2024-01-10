@@ -9,7 +9,7 @@ const substrate = new Substrate({ apiKey: SUBSTRATE_API_KEY });
 const jokePrompt = "Tell me a joke about seashells";
 
 const mistral = new Mistral()
-  .setArgs({ input_prompts: [jokePrompt] })
+  .setArgs({ prompts: [{ prompt: jokePrompt }] })
   .setOutput();
 
 const graph = new Graph().withNode(mistral);

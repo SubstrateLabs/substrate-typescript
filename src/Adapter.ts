@@ -1,4 +1,4 @@
-import * as Schema from "substrate/Schema";
+import * as Schema from "substrate/API/Schema";
 
 type Keys = { source_key?: string | null; dest_key?: string | null };
 

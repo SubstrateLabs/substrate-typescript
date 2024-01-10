@@ -1,6 +1,6 @@
 import { expect, describe, test } from "vitest";
 import { Mistral } from "substrate/Mistral";
-import * as Schema from "substrate/Schema";
+import * as Schema from "substrate/API/Schema";
 
 describe("Mistral", () => {
   test("can construct a valid Mistral", () => {

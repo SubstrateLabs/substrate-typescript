@@ -1,6 +1,6 @@
 import { expect, describe, test } from "vitest";
 import { BaseNode } from "substrate/BaseNode";
-import * as Schema from "substrate/Schema";
+import * as Schema from "substrate/API/Schema";
 
 describe("BaseNode", () => {
   test("can construct a valid BaseNode", () => {

@@ -1,5 +1,6 @@
 import { SubstrateError } from "substrate/Error";
 import { VERSION } from "substrate/version";
+import OpenAPIjson from "substrate/API/OpenAPI.json";
 import { ModelEndpoints } from "substrate/endpoints/Models";
 import { Graph } from "substrate/Graph";
 import { APIResponse } from "substrate/APIResponse";
@@ -45,7 +46,7 @@ export class Substrate {
     this.apiKey = apiKey;
     this.userAgent = userAgent ?? `substrate-typescript/${VERSION}`;
     this.baseUrl = baseUrl ?? "https://api.substrate.run";
-    this.apiVersion = apiVersion ?? "2023-12-22";
+    this.apiVersion = apiVersion ?? OpenAPIjson["info"]["version"];
   }
 
   /**
