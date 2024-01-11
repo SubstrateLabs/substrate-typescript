@@ -1,8 +1,15 @@
-import { expect, describe, test } from "vitest";
+import { vi, afterEach, expect, describe, test } from "vitest";
 import { Graph } from "substrate/Graph";
 import { BaseNode as Node } from "substrate/BaseNode";
 
 describe("Graph", () => {
+  const warnMock = vi.spyOn(console, "warn").mockImplementation(() => {});
+
+  afterEach(() => {
+    warnMock.mockReset();
+  });
+
+
   describe(".withNode", () => {
     test("returns a new graph that incldues the node", () => {
       const n = new Node();
@@ -213,6 +220,7 @@ describe("Graph", () => {
 
       expect(graphJSON.nodes[0]!.args).toEqual({ a: 1, b: 2 });
       expect(graphJSON.edges[0]![2]).toEqual({ something: "unknown" });
+      expect(warnMock).toHaveBeenCalled();
     });
   });
 });

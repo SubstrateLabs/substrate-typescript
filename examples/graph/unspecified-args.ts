@@ -18,6 +18,7 @@ const mistral = new Mistral()
   .setOutput();
 
 const graph = new Graph().withNode(mistral);
+// graph.toJSON();
 
 const result = await substrate.compose(graph);
 console.log(JSON.stringify(result));

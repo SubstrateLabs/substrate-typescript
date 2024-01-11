@@ -19,8 +19,6 @@ export class ModelNode extends AbstractNode<ModelNode.Node> implements ModelNode
   }
 
   override setArgs(args: ModelNode.Args = {}) {
-    const result = Schema.ModelNodeSchema.shape.args.safeParse(args);
-    if (!result.success) console.warn('Warning: Possibly incompatible ModelNode.Args', args);
     return super.setArgs(args);
   }
 

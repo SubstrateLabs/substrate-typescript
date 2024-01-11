@@ -27,7 +27,7 @@ export class Graph implements Graph.SubstrateGraph {
   static compose(...graphs: [Graph, ...Graph[]]): Graph {
     graphs.forEach((g) => {
       const result = Schema.GraphSchema.safeParse(g);
-      if (!result.success) console.warn('Warning: Possibly incompatible Graph', g);
+      if (!result.success) console.log('[warn] Possibly incompatible Graph:', g);
     });
 
     const initialArgs = Object.assign({}, ...graphs.map((g) => g.initialArgs));
@@ -49,7 +49,7 @@ export class Graph implements Graph.SubstrateGraph {
    */
   withNode(node: Graph.SubstrateNode): Graph {
     const result = Schema.NodeSchema.safeParse(node);
-    if (!result.success) console.warn('Warning: Possibly incompatible Node', node);
+    if (!result.success) console.warn('[warn] Possibly incompatible Node:', node);
 
     const g = DiGraph.compose(this.graph);
     g.addNode([node.id, node]);
@@ -64,7 +64,7 @@ export class Graph implements Graph.SubstrateGraph {
     const edgeData = adapter ? { adapter } : data;
 
     const result = Schema.EdgeSchema.safeParse([from, to, edgeData]);
-    if (!result.success) console.warn('Warning: Possibly incompatible Edge', [from, to, edgeData]);
+    if (!result.success) console.warn('[warn] Possibly incompatible Edge:', [from, to, edgeData]);
 
     const g = DiGraph.compose(this.graph);
     g.addNode([from.id, from]);
@@ -118,12 +118,16 @@ export class Graph implements Graph.SubstrateGraph {
   }
 
   toJSON(): Graph.SubstrateGraph {
-    // return Schema.GraphSchema.parse(this);
-    return {
+    const json = {
       nodes:this.nodes,
       edges: this.edges,
       initial_args: this.initial_args,
-    }
+    };
+
+    const result = Schema.GraphSchema.safeParse(json);
+    if (!result.success) console.warn('[warn] Possibly incompatible Graph', json);
+
+    return json;
   }
 }
 

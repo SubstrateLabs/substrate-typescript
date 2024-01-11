@@ -19,8 +19,6 @@ export class BaseNode extends AbstractNode<BaseNode.Node> implements BaseNode.No
   }
 
   override setArgs(args: BaseNode.Args = {}) {
-    const result = Schema.BaseNodeSchema.shape.args.safeParse(args);
-    if (!result.success) console.warn('Warning: Possibly incompatible BaseNode.Args', args);
     return super.setArgs(args);
   }
 }

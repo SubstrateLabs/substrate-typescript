@@ -12,7 +12,7 @@ export const StoreInfoSchema = z.object({
   user_id: z.string().optional(),
   organization_id: z.string().optional(),
   full_metadata: z.array(z.object({})).optional(),
-});
+}).strict();
 
 const BaseAdapterSchema = z.object({
   source_key: z.string().nullable(),
@@ -92,7 +92,7 @@ export const BaseNodeSchema = z.object({
   _should_output_globally: z.boolean().optional(),
   _to_adapters: z.array(AdapterSchema).optional(),
   _from_adapters: z.array(AdapterSchema).optional(),
-});
+}).strict();
 export type BaseNode = z.infer<typeof BaseNodeSchema>;
 
 export const ModelNodeSchema = BaseNodeSchema.extend({
@@ -107,7 +107,7 @@ export const MistralSchema = ModelNodeSchema.omit({ class: true }).extend({
   extra_args: z.object({
     model: z.enum(["mistral-7b-instruct"]),
   }),
-});
+}).strict();
 export type Mistral = z.infer<typeof MistralSchema>;
 
 export const JinaSchema = ModelNodeSchema.omit({ class: true }).extend({
@@ -116,7 +116,7 @@ export const JinaSchema = ModelNodeSchema.omit({ class: true }).extend({
   extra_args: z.object({
     model: z.enum(["jina-base-v2"]),
   }),
-});
+}).strict();
 export type Jina = z.infer<typeof JinaSchema>;
 
 export const StableDiffusionArgsSchema = z.object({
@@ -148,7 +148,7 @@ export const StableDiffusionSchema = ModelNodeSchema.omit({
   extra_args: z.object({
     model: z.enum(["sdxl"]),
   }),
-});
+}).strict();
 export type StableDiffusion = z.infer<typeof StableDiffusionSchema>;
 
 // NOTE: may be deprecated soon.
@@ -171,7 +171,7 @@ export type AdapterCode = z.infer<typeof AdapterCodeSchema>;
 
 export const EdgeDataSchema = z.object({
   adapter: AdapterCodeSchema.optional(),
-});
+}).strict();
 
 export const EdgeSchema = z.tuple([NodeSchema, NodeSchema, EdgeDataSchema]);
 export type Edge = z.infer<typeof EdgeSchema>;
@@ -184,12 +184,12 @@ export const GraphSchema = z.object({
   edges: z.array(EdgeIdsSchema),
   // Could be anything, initial args that are inputted into the root node
   initial_args: z.object({}),
-});
+}).strict();
 export type Graph = z.infer<typeof GraphSchema>;
 
 export const ComposeArgsSchema = z.object({
   dag: GraphSchema,
-});
+}).strict();
 export type ComposeArgs = z.infer<typeof ComposeArgsSchema>;
 
 export const EmbeddingMetaSchema = z.object({
