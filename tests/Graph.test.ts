@@ -1,23 +1,16 @@
-import { expect, describe, test } from "vitest";
+import { vi, afterEach, expect, describe, test } from "vitest";
 import { Graph } from "substrate/Graph";
 import { BaseNode as Node } from "substrate/BaseNode";
 
 describe("Graph", () => {
-  describe(".constructor", () => {
-    test("throws run time type errors", () => {
-      // @ts-expect-error
-      expect(() => new Graph({}, {})).toThrow();
-    });
+  const warnMock = vi.spyOn(console, "warn").mockImplementation(() => {});
+
+  afterEach(() => {
+    warnMock.mockReset();
   });
 
-  describe(".withNode", () => {
-    test("throws run time type errors", () => {
-      // @ts-expect-error
-      expect(() => new Graph().withNode()).toThrow();
-      // @ts-expect-error
-      expect(() => new Graph().withNode(1)).toThrow();
-    });
 
+  describe(".withNode", () => {
     test("returns a new graph that incldues the node", () => {
       const n = new Node();
       const g = new Graph().withNode(n);
@@ -26,15 +19,6 @@ describe("Graph", () => {
   });
 
   describe(".withEdge", () => {
-    test("throws run time type errors", () => {
-      // @ts-expect-error
-      expect(() => new Graph().withEdge([1, 2, 3])).toThrow();
-      // @ts-expect-error
-      expect(() => new Graph().withEdge([])).toThrow();
-      // @ts-expect-error
-      expect(() => new Graph().withEdge(1, 2, 3)).toThrow();
-    });
-
     test("returns a new graph that incldues the nodes and edges", () => {
       const a = new Node({ id: "a" });
       const b = new Node({ id: "b" });
@@ -85,15 +69,6 @@ describe("Graph", () => {
   });
 
   describe(".withEdges", () => {
-    test("throws run time type errors", () => {
-      // @ts-expect-error
-      expect(() => new Graph().withEdges([[1, 2, 3]])).toThrow();
-      // @ts-expect-error
-      expect(() => new Graph().withEdges([1])).toThrow();
-      // @ts-expect-error
-      expect(() => new Graph().withEdges(1)).toThrow();
-    });
-
     test("returns a new graph that incldues the nodes and edges", () => {
       const a = new Node({ id: "a" });
       const b = new Node({ id: "b" });
@@ -227,6 +202,25 @@ describe("Graph", () => {
       expect(g2.nodeCount()).toEqual(5);
       expect(g2.edgeCount()).toEqual(5);
       expect(() => g2.toJSON()).not.toThrow();
+    });
+  });
+
+  describe("serializing the graph (toJSON)", () => {
+    test("when you have provided un specified properties in the graph, they are still serialized", () => {
+      // we would like to allow the SDK to be permissive in such a way that a user that is on
+      // an older version of this library may override the types specified in the API (via the version of the OpenAPI spec
+      // the library is generated with) so that a user can use properties that may be valid, but not contained in
+      // an older version. this may be the case if the user for whatever can not or will not update their version of the
+      // SDK library.
+
+      const a = new Node().setArgs({ a: 1, b: 2 });
+      const b = new Node().setArgs({ c: 1, d: 2 });
+      const g = new Graph().withEdge([a, b, { something: "unknown" }]);
+      const graphJSON = g.toJSON();
+
+      expect(graphJSON.nodes[0]!.args).toEqual({ a: 1, b: 2 });
+      expect(graphJSON.edges[0]![2]).toEqual({ something: "unknown" });
+      expect(warnMock).toHaveBeenCalled();
     });
   });
 });

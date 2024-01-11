@@ -19,7 +19,6 @@ export class ModelNode extends AbstractNode<ModelNode.Node> implements ModelNode
   }
 
   override setArgs(args: ModelNode.Args = {}) {
-    Schema.ModelNodeSchema.shape.args.parse(args);
     return super.setArgs(args);
   }
 

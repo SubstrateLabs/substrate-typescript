@@ -22,7 +22,6 @@ export class StableDiffusion extends AbstractNode<StableDiffusion.Node> implemen
   }
 
   override setArgs(args: StableDiffusion.Args = {}) {
-    Schema.StableDiffusionSchema.shape.args.parse(args);
     return super.setArgs(args);
   }
 }

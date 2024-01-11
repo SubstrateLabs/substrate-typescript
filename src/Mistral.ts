@@ -22,7 +22,6 @@ export class Mistral extends AbstractNode<Mistral.Node> implements Mistral.Node 
   }
 
   override setArgs(args: Mistral.Args = {}) {
-    Schema.MistralSchema.shape.args.parse(args);
     return super.setArgs(args);
   }
 }

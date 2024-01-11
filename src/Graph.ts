@@ -25,7 +25,10 @@ export class Graph implements Graph.SubstrateGraph {
    * Returns a new graph that combines all provided graphs.
    */
   static compose(...graphs: [Graph, ...Graph[]]): Graph {
-    graphs.forEach((g) => Schema.GraphSchema.parse(g));
+    graphs.forEach((g) => {
+      const result = Schema.GraphSchema.safeParse(g);
+      if (!result.success) console.log('[warn] Possibly incompatible Graph:', g);
+    });
 
     const initialArgs = Object.assign({}, ...graphs.map((g) => g.initialArgs));
     const dag = DiGraph.compose(...graphs.map((graph) => graph.graph));
@@ -45,7 +48,8 @@ export class Graph implements Graph.SubstrateGraph {
    * Returns a new Graph that includes provided node.
    */
   withNode(node: Graph.SubstrateNode): Graph {
-    Schema.NodeSchema.parse(node);
+    const result = Schema.NodeSchema.safeParse(node);
+    if (!result.success) console.warn('[warn] Possibly incompatible Node:', node);
 
     const g = DiGraph.compose(this.graph);
     g.addNode([node.id, node]);
@@ -57,9 +61,10 @@ export class Graph implements Graph.SubstrateGraph {
    */
   withEdge([from, to, data = {}]: Graph.NewSubstrateEdge): Graph {
     const adapter = AdapterCode.tryParse(data);
-    const edgeData = adapter ? { adapter } : {};
+    const edgeData = adapter ? { adapter } : data;
 
-    Schema.EdgeSchema.parse([from, to, edgeData]);
+    const result = Schema.EdgeSchema.safeParse([from, to, edgeData]);
+    if (!result.success) console.warn('[warn] Possibly incompatible Edge:', [from, to, edgeData]);
 
     const g = DiGraph.compose(this.graph);
     g.addNode([from.id, from]);
@@ -112,8 +117,17 @@ export class Graph implements Graph.SubstrateGraph {
     }
   }
 
-  toJSON() {
-    return Schema.GraphSchema.parse(this);
+  toJSON(): Graph.SubstrateGraph {
+    const json = {
+      nodes:this.nodes,
+      edges: this.edges,
+      initial_args: this.initial_args,
+    };
+
+    const result = Schema.GraphSchema.safeParse(json);
+    if (!result.success) console.warn('[warn] Possibly incompatible Graph', json);
+
+    return json;
   }
 }
 

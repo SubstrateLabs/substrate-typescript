@@ -7,14 +7,12 @@ export type Id = z.infer<typeof IdSchema>;
 export const AnySchema = z.any();
 export const UnknownSchema = z.unknown();
 
-export const StoreInfoSchema = z
-  .object({
-    collection: z.string(),
-    user_id: z.string().optional(),
-    organization_id: z.string().optional(),
-    full_metadata: z.array(z.object({})).optional(),
-  })
-  .strict();
+export const StoreInfoSchema = z.object({
+  collection: z.string(),
+  user_id: z.string().optional(),
+  organization_id: z.string().optional(),
+  full_metadata: z.array(z.object({})).optional(),
+}).strict();
 
 const BaseAdapterSchema = z.object({
   source_key: z.string().nullable(),
@@ -26,51 +24,49 @@ const BaseAdapterSchema = z.object({
 export const GetAdapterSchema = BaseAdapterSchema.extend({
   source_key: z.string(),
   transform: z.literal("get"),
-  transform_args: z
-    .object({ path: z.string(), map: z.boolean().optional() })
-    .strict(),
-}).strict();
+  transform_args: z.object({ path: z.string(), map: z.boolean().optional() }),
+});
 export type GetAdapter = z.infer<typeof GetAdapterSchema>;
 
 export const WrapInListAdapterSchema = BaseAdapterSchema.extend({
   source_key: z.string(),
   transform: z.literal("wrap_in_list"),
-  transform_args: z.object({}).strict(),
-}).strict();
+  transform_args: z.object({}),
+});
 export type WrapInListAdapter = z.infer<typeof WrapInListAdapterSchema>;
 
 export const PickAdapterSchema = BaseAdapterSchema.extend({
   transform: z.literal("pick"),
-  transform_args: z.object({ keys: z.string().array().nonempty() }).strict(),
-}).strict();
+  transform_args: z.object({ keys: z.string().array().nonempty() }),
+});
 export type PickAdapter = z.infer<typeof PickAdapterSchema>;
 
 export const PopAdapterSchema = BaseAdapterSchema.extend({
   source_key: z.string(),
   transform: z.literal("pop"),
-  transform_args: z.object({}).strict(),
-}).strict();
+  transform_args: z.object({}),
+});
 export type PopAdapter = z.infer<typeof PopAdapterSchema>;
 
 export const ConcatAdapterSchema = BaseAdapterSchema.extend({
   source_key: z.string(),
   transform: z.literal("concat"),
-  transform_args: z.object({ target: z.string() }).strict(),
-}).strict();
+  transform_args: z.object({ target: z.string() }),
+});
 export type ConcatAdapter = z.infer<typeof ConcatAdapterSchema>;
 
 export const PrependAdapterSchema = BaseAdapterSchema.extend({
   source_key: z.string(),
   transform: z.literal("prepend"),
-  transform_args: z.object({ target: z.string() }).strict(),
-}).strict();
+  transform_args: z.object({ target: z.string() }),
+});
 export type PrependAdapter = z.infer<typeof PrependAdapterSchema>;
 
 export const WrapInDictAdapterSchema = BaseAdapterSchema.extend({
   source_key: z.string(),
   transform: z.literal("wrap_in_dict"),
-  transform_args: z.object({ key: z.string() }).strict(),
-}).strict();
+  transform_args: z.object({ key: z.string() }),
+});
 export type WrapInDictAdapter = z.infer<typeof WrapInDictAdapterSchema>;
 
 export const AdapterSchema = z.discriminatedUnion("transform", [
@@ -87,37 +83,31 @@ export type Adapter = z.infer<typeof AdapterSchema>;
 export const BaseNodeArgsSchema = z.object({});
 export type BaseNodeInput = z.infer<typeof BaseNodeArgsSchema>;
 
-export const BaseNodeSchema = z
-  .object({
-    id: IdSchema,
-    class: z.literal("Node"),
-    args: BaseNodeArgsSchema.partial(),
-    extra_args: z.object({}),
-    _global_output_keys: z.array(z.string()).optional(),
-    _should_output_globally: z.boolean().optional(),
-    _to_adapters: z.array(AdapterSchema).optional(),
-    _from_adapters: z.array(AdapterSchema).optional(),
-  })
-  .strict();
+export const BaseNodeSchema = z.object({
+  id: IdSchema,
+  class: z.literal("Node"),
+  args: BaseNodeArgsSchema.partial(),
+  extra_args: z.object({}),
+  _global_output_keys: z.array(z.string()).optional(),
+  _should_output_globally: z.boolean().optional(),
+  _to_adapters: z.array(AdapterSchema).optional(),
+  _from_adapters: z.array(AdapterSchema).optional(),
+}).strict();
 export type BaseNode = z.infer<typeof BaseNodeSchema>;
 
 export const ModelNodeSchema = BaseNodeSchema.extend({
   class: z.literal("ModelNode"),
-}).strict();
+});
 export type ModelNodeInput = BaseNodeInput;
 export type ModelNode = z.infer<typeof ModelNodeSchema>;
 
-export const MistralSchema = ModelNodeSchema.omit({ class: true })
-  .extend({
-    class: z.literal("Mistral"),
-    args: OpenAPIZod.componentsSchema.shape.schemas.shape.MistralIn.partial(),
-    extra_args: z
-      .object({
-        model: z.enum(["mistral-7b-instruct"]),
-      })
-      .strict(),
-  })
-  .strict();
+export const MistralSchema = ModelNodeSchema.omit({ class: true }).extend({
+  class: z.literal("Mistral"),
+  args: OpenAPIZod.componentsSchema.shape.schemas.shape.MistralIn.partial(),
+  extra_args: z.object({
+    model: z.enum(["mistral-7b-instruct"]),
+  }),
+}).strict();
 export type Mistral = z.infer<typeof MistralSchema>;
 
 export const JinaSchema = ModelNodeSchema.omit({ class: true }).extend({
@@ -126,7 +116,7 @@ export const JinaSchema = ModelNodeSchema.omit({ class: true }).extend({
   extra_args: z.object({
     model: z.enum(["jina-base-v2"]),
   }),
-});
+}).strict();
 export type Jina = z.infer<typeof JinaSchema>;
 
 export const StableDiffusionArgsSchema = z.object({
@@ -158,7 +148,7 @@ export const StableDiffusionSchema = ModelNodeSchema.omit({
   extra_args: z.object({
     model: z.enum(["sdxl"]),
   }),
-});
+}).strict();
 export type StableDiffusion = z.infer<typeof StableDiffusionSchema>;
 
 // NOTE: may be deprecated soon.
@@ -181,7 +171,7 @@ export type AdapterCode = z.infer<typeof AdapterCodeSchema>;
 
 export const EdgeDataSchema = z.object({
   adapter: AdapterCodeSchema.optional(),
-});
+}).strict();
 
 export const EdgeSchema = z.tuple([NodeSchema, NodeSchema, EdgeDataSchema]);
 export type Edge = z.infer<typeof EdgeSchema>;
@@ -194,12 +184,12 @@ export const GraphSchema = z.object({
   edges: z.array(EdgeIdsSchema),
   // Could be anything, initial args that are inputted into the root node
   initial_args: z.object({}),
-});
+}).strict();
 export type Graph = z.infer<typeof GraphSchema>;
 
 export const ComposeArgsSchema = z.object({
   dag: GraphSchema,
-});
+}).strict();
 export type ComposeArgs = z.infer<typeof ComposeArgsSchema>;
 
 export const EmbeddingMetaSchema = z.object({
@@ -232,7 +222,7 @@ export const TextCompletionSchema = z.object({
 });
 
 export const TextGenerationSchema = z.object({
-  completions:TextCompletionSchema.array().nonempty(),
+  completions: TextCompletionSchema.array().nonempty(),
   token_count: z.number(),
   token_input_count: z.number(),
 });

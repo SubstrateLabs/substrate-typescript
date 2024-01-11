@@ -22,7 +22,6 @@ export class Jina extends AbstractNode<Jina.Node> implements Jina.Node {
   }
 
   override setArgs(args: Jina.Args = {}) {
-    Schema.JinaSchema.shape.args.parse(args);
     return super.setArgs(args);
   }
 }
