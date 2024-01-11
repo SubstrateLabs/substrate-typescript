@@ -197,4 +197,22 @@ describe("Graph", () => {
       expect(() => g2.toJSON()).not.toThrow();
     });
   });
+
+  describe("serializing the graph (toJSON)", () => {
+    test("when you have provided un specified properties in the graph, they are still serialized", () => {
+      // we would like to allow the SDK to be permissive in such a way that a user that is on
+      // an older version of this library may override the types specified in the API (via the version of the OpenAPI spec
+      // the library is generated with) so that a user can use properties that may be valid, but not contained in
+      // an older version. this may be the case if the user for whatever can not or will not update their version of the
+      // SDK library.
+
+      const a = new Node().setArgs({ a: 1, b: 2 });
+      const b = new Node().setArgs({ c: 1, d: 2 });
+      const g = new Graph().withEdge([a, b, { something: "unknown" }]);
+      const graphJSON = g.toJSON();
+
+      expect(graphJSON.nodes[0]!.args).toEqual({ a: 1, b: 2 });
+      expect(graphJSON.edges[0]![2]).toEqual({ something: "unknown" });
+    });
+  });
 });

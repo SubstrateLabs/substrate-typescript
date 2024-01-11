@@ -61,7 +61,7 @@ export class Graph implements Graph.SubstrateGraph {
    */
   withEdge([from, to, data = {}]: Graph.NewSubstrateEdge): Graph {
     const adapter = AdapterCode.tryParse(data);
-    const edgeData = adapter ? { adapter } : {};
+    const edgeData = adapter ? { adapter } : data;
 
     const result = Schema.EdgeSchema.safeParse([from, to, edgeData]);
     if (!result.success) console.warn('Warning: Possibly incompatible Edge', [from, to, edgeData]);
@@ -117,8 +117,13 @@ export class Graph implements Graph.SubstrateGraph {
     }
   }
 
-  toJSON() {
-    return Schema.GraphSchema.parse(this);
+  toJSON(): Graph.SubstrateGraph {
+    // return Schema.GraphSchema.parse(this);
+    return {
+      nodes:this.nodes,
+      edges: this.edges,
+      initial_args: this.initial_args,
+    }
   }
 }
 
