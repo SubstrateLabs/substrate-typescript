@@ -1,5 +1,5 @@
 import { expect, describe, test } from "vitest";
-import { randId, toMermaid } from "./exploreHelpers";
+import { randId } from "./exploreHelpers";
 import { DiGraph } from "substrate/DiGraph";
 
 class Graph {
@@ -20,45 +20,49 @@ class Graph {
   add(node: ModelNode): Graph {
     this.graph.addNode([node.id, node]);
 
-    let refs: any[] = [];
+    const adj = { [node.id]: {} };
 
-    function search(o: Object) {
-      for (const key in o) {
-        // @ts-expect-error
-        const value = o[key];
-        if (Array.isArray(value)) {
-          // handle array.
-          const others = [];
-          for (const item of value) {
-            if (item instanceof Ref) {
-              // @ts-expect-error
-              refs.push(item.$unproxy);
-            } else {
-              others.push(item);
+    // search through the Node.Input and find all the dependencies.
+    function search(o: Object, toNodeId: ModelNode["id"]) {
+      if ("$op" in o) {
+        console.log("[Op]", o.$op);
+        switch (o.$op) {
+          case "OutputSelector": {
+            // @ts-expect-error
+            adj[node.id][o.args.node_id] = 1;
+            return;
+          }
+          case "Attribute": {
+            // @ts-expect-error
+            search(o.args.data, toNodeId);
+            return;
+          }
+          case "Index": {
+            // @ts-expect-error
+            search(o.args.data, toNodeId);
+            return;
+          }
+        }
+      } else {
+        for (const [_k, v] of Object.entries(o)) {
+          if (Array.isArray(v)) {
+            for (const item in v) {
+              search(item, toNodeId);
             }
+          } else if (v instanceof Ref) {
             // @ts-expect-error
-            o[key] = others;
+            const up = v.$unproxy;
+            // console.log("[Ref]", "k=", k, "v=", up);
+            search(up, toNodeId);
+          } else {
+            // console.log("[Else]", "k=", k, "v=", v);
           }
-        } else if (typeof value === "object") {
-          if (value instanceof Ref) {
-            // @ts-expect-error
-            refs.push(value.$unproxy);
-            // delete key in object
-            // @ts-expect-error;
-            delete o[key];
-            return; // stop searching.
-          }
-          search(value);
         }
       }
     }
-    search(node.args);
 
-    for (const ref of refs) {
-      this.add(ref);
-      this.graph.addEdge([ref.node.id, ref.id, {}]);
-      this.graph.addEdge([ref.id, node.id, {}]);
-    }
+    search(node.input, node.id);
+    console.log("[Found Edges]", adj);
 
     return this;
   }
@@ -79,7 +83,7 @@ class Graph {
   }
 }
 namespace Graph {
-  export type Node = { id: Id; args: Object };
+  export type Node = { id: Id; input: Object };
 }
 
 type Id = string;
@@ -92,171 +96,272 @@ type Proxied<T> = { Proxied: 1 } & T;
 
 abstract class Ref {}
 
-// OutputRef is a Node that represents selecting a value at a specific `Path` in a Node's Output.
-class OutputSelector extends Ref implements OutputSelector.Node {
-  id: Id;
-  #node: Graph.Node;
-  args: OutputSelector.Args;
-  class = "OutputSelector" as const;
-
-  constructor(args: OutputSelector.Args, node: Graph.Node, id: Id = randId()) {
-    super();
-    this.id = id;
-    this.#node = node;
-    this.args = args;
-  }
-
-  get node() {
-    return this.#node;
-  }
-
-  static create<T>(node: Graph.Node, id: Id = randId()) {
-    const ref = new OutputSelector({ path: "" }, node, id);
-    return new Proxy(ref, {
-      get(target: any, prop: any, receiver: any) {
-        // we need a way to magically get the inner target and break out of this
-        // infinite proxy
-        if (prop === "$unproxy") return target;
-
-        const propInt = parseInt(prop);
-        const isArrayIndexing = !isNaN(propInt);
-        const nextPathItem = isArrayIndexing ? `[${propInt}]` : prop;
-        const maybeDot =
-          target.args.path.length > 0 && !isArrayIndexing ? "." : "";
-        target.args.path = target.args.path + maybeDot + nextPathItem;
-        return receiver;
-      },
-    }) as Proxied<T>;
-  }
-}
-
-namespace OutputSelector {
-  export type Input = { path: string };
-  export type Output = any;
-  export type Args = Partial<Input>;
-  export type Node = {
-    id: string;
-    args: Args;
-  };
-}
+// const zoo = ModelA()
+// const foo = ModelA()
+// const bar = ModelB({ baz: [{prompt: F.concat("asdf", foo.boo[zoo.myzooidx]) }, { prompts: foo.blah.map(f => f.bar[0] ) }, { prompt: 'static' } ], boo: 1,  })
+//
+//
+// type Op = Attribute | Index | Static | Concat | ...;
+//
+// type Static = {
+//   op: "static",
+//   args: {
+//     data: any;
+//   }
+// }
+//
+// type Attribute = {
+//   op: "attribute";
+//   args: {
+//     key: Op;
+//   }
+// }
+// type Index = {
+//   op: "index";
+//   args: {
+//     key: Op;
+//   }
+// }
+//
+// type Concat = {
+//   op: "concat";
+//   args: {
+//     left: Op,
+//     right: Op,
+//   }
+// }
+//
+//
+// edge = {
+//   foo.id,
+//   bar.id,
+//   {
+//     args: [
+//       {
+//         source: [{ key: "boo", op: "attribute" }, {key: 0, op: "index" } ],
+//         target: [{ key: "baz", op: "attribute" }, {key: 0, op: "index" }, {key: "prompt", op: "attribute" }]
+//       },
+//       {
+//         source: [{ key: "blah", op: "attribute" }],
+//         target: [{ key: "baz", op: "attribute" }, {key: 1, op: "index" }, {key: "prompt", op: "attribute" }]
+//       },
+//       {
+//         source: [{ op: "static", data: "static" }],
+//         target: [{ key: "baz", op: "attribute" }, {key: 2, op: "index" }, {key: "prompt", op: "attribute" }]
+//       },
+//       {
+//         source: [{ op: "static", data: 1 }],
+//         target: [{ key: "boo", op: "attribute" }]
+//       },
+//     ]
+//   }
+// }
 
 class ModelNode implements ModelNode.Node {
   id: Id;
-  args: ModelNode.Args;
+  input: ModelNode.Input;
   class = "ModelNode" as const;
 
-  constructor(args: ModelNode.Args = {}, id: string = randId()) {
+  constructor(input: ModelNode.Input, id: string = randId()) {
     this.id = id;
-    this.args = args;
+    this.input = input;
   }
 
-  run({ x }: ModelNode.Input) {
-    const result = x + x;
+  run(input: ModelNode.ResolvedInput): ModelNode.Output {
     return {
       a: {
-        b: [result],
-        c: result.length,
+        b: [input.x, input.x],
+        c: input.x.length,
       },
     };
   }
 
-  get $output() {
-    return OutputSelector.create<ModelNode.Output>(this);
+  get $ref() {
+    return OutputSelector.create<ModelNode.Output>({ node_id: this.id });
   }
 }
 namespace ModelNode {
-  export type Input = { x: string };
+  export type Input = { x: Op.Op | string; y: Op.Op | string };
+  export type ResolvedInput = { x: string; y: string };
   export type Output = {
     a: {
       b: string[];
       c: number;
     };
   };
-  export type Args = Partial<{ x: string | Ref }>;
   export type Node = {
     id: string;
-    args: Args;
+    input: Input;
   };
 }
 
+class OutputSelector extends Ref implements Op.OutputSelector {
+  $op = "OutputSelector" as const;
+  args: Op.OutputSelector["args"];
+  op: Op.Op;
+
+  constructor(args: Op.OutputSelector["args"]) {
+    super();
+    this.args = args;
+    this.op = this;
+  }
+
+  static create<T>(args: Op.OutputSelector["args"]) {
+    const ref = new OutputSelector(args);
+    return new Proxy(ref, {
+      get(target: any, prop: any, receiver: any) {
+        // we need a way to magically get the inner target and break out of this
+        // infinite proxy
+        if (prop === "$unproxy") return target.op;
+
+        if (typeof prop === "symbol") {
+          // console.log("[prop]", target)
+          console.log("[prop]", prop)
+          // console.log("[prop]", receiver);
+        }
+
+        const propInt = parseInt(prop);
+        const isArrayIndexing = !isNaN(propInt);
+        // const nextPathItem = isArrayIndexing ? `[${propInt}]` : prop;
+        // const maybeDot =
+        //   target.args.path.length > 0 && !isArrayIndexing ? "." : "";
+        // target.args.path = target.args.path + maybeDot + nextPathItem;
+
+        if (isArrayIndexing) {
+          target.op = new Index({
+            key: propInt,
+            data: target.op,
+          });
+        } else {
+          target.op = new Attribute({
+            key: prop,
+            data: target.op,
+          });
+        }
+
+        return receiver;
+      },
+    }) as Proxied<T>;
+  }
+
+  toJSON() {
+    return {
+      $op: this.$op,
+      args: this.args,
+    };
+  }
+}
+
+class Attribute implements Op.Attribute {
+  $op = "Attribute" as const;
+  args: Op.Attribute["args"];
+  constructor(args: Op.Attribute["args"]) {
+    this.args = args;
+  }
+
+  toJSON() {
+    return {
+      $op: this.$op,
+      args: this.args,
+    };
+  }
+}
+
+class Index implements Op.Index {
+  $op = "Index" as const;
+  args: Op.Index["args"];
+  constructor(args: Op.Index["args"]) {
+    this.args = args;
+  }
+
+  toJSON() {
+    return {
+      $op: this.$op,
+      args: this.args,
+    };
+  }
+}
+
+namespace Op {
+  export type Op = OutputSelector | Attribute | Index;
+
+  export type OutputSelector = {
+    $op: "OutputSelector";
+    args: {
+      node_id: ModelNode["id"];
+    };
+  };
+
+  export type Attribute = {
+    $op: "Attribute";
+    args: {
+      key: string;
+      data: unknown[] | Op;
+    };
+  };
+
+  export type Index = {
+    $op: "Index";
+    args: {
+      key: number;
+      data: unknown[] | Op;
+    };
+  };
+}
+//  {
+//   "$op": "Index",
+//   "args": {
+//     "key": 0,
+//     "data": {
+//       "$op": "Attribute",
+//       "args": {
+//         "key": "b",
+//         "data": {
+//           "$op": "Attribute",
+//           "args": {
+//             "key": "a",
+//             "data": {
+//               "$op": "OutputSelector",
+//               "args": {
+//                 "node_id": "a"
+//               }
+//             }
+//           }
+//         }
+//       }
+//     }
+//   }
+// }
 describe("Explore", () => {
-  // test("Basic output access", () => {
-  //   const a = new ModelNode({ x: "hello" }, "a");
-  //   console.log(a);
-  //   const ref = a.$output.a.b[0];
-  //   // console.log(ref);
-  //   // console.log(ref);
-  //   // console.log(ref);
-  // });
+  test("Basic output access", () => {
+    const a = new ModelNode({ x: "hello", y: "" }, "a");
+    console.log(a);
+    const b = new ModelNode({ x: "1", y: "2" }, "b");
+    // @ts-expect-error
+    const ref = a.$ref.a.b[b.$ref.c].$unproxy;
 
-  // class F {
-  //   static concat(a: any, b: any): any {
-  //     return;
-  //   }
-  // }
-  test("Graph using Node A's output is an input for Node B", () => {
-    const a = new ModelNode({ x: "hello" }, "a");
-    const b = new ModelNode({ x: a.$output.a.b[0] }, "b");
-    const c = new ModelNode({ x: a.$output.a.b[0] }, "c");
-
-    // console.log(a);
-    // console.log(b);
-
-    const g = new Graph().add(a).add(b).add(c);
-
-    console.log(toMermaid(g));
-
-    console.log(g.nodes);
-    console.log(g.edges);
+    console.log(JSON.stringify(ref, {}, 2));
   });
 
-  // test("returns a new graph that incldues the node", () => {
-  //   // console.log(m.$output.nested.numbers[123]);
-  //   // expect(1).toEqual(2);
-  //   // expect(m.$output.hello).toEqual({ t: "OutputRef", id: "123", "state": ["hello"] });
-  //   // expect(m.$output.jokes).toEqual({ t: "OutputRef", id: "123", "state": ["hello"] });
-  //   // expect(m.$output.nested.numbers).toEqual({ t: "OutputRef", id: "123", "state": ["nested", "numbers"] });
-  //   // expect(m.$output.nested.numbers[0]).toEqual({ t: "OutputRef", id: "123", "state": ["nested", "numbers"] });
+  // test("Basic ref as input", () => {
+  //   const a = new ModelNode({ x: "hello" }, "a");
+  //   const ref = a.$ref.a.b[0]!;
+  //   const b = new ModelNode({ x: ref }, "b");
+  //   console.log(ref.$unproxy);
+  // });
+
+  // test("Basic ref as input added to a graph", () => {
+  //   const a = new ModelNode({ x: "hello", y: "" }, "a");
+  //   const ref = a.$ref.a.b[0]!;
+  //   const b = new ModelNode({ x: ref, y: "" }, "b");
+  //   const ref2 = b.$ref.a.b[0]!;
+  //   const c = new ModelNode({ x: ref, y: ref2 }, "c");
+  //
+  //   const g = new Graph().add(c);
+  //   console.log(g.toJSON());
   // });
 
   test("ok", () => {
     expect("ok").toEqual("ok");
   });
-
-
-
-
-
-
-
-  // test("proxying", () => {
-  //   class Item {
-  //     path: string;
-  //     constructor(path: string = "") {
-  //       this.path = path;
-  //     }
-  //
-  //     static create() {
-  //       return new Proxy(new Item(), {
-  //         get(target: any, prop: any, receiver: any) {
-  //           if (prop === "$deref") return target;
-  //           const propInt = parseInt(prop);
-  //           const isArrayIndexing = !isNaN(propInt);
-  //           const nextPathItem = isArrayIndexing ? `[${propInt}]` : prop;
-  //           const maybeDot =
-  //             target.path.length > 0 && !isArrayIndexing ? "." : "";
-  //           target.path = target.path + maybeDot + nextPathItem;
-  //           return receiver;
-  //         },
-  //       });
-  //     }
-  //
-  //     hello() {
-  //       return "hello mate"
-  //     }
-  //   }
-  //
-  //   const i = Item.create();
-  //   console.log(i.a.b.c.d[1].$deref.hello());
-  // });
 });
