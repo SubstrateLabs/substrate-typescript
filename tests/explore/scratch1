@@ -1,3 +1,5 @@
+// previous idea where the client creates new Nodes per operation
+
 import { expect, describe, test } from "vitest";
 import { randId } from "./exploreHelpers";
 import { DiGraph } from "substrate/DiGraph";
@@ -216,7 +218,9 @@ class OutputSelector extends Ref implements Op.OutputSelector {
 
         if (typeof prop === "symbol") {
           // console.log("[prop]", target)
-          console.log("[prop]", prop)
+          console.log("[prop]", prop);
+          console.log("hi");
+          console.log("[prop.unproxy]", prop.$unproxy);
           // console.log("[prop]", receiver);
         }
 
@@ -333,15 +337,74 @@ namespace Op {
 //   }
 // }
 describe("Explore", () => {
-  test("Basic output access", () => {
-    const a = new ModelNode({ x: "hello", y: "" }, "a");
-    console.log(a);
-    const b = new ModelNode({ x: "1", y: "2" }, "b");
-    // @ts-expect-error
-    const ref = a.$ref.a.b[b.$ref.c].$unproxy;
+  test("proxy into proxy", () => {
+    const refFactory = (
+      refs: Record<string, any> = {},
+      idPrefix: string = "$$id:",
+    ) => {
+      const id = () => `${idPrefix}${Object.keys(refs).length}`;
 
-    console.log(JSON.stringify(ref, {}, 2));
+      const makeRef = (original: Object, props: any[] = []): any => {
+        const ref = {
+          id: id(),
+          original,
+          props,
+        };
+        refs[ref.id] = ref;
+
+        return new Proxy(ref, {
+          get(target: any, prop: any, _receiver: any) {
+            if (prop === "$target") return target;
+
+            /**
+             * When a "ref" is being used as a parameter to another ref such as in the case of:
+             *
+             *    let ref1 = a.b.c;
+             *    let ref2 = d.e[ref1];
+             *
+             * When `e[ref1]` is called, internally JS will send `toPrimitive` to `ref1` in order
+             * to pass it as a paramter to `e[]` - because proxy objects cannot be transformed
+             * into primitive types, we're specifying here to use a function that resolves to the
+             * internal `proxyId`. When `e[]` recieves a property access of a string that starts
+             * with the special `$proxyId:` part it will use the actual `ref1` value using a
+             * private lookup table.
+             */
+            if (prop === Symbol.toPrimitive) {
+              return () => target.id;
+            }
+
+            const nextProp = prop.startsWith(idPrefix) ? refs[prop] : prop;
+            const props = [...ref.props, nextProp];
+
+            return makeRef(target.original, props);
+          },
+        });
+      };
+      return { makeRef, refs };
+    };
+
+    const { makeRef, refs } = refFactory();
+
+    class Thing {}
+    const a = new Thing();
+    const p = makeRef(a);
+
+    const r1 = p.a[1];
+    const r2 = p.d.e.f[r1.x.y.z].c;
+    console.log("[r1]", r1);
+    console.log("[r2]", r2);
+    console.log(refs);
   });
+
+  // test("Basic output access", () => {
+  //   const a = new ModelNode({ x: "hello", y: "" }, "a");
+  //   console.log(a);
+  //   const b = new ModelNode({ x: "1", y: "2" }, "b");
+  //   // @ts-expect-error
+  //   const ref = a.$ref.a.b[b.$ref.c].$unproxy;
+  //
+  //   console.log(JSON.stringify(ref, {}, 2));
+  // });
 
   // test("Basic ref as input", () => {
   //   const a = new ModelNode({ x: "hello" }, "a");
@@ -365,3 +428,4 @@ describe("Explore", () => {
     expect("ok").toEqual("ok");
   });
 });
+
