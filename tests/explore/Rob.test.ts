@@ -45,10 +45,6 @@ class Graph {
     const { ops } = Rob.replaceRefsWithOps(node.args, refFactory, this.newId);
     ops.forEach((op) => {
       this.graph.addEdge([op.origin_node, node.id, {}]);
-
-      op.node_graph_edges.forEach(([fromId, toId]) => {
-        this.graph.addEdge([fromId, toId, {}]);
-      });
     });
 
     return this;
@@ -63,7 +59,7 @@ class Graph {
   }
 
   toJSON() {
-    const processed = this.nodes.reduce(
+    return this.nodes.reduce(
       (acc, node) => {
         const { args, ops } = Rob.replaceRefsWithOps(
           node.args,
@@ -78,14 +74,10 @@ class Graph {
       },
       { nodes: [], ops: [] },
     );
-
-    return {
-      nodes: processed.nodes,
-      ops: processed.ops,
-      edges: this.edges,
-    };
   }
 }
+
+
 
 // Rob's Example
 const a = new FooNode("a");
@@ -125,7 +117,7 @@ describe("Rob's Example", () => {
     ]);
   });
 
-  test("b.ref[a.ref.foo].nest_id", () => {
+  test("b.ref.nested[a.ref.foo].nest_id", () => {
     let result = Rob.refOps(refFactory.getTarget(c.args.bar), idGenerator());
     expect(result).toEqual([
       {
@@ -242,11 +234,6 @@ describe("Rob's Example", () => {
     const result = g.toJSON();
     expect(result.nodes.length).toEqual(3);
     expect(result.ops.length).toEqual(4);
-    expect(result.edges).toEqual([
-      ["a", "b", {}],
-      ["a", "c", {}],
-      ["b", "c", {}],
-    ]);
     expect(result).toMatchSnapshot();
   });
 

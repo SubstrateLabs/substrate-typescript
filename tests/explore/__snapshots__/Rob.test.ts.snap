@@ -2,23 +2,6 @@
 
 exports[`Rob's Example > graph serialization (include ops, op-id replacement) 1`] = `
 {
-  "edges": [
-    [
-      "a",
-      "b",
-      {},
-    ],
-    [
-      "a",
-      "c",
-      {},
-    ],
-    [
-      "b",
-      "c",
-      {},
-    ],
-  ],
   "nodes": [
     {
       "args": {},
