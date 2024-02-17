@@ -1,5 +1,5 @@
 import { z } from "zod";
-import * as OpenAPIZod from "substrate/API/OpenAPIZod";
+// import * as OpenAPIZod from "substrate/API/OpenAPIZod";
 
 export const IdSchema = z.string().min(1);
 export type Id = z.infer<typeof IdSchema>;
@@ -7,12 +7,14 @@ export type Id = z.infer<typeof IdSchema>;
 export const AnySchema = z.any();
 export const UnknownSchema = z.unknown();
 
-export const StoreInfoSchema = z.object({
-  collection: z.string(),
-  user_id: z.string().optional(),
-  organization_id: z.string().optional(),
-  full_metadata: z.array(z.object({})).optional(),
-}).strict();
+export const StoreInfoSchema = z
+  .object({
+    collection: z.string(),
+    user_id: z.string().optional(),
+    organization_id: z.string().optional(),
+    full_metadata: z.array(z.object({})).optional(),
+  })
+  .strict();
 
 const BaseAdapterSchema = z.object({
   source_key: z.string().nullable(),
@@ -83,16 +85,18 @@ export type Adapter = z.infer<typeof AdapterSchema>;
 export const BaseNodeArgsSchema = z.object({});
 export type BaseNodeInput = z.infer<typeof BaseNodeArgsSchema>;
 
-export const BaseNodeSchema = z.object({
-  id: IdSchema,
-  class: z.literal("Node"),
-  args: BaseNodeArgsSchema.partial(),
-  extra_args: z.object({}),
-  _global_output_keys: z.array(z.string()).optional(),
-  _should_output_globally: z.boolean().optional(),
-  _to_adapters: z.array(AdapterSchema).optional(),
-  _from_adapters: z.array(AdapterSchema).optional(),
-}).strict();
+export const BaseNodeSchema = z
+  .object({
+    id: IdSchema,
+    class: z.literal("Node"),
+    args: BaseNodeArgsSchema.partial(),
+    extra_args: z.object({}),
+    _global_output_keys: z.array(z.string()).optional(),
+    _should_output_globally: z.boolean().optional(),
+    _to_adapters: z.array(AdapterSchema).optional(),
+    _from_adapters: z.array(AdapterSchema).optional(),
+  })
+  .strict();
 export type BaseNode = z.infer<typeof BaseNodeSchema>;
 
 export const ModelNodeSchema = BaseNodeSchema.extend({
@@ -100,24 +104,6 @@ export const ModelNodeSchema = BaseNodeSchema.extend({
 });
 export type ModelNodeInput = BaseNodeInput;
 export type ModelNode = z.infer<typeof ModelNodeSchema>;
-
-export const MistralSchema = ModelNodeSchema.omit({ class: true }).extend({
-  class: z.literal("Mistral"),
-  args: OpenAPIZod.componentsSchema.shape.schemas.shape.MistralIn.partial(),
-  extra_args: z.object({
-    model: z.enum(["mistral-7b-instruct"]),
-  }),
-}).strict();
-export type Mistral = z.infer<typeof MistralSchema>;
-
-export const JinaSchema = ModelNodeSchema.omit({ class: true }).extend({
-  class: z.literal("Jina"),
-  args: OpenAPIZod.componentsSchema.shape.schemas.shape.JinaIn.partial(),
-  extra_args: z.object({
-    model: z.enum(["jina-base-v2"]),
-  }),
-}).strict();
-export type Jina = z.infer<typeof JinaSchema>;
 
 export const StableDiffusionArgsSchema = z.object({
   prompt: z.string(),
@@ -142,13 +128,15 @@ export type StableDiffusionInput = z.infer<typeof StableDiffusionArgsSchema>;
 
 export const StableDiffusionSchema = ModelNodeSchema.omit({
   class: true,
-}).extend({
-  class: z.literal("SDXL"),
-  args: StableDiffusionArgsSchema.partial(),
-  extra_args: z.object({
-    model: z.enum(["sdxl"]),
-  }),
-}).strict();
+})
+  .extend({
+    class: z.literal("SDXL"),
+    args: StableDiffusionArgsSchema.partial(),
+    extra_args: z.object({
+      model: z.enum(["sdxl"]),
+    }),
+  })
+  .strict();
 export type StableDiffusion = z.infer<typeof StableDiffusionSchema>;
 
 // NOTE: may be deprecated soon.
@@ -156,8 +144,6 @@ export type StableDiffusion = z.infer<typeof StableDiffusionSchema>;
 export const NodeSchema = z.discriminatedUnion("class", [
   BaseNodeSchema,
   ModelNodeSchema,
-  MistralSchema,
-  JinaSchema,
   StableDiffusionSchema,
 ]);
 export type Node = z.infer<typeof NodeSchema>;
@@ -169,9 +155,11 @@ export const AdapterCodeSchema = z.object({
 });
 export type AdapterCode = z.infer<typeof AdapterCodeSchema>;
 
-export const EdgeDataSchema = z.object({
-  adapter: AdapterCodeSchema.optional(),
-}).strict();
+export const EdgeDataSchema = z
+  .object({
+    adapter: AdapterCodeSchema.optional(),
+  })
+  .strict();
 
 export const EdgeSchema = z.tuple([NodeSchema, NodeSchema, EdgeDataSchema]);
 export type Edge = z.infer<typeof EdgeSchema>;
@@ -179,17 +167,21 @@ export type Edge = z.infer<typeof EdgeSchema>;
 const EdgeIdsSchema = z.tuple([IdSchema, IdSchema, EdgeDataSchema]);
 export type EdgeIds = z.infer<typeof EdgeIdsSchema>;
 
-export const GraphSchema = z.object({
-  nodes: z.array(NodeSchema),
-  edges: z.array(EdgeIdsSchema),
-  // Could be anything, initial args that are inputted into the root node
-  initial_args: z.object({}),
-}).strict();
+export const GraphSchema = z
+  .object({
+    nodes: z.array(NodeSchema),
+    edges: z.array(EdgeIdsSchema),
+    // Could be anything, initial args that are inputted into the root node
+    initial_args: z.object({}),
+  })
+  .strict();
 export type Graph = z.infer<typeof GraphSchema>;
 
-export const ComposeArgsSchema = z.object({
-  dag: GraphSchema,
-}).strict();
+export const ComposeArgsSchema = z
+  .object({
+    dag: GraphSchema,
+  })
+  .strict();
 export type ComposeArgs = z.infer<typeof ComposeArgsSchema>;
 
 export const EmbeddingMetaSchema = z.object({

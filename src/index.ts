@@ -4,9 +4,5 @@ export { Graph } from "substrate/Graph";
 
 export * as Adapter from "substrate/Adapter";
 
-export { Mistral } from "substrate/Mistral";
-export { Jina } from "substrate/Jina";
-export { StableDiffusion } from "substrate/StableDiffusion";
-
 export { Substrate };
 export default Substrate;

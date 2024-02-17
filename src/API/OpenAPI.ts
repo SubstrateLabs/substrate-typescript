@@ -5,40 +5,173 @@
 
 
 export interface paths {
-  "/stablediffusion": {
+  "/GenerateText": {
     /**
-     * StableDiffusion
-     * @description Generate an image from a text prompt using the Stable Diffusion family of image models. Trained by [Stability AI](https://huggingface.co/docs/diffusers/api/pipelines/stable_diffusion/stable_diffusion_xl) and hosted on Substrate.
+     * GenerateText
+     * @description Generate text using a language model.
      */
-    post: operations["StableDiffusion"];
+    post: operations["GenerateText"];
   };
-  "/mistral": {
+  "/MultiGenerateText": {
     /**
-     * Mistral
-     * @description Generate text using the Mistral family of language models. Trained by [Mistral AI](https://huggingface.co/docs/transformers/main/model_doc/mistral) and hosted on Substrate.
+     * MultiGenerateText
+     * @description Generate multiple text choices using a language model.
      */
-    post: operations["Mistral"];
+    post: operations["MultiGenerateText"];
   };
-  "/whisper": {
+  "/GenerateTextVision": {
     /**
-     * Whisper
-     * @description Transcribe audio using the Whisper family of models. Includes sentence-level segmentation, word-level alignment and speaker diarization. Trained by [Open AI](https://huggingface.co/docs/transformers/model_doc/whisper) and hosted on Substrate.
+     * GenerateTextVision
+     * @description Generate text by prompting with text and images using a vision-language model.
      */
-    post: operations["Whisper"];
+    post: operations["GenerateTextVision"];
   };
-  "/jina": {
+  "/GenerateImage": {
     /**
-     * Jina
-     * @description TODO. Trained by [Jina AI](https://huggingface.co/jinaai) and hosted on Substrate.
+     * GenerateImage
+     * @description Generate an image.
      */
-    post: operations["Jina"];
+    post: operations["GenerateImage"];
   };
-  "/clip": {
+  "/MultiGenerateImage": {
     /**
-     * CLIP
-     * @description TODO. Trained by [Open AI](https://huggingface.co/docs/transformers/model_doc/clip) and hosted on Substrate.
+     * MultiGenerateImage
+     * @description Generate multiple images.
      */
-    post: operations["CLIP"];
+    post: operations["MultiGenerateImage"];
+  };
+  "/ControlledGenerateImage": {
+    /**
+     * ControlledGenerateImage
+     * @description Generate an image with generation controlled by an input image.
+     */
+    post: operations["ControlledGenerateImage"];
+  };
+  "/MultiControlledGenerateImage": {
+    /**
+     * MultiControlledGenerateImage
+     * @description Generate multiple image outputs with generation controlled by an input image.
+     */
+    post: operations["MultiControlledGenerateImage"];
+  };
+  "/InpaintImage": {
+    /**
+     * InpaintImage
+     * @description Modify part of an image using a mask.
+     */
+    post: operations["InpaintImage"];
+  };
+  "/MultiInpaintImage": {
+    /**
+     * MultiInpaintImage
+     * @description Generate multiple image outputs modifying part of an image using a mask.
+     */
+    post: operations["MultiInpaintImage"];
+  };
+  "/SegmentImage": {
+    /**
+     * SegmentImage
+     * @description Detect segments in an image.
+     */
+    post: operations["SegmentImage"];
+  };
+  "/CreateMaskImage": {
+    /**
+     * CreateMaskImage
+     * @description Create a mask image with a bounding box or path.
+     */
+    post: operations["CreateMaskImage"];
+  };
+  "/TranscribeMedia": {
+    /**
+     * TranscribeMedia
+     * @description Transcribe speech in an audio or video file.
+     */
+    post: operations["TranscribeMedia"];
+  };
+  "/GenerateSpeech": {
+    /**
+     * GenerateSpeech
+     * @description Generate speech from text.
+     */
+    post: operations["GenerateSpeech"];
+  };
+  "/EmbedText": {
+    /**
+     * EmbedText
+     * @description Generate vector embedding for a text document.
+     */
+    post: operations["EmbedText"];
+  };
+  "/MultiEmbedText": {
+    /**
+     * MultiEmbedText
+     * @description Generate vector embeddings for multiple text documents.
+     */
+    post: operations["MultiEmbedText"];
+  };
+  "/EmbedImage": {
+    /**
+     * EmbedImage
+     * @description Generate vector embedding for an image, and optionally store the embedding.
+     */
+    post: operations["EmbedImage"];
+  };
+  "/MultiEmbedImage": {
+    /**
+     * MultiEmbedImage
+     * @description Generate vector embeddings for multiple images, and optionally store the embeddings.
+     */
+    post: operations["MultiEmbedImage"];
+  };
+  "/vector-stores/create": {
+    /**
+     * /vector-stores/create
+     * @description Create a vector store for storing and querying embeddings.
+     */
+    post: operations["CreateVectorStore"];
+  };
+  "/vector-stores/list": {
+    /**
+     * /vector-stores/list
+     * @description List all vector stores.
+     */
+    get: operations["ListVectorStores"];
+  };
+  "/vector-stores/delete": {
+    /**
+     * /vector-stores/delete
+     * @description Delete a vector store.
+     */
+    post: operations["DeleteVectorStore"];
+  };
+  "/vector-stores/query": {
+    /**
+     * /vector-stores/query
+     * @description Query a vector store for similar vectors.
+     */
+    post: operations["QueryVectorStore"];
+  };
+  "/vectors/fetch": {
+    /**
+     * Fetch vectors
+     * @description Fetch vectors from a vector store.
+     */
+    post: operations["FetchVectors"];
+  };
+  "/vectors/update": {
+    /**
+     * Update vectors
+     * @description Update vectors in a vector store.
+     */
+    post: operations["UpdateVectors"];
+  };
+  "/vectors/delete": {
+    /**
+     * Delete vectors
+     * @description Delete vectors in a vector store.
+     */
+    post: operations["DeleteVectors"];
   };
 }
 
@@ -56,109 +189,41 @@ export interface components {
       /** @description A message providing more details about the error. */
       message: string;
     };
-    /** StableDiffusionInputImage */
-    StableDiffusionInputImage: {
-      /** @description Input image URL to modify with a text prompt. */
-      image_url: string;
-      /** @description Mask of the input image to selectively modify. */
-      mask_image_url?: string;
+    /** ResponseFormat */
+    ResponseFormat: {
       /**
-       * Format: float
-       * @description Controls the influence of the input prompt on the generated output.
-       * @default 0.6
+       * @description Type of response.
+       * @default text
+       * @enum {string}
        */
-      prompt_strength?: number;
+      type: "json_object" | "text";
+      /** @description JSON schema to guide `json_object` response. */
+      json_schema?: Record<string, never>;
     };
-    /** StableDiffusionIn */
-    StableDiffusionIn: {
+    /** GenerateTextIn */
+    GenerateTextIn: {
       /** @description Input prompt. */
       prompt: string;
-      /** @description Negative input prompt. */
-      negative_prompt?: string;
-      /** StableDiffusionInputImage */
-      image?: {
-        /** @description Input image URL to modify with a text prompt. */
-        image_url: string;
-        /** @description Mask of the input image to selectively modify. */
-        mask_image_url?: string;
-        /**
-         * Format: float
-         * @description Controls the influence of the input prompt on the generated output.
-         * @default 0.6
-         */
-        prompt_strength?: number;
-      };
       /**
-       * @description Return a hosted image URL instead of base64 encoded image data.
-       * @default false
+       * @description Selected model.
+       * @default mistral-7b-instruct
+       * @enum {string}
        */
-      store?: boolean;
-      /** @description Width of output image, in pixels. */
-      width?: number;
-      /** @description Height of output image, in pixels. */
-      height?: number;
-      /** @description Number of diffusion steps to run. */
-      steps?: number;
-      /** @description Random noise seed. Default is a random seed. */
-      seed?: number;
-      /** @description Controls the influence of the input prompt on the generated output. */
-      guidance_scale?: number;
-      /**
-       * @description Number of images to generate.
-       * @default 1
-       */
-      num_images?: number;
-    };
-    /** StableDiffusionImage */
-    StableDiffusionImage: {
-      /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is enabled. */
-      uri: string;
-      /** @description The random noise seed used for generation. */
-      seed: number;
-    };
-    /** StableDiffusionOut */
-    StableDiffusionOut: {
-        /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is enabled. */
-        uri: string;
-        /** @description The random noise seed used for generation. */
-        seed: number;
-      }[];
-    /** StableDiffusionResponse */
-    StableDiffusionResponse: {
-      /** StableDiffusionOut */
-      data?: {
-          /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is enabled. */
-          uri: string;
-          /** @description The random noise seed used for generation. */
-          seed: number;
-        }[];
-      /** ErrorOut */
-      error?: {
+      model?: "mistral-7b-instruct";
+      /** ResponseFormat */
+      response_format?: {
         /**
-         * @description The type of error returned.
+         * @description Type of response.
+         * @default text
          * @enum {string}
          */
-        type: "api_error" | "invalid_request_error";
-        /** @description A message providing more details about the error. */
-        message: string;
+        type: "json_object" | "text";
+        /** @description JSON schema to guide `json_object` response. */
+        json_schema?: Record<string, never>;
       };
-    };
-    /** MistralPrompt */
-    MistralPrompt: {
-      /** @description Prompt to generate completions for. */
-      prompt: string;
-    };
-    /** MistralIn */
-    MistralIn: {
-      /** @description Input prompts. */
-      prompts: {
-          /** @description Prompt to generate completions for. */
-          prompt: string;
-        }[];
       /**
-       * Format: float
-       * @description Sampling temperature to use. Higher values make the output more random; lower values make the output more deterministic.
-       * @default 0.75
+       * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
+       * @default 4
        */
       temperature?: number;
       /**
@@ -166,64 +231,584 @@ export interface components {
        * @default 800
        */
       max_tokens?: number;
+    };
+    /** MultiGenerateTextIn */
+    MultiGenerateTextIn: {
+      /** @description Input prompt. */
+      prompt: string;
+      /** @description Number of choices to generate. */
+      num_choices: number;
       /**
-       * @description Number of completions to generate for each prompt.
-       * @default 1
+       * @description Selected model.
+       * @default mistral-7b-instruct
+       * @enum {string}
        */
-      num_completions?: number;
-    };
-    /** MistralResult */
-    MistralResult: {
-      /** @description Generated completion choices. */
-      completions: string[];
-    };
-    /** MistralOut */
-    MistralOut: {
-        /** @description Generated completion choices. */
-        completions: string[];
-      }[];
-    /** MistralResponse */
-    MistralResponse: {
-      /** MistralOut */
-      data?: {
-          /** @description Generated completion choices. */
-          completions: string[];
-        }[];
-      /** ErrorOut */
-      error?: {
+      model?: "mistral-7b-instruct";
+      /** ResponseFormat */
+      response_format?: {
         /**
-         * @description The type of error returned.
+         * @description Type of response.
+         * @default text
          * @enum {string}
          */
-        type: "api_error" | "invalid_request_error";
-        /** @description A message providing more details about the error. */
-        message: string;
+        type: "json_object" | "text";
+        /** @description JSON schema to guide `json_object` response. */
+        json_schema?: Record<string, never>;
+      };
+      /**
+       * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
+       * @default 4
+       */
+      temperature?: number;
+      /**
+       * @description Maximum number of tokens to generate.
+       * @default 800
+       */
+      max_tokens?: number;
+    };
+    /** GenerateTextOut */
+    GenerateTextOut: {
+      /** @description Text response. */
+      text?: string;
+      /** @description JSON response. */
+      json_object?: Record<string, never>;
+    };
+    /** MultiGenerateTextOut */
+    MultiGenerateTextOut: {
+      choices: {
+          /** @description Text response. */
+          text?: string;
+          /** @description JSON response. */
+          json_object?: Record<string, never>;
+        }[];
+    };
+    /** GenerateTextVisionIn */
+    GenerateTextVisionIn: {
+      /** @description Text prompt. */
+      prompt: string;
+      /** @description Image prompts. */
+      image_uris?: string[];
+      /**
+       * @description Selected model.
+       * @default firellava-13b
+       * @enum {string}
+       */
+      model?: "firellava-13b";
+      /**
+       * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
+       * @default 4
+       */
+      temperature?: number;
+      /**
+       * @description Maximum number of tokens to generate.
+       * @default 800
+       */
+      max_tokens?: number;
+    };
+    /** GenerateTextVisionOut */
+    GenerateTextVisionOut: {
+      /** @description Text response. */
+      text: string;
+    };
+    /** GenerateImageIn */
+    GenerateImageIn: {
+      /** @description Input prompt. */
+      prompt: string;
+      /**
+       * @description Selected model.
+       * @default stablediffusion-xl
+       * @enum {string}
+       */
+      model?: "stablediffusion-xl" | "stablediffusion-1.5";
+      /** @description Negative input prompt. */
+      negative_prompt?: string;
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      store?: string;
+      /** @description Width of output image, in pixels. */
+      width?: number;
+      /** @description Height of output image, in pixels. */
+      height?: number;
+      /**
+       * Format: float
+       * @description Controls how long to run the image refinement process.
+       * @default 6
+       */
+      refinement?: number;
+      /**
+       * Format: float
+       * @description Controls the influence of the input prompt on the generated output.
+       * @default 2
+       */
+      prompt_influence?: number;
+      /** @description Seed for deterministic generation. Default is a random seed. */
+      seed?: number;
+    };
+    /** GenerateImageOut */
+    GenerateImageOut: {
+      /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+      image_uri: string;
+      /** @description The random noise seed used for generation. */
+      seed: number;
+    };
+    /** MultiGenerateImageIn */
+    MultiGenerateImageIn: {
+      /** @description Input prompt. */
+      prompt: string;
+      /** @description Number of images to generate. */
+      num_images: number;
+      /**
+       * @description Selected model.
+       * @default stablediffusion-xl
+       * @enum {string}
+       */
+      model?: "stablediffusion-xl" | "stablediffusion-1.5";
+      /** @description Negative input prompt. */
+      negative_prompt?: string;
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      store?: string;
+      /** @description Width of output image, in pixels. */
+      width?: number;
+      /** @description Height of output image, in pixels. */
+      height?: number;
+      /**
+       * Format: float
+       * @description Controls how long to run the image refinement process.
+       * @default 6
+       */
+      refinement?: number;
+      /**
+       * Format: float
+       * @description Controls the influence of the input prompt on the generated output.
+       */
+      prompt_influence?: number;
+      /** @description Random noise seeds. Default is random seeds for each generation. */
+      seeds?: number[];
+    };
+    /** MultiGenerateImageOut */
+    MultiGenerateImageOut: {
+      outputs: {
+          /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+          image_uri: string;
+          /** @description The random noise seed used for generation. */
+          seed: number;
+        }[];
+    };
+    /** ControlledGenerateImageIn */
+    ControlledGenerateImageIn: {
+      /** @description Input image. */
+      image_uri: string;
+      /**
+       * @description Strategy to control generation using the input image.
+       * @enum {string}
+       */
+      control_method: "edge" | "upscale" | "depth" | "qr";
+      /** @description Input prompt. */
+      prompt: string;
+      /**
+       * @description Resolution of the output image, in pixels.
+       * @default 1024
+       */
+      output_resolution?: number;
+      /**
+       * @description Selected model.
+       * @default stablediffusion-xl
+       * @enum {string}
+       */
+      model?: "stablediffusion-1.5" | "stablediffusion-xl";
+      /** @description Negative input prompt. */
+      negative_prompt?: string;
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      store?: string;
+      /**
+       * Format: float
+       * @description Controls how long to run the image refinement process.
+       * @default 6
+       */
+      refinement?: number;
+      /**
+       * Format: float
+       * @description Controls the influence of the input image on the generated output.
+       * @default 9
+       */
+      image_influence?: number;
+      /**
+       * Format: float
+       * @description Controls the influence of the input prompt on the generated output.
+       * @default 2
+       */
+      prompt_influence?: number;
+      /** @description Seed for deterministic generation. Default is a random seed. */
+      seed?: number;
+    };
+    /** ControlledGenerateImageOut */
+    ControlledGenerateImageOut: {
+      /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+      image_uri: string;
+      /** @description The random noise seed used for generation. */
+      seed: number;
+    };
+    /** MultiControlledGenerateImageIn */
+    MultiControlledGenerateImageIn: {
+      /** @description Input image. */
+      image_uri: string;
+      /**
+       * @description Strategy to control generation using the input image.
+       * @enum {string}
+       */
+      control_method: "edge" | "upscale" | "depth" | "qr";
+      /** @description Input prompt. */
+      prompt: string;
+      /** @description Number of images to generate. */
+      num_images: number;
+      /**
+       * @description Resolution of the output image, in pixels.
+       * @default 1024
+       */
+      output_resolution?: number;
+      /**
+       * @description Selected model.
+       * @default stablediffusion-1.5
+       * @enum {string}
+       */
+      model?: "stablediffusion-1.5";
+      /** @description Negative input prompt. */
+      negative_prompt?: string;
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      store?: string;
+      /**
+       * Format: float
+       * @description Controls how long to run the image refinement process.
+       * @default 6
+       */
+      refinement?: number;
+      /**
+       * Format: float
+       * @description Controls the influence of the input image on the generated output.
+       * @default 9
+       */
+      image_influence?: number;
+      /**
+       * Format: float
+       * @description Controls the influence of the input prompt on the generated output.
+       * @default 2
+       */
+      prompt_influence?: number;
+      /** @description Random noise seeds. Default is random seeds for each generation. */
+      seeds?: number[];
+    };
+    /** MultiControlledGenerateImageOut */
+    MultiControlledGenerateImageOut: {
+      outputs: {
+          /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+          image_uri: string;
+          /** @description The random noise seed used for generation. */
+          seed: number;
+        }[];
+    };
+    /** InpaintImageIn */
+    InpaintImageIn: {
+      /** @description Input image. */
+      image_uri: string;
+      /** @description Mask image that controls which pixels are inpainted. If unset, the entire image is modified (image-to-image). */
+      mask_image_uri?: string;
+      /** @description Input prompt. */
+      prompt: string;
+      /**
+       * @description Resolution of the output image, in pixels.
+       * @default 1024
+       */
+      output_resolution?: number;
+      /**
+       * @description Selected model.
+       * @default stablediffusion-xl
+       * @enum {string}
+       */
+      model?: "stablediffusion-xl";
+      /** @description Negative input prompt. */
+      negative_prompt?: string;
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      store?: string;
+      /**
+       * Format: float
+       * @description Controls how long to run the image refinement process.
+       * @default 6
+       */
+      refinement?: number;
+      /**
+       * Format: float
+       * @description Controls the influence of the input prompt on the generated output.
+       * @default 5
+       */
+      prompt_influence?: number;
+      /** @description Seed for deterministic generation. Default is a random seed. */
+      seed?: number;
+    };
+    /** InpaintImageOut */
+    InpaintImageOut: {
+      /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+      image_uri: string;
+      /** @description The random noise seed used for generation. */
+      seed: number;
+    };
+    /** MultiInpaintImageIn */
+    MultiInpaintImageIn: {
+      /** @description Input image. */
+      image_uri: string;
+      /** @description Mask image that controls which pixels are inpainted. If unset, the entire image is modified (image-to-image). */
+      mask_image_uri?: string;
+      /** @description Input prompt. */
+      prompt: string;
+      /** @description Number of images to generate. */
+      num_images: number;
+      /**
+       * @description Resolution of the output image, in pixels.
+       * @default 1024
+       */
+      output_resolution?: number;
+      /**
+       * @description Selected model.
+       * @default stablediffusion-1.5
+       * @enum {string}
+       */
+      model?: "stablediffusion-1.5";
+      /** @description Negative input prompt. */
+      negative_prompt?: string;
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      store?: string;
+      /**
+       * Format: float
+       * @description Controls how long to run the image refinement process.
+       * @default 6
+       */
+      refinement?: number;
+      /**
+       * Format: float
+       * @description Controls the influence of the input image on the generated output.
+       * @default 9
+       */
+      image_influence?: number;
+      /**
+       * Format: float
+       * @description Controls the influence of the input prompt on the generated output.
+       * @default 2
+       */
+      prompt_influence?: number;
+      /** @description Random noise seeds. Default is random seeds for each generation. */
+      seeds?: number[];
+    };
+    /** MultiInpaintImageOut */
+    MultiInpaintImageOut: {
+      outputs: {
+          /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+          image_uri: string;
+          /** @description The random noise seed used for generation. */
+          seed: number;
+        }[];
+    };
+    /** BoundingBox */
+    BoundingBox: {
+      /**
+       * Format: float
+       * @description Top left corner x.
+       */
+      x1: number;
+      /**
+       * Format: float
+       * @description Top left corner y.
+       */
+      y1: number;
+      /**
+       * Format: float
+       * @description Bottom right corner x.
+       */
+      x2: number;
+      /**
+       * Format: float
+       * @description Bottom right corner y.
+       */
+      y2: number;
+    };
+    /** MaskPath */
+    MaskPath: {
+      /** @description x values. */
+      x: number[];
+      /** @description y values. */
+      y: number[];
+    };
+    /** ImageSegment */
+    ImageSegment: {
+      /** @description Detected object class. */
+      object_class: string;
+      /**
+       * Format: float
+       * @description Classification confidence.
+       */
+      confidence: number;
+      /** BoundingBox */
+      box: {
+        /**
+         * Format: float
+         * @description Top left corner x.
+         */
+        x1: number;
+        /**
+         * Format: float
+         * @description Top left corner y.
+         */
+        y1: number;
+        /**
+         * Format: float
+         * @description Bottom right corner x.
+         */
+        x2: number;
+        /**
+         * Format: float
+         * @description Bottom right corner y.
+         */
+        y2: number;
+      };
+      /** MaskPath */
+      path: {
+        /** @description x values. */
+        x: number[];
+        /** @description y values. */
+        y: number[];
       };
     };
-    /** WhisperIn */
-    WhisperIn: {
-      /** @description Input audio URL. */
-      audio_url: string;
-      /** @description Prompt to guide model on contents of input audio and desired output. */
+    /** SegmentImageIn */
+    SegmentImageIn: {
+      /** @description Input image. */
+      image_uri: string;
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      store?: string;
+    };
+    /** SegmentImageOut */
+    SegmentImageOut: {
+      /** @description Detected segments. */
+      objects: {
+          /** @description Detected object class. */
+          object_class: string;
+          /**
+           * Format: float
+           * @description Classification confidence.
+           */
+          confidence: number;
+          /** BoundingBox */
+          box: {
+            /**
+             * Format: float
+             * @description Top left corner x.
+             */
+            x1: number;
+            /**
+             * Format: float
+             * @description Top left corner y.
+             */
+            y1: number;
+            /**
+             * Format: float
+             * @description Bottom right corner x.
+             */
+            x2: number;
+            /**
+             * Format: float
+             * @description Bottom right corner y.
+             */
+            y2: number;
+          };
+          /** MaskPath */
+          path: {
+            /** @description x values. */
+            x: number[];
+            /** @description y values. */
+            y: number[];
+          };
+        }[];
+      /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+      image_uri: string;
+      /** @description Width of image, in pixels. */
+      width: number;
+      /** @description Height of image, in pixels. */
+      height: number;
+    };
+    /** CreateMaskImageIn */
+    CreateMaskImageIn: {
+      /** @description Width of image, in pixels. */
+      width: number;
+      /** @description Height of image, in pixels. */
+      height: number;
+      /** BoundingBox */
+      box?: {
+        /**
+         * Format: float
+         * @description Top left corner x.
+         */
+        x1: number;
+        /**
+         * Format: float
+         * @description Top left corner y.
+         */
+        y1: number;
+        /**
+         * Format: float
+         * @description Bottom right corner x.
+         */
+        x2: number;
+        /**
+         * Format: float
+         * @description Bottom right corner y.
+         */
+        y2: number;
+      };
+      /** MaskPath */
+      path?: {
+        /** @description x values. */
+        x: number[];
+        /** @description y values. */
+        y: number[];
+      };
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      store?: string;
+    };
+    /** CreateMaskImageOut */
+    CreateMaskImageOut: {
+      /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+      image_uri: string;
+    };
+    /** TranscribeMediaIn */
+    TranscribeMediaIn: {
+      /** @description Input audio. */
+      audio_uri: string;
+      /** @description Prompt to guide model on the content and context of input audio. */
       prompt?: string;
       /**
-       * @description Language of input audio in ISO-639-1 format.
+       * @description Language of input audio in [ISO-639-1](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes) format.
        * @default en
        */
       language?: string;
+      /**
+       * @description Segment the text into sentences with approximate timestamps.
+       * @default false
+       */
+      segment?: boolean;
       /**
        * @description Align transcription to produce more accurate sentence-level timestamps and word-level timestamps. An array of word segments will be included in each sentence segment.
        * @default false
        */
       align?: boolean;
       /**
-       * @description Identify speakers for each segment. Speaker IDs will be added to each output segment.
+       * @description Identify speakers for each segment. Speaker IDs will be included in each segment.
        * @default false
        */
       diarize?: boolean;
+      /**
+       * @description Suggest automatic chapter markers.
+       * @default false
+       */
+      suggest_chapters?: boolean;
     };
-    /** WhisperWord */
-    WhisperWord: {
+    /** TranscribedWord */
+    TranscribedWord: {
       /** @description Text of word. */
       word: string;
       /**
@@ -239,8 +824,8 @@ export interface components {
       /** @description ID of speaker, if `diarize` is enabled. */
       speaker?: string;
     };
-    /** WhisperSegment */
-    WhisperSegment: {
+    /** TranscribedSegment */
+    TranscribedSegment: {
       /** @description Text of segment. */
       text: string;
       /**
@@ -273,44 +858,22 @@ export interface components {
           speaker?: string;
         }[];
     };
-    /** WhisperOut */
-    WhisperOut: {
-        /** @description Text of segment. */
-        text: string;
-        /**
-         * Format: float
-         * @description Start time of segment, in seconds.
-         */
-        start: number;
-        /**
-         * Format: float
-         * @description End time of segment, in seconds.
-         */
-        end: number;
-        /** @description ID of speaker, if `diarize` is enabled. */
-        speaker?: string;
-        /** @description Aligned words, if `align` is enabled. */
-        words?: {
-            /** @description Text of word. */
-            word: string;
-            /**
-             * Format: float
-             * @description Start time of word, in seconds.
-             */
-            start: number;
-            /**
-             * Format: float
-             * @description End time of word, in seconds.
-             */
-            end: number;
-            /** @description ID of speaker, if `diarize` is enabled. */
-            speaker?: string;
-          }[];
-      }[];
-    /** WhisperResponse */
-    WhisperResponse: {
-      /** WhisperOut */
-      data?: {
+    /** ChapterMarker */
+    ChapterMarker: {
+      /** @description Chapter title. */
+      title: string;
+      /**
+       * Format: float
+       * @description Start time of chapter, in seconds.
+       */
+      start: number;
+    };
+    /** TranscribeMediaOut */
+    TranscribeMediaOut: {
+      /** @description Transcribed text. */
+      text: string;
+      /** @description Transcribed segments, if `segment` is enabled. */
+      segments?: {
           /** @description Text of segment. */
           text: string;
           /**
@@ -343,154 +906,378 @@ export interface components {
               speaker?: string;
             }[];
         }[];
-      /** ErrorOut */
-      error?: {
-        /**
-         * @description The type of error returned.
-         * @enum {string}
-         */
-        type: "api_error" | "invalid_request_error";
-        /** @description A message providing more details about the error. */
-        message: string;
-      };
+      /** @description Chapter markers, if `suggest_chapters` is enabled. */
+      chapters?: {
+          /** @description Chapter title. */
+          title: string;
+          /**
+           * Format: float
+           * @description Start time of chapter, in seconds.
+           */
+          start: number;
+        }[];
     };
-    /** JinaDoc */
-    JinaDoc: {
+    /** GenerateSpeechIn */
+    GenerateSpeechIn: {
+      /** @description Input text. */
+      text: string;
+      /** @description Reference audio used to synthesize the speaker. If unset, a default speaker voice will be used. */
+      audio_uri?: string;
+      /**
+       * @description Language of input text. Supported languages: `en, es, fr, de, it, pt, pl, tr, ru, nl, cs, ar, zh, hu, ko, hi`.
+       * @default en
+       */
+      language?: string;
+      /** @description Use "hosted" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the audio data will be returned as a base64-encoded string. */
+      store?: string;
+    };
+    /** GenerateSpeechOut */
+    GenerateSpeechOut: {
+      /** @description Base 64-encoded WAV audio bytes, or a hosted audio url if `store` is provided. */
+      audio_uri: string;
+    };
+    /** Embedding */
+    Embedding: {
+      /** @description Embedding vector. */
+      vector: string;
+    };
+    /** EmbedTextIn */
+    EmbedTextIn: {
       /** @description Text to embed. */
       text: string;
-      /** @description Document id. Required when storing embedding. */
-      id?: string;
-      /** @description Additional metadata to store in embedding document. */
+      /**
+       * @description Selected model.
+       * @default jina-v2
+       * @enum {string}
+       */
+      model?: "jina-v2" | "clip";
+      /** @description [Vector store](/docs/vector-stores) identifier. */
+      store?: string;
+      /** @description Metadata that can be used to query the vector store. Ignored if `store` is unset. */
       metadata?: Record<string, never>;
-      /** @description Contents of `metadata` included to generate embedding. */
-      embed_metadata_keys?: string[];
+      embedded_metadata?: {
+        /** @description Keys to embed with text. */
+        include_keys?: string[];
+        /** @description Keys to exclude. All other keys will be embedded with text. */
+        exclude_keys?: string[];
+      };
     };
-    /** JinaIn */
-    JinaIn: {
-      /** @description Documents to embed. */
-      docs: {
+    /** EmbedTextOut */
+    EmbedTextOut: {
+      /** Embedding */
+      embedding: {
+        /** @description Embedding vector. */
+        vector: string;
+      };
+    };
+    EmbedTextItem: {
+      /** @description Text to embed. */
+      text: string;
+      /** @description Metadata that can be used to query the vector store. Ignored if `store` is unset. */
+      metadata?: Record<string, never>;
+    };
+    /** MultiEmbedTextIn */
+    MultiEmbedTextIn: {
+      /** @description Items to embed. */
+      items: {
           /** @description Text to embed. */
           text: string;
-          /** @description Document id. Required when storing embedding. */
-          id?: string;
-          /** @description Additional metadata to store in embedding document. */
+          /** @description Metadata that can be used to query the vector store. Ignored if `store` is unset. */
           metadata?: Record<string, never>;
-          /** @description Contents of `metadata` included to generate embedding. */
-          embed_metadata_keys?: string[];
         }[];
-      /** @description Vector store ID in which embedding will be stored. */
+      /**
+       * @description Selected model.
+       * @default jina-v2
+       * @enum {string}
+       */
+      model?: "jina-v2" | "clip";
+      /** @description [Vector store](/docs/vector-stores) identifier. */
       store?: string;
-    };
-    /** JinaEmbedding */
-    JinaEmbedding: {
-      /** @description Embedding vector. */
-      vector: string;
-      /** @description Document id. */
-      id?: string;
-      /** @description Additional metadata stored in embedding document. */
-      metadata?: Record<string, never>;
-    };
-    /** JinaOut */
-    JinaOut: {
-        /** @description Embedding vector. */
-        vector: string;
-        /** @description Document id. */
-        id?: string;
-        /** @description Additional metadata stored in embedding document. */
-        metadata?: Record<string, never>;
-      }[];
-    /** JinaResponse */
-    JinaResponse: {
-      /** JinaOut */
-      data?: {
-          /** @description Embedding vector. */
-          vector: string;
-          /** @description Document id. */
-          id?: string;
-          /** @description Additional metadata stored in embedding document. */
-          metadata?: Record<string, never>;
-        }[];
-      /** ErrorOut */
-      error?: {
-        /**
-         * @description The type of error returned.
-         * @enum {string}
-         */
-        type: "api_error" | "invalid_request_error";
-        /** @description A message providing more details about the error. */
-        message: string;
+      embedded_metadata?: {
+        /** @description Keys to embed with text. */
+        include_keys?: string[];
+        /** @description Keys to exclude. All other keys will be embedded with text. */
+        exclude_keys?: string[];
       };
     };
-    /** CLIPDoc */
-    CLIPDoc: {
-      /** @description Text to embed. */
-      text?: string;
-      /** @description URL of image to embed. */
-      image_url?: string;
-      /** @description Document id. Required when storing embedding. */
-      id?: string;
-      /** @description Additional metadata to store in embedding document. */
-      metadata?: Record<string, never>;
-      /** @description Contents of `metadata` included to generate embedding. */
-      embed_metadata_keys?: string[];
-    };
-    /** CLIPIn */
-    CLIPIn: {
-      /** @description Documents to embed. */
-      docs: {
-          /** @description Text to embed. */
-          text?: string;
-          /** @description URL of image to embed. */
-          image_url?: string;
-          /** @description Document id. Required when storing embedding. */
-          id?: string;
-          /** @description Additional metadata to store in embedding document. */
-          metadata?: Record<string, never>;
-          /** @description Contents of `metadata` included to generate embedding. */
-          embed_metadata_keys?: string[];
-        }[];
-      /** @description Vector store ID in which embedding will be stored. */
-      store?: string;
-    };
-    /** CLIPEmbedding */
-    CLIPEmbedding: {
-      /** @description Embedding vector. */
-      vector: string;
-      /** @description Document id. */
-      id?: string;
-      /** @description Additional metadata stored in embedding document. */
-      metadata?: Record<string, never>;
-    };
-    /** CLIPOut */
-    CLIPOut: {
-        /** @description Embedding vector. */
-        vector: string;
-        /** @description Document id. */
-        id?: string;
-        /** @description Additional metadata stored in embedding document. */
-        metadata?: Record<string, never>;
-      }[];
-    /** CLIPResponse */
-    CLIPResponse: {
-      /** CLIPOut */
-      data?: {
+    /** MultiEmbedTextOut */
+    MultiEmbedTextOut: {
+      /** @description Generated embeddings. */
+      embeddings: {
           /** @description Embedding vector. */
           vector: string;
-          /** @description Document id. */
-          id?: string;
-          /** @description Additional metadata stored in embedding document. */
+        }[];
+    };
+    EmbeddedMetadataSelect: {
+      /** @description Keys to embed with text. */
+      include_keys?: string[];
+      /** @description Keys to exclude. All other keys will be embedded with text. */
+      exclude_keys?: string[];
+    };
+    /** EmbedImageIn */
+    EmbedImageIn: {
+      /** @description Image to embed. */
+      image_uri: string;
+      /**
+       * @description Selected model.
+       * @default clip
+       * @enum {string}
+       */
+      model?: "clip";
+      /** @description [Vector store](/docs/vector-stores) identifier. */
+      store?: string;
+    };
+    /** EmbedImageOut */
+    EmbedImageOut: {
+      /** Embedding */
+      embedding: {
+        /** @description Embedding vector. */
+        vector: string;
+      };
+    };
+    EmbedImageItem: {
+      /** @description Image to embed. */
+      image_uri: string;
+    };
+    /** MultiEmbedImageIn */
+    MultiEmbedImageIn: {
+      /** @description Items to embed. */
+      items: {
+          /** @description Image to embed. */
+          image_uri: string;
+        }[];
+      /** @description [Vector store](/docs/vector-stores) identifier. */
+      store?: string;
+      /**
+       * @description Selected model.
+       * @default clip
+       * @enum {string}
+       */
+      model?: "clip";
+    };
+    /** MultiEmbedImageOut */
+    MultiEmbedImageOut: {
+      /** @description Generated embeddings. */
+      embeddings: {
+          /** @description Embedding vector. */
+          vector: string;
+        }[];
+    };
+    /**
+     * VectorStoreParams
+     * @description Fields describing a vector store and its associated index.
+     */
+    VectorStoreParams: {
+      /** @description Vector store name. */
+      name: string;
+      /**
+       * @description Selected embedding model
+       * @enum {string}
+       */
+      model: "jina-v2" | "clip";
+      /**
+       * @description The max number of connections per layer for the index.
+       * @default 16
+       */
+      m?: number;
+      /**
+       * @description The size of the dynamic candidate list for constructing the index graph.
+       * @default 64
+       */
+      ef_construction?: number;
+      /**
+       * @description The distance metric to construct the index with.
+       * @default inner
+       * @enum {string}
+       */
+      metric?: "cosine" | "l2" | "inner";
+    };
+    /** DeleteVectorStoreParams */
+    DeleteVectorStoreParams: {
+      /** @description Vector store name. */
+      name: string;
+      /**
+       * @description Selected embedding model
+       * @enum {string}
+       */
+      model: "jina-v2" | "clip";
+    };
+    /**
+     * Vector
+     * @description Canonical representation of document with embedding vector.
+     */
+    Vector: {
+      /** @description Document ID. */
+      id: string;
+      /** @description Embedding vector. */
+      vector: number[];
+      /**
+       * @description Document metadata.
+       * @default {}
+       */
+      metadata: Record<string, never>;
+    };
+    /** GetVectorsParams */
+    GetVectorsParams: {
+      /** @description Vector store name. */
+      name: string;
+      /**
+       * @description Selected embedding model
+       * @enum {string}
+       */
+      model: "jina-v2" | "clip";
+      /** @description Document IDs to retrieve. */
+      ids: string[];
+    };
+    /** GetVectorsResponse */
+    GetVectorsResponse: {
+      /** @description Retrieved vectors. */
+      vectors: {
+          /** @description Document ID. */
+          id: string;
+          /** @description Embedding vector. */
+          vector: number[];
+          /**
+           * @description Document metadata.
+           * @default {}
+           */
+          metadata: Record<string, never>;
+        }[];
+    };
+    /** VectorUpdateCountResponse */
+    VectorUpdateCountResponse: {
+      /** @description Number of vectors modified. */
+      count: number;
+    };
+    /**
+     * UpdateVectorParams
+     * @description Document to update.
+     */
+    UpdateVectorParams: {
+      /** @description Document ID. */
+      id: string;
+      /** @description Embedding vector. */
+      vector?: number[];
+      /**
+       * @description Document metadata.
+       * @default {}
+       */
+      metadata?: Record<string, never>;
+    };
+    /** UpdateVectorsParams */
+    UpdateVectorsParams: {
+      /** @description Vector store name. */
+      name: string;
+      /**
+       * @description Selected embedding model
+       * @enum {string}
+       */
+      model: "jina-v2" | "clip";
+      /** @description Vectors to upsert. */
+      vectors: {
+          /** @description Document ID. */
+          id: string;
+          /** @description Embedding vector. */
+          vector?: number[];
+          /**
+           * @description Document metadata.
+           * @default {}
+           */
           metadata?: Record<string, never>;
         }[];
-      /** ErrorOut */
-      error?: {
-        /**
-         * @description The type of error returned.
-         * @enum {string}
-         */
-        type: "api_error" | "invalid_request_error";
-        /** @description A message providing more details about the error. */
-        message: string;
-      };
+    };
+    /** DeleteVectorsParams */
+    DeleteVectorsParams: {
+      /** @description Vector store name. */
+      name: string;
+      /**
+       * @description Selected embedding model
+       * @enum {string}
+       */
+      model: "jina-v2" | "clip";
+      /** @description Document IDs to delete. */
+      ids: string[];
+    };
+    /** QueryVectorStoreParams */
+    QueryVectorStoreParams: {
+      /** @description Vector store to query against. */
+      name: string;
+      /**
+       * @description Selected embedding model
+       * @enum {string}
+       */
+      model: "jina-v2" | "clip";
+      /** @description Document IDs to use for the query. */
+      queryIds?: string[];
+      /** @description Vector to use for the query. */
+      queryVectors?: number[][];
+      /** @description Text to embed and use for the query. */
+      queryStrings?: string[];
+      /**
+       * @description Number of results to return.
+       * @default 10
+       */
+      topK?: number;
+      /**
+       * @description The size of the dynamic candidate list for searching the index graph.
+       * @default 40
+       */
+      efSearch?: number;
+      /**
+       * @description Include the values of the vectors in the response.
+       * @default false
+       */
+      includeValues?: boolean;
+      /**
+       * @description Include the metadata of the vectors in the response.
+       * @default false
+       */
+      includeMetadata?: boolean;
+      /** @description Filter metadata by key-value pairs. */
+      filters?: Record<string, never>;
+    };
+    /** VectorStoreQueryResult */
+    VectorStoreQueryResult: {
+      /** @description Document ID. */
+      id: string;
+      /**
+       * Format: float
+       * @description Similarity score.
+       */
+      distance: number;
+      /** @description Embedding vector. */
+      vector?: number[];
+      /** @description Document metadata. */
+      metadata?: Record<string, never>;
+    };
+    /** QueryVectorStoreResponse */
+    QueryVectorStoreResponse: {
+      /** @description Query results. */
+      results: {
+            /** @description Document ID. */
+            id: string;
+            /**
+             * Format: float
+             * @description Similarity score.
+             */
+            distance: number;
+            /** @description Embedding vector. */
+            vector?: number[];
+            /** @description Document metadata. */
+            metadata?: Record<string, never>;
+          }[][];
+      /** @description Vector store name. */
+      name?: string;
+      /**
+       * @description Selected embedding model
+       * @enum {string}
+       */
+      model?: "jina-v2" | "clip";
+      /**
+       * @description The distance metric used for the query.
+       * @enum {string}
+       */
+      metric?: "cosine" | "l2" | "inner";
     };
   };
   responses: never;
@@ -507,97 +1294,35 @@ export type external = Record<string, never>;
 export interface operations {
 
   /**
-   * StableDiffusion
-   * @description Generate an image from a text prompt using the Stable Diffusion family of image models. Trained by [Stability AI](https://huggingface.co/docs/diffusers/api/pipelines/stable_diffusion/stable_diffusion_xl) and hosted on Substrate.
+   * GenerateText
+   * @description Generate text using a language model.
    */
-  StableDiffusion: {
+  GenerateText: {
     parameters: {
       query?: {
         undefined?: {
           /** @description Input prompt. */
           prompt: string;
-          /** @description Negative input prompt. */
-          negative_prompt?: string;
-          /** StableDiffusionInputImage */
-          image?: {
-            /** @description Input image URL to modify with a text prompt. */
-            image_url: string;
-            /** @description Mask of the input image to selectively modify. */
-            mask_image_url?: string;
+          /**
+           * @description Selected model.
+           * @default mistral-7b-instruct
+           * @enum {string}
+           */
+          model?: "mistral-7b-instruct";
+          /** ResponseFormat */
+          response_format?: {
             /**
-             * Format: float
-             * @description Controls the influence of the input prompt on the generated output.
-             * @default 0.6
+             * @description Type of response.
+             * @default text
+             * @enum {string}
              */
-            prompt_strength?: number;
+            type: "json_object" | "text";
+            /** @description JSON schema to guide `json_object` response. */
+            json_schema?: Record<string, never>;
           };
           /**
-           * @description Return a hosted image URL instead of base64 encoded image data.
-           * @default false
-           */
-          store?: boolean;
-          /** @description Width of output image, in pixels. */
-          width?: number;
-          /** @description Height of output image, in pixels. */
-          height?: number;
-          /** @description Number of diffusion steps to run. */
-          steps?: number;
-          /** @description Random noise seed. Default is a random seed. */
-          seed?: number;
-          /** @description Controls the influence of the input prompt on the generated output. */
-          guidance_scale?: number;
-          /**
-           * @description Number of images to generate.
-           * @default 1
-           */
-          num_images?: number;
-        };
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": {
-            /** StableDiffusionOut */
-            data?: {
-                /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is enabled. */
-                uri: string;
-                /** @description The random noise seed used for generation. */
-                seed: number;
-              }[];
-            /** ErrorOut */
-            error?: {
-              /**
-               * @description The type of error returned.
-               * @enum {string}
-               */
-              type: "api_error" | "invalid_request_error";
-              /** @description A message providing more details about the error. */
-              message: string;
-            };
-          };
-        };
-      };
-    };
-  };
-  /**
-   * Mistral
-   * @description Generate text using the Mistral family of language models. Trained by [Mistral AI](https://huggingface.co/docs/transformers/main/model_doc/mistral) and hosted on Substrate.
-   */
-  Mistral: {
-    parameters: {
-      query?: {
-        undefined?: {
-          /** @description Input prompts. */
-          prompts: {
-              /** @description Prompt to generate completions for. */
-              prompt: string;
-            }[];
-          /**
-           * Format: float
-           * @description Sampling temperature to use. Higher values make the output more random; lower values make the output more deterministic.
-           * @default 0.75
+           * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
+           * @default 4
            */
           temperature?: number;
           /**
@@ -605,11 +1330,6 @@ export interface operations {
            * @default 800
            */
           max_tokens?: number;
-          /**
-           * @description Number of completions to generate for each prompt.
-           * @default 1
-           */
-          num_completions?: number;
         };
       };
     };
@@ -618,53 +1338,54 @@ export interface operations {
       200: {
         content: {
           "application/json": {
-            /** MistralOut */
-            data?: {
-                /** @description Generated completion choices. */
-                completions: string[];
-              }[];
-            /** ErrorOut */
-            error?: {
-              /**
-               * @description The type of error returned.
-               * @enum {string}
-               */
-              type: "api_error" | "invalid_request_error";
-              /** @description A message providing more details about the error. */
-              message: string;
-            };
+            /** @description Text response. */
+            text?: string;
+            /** @description JSON response. */
+            json_object?: Record<string, never>;
           };
         };
       };
     };
   };
   /**
-   * Whisper
-   * @description Transcribe audio using the Whisper family of models. Includes sentence-level segmentation, word-level alignment and speaker diarization. Trained by [Open AI](https://huggingface.co/docs/transformers/model_doc/whisper) and hosted on Substrate.
+   * MultiGenerateText
+   * @description Generate multiple text choices using a language model.
    */
-  Whisper: {
+  MultiGenerateText: {
     parameters: {
       query?: {
         undefined?: {
-          /** @description Input audio URL. */
-          audio_url: string;
-          /** @description Prompt to guide model on contents of input audio and desired output. */
-          prompt?: string;
+          /** @description Input prompt. */
+          prompt: string;
+          /** @description Number of choices to generate. */
+          num_choices: number;
           /**
-           * @description Language of input audio in ISO-639-1 format.
-           * @default en
+           * @description Selected model.
+           * @default mistral-7b-instruct
+           * @enum {string}
            */
-          language?: string;
+          model?: "mistral-7b-instruct";
+          /** ResponseFormat */
+          response_format?: {
+            /**
+             * @description Type of response.
+             * @default text
+             * @enum {string}
+             */
+            type: "json_object" | "text";
+            /** @description JSON schema to guide `json_object` response. */
+            json_schema?: Record<string, never>;
+          };
           /**
-           * @description Align transcription to produce more accurate sentence-level timestamps and word-level timestamps. An array of word segments will be included in each sentence segment.
-           * @default false
+           * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
+           * @default 4
            */
-          align?: boolean;
+          temperature?: number;
           /**
-           * @description Identify speakers for each segment. Speaker IDs will be added to each output segment.
-           * @default false
+           * @description Maximum number of tokens to generate.
+           * @default 800
            */
-          diarize?: boolean;
+          max_tokens?: number;
         };
       };
     };
@@ -673,8 +1394,624 @@ export interface operations {
       200: {
         content: {
           "application/json": {
-            /** WhisperOut */
-            data?: {
+            choices: {
+                /** @description Text response. */
+                text?: string;
+                /** @description JSON response. */
+                json_object?: Record<string, never>;
+              }[];
+          };
+        };
+      };
+    };
+  };
+  /**
+   * GenerateTextVision
+   * @description Generate text by prompting with text and images using a vision-language model.
+   */
+  GenerateTextVision: {
+    parameters: {
+      query?: {
+        undefined?: {
+          /** @description Text prompt. */
+          prompt: string;
+          /** @description Image prompts. */
+          image_uris?: string[];
+          /**
+           * @description Selected model.
+           * @default firellava-13b
+           * @enum {string}
+           */
+          model?: "firellava-13b";
+          /**
+           * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
+           * @default 4
+           */
+          temperature?: number;
+          /**
+           * @description Maximum number of tokens to generate.
+           * @default 800
+           */
+          max_tokens?: number;
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": {
+            /** @description Text response. */
+            text: string;
+          };
+        };
+      };
+    };
+  };
+  /**
+   * GenerateImage
+   * @description Generate an image.
+   */
+  GenerateImage: {
+    parameters: {
+      query?: {
+        undefined?: {
+          /** @description Input prompt. */
+          prompt: string;
+          /**
+           * @description Selected model.
+           * @default stablediffusion-xl
+           * @enum {string}
+           */
+          model?: "stablediffusion-xl" | "stablediffusion-1.5";
+          /** @description Negative input prompt. */
+          negative_prompt?: string;
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+          store?: string;
+          /** @description Width of output image, in pixels. */
+          width?: number;
+          /** @description Height of output image, in pixels. */
+          height?: number;
+          /**
+           * Format: float
+           * @description Controls how long to run the image refinement process.
+           * @default 6
+           */
+          refinement?: number;
+          /**
+           * Format: float
+           * @description Controls the influence of the input prompt on the generated output.
+           * @default 2
+           */
+          prompt_influence?: number;
+          /** @description Seed for deterministic generation. Default is a random seed. */
+          seed?: number;
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": {
+            /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+            image_uri: string;
+            /** @description The random noise seed used for generation. */
+            seed: number;
+          };
+        };
+      };
+    };
+  };
+  /**
+   * MultiGenerateImage
+   * @description Generate multiple images.
+   */
+  MultiGenerateImage: {
+    parameters: {
+      query?: {
+        undefined?: {
+          /** @description Input prompt. */
+          prompt: string;
+          /** @description Number of images to generate. */
+          num_images: number;
+          /**
+           * @description Selected model.
+           * @default stablediffusion-xl
+           * @enum {string}
+           */
+          model?: "stablediffusion-xl" | "stablediffusion-1.5";
+          /** @description Negative input prompt. */
+          negative_prompt?: string;
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+          store?: string;
+          /** @description Width of output image, in pixels. */
+          width?: number;
+          /** @description Height of output image, in pixels. */
+          height?: number;
+          /**
+           * Format: float
+           * @description Controls how long to run the image refinement process.
+           * @default 6
+           */
+          refinement?: number;
+          /**
+           * Format: float
+           * @description Controls the influence of the input prompt on the generated output.
+           */
+          prompt_influence?: number;
+          /** @description Random noise seeds. Default is random seeds for each generation. */
+          seeds?: number[];
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": {
+            outputs: {
+                /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+                image_uri: string;
+                /** @description The random noise seed used for generation. */
+                seed: number;
+              }[];
+          };
+        };
+      };
+    };
+  };
+  /**
+   * ControlledGenerateImage
+   * @description Generate an image with generation controlled by an input image.
+   */
+  ControlledGenerateImage: {
+    parameters: {
+      query?: {
+        undefined?: {
+          /** @description Input image. */
+          image_uri: string;
+          /**
+           * @description Strategy to control generation using the input image.
+           * @enum {string}
+           */
+          control_method: "edge" | "upscale" | "depth" | "qr";
+          /** @description Input prompt. */
+          prompt: string;
+          /**
+           * @description Resolution of the output image, in pixels.
+           * @default 1024
+           */
+          output_resolution?: number;
+          /**
+           * @description Selected model.
+           * @default stablediffusion-xl
+           * @enum {string}
+           */
+          model?: "stablediffusion-1.5" | "stablediffusion-xl";
+          /** @description Negative input prompt. */
+          negative_prompt?: string;
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+          store?: string;
+          /**
+           * Format: float
+           * @description Controls how long to run the image refinement process.
+           * @default 6
+           */
+          refinement?: number;
+          /**
+           * Format: float
+           * @description Controls the influence of the input image on the generated output.
+           * @default 9
+           */
+          image_influence?: number;
+          /**
+           * Format: float
+           * @description Controls the influence of the input prompt on the generated output.
+           * @default 2
+           */
+          prompt_influence?: number;
+          /** @description Seed for deterministic generation. Default is a random seed. */
+          seed?: number;
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": {
+            /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+            image_uri: string;
+            /** @description The random noise seed used for generation. */
+            seed: number;
+          };
+        };
+      };
+    };
+  };
+  /**
+   * MultiControlledGenerateImage
+   * @description Generate multiple image outputs with generation controlled by an input image.
+   */
+  MultiControlledGenerateImage: {
+    parameters: {
+      query?: {
+        undefined?: {
+          /** @description Input image. */
+          image_uri: string;
+          /**
+           * @description Strategy to control generation using the input image.
+           * @enum {string}
+           */
+          control_method: "edge" | "upscale" | "depth" | "qr";
+          /** @description Input prompt. */
+          prompt: string;
+          /** @description Number of images to generate. */
+          num_images: number;
+          /**
+           * @description Resolution of the output image, in pixels.
+           * @default 1024
+           */
+          output_resolution?: number;
+          /**
+           * @description Selected model.
+           * @default stablediffusion-1.5
+           * @enum {string}
+           */
+          model?: "stablediffusion-1.5";
+          /** @description Negative input prompt. */
+          negative_prompt?: string;
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+          store?: string;
+          /**
+           * Format: float
+           * @description Controls how long to run the image refinement process.
+           * @default 6
+           */
+          refinement?: number;
+          /**
+           * Format: float
+           * @description Controls the influence of the input image on the generated output.
+           * @default 9
+           */
+          image_influence?: number;
+          /**
+           * Format: float
+           * @description Controls the influence of the input prompt on the generated output.
+           * @default 2
+           */
+          prompt_influence?: number;
+          /** @description Random noise seeds. Default is random seeds for each generation. */
+          seeds?: number[];
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": {
+            outputs: {
+                /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+                image_uri: string;
+                /** @description The random noise seed used for generation. */
+                seed: number;
+              }[];
+          };
+        };
+      };
+    };
+  };
+  /**
+   * InpaintImage
+   * @description Modify part of an image using a mask.
+   */
+  InpaintImage: {
+    parameters: {
+      query?: {
+        undefined?: {
+          /** @description Input image. */
+          image_uri: string;
+          /** @description Mask image that controls which pixels are inpainted. If unset, the entire image is modified (image-to-image). */
+          mask_image_uri?: string;
+          /** @description Input prompt. */
+          prompt: string;
+          /**
+           * @description Resolution of the output image, in pixels.
+           * @default 1024
+           */
+          output_resolution?: number;
+          /**
+           * @description Selected model.
+           * @default stablediffusion-xl
+           * @enum {string}
+           */
+          model?: "stablediffusion-xl";
+          /** @description Negative input prompt. */
+          negative_prompt?: string;
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+          store?: string;
+          /**
+           * Format: float
+           * @description Controls how long to run the image refinement process.
+           * @default 6
+           */
+          refinement?: number;
+          /**
+           * Format: float
+           * @description Controls the influence of the input prompt on the generated output.
+           * @default 5
+           */
+          prompt_influence?: number;
+          /** @description Seed for deterministic generation. Default is a random seed. */
+          seed?: number;
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": {
+            /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+            image_uri: string;
+            /** @description The random noise seed used for generation. */
+            seed: number;
+          };
+        };
+      };
+    };
+  };
+  /**
+   * MultiInpaintImage
+   * @description Generate multiple image outputs modifying part of an image using a mask.
+   */
+  MultiInpaintImage: {
+    parameters: {
+      query?: {
+        undefined?: {
+          /** @description Input image. */
+          image_uri: string;
+          /** @description Mask image that controls which pixels are inpainted. If unset, the entire image is modified (image-to-image). */
+          mask_image_uri?: string;
+          /** @description Input prompt. */
+          prompt: string;
+          /** @description Number of images to generate. */
+          num_images: number;
+          /**
+           * @description Resolution of the output image, in pixels.
+           * @default 1024
+           */
+          output_resolution?: number;
+          /**
+           * @description Selected model.
+           * @default stablediffusion-1.5
+           * @enum {string}
+           */
+          model?: "stablediffusion-1.5";
+          /** @description Negative input prompt. */
+          negative_prompt?: string;
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+          store?: string;
+          /**
+           * Format: float
+           * @description Controls how long to run the image refinement process.
+           * @default 6
+           */
+          refinement?: number;
+          /**
+           * Format: float
+           * @description Controls the influence of the input image on the generated output.
+           * @default 9
+           */
+          image_influence?: number;
+          /**
+           * Format: float
+           * @description Controls the influence of the input prompt on the generated output.
+           * @default 2
+           */
+          prompt_influence?: number;
+          /** @description Random noise seeds. Default is random seeds for each generation. */
+          seeds?: number[];
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": {
+            outputs: {
+                /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+                image_uri: string;
+                /** @description The random noise seed used for generation. */
+                seed: number;
+              }[];
+          };
+        };
+      };
+    };
+  };
+  /**
+   * SegmentImage
+   * @description Detect segments in an image.
+   */
+  SegmentImage: {
+    parameters: {
+      query?: {
+        undefined?: {
+          /** @description Input image. */
+          image_uri: string;
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+          store?: string;
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": {
+            /** @description Detected segments. */
+            objects: {
+                /** @description Detected object class. */
+                object_class: string;
+                /**
+                 * Format: float
+                 * @description Classification confidence.
+                 */
+                confidence: number;
+                /** BoundingBox */
+                box: {
+                  /**
+                   * Format: float
+                   * @description Top left corner x.
+                   */
+                  x1: number;
+                  /**
+                   * Format: float
+                   * @description Top left corner y.
+                   */
+                  y1: number;
+                  /**
+                   * Format: float
+                   * @description Bottom right corner x.
+                   */
+                  x2: number;
+                  /**
+                   * Format: float
+                   * @description Bottom right corner y.
+                   */
+                  y2: number;
+                };
+                /** MaskPath */
+                path: {
+                  /** @description x values. */
+                  x: number[];
+                  /** @description y values. */
+                  y: number[];
+                };
+              }[];
+            /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+            image_uri: string;
+            /** @description Width of image, in pixels. */
+            width: number;
+            /** @description Height of image, in pixels. */
+            height: number;
+          };
+        };
+      };
+    };
+  };
+  /**
+   * CreateMaskImage
+   * @description Create a mask image with a bounding box or path.
+   */
+  CreateMaskImage: {
+    parameters: {
+      query?: {
+        undefined?: {
+          /** @description Width of image, in pixels. */
+          width: number;
+          /** @description Height of image, in pixels. */
+          height: number;
+          /** BoundingBox */
+          box?: {
+            /**
+             * Format: float
+             * @description Top left corner x.
+             */
+            x1: number;
+            /**
+             * Format: float
+             * @description Top left corner y.
+             */
+            y1: number;
+            /**
+             * Format: float
+             * @description Bottom right corner x.
+             */
+            x2: number;
+            /**
+             * Format: float
+             * @description Bottom right corner y.
+             */
+            y2: number;
+          };
+          /** MaskPath */
+          path?: {
+            /** @description x values. */
+            x: number[];
+            /** @description y values. */
+            y: number[];
+          };
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+          store?: string;
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": {
+            /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+            image_uri: string;
+          };
+        };
+      };
+    };
+  };
+  /**
+   * TranscribeMedia
+   * @description Transcribe speech in an audio or video file.
+   */
+  TranscribeMedia: {
+    parameters: {
+      query?: {
+        undefined?: {
+          /** @description Input audio. */
+          audio_uri: string;
+          /** @description Prompt to guide model on the content and context of input audio. */
+          prompt?: string;
+          /**
+           * @description Language of input audio in [ISO-639-1](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes) format.
+           * @default en
+           */
+          language?: string;
+          /**
+           * @description Segment the text into sentences with approximate timestamps.
+           * @default false
+           */
+          segment?: boolean;
+          /**
+           * @description Align transcription to produce more accurate sentence-level timestamps and word-level timestamps. An array of word segments will be included in each sentence segment.
+           * @default false
+           */
+          align?: boolean;
+          /**
+           * @description Identify speakers for each segment. Speaker IDs will be included in each segment.
+           * @default false
+           */
+          diarize?: boolean;
+          /**
+           * @description Suggest automatic chapter markers.
+           * @default false
+           */
+          suggest_chapters?: boolean;
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": {
+            /** @description Transcribed text. */
+            text: string;
+            /** @description Transcribed segments, if `segment` is enabled. */
+            segments?: {
                 /** @description Text of segment. */
                 text: string;
                 /**
@@ -707,15 +2044,93 @@ export interface operations {
                     speaker?: string;
                   }[];
               }[];
-            /** ErrorOut */
-            error?: {
-              /**
-               * @description The type of error returned.
-               * @enum {string}
-               */
-              type: "api_error" | "invalid_request_error";
-              /** @description A message providing more details about the error. */
-              message: string;
+            /** @description Chapter markers, if `suggest_chapters` is enabled. */
+            chapters?: {
+                /** @description Chapter title. */
+                title: string;
+                /**
+                 * Format: float
+                 * @description Start time of chapter, in seconds.
+                 */
+                start: number;
+              }[];
+          };
+        };
+      };
+    };
+  };
+  /**
+   * GenerateSpeech
+   * @description Generate speech from text.
+   */
+  GenerateSpeech: {
+    parameters: {
+      query?: {
+        undefined?: {
+          /** @description Input text. */
+          text: string;
+          /** @description Reference audio used to synthesize the speaker. If unset, a default speaker voice will be used. */
+          audio_uri?: string;
+          /**
+           * @description Language of input text. Supported languages: `en, es, fr, de, it, pt, pl, tr, ru, nl, cs, ar, zh, hu, ko, hi`.
+           * @default en
+           */
+          language?: string;
+          /** @description Use "hosted" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the audio data will be returned as a base64-encoded string. */
+          store?: string;
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": {
+            /** @description Base 64-encoded WAV audio bytes, or a hosted audio url if `store` is provided. */
+            audio_uri: string;
+          };
+        };
+      };
+    };
+  };
+  /**
+   * EmbedText
+   * @description Generate vector embedding for a text document.
+   */
+  EmbedText: {
+    parameters: {
+      query?: {
+        undefined?: {
+          /** @description Text to embed. */
+          text: string;
+          /**
+           * @description Selected model.
+           * @default jina-v2
+           * @enum {string}
+           */
+          model?: "jina-v2" | "clip";
+          /** @description [Vector store](/docs/vector-stores) identifier. */
+          store?: string;
+          /** @description Metadata that can be used to query the vector store. Ignored if `store` is unset. */
+          metadata?: Record<string, never>;
+          embedded_metadata?: {
+            /** @description Keys to embed with text. */
+            include_keys?: string[];
+            /** @description Keys to exclude. All other keys will be embedded with text. */
+            exclude_keys?: string[];
+          };
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": {
+            /** Embedding */
+            embedding: {
+              /** @description Embedding vector. */
+              vector: string;
             };
           };
         };
@@ -723,25 +2138,69 @@ export interface operations {
     };
   };
   /**
-   * Jina
-   * @description TODO. Trained by [Jina AI](https://huggingface.co/jinaai) and hosted on Substrate.
+   * MultiEmbedText
+   * @description Generate vector embeddings for multiple text documents.
    */
-  Jina: {
+  MultiEmbedText: {
     parameters: {
       query?: {
         undefined?: {
-          /** @description Documents to embed. */
-          docs: {
+          /** @description Items to embed. */
+          items: {
               /** @description Text to embed. */
               text: string;
-              /** @description Document id. Required when storing embedding. */
-              id?: string;
-              /** @description Additional metadata to store in embedding document. */
+              /** @description Metadata that can be used to query the vector store. Ignored if `store` is unset. */
               metadata?: Record<string, never>;
-              /** @description Contents of `metadata` included to generate embedding. */
-              embed_metadata_keys?: string[];
             }[];
-          /** @description Vector store ID in which embedding will be stored. */
+          /**
+           * @description Selected model.
+           * @default jina-v2
+           * @enum {string}
+           */
+          model?: "jina-v2" | "clip";
+          /** @description [Vector store](/docs/vector-stores) identifier. */
+          store?: string;
+          embedded_metadata?: {
+            /** @description Keys to embed with text. */
+            include_keys?: string[];
+            /** @description Keys to exclude. All other keys will be embedded with text. */
+            exclude_keys?: string[];
+          };
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": {
+            /** @description Generated embeddings. */
+            embeddings: {
+                /** @description Embedding vector. */
+                vector: string;
+              }[];
+          };
+        };
+      };
+    };
+  };
+  /**
+   * EmbedImage
+   * @description Generate vector embedding for an image, and optionally store the embedding.
+   */
+  EmbedImage: {
+    parameters: {
+      query?: {
+        undefined?: {
+          /** @description Image to embed. */
+          image_uri: string;
+          /**
+           * @description Selected model.
+           * @default clip
+           * @enum {string}
+           */
+          model?: "clip";
+          /** @description [Vector store](/docs/vector-stores) identifier. */
           store?: string;
         };
       };
@@ -751,24 +2210,10 @@ export interface operations {
       200: {
         content: {
           "application/json": {
-            /** JinaOut */
-            data?: {
-                /** @description Embedding vector. */
-                vector: string;
-                /** @description Document id. */
-                id?: string;
-                /** @description Additional metadata stored in embedding document. */
-                metadata?: Record<string, never>;
-              }[];
-            /** ErrorOut */
-            error?: {
-              /**
-               * @description The type of error returned.
-               * @enum {string}
-               */
-              type: "api_error" | "invalid_request_error";
-              /** @description A message providing more details about the error. */
-              message: string;
+            /** Embedding */
+            embedding: {
+              /** @description Embedding vector. */
+              vector: string;
             };
           };
         };
@@ -776,28 +2221,26 @@ export interface operations {
     };
   };
   /**
-   * CLIP
-   * @description TODO. Trained by [Open AI](https://huggingface.co/docs/transformers/model_doc/clip) and hosted on Substrate.
+   * MultiEmbedImage
+   * @description Generate vector embeddings for multiple images, and optionally store the embeddings.
    */
-  CLIP: {
+  MultiEmbedImage: {
     parameters: {
       query?: {
         undefined?: {
-          /** @description Documents to embed. */
-          docs: {
-              /** @description Text to embed. */
-              text?: string;
-              /** @description URL of image to embed. */
-              image_url?: string;
-              /** @description Document id. Required when storing embedding. */
-              id?: string;
-              /** @description Additional metadata to store in embedding document. */
-              metadata?: Record<string, never>;
-              /** @description Contents of `metadata` included to generate embedding. */
-              embed_metadata_keys?: string[];
+          /** @description Items to embed. */
+          items: {
+              /** @description Image to embed. */
+              image_uri: string;
             }[];
-          /** @description Vector store ID in which embedding will be stored. */
+          /** @description [Vector store](/docs/vector-stores) identifier. */
           store?: string;
+          /**
+           * @description Selected model.
+           * @default clip
+           * @enum {string}
+           */
+          model?: "clip";
         };
       };
     };
@@ -806,25 +2249,339 @@ export interface operations {
       200: {
         content: {
           "application/json": {
-            /** CLIPOut */
-            data?: {
+            /** @description Generated embeddings. */
+            embeddings: {
                 /** @description Embedding vector. */
                 vector: string;
-                /** @description Document id. */
-                id?: string;
-                /** @description Additional metadata stored in embedding document. */
-                metadata?: Record<string, never>;
               }[];
-            /** ErrorOut */
-            error?: {
+          };
+        };
+      };
+    };
+  };
+  /**
+   * /vector-stores/create
+   * @description Create a vector store for storing and querying embeddings.
+   */
+  CreateVectorStore: {
+    parameters: {
+      query?: {
+        undefined?: {
+          /** @description Vector store name. */
+          name: string;
+          /**
+           * @description Selected embedding model
+           * @enum {string}
+           */
+          model: "jina-v2" | "clip";
+          /**
+           * @description The max number of connections per layer for the index.
+           * @default 16
+           */
+          m?: number;
+          /**
+           * @description The size of the dynamic candidate list for constructing the index graph.
+           * @default 64
+           */
+          ef_construction?: number;
+          /**
+           * @description The distance metric to construct the index with.
+           * @default inner
+           * @enum {string}
+           */
+          metric?: "cosine" | "l2" | "inner";
+        };
+      };
+    };
+    responses: {
+      /** @description Vector store created. */
+      201: {
+        content: {
+          "application/json": {
+            /** @description Vector store name. */
+            name: string;
+            /**
+             * @description Selected embedding model
+             * @enum {string}
+             */
+            model: "jina-v2" | "clip";
+            /**
+             * @description The max number of connections per layer for the index.
+             * @default 16
+             */
+            m?: number;
+            /**
+             * @description The size of the dynamic candidate list for constructing the index graph.
+             * @default 64
+             */
+            ef_construction?: number;
+            /**
+             * @description The distance metric to construct the index with.
+             * @default inner
+             * @enum {string}
+             */
+            metric?: "cosine" | "l2" | "inner";
+          };
+        };
+      };
+    };
+  };
+  /**
+   * /vector-stores/list
+   * @description List all vector stores.
+   */
+  ListVectorStores: {
+    responses: {
+      /** @description List of vector stores. */
+      200: {
+        content: {
+          "application/json": ({
+              /** @description Vector store name. */
+              name: string;
               /**
-               * @description The type of error returned.
+               * @description Selected embedding model
                * @enum {string}
                */
-              type: "api_error" | "invalid_request_error";
-              /** @description A message providing more details about the error. */
-              message: string;
-            };
+              model: "jina-v2" | "clip";
+              /**
+               * @description The max number of connections per layer for the index.
+               * @default 16
+               */
+              m?: number;
+              /**
+               * @description The size of the dynamic candidate list for constructing the index graph.
+               * @default 64
+               */
+              ef_construction?: number;
+              /**
+               * @description The distance metric to construct the index with.
+               * @default inner
+               * @enum {string}
+               */
+              metric?: "cosine" | "l2" | "inner";
+            })[];
+        };
+      };
+    };
+  };
+  /**
+   * /vector-stores/delete
+   * @description Delete a vector store.
+   */
+  DeleteVectorStore: {
+    parameters: {
+      query?: {
+        undefined?: {
+          /** @description Vector store name. */
+          name: string;
+          /**
+           * @description Selected embedding model
+           * @enum {string}
+           */
+          model: "jina-v2" | "clip";
+        };
+      };
+    };
+    responses: {
+      /** @description Vector store deleted. */
+      204: {
+        content: never;
+      };
+    };
+  };
+  /**
+   * /vector-stores/query
+   * @description Query a vector store for similar vectors.
+   */
+  QueryVectorStore: {
+    parameters: {
+      query?: {
+        undefined?: {
+          /** @description Vector store to query against. */
+          name: string;
+          /**
+           * @description Selected embedding model
+           * @enum {string}
+           */
+          model: "jina-v2" | "clip";
+          /** @description Document IDs to use for the query. */
+          queryIds?: string[];
+          /** @description Vector to use for the query. */
+          queryVectors?: number[][];
+          /** @description Text to embed and use for the query. */
+          queryStrings?: string[];
+          /**
+           * @description Number of results to return.
+           * @default 10
+           */
+          topK?: number;
+          /**
+           * @description The size of the dynamic candidate list for searching the index graph.
+           * @default 40
+           */
+          efSearch?: number;
+          /**
+           * @description Include the values of the vectors in the response.
+           * @default false
+           */
+          includeValues?: boolean;
+          /**
+           * @description Include the metadata of the vectors in the response.
+           * @default false
+           */
+          includeMetadata?: boolean;
+          /** @description Filter metadata by key-value pairs. */
+          filters?: Record<string, never>;
+        };
+      };
+    };
+    responses: {
+      /** @description Query results. */
+      200: {
+        content: {
+          "application/json": {
+            /** @description Query results. */
+            results: {
+                  /** @description Document ID. */
+                  id: string;
+                  /**
+                   * Format: float
+                   * @description Similarity score.
+                   */
+                  distance: number;
+                  /** @description Embedding vector. */
+                  vector?: number[];
+                  /** @description Document metadata. */
+                  metadata?: Record<string, never>;
+                }[][];
+            /** @description Vector store name. */
+            name?: string;
+            /**
+             * @description Selected embedding model
+             * @enum {string}
+             */
+            model?: "jina-v2" | "clip";
+            /**
+             * @description The distance metric used for the query.
+             * @enum {string}
+             */
+            metric?: "cosine" | "l2" | "inner";
+          };
+        };
+      };
+    };
+  };
+  /**
+   * Fetch vectors
+   * @description Fetch vectors from a vector store.
+   */
+  FetchVectors: {
+    parameters: {
+      query?: {
+        undefined?: {
+          /** @description Vector store name. */
+          name: string;
+          /**
+           * @description Selected embedding model
+           * @enum {string}
+           */
+          model: "jina-v2" | "clip";
+          /** @description Document IDs to retrieve. */
+          ids: string[];
+        };
+      };
+    };
+    responses: {
+      /** @description Vector data. */
+      200: {
+        content: {
+          "application/json": {
+            /** @description Retrieved vectors. */
+            vectors: {
+                /** @description Document ID. */
+                id: string;
+                /** @description Embedding vector. */
+                vector: number[];
+                /**
+                 * @description Document metadata.
+                 * @default {}
+                 */
+                metadata: Record<string, never>;
+              }[];
+          };
+        };
+      };
+    };
+  };
+  /**
+   * Update vectors
+   * @description Update vectors in a vector store.
+   */
+  UpdateVectors: {
+    parameters: {
+      query?: {
+        undefined?: {
+          /** @description Vector store name. */
+          name: string;
+          /**
+           * @description Selected embedding model
+           * @enum {string}
+           */
+          model: "jina-v2" | "clip";
+          /** @description Vectors to upsert. */
+          vectors: {
+              /** @description Document ID. */
+              id: string;
+              /** @description Embedding vector. */
+              vector?: number[];
+              /**
+               * @description Document metadata.
+               * @default {}
+               */
+              metadata?: Record<string, never>;
+            }[];
+        };
+      };
+    };
+    responses: {
+      /** @description Count of updated vectors. */
+      200: {
+        content: {
+          "application/json": {
+            /** @description Number of vectors modified. */
+            count: number;
+          };
+        };
+      };
+    };
+  };
+  /**
+   * Delete vectors
+   * @description Delete vectors in a vector store.
+   */
+  DeleteVectors: {
+    parameters: {
+      query?: {
+        undefined?: {
+          /** @description Vector store name. */
+          name: string;
+          /**
+           * @description Selected embedding model
+           * @enum {string}
+           */
+          model: "jina-v2" | "clip";
+          /** @description Document IDs to delete. */
+          ids: string[];
+        };
+      };
+    };
+    responses: {
+      /** @description Count of deleted vectors. */
+      200: {
+        content: {
+          "application/json": {
+            /** @description Number of vectors modified. */
+            count: number;
           };
         };
       };

@@ -2,21 +2,16 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Substrate API",
-    "version": "2024-01-01",
+    "version": "2024-02-01",
     "contact": {
       "email": "support@substrate.run"
     },
-    "description": "The Substrate API"
+    "description": "Substrate API"
   },
   "servers": [
     {
-      "url": "https://api.substrate.run/{basePath}",
-      "description": "The production Substrate API",
-      "variables": {
-        "basePath": {
-          "default": "v1"
-        }
-      }
+      "url": "https://api.substrate.run",
+      "description": "Substrate API"
     }
   ],
   "components": {
@@ -43,72 +38,261 @@
           "message"
         ]
       },
-      "StableDiffusionInputImage": {
-        "title": "StableDiffusionInputImage",
+      "ResponseFormat": {
+        "title": "ResponseFormat",
         "type": "object",
         "properties": {
-          "image_url": {
+          "type": {
             "type": "string",
-            "description": "Input image URL to modify with a text prompt."
+            "enum": [
+              "json_object",
+              "text"
+            ],
+            "description": "Type of response.",
+            "default": "text"
           },
-          "mask_image_url": {
-            "type": "string",
-            "description": "Mask of the input image to selectively modify."
-          },
-          "prompt_strength": {
-            "type": "number",
-            "format": "float",
-            "minimum": 0,
-            "maximum": 1,
-            "description": "Controls the influence of the input prompt on the generated output.",
-            "default": 0.6
+          "json_schema": {
+            "type": "object",
+            "description": "JSON schema to guide `json_object` response."
           }
         },
         "required": [
-          "image_url"
+          "type"
         ]
       },
-      "StableDiffusionIn": {
-        "title": "StableDiffusionIn",
+      "GenerateTextIn": {
+        "title": "GenerateTextIn",
         "type": "object",
         "properties": {
           "prompt": {
             "type": "string",
             "description": "Input prompt."
           },
+          "model": {
+            "type": "string",
+            "enum": [
+              "mistral-7b-instruct"
+            ],
+            "description": "Selected model.",
+            "default": "mistral-7b-instruct"
+          },
+          "response_format": {
+            "title": "ResponseFormat",
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "json_object",
+                  "text"
+                ],
+                "description": "Type of response.",
+                "default": "text"
+              },
+              "json_schema": {
+                "type": "object",
+                "description": "JSON schema to guide `json_object` response."
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "temperature": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10,
+            "default": 4,
+            "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic."
+          },
+          "max_tokens": {
+            "type": "integer",
+            "description": "Maximum number of tokens to generate.",
+            "default": 800
+          }
+        },
+        "required": [
+          "prompt"
+        ]
+      },
+      "MultiGenerateTextIn": {
+        "title": "MultiGenerateTextIn",
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "Input prompt."
+          },
+          "num_choices": {
+            "type": "integer",
+            "description": "Number of choices to generate."
+          },
+          "model": {
+            "type": "string",
+            "enum": [
+              "mistral-7b-instruct"
+            ],
+            "description": "Selected model.",
+            "default": "mistral-7b-instruct"
+          },
+          "response_format": {
+            "title": "ResponseFormat",
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "json_object",
+                  "text"
+                ],
+                "description": "Type of response.",
+                "default": "text"
+              },
+              "json_schema": {
+                "type": "object",
+                "description": "JSON schema to guide `json_object` response."
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "temperature": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10,
+            "default": 4,
+            "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic."
+          },
+          "max_tokens": {
+            "type": "integer",
+            "description": "Maximum number of tokens to generate.",
+            "default": 800
+          }
+        },
+        "required": [
+          "prompt",
+          "num_choices"
+        ]
+      },
+      "GenerateTextOut": {
+        "title": "GenerateTextOut",
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "Text response."
+          },
+          "json_object": {
+            "type": "object",
+            "description": "JSON response."
+          }
+        }
+      },
+      "MultiGenerateTextOut": {
+        "title": "MultiGenerateTextOut",
+        "type": "object",
+        "properties": {
+          "choices": {
+            "type": "array",
+            "items": {
+              "title": "GenerateTextOut",
+              "type": "object",
+              "properties": {
+                "text": {
+                  "type": "string",
+                  "description": "Text response."
+                },
+                "json_object": {
+                  "type": "object",
+                  "description": "JSON response."
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "choices"
+        ]
+      },
+      "GenerateTextVisionIn": {
+        "title": "GenerateTextVisionIn",
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "Text prompt."
+          },
+          "image_uris": {
+            "description": "Image prompts.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "model": {
+            "type": "string",
+            "enum": [
+              "firellava-13b"
+            ],
+            "description": "Selected model.",
+            "default": "firellava-13b"
+          },
+          "temperature": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10,
+            "default": 4,
+            "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic."
+          },
+          "max_tokens": {
+            "type": "integer",
+            "description": "Maximum number of tokens to generate.",
+            "default": 800
+          }
+        },
+        "required": [
+          "prompt",
+          "image_uri"
+        ]
+      },
+      "GenerateTextVisionOut": {
+        "title": "GenerateTextVisionOut",
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "Text response."
+          }
+        },
+        "required": [
+          "text"
+        ]
+      },
+      "GenerateImageIn": {
+        "title": "GenerateImageIn",
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "Input prompt."
+          },
+          "model": {
+            "type": "string",
+            "enum": [
+              "stablediffusion-xl",
+              "stablediffusion-1.5"
+            ],
+            "description": "Selected model.",
+            "default": "stablediffusion-xl"
+          },
           "negative_prompt": {
             "type": "string",
             "description": "Negative input prompt."
           },
-          "image": {
-            "title": "StableDiffusionInputImage",
-            "type": "object",
-            "properties": {
-              "image_url": {
-                "type": "string",
-                "description": "Input image URL to modify with a text prompt."
-              },
-              "mask_image_url": {
-                "type": "string",
-                "description": "Mask of the input image to selectively modify."
-              },
-              "prompt_strength": {
-                "type": "number",
-                "format": "float",
-                "minimum": 0,
-                "maximum": 1,
-                "description": "Controls the influence of the input prompt on the generated output.",
-                "default": 0.6
-              }
-            },
-            "required": [
-              "image_url"
-            ]
-          },
           "store": {
-            "type": "boolean",
-            "description": "Return a hosted image URL instead of base64 encoded image data.",
-            "default": false
+            "type": "string",
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
           },
           "width": {
             "type": "integer",
@@ -118,37 +302,38 @@
             "type": "integer",
             "description": "Height of output image, in pixels."
           },
-          "steps": {
-            "type": "integer",
-            "description": "Number of diffusion steps to run."
+          "refinement": {
+            "type": "number",
+            "format": "float",
+            "description": "Controls how long to run the image refinement process.",
+            "minimum": 0,
+            "maximum": 10,
+            "default": 6
+          },
+          "prompt_influence": {
+            "type": "number",
+            "format": "float",
+            "description": "Controls the influence of the input prompt on the generated output.",
+            "minimum": 0,
+            "maximum": 10,
+            "default": 2
           },
           "seed": {
             "type": "integer",
-            "description": "Random noise seed. Default is a random seed."
-          },
-          "guidance_scale": {
-            "type": "integer",
-            "minimum": 0,
-            "maximum": 35,
-            "description": "Controls the influence of the input prompt on the generated output."
-          },
-          "num_images": {
-            "type": "integer",
-            "description": "Number of images to generate.",
-            "default": 1
+            "description": "Seed for deterministic generation. Default is a random seed."
           }
         },
         "required": [
           "prompt"
         ]
       },
-      "StableDiffusionImage": {
-        "title": "StableDiffusionImage",
+      "GenerateImageOut": {
+        "title": "GenerateImageOut",
         "type": "object",
         "properties": {
-          "uri": {
+          "image_uri": {
             "type": "string",
-            "description": "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is enabled."
+            "description": "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided."
           },
           "seed": {
             "type": "integer",
@@ -156,46 +341,88 @@
           }
         },
         "required": [
-          "uri",
+          "image_uri",
           "seed"
         ]
       },
-      "StableDiffusionOut": {
-        "title": "StableDiffusionOut",
-        "type": "array",
-        "items": {
-          "title": "StableDiffusionImage",
-          "type": "object",
-          "properties": {
-            "uri": {
-              "type": "string",
-              "description": "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is enabled."
-            },
-            "seed": {
-              "type": "integer",
-              "description": "The random noise seed used for generation."
-            }
-          },
-          "required": [
-            "uri",
-            "seed"
-          ]
-        }
-      },
-      "StableDiffusionResponse": {
-        "title": "StableDiffusionResponse",
+      "MultiGenerateImageIn": {
+        "title": "MultiGenerateImageIn",
         "type": "object",
         "properties": {
-          "data": {
-            "title": "StableDiffusionOut",
+          "prompt": {
+            "type": "string",
+            "description": "Input prompt."
+          },
+          "num_images": {
+            "type": "integer",
+            "description": "Number of images to generate."
+          },
+          "model": {
+            "type": "string",
+            "enum": [
+              "stablediffusion-xl",
+              "stablediffusion-1.5"
+            ],
+            "description": "Selected model.",
+            "default": "stablediffusion-xl"
+          },
+          "negative_prompt": {
+            "type": "string",
+            "description": "Negative input prompt."
+          },
+          "store": {
+            "type": "string",
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+          },
+          "width": {
+            "type": "integer",
+            "description": "Width of output image, in pixels."
+          },
+          "height": {
+            "type": "integer",
+            "description": "Height of output image, in pixels."
+          },
+          "refinement": {
+            "type": "number",
+            "format": "float",
+            "description": "Controls how long to run the image refinement process.",
+            "minimum": 0,
+            "maximum": 10,
+            "default": 6
+          },
+          "prompt_influence": {
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "maximum": 10,
+            "description": "Controls the influence of the input prompt on the generated output."
+          },
+          "seeds": {
+            "description": "Random noise seeds. Default is random seeds for each generation.",
             "type": "array",
             "items": {
-              "title": "StableDiffusionImage",
+              "type": "integer"
+            }
+          }
+        },
+        "required": [
+          "prompt",
+          "num_images"
+        ]
+      },
+      "MultiGenerateImageOut": {
+        "title": "MultiGenerateImageOut",
+        "type": "object",
+        "properties": {
+          "outputs": {
+            "type": "array",
+            "items": {
+              "title": "GenerateImageOut",
               "type": "object",
               "properties": {
-                "uri": {
+                "image_uri": {
                   "type": "string",
-                  "description": "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is enabled."
+                  "description": "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided."
                 },
                 "seed": {
                   "type": "integer",
@@ -203,192 +430,798 @@
                 }
               },
               "required": [
-                "uri",
+                "image_uri",
                 "seed"
               ]
             }
-          },
-          "error": {
-            "title": "ErrorOut",
-            "type": "object",
-            "properties": {
-              "type": {
-                "type": "string",
-                "enum": [
-                  "api_error",
-                  "invalid_request_error"
-                ],
-                "description": "The type of error returned."
-              },
-              "message": {
-                "type": "string",
-                "description": "A message providing more details about the error."
-              }
-            },
-            "required": [
-              "type",
-              "message"
-            ]
-          }
-        }
-      },
-      "MistralPrompt": {
-        "title": "MistralPrompt",
-        "type": "object",
-        "properties": {
-          "prompt": {
-            "type": "string",
-            "description": "Prompt to generate completions for."
           }
         },
         "required": [
+          "outputs"
+        ]
+      },
+      "ControlledGenerateImageIn": {
+        "title": "ControlledGenerateImageIn",
+        "type": "object",
+        "properties": {
+          "image_uri": {
+            "type": "string",
+            "description": "Input image."
+          },
+          "control_method": {
+            "type": "string",
+            "enum": [
+              "edge",
+              "upscale",
+              "depth",
+              "qr"
+            ],
+            "description": "Strategy to control generation using the input image."
+          },
+          "prompt": {
+            "type": "string",
+            "description": "Input prompt."
+          },
+          "output_resolution": {
+            "type": "integer",
+            "description": "Resolution of the output image, in pixels.",
+            "default": 1024
+          },
+          "model": {
+            "type": "string",
+            "enum": [
+              "stablediffusion-1.5",
+              "stablediffusion-xl"
+            ],
+            "description": "Selected model.",
+            "default": "stablediffusion-xl"
+          },
+          "negative_prompt": {
+            "type": "string",
+            "description": "Negative input prompt."
+          },
+          "store": {
+            "type": "string",
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+          },
+          "refinement": {
+            "type": "number",
+            "format": "float",
+            "description": "Controls how long to run the image refinement process.",
+            "minimum": 0,
+            "maximum": 10,
+            "default": 6
+          },
+          "image_influence": {
+            "type": "number",
+            "format": "float",
+            "description": "Controls the influence of the input image on the generated output.",
+            "minimum": 0,
+            "maximum": 10,
+            "default": 9
+          },
+          "prompt_influence": {
+            "type": "number",
+            "format": "float",
+            "description": "Controls the influence of the input prompt on the generated output.",
+            "minimum": 0,
+            "maximum": 10,
+            "default": 2
+          },
+          "seed": {
+            "type": "integer",
+            "description": "Seed for deterministic generation. Default is a random seed."
+          }
+        },
+        "required": [
+          "image_uri",
+          "control_method",
           "prompt"
         ]
       },
-      "MistralIn": {
-        "title": "MistralIn",
+      "ControlledGenerateImageOut": {
+        "title": "ControlledGenerateImageOut",
         "type": "object",
         "properties": {
-          "prompts": {
-            "type": "array",
-            "description": "Input prompts.",
-            "items": {
-              "title": "MistralPrompt",
-              "type": "object",
-              "properties": {
-                "prompt": {
-                  "type": "string",
-                  "description": "Prompt to generate completions for."
-                }
-              },
-              "required": [
-                "prompt"
-              ]
-            }
-          },
-          "temperature": {
-            "type": "number",
-            "format": "float",
-            "minimum": 0,
-            "maximum": 2,
-            "description": "Sampling temperature to use. Higher values make the output more random; lower values make the output more deterministic.",
-            "default": 0.75
-          },
-          "max_tokens": {
-            "type": "integer",
-            "description": "Maximum number of tokens to generate.",
-            "default": 800
-          },
-          "num_completions": {
-            "type": "integer",
-            "description": "Number of completions to generate for each prompt.",
-            "default": 1
-          }
-        },
-        "required": [
-          "prompts"
-        ]
-      },
-      "MistralResult": {
-        "title": "MistralResult",
-        "type": "object",
-        "properties": {
-          "completions": {
-            "type": "array",
-            "description": "Generated completion choices.",
-            "items": {
-              "type": "string"
-            }
-          }
-        },
-        "required": [
-          "completions"
-        ]
-      },
-      "MistralOut": {
-        "title": "MistralOut",
-        "type": "array",
-        "items": {
-          "title": "MistralResult",
-          "type": "object",
-          "properties": {
-            "completions": {
-              "type": "array",
-              "description": "Generated completion choices.",
-              "items": {
-                "type": "string"
-              }
-            }
-          },
-          "required": [
-            "completions"
-          ]
-        }
-      },
-      "MistralResponse": {
-        "title": "MistralResponse",
-        "type": "object",
-        "properties": {
-          "data": {
-            "title": "MistralOut",
-            "type": "array",
-            "items": {
-              "title": "MistralResult",
-              "type": "object",
-              "properties": {
-                "completions": {
-                  "type": "array",
-                  "description": "Generated completion choices.",
-                  "items": {
-                    "type": "string"
-                  }
-                }
-              },
-              "required": [
-                "completions"
-              ]
-            }
-          },
-          "error": {
-            "title": "ErrorOut",
-            "type": "object",
-            "properties": {
-              "type": {
-                "type": "string",
-                "enum": [
-                  "api_error",
-                  "invalid_request_error"
-                ],
-                "description": "The type of error returned."
-              },
-              "message": {
-                "type": "string",
-                "description": "A message providing more details about the error."
-              }
-            },
-            "required": [
-              "type",
-              "message"
-            ]
-          }
-        }
-      },
-      "WhisperIn": {
-        "title": "WhisperIn",
-        "type": "object",
-        "properties": {
-          "audio_url": {
+          "image_uri": {
             "type": "string",
-            "description": "Input audio URL."
+            "description": "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided."
+          },
+          "seed": {
+            "type": "integer",
+            "description": "The random noise seed used for generation."
+          }
+        },
+        "required": [
+          "image_uri",
+          "seed"
+        ]
+      },
+      "MultiControlledGenerateImageIn": {
+        "title": "MultiControlledGenerateImageIn",
+        "type": "object",
+        "properties": {
+          "image_uri": {
+            "type": "string",
+            "description": "Input image."
+          },
+          "control_method": {
+            "type": "string",
+            "enum": [
+              "edge",
+              "upscale",
+              "depth",
+              "qr"
+            ],
+            "description": "Strategy to control generation using the input image."
           },
           "prompt": {
             "type": "string",
-            "description": "Prompt to guide model on contents of input audio and desired output."
+            "description": "Input prompt."
+          },
+          "num_images": {
+            "type": "integer",
+            "description": "Number of images to generate."
+          },
+          "output_resolution": {
+            "type": "integer",
+            "description": "Resolution of the output image, in pixels.",
+            "default": 1024
+          },
+          "model": {
+            "type": "string",
+            "enum": [
+              "stablediffusion-1.5"
+            ],
+            "description": "Selected model.",
+            "default": "stablediffusion-1.5"
+          },
+          "negative_prompt": {
+            "type": "string",
+            "description": "Negative input prompt."
+          },
+          "store": {
+            "type": "string",
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+          },
+          "refinement": {
+            "type": "number",
+            "format": "float",
+            "description": "Controls how long to run the image refinement process.",
+            "minimum": 0,
+            "maximum": 10,
+            "default": 6
+          },
+          "image_influence": {
+            "type": "number",
+            "format": "float",
+            "description": "Controls the influence of the input image on the generated output.",
+            "minimum": 0,
+            "maximum": 10,
+            "default": 9
+          },
+          "prompt_influence": {
+            "type": "number",
+            "format": "float",
+            "description": "Controls the influence of the input prompt on the generated output.",
+            "minimum": 0,
+            "maximum": 10,
+            "default": 2
+          },
+          "seeds": {
+            "description": "Random noise seeds. Default is random seeds for each generation.",
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        },
+        "required": [
+          "image_uri",
+          "control_method",
+          "prompt",
+          "num_images"
+        ]
+      },
+      "MultiControlledGenerateImageOut": {
+        "title": "MultiControlledGenerateImageOut",
+        "type": "object",
+        "properties": {
+          "outputs": {
+            "type": "array",
+            "items": {
+              "title": "ControlledGenerateImageOut",
+              "type": "object",
+              "properties": {
+                "image_uri": {
+                  "type": "string",
+                  "description": "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided."
+                },
+                "seed": {
+                  "type": "integer",
+                  "description": "The random noise seed used for generation."
+                }
+              },
+              "required": [
+                "image_uri",
+                "seed"
+              ]
+            }
+          }
+        },
+        "required": [
+          "outputs"
+        ]
+      },
+      "InpaintImageIn": {
+        "title": "InpaintImageIn",
+        "type": "object",
+        "properties": {
+          "image_uri": {
+            "type": "string",
+            "description": "Input image."
+          },
+          "mask_image_uri": {
+            "type": "string",
+            "description": "Mask image that controls which pixels are inpainted. If unset, the entire image is modified (image-to-image)."
+          },
+          "prompt": {
+            "type": "string",
+            "description": "Input prompt."
+          },
+          "output_resolution": {
+            "type": "integer",
+            "description": "Resolution of the output image, in pixels.",
+            "default": 1024
+          },
+          "model": {
+            "type": "string",
+            "enum": [
+              "stablediffusion-xl"
+            ],
+            "description": "Selected model.",
+            "default": "stablediffusion-xl"
+          },
+          "negative_prompt": {
+            "type": "string",
+            "description": "Negative input prompt."
+          },
+          "store": {
+            "type": "string",
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+          },
+          "refinement": {
+            "type": "number",
+            "format": "float",
+            "description": "Controls how long to run the image refinement process.",
+            "minimum": 0,
+            "maximum": 10,
+            "default": 6
+          },
+          "prompt_influence": {
+            "type": "number",
+            "format": "float",
+            "description": "Controls the influence of the input prompt on the generated output.",
+            "minimum": 0,
+            "maximum": 10,
+            "default": 5
+          },
+          "seed": {
+            "type": "integer",
+            "description": "Seed for deterministic generation. Default is a random seed."
+          }
+        },
+        "required": [
+          "image_uri",
+          "prompt"
+        ]
+      },
+      "InpaintImageOut": {
+        "title": "InpaintImageOut",
+        "type": "object",
+        "properties": {
+          "image_uri": {
+            "type": "string",
+            "description": "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided."
+          },
+          "seed": {
+            "type": "integer",
+            "description": "The random noise seed used for generation."
+          }
+        },
+        "required": [
+          "image_uri",
+          "seed"
+        ]
+      },
+      "MultiInpaintImageIn": {
+        "title": "MultiInpaintImageIn",
+        "type": "object",
+        "properties": {
+          "image_uri": {
+            "type": "string",
+            "description": "Input image."
+          },
+          "mask_image_uri": {
+            "type": "string",
+            "description": "Mask image that controls which pixels are inpainted. If unset, the entire image is modified (image-to-image)."
+          },
+          "prompt": {
+            "type": "string",
+            "description": "Input prompt."
+          },
+          "num_images": {
+            "type": "integer",
+            "description": "Number of images to generate."
+          },
+          "output_resolution": {
+            "type": "integer",
+            "description": "Resolution of the output image, in pixels.",
+            "default": 1024
+          },
+          "model": {
+            "type": "string",
+            "enum": [
+              "stablediffusion-1.5"
+            ],
+            "description": "Selected model.",
+            "default": "stablediffusion-1.5"
+          },
+          "negative_prompt": {
+            "type": "string",
+            "description": "Negative input prompt."
+          },
+          "store": {
+            "type": "string",
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+          },
+          "refinement": {
+            "type": "number",
+            "format": "float",
+            "description": "Controls how long to run the image refinement process.",
+            "minimum": 0,
+            "maximum": 10,
+            "default": 6
+          },
+          "image_influence": {
+            "type": "number",
+            "format": "float",
+            "description": "Controls the influence of the input image on the generated output.",
+            "minimum": 0,
+            "maximum": 10,
+            "default": 9
+          },
+          "prompt_influence": {
+            "type": "number",
+            "format": "float",
+            "description": "Controls the influence of the input prompt on the generated output.",
+            "minimum": 0,
+            "maximum": 10,
+            "default": 2
+          },
+          "seeds": {
+            "description": "Random noise seeds. Default is random seeds for each generation.",
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        },
+        "required": [
+          "image_uri",
+          "prompt",
+          "num_images"
+        ]
+      },
+      "MultiInpaintImageOut": {
+        "title": "MultiInpaintImageOut",
+        "type": "object",
+        "properties": {
+          "outputs": {
+            "type": "array",
+            "items": {
+              "title": "InpaintImageOut",
+              "type": "object",
+              "properties": {
+                "image_uri": {
+                  "type": "string",
+                  "description": "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided."
+                },
+                "seed": {
+                  "type": "integer",
+                  "description": "The random noise seed used for generation."
+                }
+              },
+              "required": [
+                "image_uri",
+                "seed"
+              ]
+            }
+          }
+        },
+        "required": [
+          "outputs"
+        ]
+      },
+      "BoundingBox": {
+        "title": "BoundingBox",
+        "type": "object",
+        "properties": {
+          "x1": {
+            "type": "number",
+            "format": "float",
+            "description": "Top left corner x."
+          },
+          "y1": {
+            "type": "number",
+            "format": "float",
+            "description": "Top left corner y."
+          },
+          "x2": {
+            "type": "number",
+            "format": "float",
+            "description": "Bottom right corner x."
+          },
+          "y2": {
+            "type": "number",
+            "format": "float",
+            "description": "Bottom right corner y."
+          }
+        },
+        "required": [
+          "x1",
+          "y1",
+          "x2",
+          "y2"
+        ]
+      },
+      "MaskPath": {
+        "title": "MaskPath",
+        "type": "object",
+        "properties": {
+          "x": {
+            "type": "array",
+            "description": "x values.",
+            "items": {
+              "type": "number",
+              "format": "float"
+            }
+          },
+          "y": {
+            "type": "array",
+            "description": "y values.",
+            "items": {
+              "type": "number",
+              "format": "float"
+            }
+          }
+        },
+        "required": [
+          "x",
+          "y"
+        ]
+      },
+      "ImageSegment": {
+        "title": "ImageSegment",
+        "type": "object",
+        "properties": {
+          "object_class": {
+            "type": "string",
+            "description": "Detected object class."
+          },
+          "confidence": {
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "Classification confidence."
+          },
+          "box": {
+            "title": "BoundingBox",
+            "type": "object",
+            "properties": {
+              "x1": {
+                "type": "number",
+                "format": "float",
+                "description": "Top left corner x."
+              },
+              "y1": {
+                "type": "number",
+                "format": "float",
+                "description": "Top left corner y."
+              },
+              "x2": {
+                "type": "number",
+                "format": "float",
+                "description": "Bottom right corner x."
+              },
+              "y2": {
+                "type": "number",
+                "format": "float",
+                "description": "Bottom right corner y."
+              }
+            },
+            "required": [
+              "x1",
+              "y1",
+              "x2",
+              "y2"
+            ]
+          },
+          "path": {
+            "title": "MaskPath",
+            "type": "object",
+            "properties": {
+              "x": {
+                "type": "array",
+                "description": "x values.",
+                "items": {
+                  "type": "number",
+                  "format": "float"
+                }
+              },
+              "y": {
+                "type": "array",
+                "description": "y values.",
+                "items": {
+                  "type": "number",
+                  "format": "float"
+                }
+              }
+            },
+            "required": [
+              "x",
+              "y"
+            ]
+          }
+        },
+        "required": [
+          "object_class",
+          "confidence",
+          "box",
+          "path"
+        ]
+      },
+      "SegmentImageIn": {
+        "title": "SegmentImageIn",
+        "type": "object",
+        "properties": {
+          "image_uri": {
+            "type": "string",
+            "description": "Input image."
+          },
+          "store": {
+            "type": "string",
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+          }
+        },
+        "required": [
+          "image_uri"
+        ]
+      },
+      "SegmentImageOut": {
+        "title": "SegmentImageOut",
+        "type": "object",
+        "properties": {
+          "objects": {
+            "type": "array",
+            "description": "Detected segments.",
+            "items": {
+              "title": "ImageSegment",
+              "type": "object",
+              "properties": {
+                "object_class": {
+                  "type": "string",
+                  "description": "Detected object class."
+                },
+                "confidence": {
+                  "type": "number",
+                  "format": "float",
+                  "minimum": 0,
+                  "maximum": 1,
+                  "description": "Classification confidence."
+                },
+                "box": {
+                  "title": "BoundingBox",
+                  "type": "object",
+                  "properties": {
+                    "x1": {
+                      "type": "number",
+                      "format": "float",
+                      "description": "Top left corner x."
+                    },
+                    "y1": {
+                      "type": "number",
+                      "format": "float",
+                      "description": "Top left corner y."
+                    },
+                    "x2": {
+                      "type": "number",
+                      "format": "float",
+                      "description": "Bottom right corner x."
+                    },
+                    "y2": {
+                      "type": "number",
+                      "format": "float",
+                      "description": "Bottom right corner y."
+                    }
+                  },
+                  "required": [
+                    "x1",
+                    "y1",
+                    "x2",
+                    "y2"
+                  ]
+                },
+                "path": {
+                  "title": "MaskPath",
+                  "type": "object",
+                  "properties": {
+                    "x": {
+                      "type": "array",
+                      "description": "x values.",
+                      "items": {
+                        "type": "number",
+                        "format": "float"
+                      }
+                    },
+                    "y": {
+                      "type": "array",
+                      "description": "y values.",
+                      "items": {
+                        "type": "number",
+                        "format": "float"
+                      }
+                    }
+                  },
+                  "required": [
+                    "x",
+                    "y"
+                  ]
+                }
+              },
+              "required": [
+                "object_class",
+                "confidence",
+                "box",
+                "path"
+              ]
+            }
+          },
+          "image_uri": {
+            "type": "string",
+            "description": "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided."
+          },
+          "width": {
+            "type": "integer",
+            "description": "Width of image, in pixels."
+          },
+          "height": {
+            "type": "integer",
+            "description": "Height of image, in pixels."
+          }
+        },
+        "required": [
+          "objects",
+          "image_uri",
+          "width",
+          "height"
+        ]
+      },
+      "CreateMaskImageIn": {
+        "title": "CreateMaskImageIn",
+        "type": "object",
+        "properties": {
+          "width": {
+            "type": "integer",
+            "description": "Width of image, in pixels."
+          },
+          "height": {
+            "type": "integer",
+            "description": "Height of image, in pixels."
+          },
+          "box": {
+            "title": "BoundingBox",
+            "type": "object",
+            "properties": {
+              "x1": {
+                "type": "number",
+                "format": "float",
+                "description": "Top left corner x."
+              },
+              "y1": {
+                "type": "number",
+                "format": "float",
+                "description": "Top left corner y."
+              },
+              "x2": {
+                "type": "number",
+                "format": "float",
+                "description": "Bottom right corner x."
+              },
+              "y2": {
+                "type": "number",
+                "format": "float",
+                "description": "Bottom right corner y."
+              }
+            },
+            "required": [
+              "x1",
+              "y1",
+              "x2",
+              "y2"
+            ]
+          },
+          "path": {
+            "title": "MaskPath",
+            "type": "object",
+            "properties": {
+              "x": {
+                "type": "array",
+                "description": "x values.",
+                "items": {
+                  "type": "number",
+                  "format": "float"
+                }
+              },
+              "y": {
+                "type": "array",
+                "description": "y values.",
+                "items": {
+                  "type": "number",
+                  "format": "float"
+                }
+              }
+            },
+            "required": [
+              "x",
+              "y"
+            ]
+          },
+          "store": {
+            "type": "string",
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+          }
+        },
+        "required": [
+          "width",
+          "height"
+        ]
+      },
+      "CreateMaskImageOut": {
+        "title": "CreateMaskImageOut",
+        "type": "object",
+        "properties": {
+          "image_uri": {
+            "type": "string",
+            "description": "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided."
+          }
+        },
+        "required": [
+          "image_uri"
+        ]
+      },
+      "TranscribeMediaIn": {
+        "title": "TranscribeMediaIn",
+        "type": "object",
+        "properties": {
+          "audio_uri": {
+            "type": "string",
+            "description": "Input audio."
+          },
+          "prompt": {
+            "type": "string",
+            "description": "Prompt to guide model on the content and context of input audio."
           },
           "language": {
             "type": "string",
             "default": "en",
-            "description": "Language of input audio in ISO-639-1 format."
+            "description": "Language of input audio in [ISO-639-1](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes) format."
+          },
+          "segment": {
+            "type": "boolean",
+            "default": false,
+            "description": "Segment the text into sentences with approximate timestamps."
           },
           "align": {
             "type": "boolean",
@@ -398,15 +1231,20 @@
           "diarize": {
             "type": "boolean",
             "default": false,
-            "description": "Identify speakers for each segment. Speaker IDs will be added to each output segment."
+            "description": "Identify speakers for each segment. Speaker IDs will be included in each segment."
+          },
+          "suggest_chapters": {
+            "type": "boolean",
+            "default": false,
+            "description": "Suggest automatic chapter markers."
           }
         },
         "required": [
-          "audio_url"
+          "audio_uri"
         ]
       },
-      "WhisperWord": {
-        "title": "WhisperWord",
+      "TranscribedWord": {
+        "title": "TranscribedWord",
         "type": "object",
         "properties": {
           "word": {
@@ -434,8 +1272,8 @@
           "end"
         ]
       },
-      "WhisperSegment": {
-        "title": "WhisperSegment",
+      "TranscribedSegment": {
+        "title": "TranscribedSegment",
         "type": "object",
         "properties": {
           "text": {
@@ -460,7 +1298,7 @@
             "type": "array",
             "description": "Aligned words, if `align` is enabled.",
             "items": {
-              "title": "WhisperWord",
+              "title": "TranscribedWord",
               "type": "object",
               "properties": {
                 "word": {
@@ -496,81 +1334,38 @@
           "end"
         ]
       },
-      "WhisperOut": {
-        "title": "WhisperOut",
-        "type": "array",
-        "items": {
-          "title": "WhisperSegment",
-          "type": "object",
-          "properties": {
-            "text": {
-              "type": "string",
-              "description": "Text of segment."
-            },
-            "start": {
-              "type": "number",
-              "format": "float",
-              "description": "Start time of segment, in seconds."
-            },
-            "end": {
-              "type": "number",
-              "format": "float",
-              "description": "End time of segment, in seconds."
-            },
-            "speaker": {
-              "type": "string",
-              "description": "ID of speaker, if `diarize` is enabled."
-            },
-            "words": {
-              "type": "array",
-              "description": "Aligned words, if `align` is enabled.",
-              "items": {
-                "title": "WhisperWord",
-                "type": "object",
-                "properties": {
-                  "word": {
-                    "type": "string",
-                    "description": "Text of word."
-                  },
-                  "start": {
-                    "type": "number",
-                    "format": "float",
-                    "description": "Start time of word, in seconds."
-                  },
-                  "end": {
-                    "type": "number",
-                    "format": "float",
-                    "description": "End time of word, in seconds."
-                  },
-                  "speaker": {
-                    "type": "string",
-                    "description": "ID of speaker, if `diarize` is enabled."
-                  }
-                },
-                "required": [
-                  "word",
-                  "start",
-                  "end"
-                ]
-              }
-            }
-          },
-          "required": [
-            "text",
-            "start",
-            "end"
-          ]
-        }
-      },
-      "WhisperResponse": {
-        "title": "WhisperResponse",
+      "ChapterMarker": {
+        "title": "ChapterMarker",
         "type": "object",
         "properties": {
-          "data": {
-            "title": "WhisperOut",
+          "title": {
+            "type": "string",
+            "description": "Chapter title."
+          },
+          "start": {
+            "type": "number",
+            "format": "float",
+            "description": "Start time of chapter, in seconds."
+          }
+        },
+        "required": [
+          "title",
+          "start"
+        ]
+      },
+      "TranscribeMediaOut": {
+        "title": "TranscribeMediaOut",
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "Transcribed text."
+          },
+          "segments": {
             "type": "array",
+            "description": "Transcribed segments, if `segment` is enabled.",
             "items": {
-              "title": "WhisperSegment",
+              "title": "TranscribedSegment",
               "type": "object",
               "properties": {
                 "text": {
@@ -595,7 +1390,7 @@
                   "type": "array",
                   "description": "Aligned words, if `align` is enabled.",
                   "items": {
-                    "title": "WhisperWord",
+                    "title": "TranscribedWord",
                     "type": "object",
                     "properties": {
                       "word": {
@@ -632,51 +1427,27 @@
               ]
             }
           },
-          "error": {
-            "title": "ErrorOut",
-            "type": "object",
-            "properties": {
-              "type": {
-                "type": "string",
-                "enum": [
-                  "api_error",
-                  "invalid_request_error"
-                ],
-                "description": "The type of error returned."
-              },
-              "message": {
-                "type": "string",
-                "description": "A message providing more details about the error."
-              }
-            },
-            "required": [
-              "type",
-              "message"
-            ]
-          }
-        }
-      },
-      "JinaDoc": {
-        "title": "JinaDoc",
-        "type": "object",
-        "properties": {
-          "text": {
-            "type": "string",
-            "description": "Text to embed."
-          },
-          "id": {
-            "type": "string",
-            "description": "Document id. Required when storing embedding."
-          },
-          "metadata": {
-            "type": "object",
-            "description": "Additional metadata to store in embedding document."
-          },
-          "embed_metadata_keys": {
+          "chapters": {
             "type": "array",
-            "description": "Contents of `metadata` included to generate embedding.",
+            "description": "Chapter markers, if `suggest_chapters` is enabled.",
             "items": {
-              "type": "string"
+              "title": "ChapterMarker",
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "description": "Chapter title."
+                },
+                "start": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "Start time of chapter, in seconds."
+                }
+              },
+              "required": [
+                "title",
+                "start"
+              ]
             }
           }
         },
@@ -684,35 +1455,170 @@
           "text"
         ]
       },
-      "JinaIn": {
-        "title": "JinaIn",
+      "GenerateSpeechIn": {
+        "title": "GenerateSpeechIn",
         "type": "object",
         "properties": {
-          "docs": {
-            "type": "array",
-            "description": "Documents to embed.",
+          "text": {
+            "type": "string",
+            "description": "Input text."
+          },
+          "audio_uri": {
+            "type": "string",
+            "description": "Reference audio used to synthesize the speaker. If unset, a default speaker voice will be used."
+          },
+          "language": {
+            "type": "string",
+            "default": "en",
+            "description": "Language of input text. Supported languages: `en, es, fr, de, it, pt, pl, tr, ru, nl, cs, ar, zh, hu, ko, hi`."
+          },
+          "store": {
+            "type": "string",
+            "description": "Use \"hosted\" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the audio data will be returned as a base64-encoded string."
+          }
+        },
+        "required": [
+          "text"
+        ]
+      },
+      "GenerateSpeechOut": {
+        "title": "GenerateSpeechOut",
+        "type": "object",
+        "properties": {
+          "audio_uri": {
+            "type": "string",
+            "description": "Base 64-encoded WAV audio bytes, or a hosted audio url if `store` is provided."
+          }
+        },
+        "required": [
+          "audio_uri"
+        ]
+      },
+      "Embedding": {
+        "title": "Embedding",
+        "type": "object",
+        "properties": {
+          "vector": {
+            "type": "string",
+            "description": "Embedding vector.",
             "items": {
-              "title": "JinaDoc",
+              "type": "number",
+              "format": "float"
+            }
+          }
+        },
+        "required": [
+          "vector"
+        ]
+      },
+      "EmbedTextIn": {
+        "title": "EmbedTextIn",
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "Text to embed."
+          },
+          "model": {
+            "type": "string",
+            "enum": [
+              "jina-v2",
+              "clip"
+            ],
+            "description": "Selected model.",
+            "default": "jina-v2"
+          },
+          "store": {
+            "type": "string",
+            "description": "[Vector store](/docs/vector-stores) identifier."
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Metadata that can be used to query the vector store. Ignored if `store` is unset."
+          },
+          "embedded_metadata": {
+            "type": "object",
+            "properties": {
+              "include_keys": {
+                "type": "array",
+                "description": "Keys to embed with text.",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "exclude_keys": {
+                "type": "array",
+                "description": "Keys to exclude. All other keys will be embedded with text.",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "text"
+        ]
+      },
+      "EmbedTextOut": {
+        "title": "EmbedTextOut",
+        "type": "object",
+        "properties": {
+          "embedding": {
+            "title": "Embedding",
+            "type": "object",
+            "properties": {
+              "vector": {
+                "type": "string",
+                "description": "Embedding vector.",
+                "items": {
+                  "type": "number",
+                  "format": "float"
+                }
+              }
+            },
+            "required": [
+              "vector"
+            ]
+          }
+        },
+        "required": [
+          "embedding"
+        ]
+      },
+      "EmbedTextItem": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "Text to embed."
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Metadata that can be used to query the vector store. Ignored if `store` is unset."
+          }
+        },
+        "required": [
+          "text"
+        ]
+      },
+      "MultiEmbedTextIn": {
+        "title": "MultiEmbedTextIn",
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "description": "Items to embed.",
+            "items": {
               "type": "object",
               "properties": {
                 "text": {
                   "type": "string",
                   "description": "Text to embed."
                 },
-                "id": {
-                  "type": "string",
-                  "description": "Document id. Required when storing embedding."
-                },
                 "metadata": {
                   "type": "object",
-                  "description": "Additional metadata to store in embedding document."
-                },
-                "embed_metadata_keys": {
-                  "type": "array",
-                  "description": "Contents of `metadata` included to generate embedding.",
-                  "items": {
-                    "type": "string"
-                  }
+                  "description": "Metadata that can be used to query the vector store. Ignored if `store` is unset."
                 }
               },
               "required": [
@@ -720,78 +1626,52 @@
               ]
             }
           },
+          "model": {
+            "type": "string",
+            "enum": [
+              "jina-v2",
+              "clip"
+            ],
+            "description": "Selected model.",
+            "default": "jina-v2"
+          },
           "store": {
             "type": "string",
-            "description": "Vector store ID in which embedding will be stored."
-          }
-        },
-        "required": [
-          "docs"
-        ]
-      },
-      "JinaEmbedding": {
-        "title": "JinaEmbedding",
-        "type": "object",
-        "properties": {
-          "vector": {
-            "type": "string",
-            "description": "Embedding vector.",
-            "items": {
-              "type": "number",
-              "format": "float"
-            }
+            "description": "[Vector store](/docs/vector-stores) identifier."
           },
-          "id": {
-            "type": "string",
-            "description": "Document id."
-          },
-          "metadata": {
+          "embedded_metadata": {
             "type": "object",
-            "description": "Additional metadata stored in embedding document."
+            "properties": {
+              "include_keys": {
+                "type": "array",
+                "description": "Keys to embed with text.",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "exclude_keys": {
+                "type": "array",
+                "description": "Keys to exclude. All other keys will be embedded with text.",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
           }
         },
         "required": [
-          "vector"
+          "items"
         ]
       },
-      "JinaOut": {
-        "title": "JinaOut",
-        "type": "array",
-        "items": {
-          "title": "JinaEmbedding",
-          "type": "object",
-          "properties": {
-            "vector": {
-              "type": "string",
-              "description": "Embedding vector.",
-              "items": {
-                "type": "number",
-                "format": "float"
-              }
-            },
-            "id": {
-              "type": "string",
-              "description": "Document id."
-            },
-            "metadata": {
-              "type": "object",
-              "description": "Additional metadata stored in embedding document."
-            }
-          },
-          "required": [
-            "vector"
-          ]
-        }
-      },
-      "JinaResponse": {
-        "title": "JinaResponse",
+      "MultiEmbedTextOut": {
+        "title": "MultiEmbedTextOut",
         "type": "object",
         "properties": {
-          "data": {
-            "title": "JinaOut",
+          "embeddings": {
             "type": "array",
+            "description": "Generated embeddings.",
             "items": {
-              "title": "JinaEmbedding",
+              "title": "Embedding",
               "type": "object",
               "properties": {
                 "vector": {
@@ -801,183 +1681,146 @@
                     "type": "number",
                     "format": "float"
                   }
-                },
-                "id": {
-                  "type": "string",
-                  "description": "Document id."
-                },
-                "metadata": {
-                  "type": "object",
-                  "description": "Additional metadata stored in embedding document."
                 }
               },
               "required": [
                 "vector"
               ]
             }
-          },
-          "error": {
-            "title": "ErrorOut",
-            "type": "object",
-            "properties": {
-              "type": {
-                "type": "string",
-                "enum": [
-                  "api_error",
-                  "invalid_request_error"
-                ],
-                "description": "The type of error returned."
-              },
-              "message": {
-                "type": "string",
-                "description": "A message providing more details about the error."
-              }
-            },
-            "required": [
-              "type",
-              "message"
-            ]
           }
-        }
+        },
+        "required": [
+          "embeddings"
+        ]
       },
-      "CLIPDoc": {
-        "title": "CLIPDoc",
+      "EmbeddedMetadataSelect": {
         "type": "object",
         "properties": {
-          "text": {
-            "type": "string",
-            "description": "Text to embed."
-          },
-          "image_url": {
-            "type": "string",
-            "description": "URL of image to embed."
-          },
-          "id": {
-            "type": "string",
-            "description": "Document id. Required when storing embedding."
-          },
-          "metadata": {
-            "type": "object",
-            "description": "Additional metadata to store in embedding document."
-          },
-          "embed_metadata_keys": {
+          "include_keys": {
             "type": "array",
-            "description": "Contents of `metadata` included to generate embedding.",
+            "description": "Keys to embed with text.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "exclude_keys": {
+            "type": "array",
+            "description": "Keys to exclude. All other keys will be embedded with text.",
             "items": {
               "type": "string"
             }
           }
         }
       },
-      "CLIPIn": {
-        "title": "CLIPIn",
+      "EmbedImageIn": {
+        "title": "EmbedImageIn",
         "type": "object",
         "properties": {
-          "docs": {
-            "type": "array",
-            "description": "Documents to embed.",
-            "items": {
-              "title": "CLIPDoc",
-              "type": "object",
-              "properties": {
-                "text": {
-                  "type": "string",
-                  "description": "Text to embed."
-                },
-                "image_url": {
-                  "type": "string",
-                  "description": "URL of image to embed."
-                },
-                "id": {
-                  "type": "string",
-                  "description": "Document id. Required when storing embedding."
-                },
-                "metadata": {
-                  "type": "object",
-                  "description": "Additional metadata to store in embedding document."
-                },
-                "embed_metadata_keys": {
-                  "type": "array",
-                  "description": "Contents of `metadata` included to generate embedding.",
-                  "items": {
-                    "type": "string"
-                  }
+          "image_uri": {
+            "type": "string",
+            "description": "Image to embed."
+          },
+          "model": {
+            "type": "string",
+            "enum": [
+              "clip"
+            ],
+            "description": "Selected model.",
+            "default": "clip"
+          },
+          "store": {
+            "type": "string",
+            "description": "[Vector store](/docs/vector-stores) identifier."
+          }
+        },
+        "required": [
+          "image_uri"
+        ]
+      },
+      "EmbedImageOut": {
+        "title": "EmbedImageOut",
+        "type": "object",
+        "properties": {
+          "embedding": {
+            "title": "Embedding",
+            "type": "object",
+            "properties": {
+              "vector": {
+                "type": "string",
+                "description": "Embedding vector.",
+                "items": {
+                  "type": "number",
+                  "format": "float"
                 }
               }
+            },
+            "required": [
+              "vector"
+            ]
+          }
+        },
+        "required": [
+          "embedding"
+        ]
+      },
+      "EmbedImageItem": {
+        "type": "object",
+        "properties": {
+          "image_uri": {
+            "type": "string",
+            "description": "Image to embed."
+          }
+        },
+        "required": [
+          "image_uri"
+        ]
+      },
+      "MultiEmbedImageIn": {
+        "title": "MultiEmbedImageIn",
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "description": "Items to embed.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "image_uri": {
+                  "type": "string",
+                  "description": "Image to embed."
+                }
+              },
+              "required": [
+                "image_uri"
+              ]
             }
           },
           "store": {
             "type": "string",
-            "description": "Vector store ID in which embedding will be stored."
+            "description": "[Vector store](/docs/vector-stores) identifier."
+          },
+          "model": {
+            "type": "string",
+            "enum": [
+              "clip"
+            ],
+            "description": "Selected model.",
+            "default": "clip"
           }
         },
         "required": [
-          "docs"
+          "items"
         ]
       },
-      "CLIPEmbedding": {
-        "title": "CLIPEmbedding",
+      "MultiEmbedImageOut": {
+        "title": "MultiEmbedImageOut",
         "type": "object",
         "properties": {
-          "vector": {
-            "type": "string",
-            "description": "Embedding vector.",
-            "items": {
-              "type": "number",
-              "format": "float"
-            }
-          },
-          "id": {
-            "type": "string",
-            "description": "Document id."
-          },
-          "metadata": {
-            "type": "object",
-            "description": "Additional metadata stored in embedding document."
-          }
-        },
-        "required": [
-          "vector"
-        ]
-      },
-      "CLIPOut": {
-        "title": "CLIPOut",
-        "type": "array",
-        "items": {
-          "title": "CLIPEmbedding",
-          "type": "object",
-          "properties": {
-            "vector": {
-              "type": "string",
-              "description": "Embedding vector.",
-              "items": {
-                "type": "number",
-                "format": "float"
-              }
-            },
-            "id": {
-              "type": "string",
-              "description": "Document id."
-            },
-            "metadata": {
-              "type": "object",
-              "description": "Additional metadata stored in embedding document."
-            }
-          },
-          "required": [
-            "vector"
-          ]
-        }
-      },
-      "CLIPResponse": {
-        "title": "CLIPResponse",
-        "type": "object",
-        "properties": {
-          "data": {
-            "title": "CLIPOut",
+          "embeddings": {
             "type": "array",
+            "description": "Generated embeddings.",
             "items": {
-              "title": "CLIPEmbedding",
+              "title": "Embedding",
               "type": "object",
               "properties": {
                 "vector": {
@@ -987,127 +1830,554 @@
                     "type": "number",
                     "format": "float"
                   }
-                },
-                "id": {
-                  "type": "string",
-                  "description": "Document id."
-                },
-                "metadata": {
-                  "type": "object",
-                  "description": "Additional metadata stored in embedding document."
                 }
               },
               "required": [
                 "vector"
               ]
             }
+          }
+        },
+        "required": [
+          "embeddings"
+        ]
+      },
+      "VectorStoreParams": {
+        "title": "VectorStoreParams",
+        "description": "Fields describing a vector store and its associated index.",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Vector store name.",
+            "minLength": 1,
+            "maxLength": 63
           },
-          "error": {
-            "title": "ErrorOut",
-            "type": "object",
-            "properties": {
-              "type": {
-                "type": "string",
-                "enum": [
-                  "api_error",
-                  "invalid_request_error"
-                ],
-                "description": "The type of error returned."
-              },
-              "message": {
-                "type": "string",
-                "description": "A message providing more details about the error."
-              }
-            },
-            "required": [
-              "type",
-              "message"
+          "model": {
+            "type": "string",
+            "description": "Selected embedding model",
+            "enum": [
+              "jina-v2",
+              "clip"
+            ]
+          },
+          "m": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 64,
+            "default": 16,
+            "description": "The max number of connections per layer for the index."
+          },
+          "ef_construction": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 128,
+            "description": "The size of the dynamic candidate list for constructing the index graph.",
+            "default": 64
+          },
+          "metric": {
+            "type": "string",
+            "enum": [
+              "cosine",
+              "l2",
+              "inner"
+            ],
+            "default": "inner",
+            "description": "The distance metric to construct the index with."
+          }
+        },
+        "required": [
+          "name",
+          "model"
+        ]
+      },
+      "DeleteVectorStoreParams": {
+        "title": "DeleteVectorStoreParams",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Vector store name."
+          },
+          "model": {
+            "type": "string",
+            "description": "Selected embedding model",
+            "enum": [
+              "jina-v2",
+              "clip"
             ]
           }
-        }
+        },
+        "required": [
+          "name",
+          "model"
+        ]
+      },
+      "Vector": {
+        "title": "Vector",
+        "type": "object",
+        "description": "Canonical representation of document with embedding vector.",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Document ID."
+          },
+          "vector": {
+            "type": "array",
+            "description": "Embedding vector.",
+            "items": {
+              "type": "number",
+              "format": "float"
+            }
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Document metadata.",
+            "default": {}
+          }
+        },
+        "required": [
+          "id",
+          "vector",
+          "metadata"
+        ]
+      },
+      "GetVectorsParams": {
+        "title": "GetVectorsParams",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Vector store name."
+          },
+          "model": {
+            "type": "string",
+            "description": "Selected embedding model",
+            "enum": [
+              "jina-v2",
+              "clip"
+            ]
+          },
+          "ids": {
+            "type": "array",
+            "description": "Document IDs to retrieve.",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 100
+          }
+        },
+        "required": [
+          "name",
+          "model",
+          "ids"
+        ]
+      },
+      "GetVectorsResponse": {
+        "title": "GetVectorsResponse",
+        "type": "object",
+        "properties": {
+          "vectors": {
+            "type": "array",
+            "description": "Retrieved vectors.",
+            "items": {
+              "title": "Vector",
+              "type": "object",
+              "description": "Canonical representation of document with embedding vector.",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Document ID."
+                },
+                "vector": {
+                  "type": "array",
+                  "description": "Embedding vector.",
+                  "items": {
+                    "type": "number",
+                    "format": "float"
+                  }
+                },
+                "metadata": {
+                  "type": "object",
+                  "description": "Document metadata.",
+                  "default": {}
+                }
+              },
+              "required": [
+                "id",
+                "vector",
+                "metadata"
+              ]
+            }
+          }
+        },
+        "required": [
+          "vectors"
+        ]
+      },
+      "VectorUpdateCountResponse": {
+        "title": "VectorUpdateCountResponse",
+        "type": "object",
+        "properties": {
+          "count": {
+            "type": "integer",
+            "description": "Number of vectors modified."
+          }
+        },
+        "required": [
+          "count"
+        ]
+      },
+      "UpdateVectorParams": {
+        "title": "UpdateVectorParams",
+        "description": "Document to update.",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Document ID."
+          },
+          "vector": {
+            "type": "array",
+            "description": "Embedding vector.",
+            "items": {
+              "type": "number",
+              "format": "float"
+            }
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Document metadata.",
+            "default": {}
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "UpdateVectorsParams": {
+        "title": "UpdateVectorsParams",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Vector store name."
+          },
+          "model": {
+            "type": "string",
+            "description": "Selected embedding model",
+            "enum": [
+              "jina-v2",
+              "clip"
+            ]
+          },
+          "vectors": {
+            "type": "array",
+            "description": "Vectors to upsert.",
+            "items": {
+              "title": "UpdateVectorParams",
+              "description": "Document to update.",
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Document ID."
+                },
+                "vector": {
+                  "type": "array",
+                  "description": "Embedding vector.",
+                  "items": {
+                    "type": "number",
+                    "format": "float"
+                  }
+                },
+                "metadata": {
+                  "type": "object",
+                  "description": "Document metadata.",
+                  "default": {}
+                }
+              },
+              "required": [
+                "id"
+              ]
+            },
+            "maxItems": 100
+          }
+        },
+        "required": [
+          "name",
+          "model",
+          "vectors"
+        ]
+      },
+      "DeleteVectorsParams": {
+        "title": "DeleteVectorsParams",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Vector store name."
+          },
+          "model": {
+            "type": "string",
+            "description": "Selected embedding model",
+            "enum": [
+              "jina-v2",
+              "clip"
+            ]
+          },
+          "ids": {
+            "type": "array",
+            "description": "Document IDs to delete.",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 100
+          }
+        },
+        "required": [
+          "name",
+          "model",
+          "ids"
+        ]
+      },
+      "QueryVectorStoreParams": {
+        "title": "QueryVectorStoreParams",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Vector store to query against."
+          },
+          "model": {
+            "type": "string",
+            "description": "Selected embedding model",
+            "enum": [
+              "jina-v2",
+              "clip"
+            ]
+          },
+          "queryIds": {
+            "type": "array",
+            "description": "Document IDs to use for the query.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "queryVectors": {
+            "type": "array",
+            "description": "Vector to use for the query.",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "number",
+                "format": "float"
+              }
+            }
+          },
+          "queryStrings": {
+            "type": "array",
+            "description": "Text to embed and use for the query.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "topK": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 1000,
+            "default": 10,
+            "description": "Number of results to return."
+          },
+          "efSearch": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 1000,
+            "default": 40,
+            "description": "The size of the dynamic candidate list for searching the index graph."
+          },
+          "includeValues": {
+            "type": "boolean",
+            "default": false,
+            "description": "Include the values of the vectors in the response."
+          },
+          "includeMetadata": {
+            "type": "boolean",
+            "default": false,
+            "description": "Include the metadata of the vectors in the response."
+          },
+          "filters": {
+            "type": "object",
+            "description": "Filter metadata by key-value pairs."
+          }
+        },
+        "required": [
+          "name",
+          "model"
+        ]
+      },
+      "VectorStoreQueryResult": {
+        "title": "VectorStoreQueryResult",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Document ID."
+          },
+          "distance": {
+            "type": "number",
+            "format": "float",
+            "description": "Similarity score."
+          },
+          "vector": {
+            "type": "array",
+            "description": "Embedding vector.",
+            "items": {
+              "type": "number",
+              "format": "float"
+            }
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Document metadata."
+          }
+        },
+        "required": [
+          "id",
+          "distance"
+        ]
+      },
+      "QueryVectorStoreResponse": {
+        "title": "QueryVectorStoreResponse",
+        "type": "object",
+        "properties": {
+          "results": {
+            "type": "array",
+            "description": "Query results.",
+            "items": {
+              "type": "array",
+              "items": {
+                "title": "VectorStoreQueryResult",
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "description": "Document ID."
+                  },
+                  "distance": {
+                    "type": "number",
+                    "format": "float",
+                    "description": "Similarity score."
+                  },
+                  "vector": {
+                    "type": "array",
+                    "description": "Embedding vector.",
+                    "items": {
+                      "type": "number",
+                      "format": "float"
+                    }
+                  },
+                  "metadata": {
+                    "type": "object",
+                    "description": "Document metadata."
+                  }
+                },
+                "required": [
+                  "id",
+                  "distance"
+                ]
+              }
+            }
+          },
+          "name": {
+            "type": "string",
+            "description": "Vector store name."
+          },
+          "model": {
+            "type": "string",
+            "description": "Selected embedding model",
+            "enum": [
+              "jina-v2",
+              "clip"
+            ]
+          },
+          "metric": {
+            "type": "string",
+            "enum": [
+              "cosine",
+              "l2",
+              "inner"
+            ],
+            "description": "The distance metric used for the query."
+          }
+        },
+        "required": [
+          "results"
+        ]
       }
     }
   },
   "paths": {
-    "/stablediffusion": {
+    "/GenerateText": {
       "post": {
-        "summary": "StableDiffusion",
-        "description": "Generate an image from a text prompt using the Stable Diffusion family of image models. Trained by [Stability AI](https://huggingface.co/docs/diffusers/api/pipelines/stable_diffusion/stable_diffusion_xl) and hosted on Substrate.",
-        "operationId": "StableDiffusion",
+        "summary": "GenerateText",
+        "operationId": "GenerateText",
         "tags": [
-          "models"
+          "language-generation"
         ],
+        "description": "Generate text using a language model.",
         "parameters": [
           {
             "in": "query",
             "schema": {
-              "title": "StableDiffusionIn",
+              "title": "GenerateTextIn",
               "type": "object",
               "properties": {
                 "prompt": {
                   "type": "string",
                   "description": "Input prompt."
                 },
-                "negative_prompt": {
+                "model": {
                   "type": "string",
-                  "description": "Negative input prompt."
+                  "enum": [
+                    "mistral-7b-instruct"
+                  ],
+                  "description": "Selected model.",
+                  "default": "mistral-7b-instruct"
                 },
-                "image": {
-                  "title": "StableDiffusionInputImage",
+                "response_format": {
+                  "title": "ResponseFormat",
                   "type": "object",
                   "properties": {
-                    "image_url": {
+                    "type": {
                       "type": "string",
-                      "description": "Input image URL to modify with a text prompt."
+                      "enum": [
+                        "json_object",
+                        "text"
+                      ],
+                      "description": "Type of response.",
+                      "default": "text"
                     },
-                    "mask_image_url": {
-                      "type": "string",
-                      "description": "Mask of the input image to selectively modify."
-                    },
-                    "prompt_strength": {
-                      "type": "number",
-                      "format": "float",
-                      "minimum": 0,
-                      "maximum": 1,
-                      "description": "Controls the influence of the input prompt on the generated output.",
-                      "default": 0.6
+                    "json_schema": {
+                      "type": "object",
+                      "description": "JSON schema to guide `json_object` response."
                     }
                   },
                   "required": [
-                    "image_url"
+                    "type"
                   ]
                 },
-                "store": {
-                  "type": "boolean",
-                  "description": "Return a hosted image URL instead of base64 encoded image data.",
-                  "default": false
-                },
-                "width": {
+                "temperature": {
                   "type": "integer",
-                  "description": "Width of output image, in pixels."
+                  "minimum": 1,
+                  "maximum": 10,
+                  "default": 4,
+                  "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic."
                 },
-                "height": {
+                "max_tokens": {
                   "type": "integer",
-                  "description": "Height of output image, in pixels."
-                },
-                "steps": {
-                  "type": "integer",
-                  "description": "Number of diffusion steps to run."
-                },
-                "seed": {
-                  "type": "integer",
-                  "description": "Random noise seed. Default is a random seed."
-                },
-                "guidance_scale": {
-                  "type": "integer",
-                  "minimum": 0,
-                  "maximum": 35,
-                  "description": "Controls the influence of the input prompt on the generated output."
-                },
-                "num_images": {
-                  "type": "integer",
-                  "description": "Number of images to generate.",
-                  "default": 1
+                  "description": "Maximum number of tokens to generate.",
+                  "default": 800
                 }
               },
               "required": [
@@ -1122,52 +2392,16 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "title": "StableDiffusionResponse",
+                  "title": "GenerateTextOut",
                   "type": "object",
                   "properties": {
-                    "data": {
-                      "title": "StableDiffusionOut",
-                      "type": "array",
-                      "items": {
-                        "title": "StableDiffusionImage",
-                        "type": "object",
-                        "properties": {
-                          "uri": {
-                            "type": "string",
-                            "description": "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is enabled."
-                          },
-                          "seed": {
-                            "type": "integer",
-                            "description": "The random noise seed used for generation."
-                          }
-                        },
-                        "required": [
-                          "uri",
-                          "seed"
-                        ]
-                      }
+                    "text": {
+                      "type": "string",
+                      "description": "Text response."
                     },
-                    "error": {
-                      "title": "ErrorOut",
+                    "json_object": {
                       "type": "object",
-                      "properties": {
-                        "type": {
-                          "type": "string",
-                          "enum": [
-                            "api_error",
-                            "invalid_request_error"
-                          ],
-                          "description": "The type of error returned."
-                        },
-                        "message": {
-                          "type": "string",
-                          "description": "A message providing more details about the error."
-                        }
-                      },
-                      "required": [
-                        "type",
-                        "message"
-                      ]
+                      "description": "JSON response."
                     }
                   }
                 }
@@ -1177,59 +2411,75 @@
         }
       }
     },
-    "/mistral": {
+    "/MultiGenerateText": {
       "post": {
-        "summary": "Mistral",
-        "description": "Generate text using the Mistral family of language models. Trained by [Mistral AI](https://huggingface.co/docs/transformers/main/model_doc/mistral) and hosted on Substrate.",
-        "operationId": "Mistral",
+        "summary": "MultiGenerateText",
+        "operationId": "MultiGenerateText",
         "tags": [
-          "models"
+          "language-generation"
         ],
+        "description": "Generate multiple text choices using a language model.",
         "parameters": [
           {
             "in": "query",
             "schema": {
-              "title": "MistralIn",
+              "title": "MultiGenerateTextIn",
               "type": "object",
               "properties": {
-                "prompts": {
-                  "type": "array",
-                  "description": "Input prompts.",
-                  "items": {
-                    "title": "MistralPrompt",
-                    "type": "object",
-                    "properties": {
-                      "prompt": {
-                        "type": "string",
-                        "description": "Prompt to generate completions for."
-                      }
+                "prompt": {
+                  "type": "string",
+                  "description": "Input prompt."
+                },
+                "num_choices": {
+                  "type": "integer",
+                  "description": "Number of choices to generate."
+                },
+                "model": {
+                  "type": "string",
+                  "enum": [
+                    "mistral-7b-instruct"
+                  ],
+                  "description": "Selected model.",
+                  "default": "mistral-7b-instruct"
+                },
+                "response_format": {
+                  "title": "ResponseFormat",
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "enum": [
+                        "json_object",
+                        "text"
+                      ],
+                      "description": "Type of response.",
+                      "default": "text"
                     },
-                    "required": [
-                      "prompt"
-                    ]
-                  }
+                    "json_schema": {
+                      "type": "object",
+                      "description": "JSON schema to guide `json_object` response."
+                    }
+                  },
+                  "required": [
+                    "type"
+                  ]
                 },
                 "temperature": {
-                  "type": "number",
-                  "format": "float",
-                  "minimum": 0,
-                  "maximum": 2,
-                  "description": "Sampling temperature to use. Higher values make the output more random; lower values make the output more deterministic.",
-                  "default": 0.75
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 10,
+                  "default": 4,
+                  "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic."
                 },
                 "max_tokens": {
                   "type": "integer",
                   "description": "Maximum number of tokens to generate.",
                   "default": 800
-                },
-                "num_completions": {
-                  "type": "integer",
-                  "description": "Number of completions to generate for each prompt.",
-                  "default": 1
                 }
               },
               "required": [
-                "prompts"
+                "prompt",
+                "num_choices"
               ]
             }
           }
@@ -1240,52 +2490,30 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "title": "MistralResponse",
+                  "title": "MultiGenerateTextOut",
                   "type": "object",
                   "properties": {
-                    "data": {
-                      "title": "MistralOut",
+                    "choices": {
                       "type": "array",
                       "items": {
-                        "title": "MistralResult",
+                        "title": "GenerateTextOut",
                         "type": "object",
                         "properties": {
-                          "completions": {
-                            "type": "array",
-                            "description": "Generated completion choices.",
-                            "items": {
-                              "type": "string"
-                            }
+                          "text": {
+                            "type": "string",
+                            "description": "Text response."
+                          },
+                          "json_object": {
+                            "type": "object",
+                            "description": "JSON response."
                           }
-                        },
-                        "required": [
-                          "completions"
-                        ]
-                      }
-                    },
-                    "error": {
-                      "title": "ErrorOut",
-                      "type": "object",
-                      "properties": {
-                        "type": {
-                          "type": "string",
-                          "enum": [
-                            "api_error",
-                            "invalid_request_error"
-                          ],
-                          "description": "The type of error returned."
-                        },
-                        "message": {
-                          "type": "string",
-                          "description": "A message providing more details about the error."
                         }
-                      },
-                      "required": [
-                        "type",
-                        "message"
-                      ]
+                      }
                     }
-                  }
+                  },
+                  "required": [
+                    "choices"
+                  ]
                 }
               }
             }
@@ -1293,33 +2521,1101 @@
         }
       }
     },
-    "/whisper": {
+    "/GenerateTextVision": {
       "post": {
-        "summary": "Whisper",
-        "description": "Transcribe audio using the Whisper family of models. Includes sentence-level segmentation, word-level alignment and speaker diarization. Trained by [Open AI](https://huggingface.co/docs/transformers/model_doc/whisper) and hosted on Substrate.",
-        "operationId": "Whisper",
+        "summary": "GenerateTextVision",
+        "operationId": "GenerateTextVision",
         "tags": [
-          "models"
+          "vision-language-generation"
         ],
+        "description": "Generate text by prompting with text and images using a vision-language model.",
         "parameters": [
           {
             "in": "query",
             "schema": {
-              "title": "WhisperIn",
+              "title": "GenerateTextVisionIn",
               "type": "object",
               "properties": {
-                "audio_url": {
+                "prompt": {
                   "type": "string",
-                  "description": "Input audio URL."
+                  "description": "Text prompt."
+                },
+                "image_uris": {
+                  "description": "Image prompts.",
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "model": {
+                  "type": "string",
+                  "enum": [
+                    "firellava-13b"
+                  ],
+                  "description": "Selected model.",
+                  "default": "firellava-13b"
+                },
+                "temperature": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 10,
+                  "default": 4,
+                  "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic."
+                },
+                "max_tokens": {
+                  "type": "integer",
+                  "description": "Maximum number of tokens to generate.",
+                  "default": 800
+                }
+              },
+              "required": [
+                "prompt",
+                "image_uri"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "GenerateTextVisionOut",
+                  "type": "object",
+                  "properties": {
+                    "text": {
+                      "type": "string",
+                      "description": "Text response."
+                    }
+                  },
+                  "required": [
+                    "text"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/GenerateImage": {
+      "post": {
+        "summary": "GenerateImage",
+        "operationId": "GenerateImage",
+        "tags": [
+          "image-generation"
+        ],
+        "description": "Generate an image.",
+        "parameters": [
+          {
+            "in": "query",
+            "schema": {
+              "title": "GenerateImageIn",
+              "type": "object",
+              "properties": {
+                "prompt": {
+                  "type": "string",
+                  "description": "Input prompt."
+                },
+                "model": {
+                  "type": "string",
+                  "enum": [
+                    "stablediffusion-xl",
+                    "stablediffusion-1.5"
+                  ],
+                  "description": "Selected model.",
+                  "default": "stablediffusion-xl"
+                },
+                "negative_prompt": {
+                  "type": "string",
+                  "description": "Negative input prompt."
+                },
+                "store": {
+                  "type": "string",
+                  "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+                },
+                "width": {
+                  "type": "integer",
+                  "description": "Width of output image, in pixels."
+                },
+                "height": {
+                  "type": "integer",
+                  "description": "Height of output image, in pixels."
+                },
+                "refinement": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "Controls how long to run the image refinement process.",
+                  "minimum": 0,
+                  "maximum": 10,
+                  "default": 6
+                },
+                "prompt_influence": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "Controls the influence of the input prompt on the generated output.",
+                  "minimum": 0,
+                  "maximum": 10,
+                  "default": 2
+                },
+                "seed": {
+                  "type": "integer",
+                  "description": "Seed for deterministic generation. Default is a random seed."
+                }
+              },
+              "required": [
+                "prompt"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "GenerateImageOut",
+                  "type": "object",
+                  "properties": {
+                    "image_uri": {
+                      "type": "string",
+                      "description": "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided."
+                    },
+                    "seed": {
+                      "type": "integer",
+                      "description": "The random noise seed used for generation."
+                    }
+                  },
+                  "required": [
+                    "image_uri",
+                    "seed"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/MultiGenerateImage": {
+      "post": {
+        "summary": "MultiGenerateImage",
+        "operationId": "MultiGenerateImage",
+        "tags": [
+          "image-generation"
+        ],
+        "description": "Generate multiple images.",
+        "parameters": [
+          {
+            "in": "query",
+            "schema": {
+              "title": "MultiGenerateImageIn",
+              "type": "object",
+              "properties": {
+                "prompt": {
+                  "type": "string",
+                  "description": "Input prompt."
+                },
+                "num_images": {
+                  "type": "integer",
+                  "description": "Number of images to generate."
+                },
+                "model": {
+                  "type": "string",
+                  "enum": [
+                    "stablediffusion-xl",
+                    "stablediffusion-1.5"
+                  ],
+                  "description": "Selected model.",
+                  "default": "stablediffusion-xl"
+                },
+                "negative_prompt": {
+                  "type": "string",
+                  "description": "Negative input prompt."
+                },
+                "store": {
+                  "type": "string",
+                  "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+                },
+                "width": {
+                  "type": "integer",
+                  "description": "Width of output image, in pixels."
+                },
+                "height": {
+                  "type": "integer",
+                  "description": "Height of output image, in pixels."
+                },
+                "refinement": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "Controls how long to run the image refinement process.",
+                  "minimum": 0,
+                  "maximum": 10,
+                  "default": 6
+                },
+                "prompt_influence": {
+                  "type": "number",
+                  "format": "float",
+                  "minimum": 0,
+                  "maximum": 10,
+                  "description": "Controls the influence of the input prompt on the generated output."
+                },
+                "seeds": {
+                  "description": "Random noise seeds. Default is random seeds for each generation.",
+                  "type": "array",
+                  "items": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "required": [
+                "prompt",
+                "num_images"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "MultiGenerateImageOut",
+                  "type": "object",
+                  "properties": {
+                    "outputs": {
+                      "type": "array",
+                      "items": {
+                        "title": "GenerateImageOut",
+                        "type": "object",
+                        "properties": {
+                          "image_uri": {
+                            "type": "string",
+                            "description": "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided."
+                          },
+                          "seed": {
+                            "type": "integer",
+                            "description": "The random noise seed used for generation."
+                          }
+                        },
+                        "required": [
+                          "image_uri",
+                          "seed"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "outputs"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ControlledGenerateImage": {
+      "post": {
+        "summary": "ControlledGenerateImage",
+        "operationId": "ControlledGenerateImage",
+        "tags": [
+          "image-generation"
+        ],
+        "description": "Generate an image with generation controlled by an input image.",
+        "parameters": [
+          {
+            "in": "query",
+            "schema": {
+              "title": "ControlledGenerateImageIn",
+              "type": "object",
+              "properties": {
+                "image_uri": {
+                  "type": "string",
+                  "description": "Input image."
+                },
+                "control_method": {
+                  "type": "string",
+                  "enum": [
+                    "edge",
+                    "upscale",
+                    "depth",
+                    "qr"
+                  ],
+                  "description": "Strategy to control generation using the input image."
                 },
                 "prompt": {
                   "type": "string",
-                  "description": "Prompt to guide model on contents of input audio and desired output."
+                  "description": "Input prompt."
+                },
+                "output_resolution": {
+                  "type": "integer",
+                  "description": "Resolution of the output image, in pixels.",
+                  "default": 1024
+                },
+                "model": {
+                  "type": "string",
+                  "enum": [
+                    "stablediffusion-1.5",
+                    "stablediffusion-xl"
+                  ],
+                  "description": "Selected model.",
+                  "default": "stablediffusion-xl"
+                },
+                "negative_prompt": {
+                  "type": "string",
+                  "description": "Negative input prompt."
+                },
+                "store": {
+                  "type": "string",
+                  "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+                },
+                "refinement": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "Controls how long to run the image refinement process.",
+                  "minimum": 0,
+                  "maximum": 10,
+                  "default": 6
+                },
+                "image_influence": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "Controls the influence of the input image on the generated output.",
+                  "minimum": 0,
+                  "maximum": 10,
+                  "default": 9
+                },
+                "prompt_influence": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "Controls the influence of the input prompt on the generated output.",
+                  "minimum": 0,
+                  "maximum": 10,
+                  "default": 2
+                },
+                "seed": {
+                  "type": "integer",
+                  "description": "Seed for deterministic generation. Default is a random seed."
+                }
+              },
+              "required": [
+                "image_uri",
+                "control_method",
+                "prompt"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "ControlledGenerateImageOut",
+                  "type": "object",
+                  "properties": {
+                    "image_uri": {
+                      "type": "string",
+                      "description": "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided."
+                    },
+                    "seed": {
+                      "type": "integer",
+                      "description": "The random noise seed used for generation."
+                    }
+                  },
+                  "required": [
+                    "image_uri",
+                    "seed"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/MultiControlledGenerateImage": {
+      "post": {
+        "summary": "MultiControlledGenerateImage",
+        "operationId": "MultiControlledGenerateImage",
+        "tags": [
+          "image-generation"
+        ],
+        "description": "Generate multiple image outputs with generation controlled by an input image.",
+        "parameters": [
+          {
+            "in": "query",
+            "schema": {
+              "title": "MultiControlledGenerateImageIn",
+              "type": "object",
+              "properties": {
+                "image_uri": {
+                  "type": "string",
+                  "description": "Input image."
+                },
+                "control_method": {
+                  "type": "string",
+                  "enum": [
+                    "edge",
+                    "upscale",
+                    "depth",
+                    "qr"
+                  ],
+                  "description": "Strategy to control generation using the input image."
+                },
+                "prompt": {
+                  "type": "string",
+                  "description": "Input prompt."
+                },
+                "num_images": {
+                  "type": "integer",
+                  "description": "Number of images to generate."
+                },
+                "output_resolution": {
+                  "type": "integer",
+                  "description": "Resolution of the output image, in pixels.",
+                  "default": 1024
+                },
+                "model": {
+                  "type": "string",
+                  "enum": [
+                    "stablediffusion-1.5"
+                  ],
+                  "description": "Selected model.",
+                  "default": "stablediffusion-1.5"
+                },
+                "negative_prompt": {
+                  "type": "string",
+                  "description": "Negative input prompt."
+                },
+                "store": {
+                  "type": "string",
+                  "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+                },
+                "refinement": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "Controls how long to run the image refinement process.",
+                  "minimum": 0,
+                  "maximum": 10,
+                  "default": 6
+                },
+                "image_influence": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "Controls the influence of the input image on the generated output.",
+                  "minimum": 0,
+                  "maximum": 10,
+                  "default": 9
+                },
+                "prompt_influence": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "Controls the influence of the input prompt on the generated output.",
+                  "minimum": 0,
+                  "maximum": 10,
+                  "default": 2
+                },
+                "seeds": {
+                  "description": "Random noise seeds. Default is random seeds for each generation.",
+                  "type": "array",
+                  "items": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "required": [
+                "image_uri",
+                "control_method",
+                "prompt",
+                "num_images"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "MultiControlledGenerateImageOut",
+                  "type": "object",
+                  "properties": {
+                    "outputs": {
+                      "type": "array",
+                      "items": {
+                        "title": "ControlledGenerateImageOut",
+                        "type": "object",
+                        "properties": {
+                          "image_uri": {
+                            "type": "string",
+                            "description": "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided."
+                          },
+                          "seed": {
+                            "type": "integer",
+                            "description": "The random noise seed used for generation."
+                          }
+                        },
+                        "required": [
+                          "image_uri",
+                          "seed"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "outputs"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/InpaintImage": {
+      "post": {
+        "summary": "InpaintImage",
+        "operationId": "InpaintImage",
+        "tags": [
+          "image-generation"
+        ],
+        "description": "Modify part of an image using a mask.",
+        "parameters": [
+          {
+            "in": "query",
+            "schema": {
+              "title": "InpaintImageIn",
+              "type": "object",
+              "properties": {
+                "image_uri": {
+                  "type": "string",
+                  "description": "Input image."
+                },
+                "mask_image_uri": {
+                  "type": "string",
+                  "description": "Mask image that controls which pixels are inpainted. If unset, the entire image is modified (image-to-image)."
+                },
+                "prompt": {
+                  "type": "string",
+                  "description": "Input prompt."
+                },
+                "output_resolution": {
+                  "type": "integer",
+                  "description": "Resolution of the output image, in pixels.",
+                  "default": 1024
+                },
+                "model": {
+                  "type": "string",
+                  "enum": [
+                    "stablediffusion-xl"
+                  ],
+                  "description": "Selected model.",
+                  "default": "stablediffusion-xl"
+                },
+                "negative_prompt": {
+                  "type": "string",
+                  "description": "Negative input prompt."
+                },
+                "store": {
+                  "type": "string",
+                  "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+                },
+                "refinement": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "Controls how long to run the image refinement process.",
+                  "minimum": 0,
+                  "maximum": 10,
+                  "default": 6
+                },
+                "prompt_influence": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "Controls the influence of the input prompt on the generated output.",
+                  "minimum": 0,
+                  "maximum": 10,
+                  "default": 5
+                },
+                "seed": {
+                  "type": "integer",
+                  "description": "Seed for deterministic generation. Default is a random seed."
+                }
+              },
+              "required": [
+                "image_uri",
+                "prompt"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "InpaintImageOut",
+                  "type": "object",
+                  "properties": {
+                    "image_uri": {
+                      "type": "string",
+                      "description": "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided."
+                    },
+                    "seed": {
+                      "type": "integer",
+                      "description": "The random noise seed used for generation."
+                    }
+                  },
+                  "required": [
+                    "image_uri",
+                    "seed"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/MultiInpaintImage": {
+      "post": {
+        "summary": "MultiInpaintImage",
+        "operationId": "MultiInpaintImage",
+        "tags": [
+          "image-generation"
+        ],
+        "description": "Generate multiple image outputs modifying part of an image using a mask.",
+        "parameters": [
+          {
+            "in": "query",
+            "schema": {
+              "title": "MultiInpaintImageIn",
+              "type": "object",
+              "properties": {
+                "image_uri": {
+                  "type": "string",
+                  "description": "Input image."
+                },
+                "mask_image_uri": {
+                  "type": "string",
+                  "description": "Mask image that controls which pixels are inpainted. If unset, the entire image is modified (image-to-image)."
+                },
+                "prompt": {
+                  "type": "string",
+                  "description": "Input prompt."
+                },
+                "num_images": {
+                  "type": "integer",
+                  "description": "Number of images to generate."
+                },
+                "output_resolution": {
+                  "type": "integer",
+                  "description": "Resolution of the output image, in pixels.",
+                  "default": 1024
+                },
+                "model": {
+                  "type": "string",
+                  "enum": [
+                    "stablediffusion-1.5"
+                  ],
+                  "description": "Selected model.",
+                  "default": "stablediffusion-1.5"
+                },
+                "negative_prompt": {
+                  "type": "string",
+                  "description": "Negative input prompt."
+                },
+                "store": {
+                  "type": "string",
+                  "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+                },
+                "refinement": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "Controls how long to run the image refinement process.",
+                  "minimum": 0,
+                  "maximum": 10,
+                  "default": 6
+                },
+                "image_influence": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "Controls the influence of the input image on the generated output.",
+                  "minimum": 0,
+                  "maximum": 10,
+                  "default": 9
+                },
+                "prompt_influence": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "Controls the influence of the input prompt on the generated output.",
+                  "minimum": 0,
+                  "maximum": 10,
+                  "default": 2
+                },
+                "seeds": {
+                  "description": "Random noise seeds. Default is random seeds for each generation.",
+                  "type": "array",
+                  "items": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "required": [
+                "image_uri",
+                "prompt",
+                "num_images"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "MultiInpaintImageOut",
+                  "type": "object",
+                  "properties": {
+                    "outputs": {
+                      "type": "array",
+                      "items": {
+                        "title": "InpaintImageOut",
+                        "type": "object",
+                        "properties": {
+                          "image_uri": {
+                            "type": "string",
+                            "description": "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided."
+                          },
+                          "seed": {
+                            "type": "integer",
+                            "description": "The random noise seed used for generation."
+                          }
+                        },
+                        "required": [
+                          "image_uri",
+                          "seed"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "outputs"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/SegmentImage": {
+      "post": {
+        "summary": "SegmentImage",
+        "operationId": "SegmentImage",
+        "tags": [
+          "object-detection"
+        ],
+        "description": "Detect segments in an image.",
+        "parameters": [
+          {
+            "in": "query",
+            "schema": {
+              "title": "SegmentImageIn",
+              "type": "object",
+              "properties": {
+                "image_uri": {
+                  "type": "string",
+                  "description": "Input image."
+                },
+                "store": {
+                  "type": "string",
+                  "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+                }
+              },
+              "required": [
+                "image_uri"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "SegmentImageOut",
+                  "type": "object",
+                  "properties": {
+                    "objects": {
+                      "type": "array",
+                      "description": "Detected segments.",
+                      "items": {
+                        "title": "ImageSegment",
+                        "type": "object",
+                        "properties": {
+                          "object_class": {
+                            "type": "string",
+                            "description": "Detected object class."
+                          },
+                          "confidence": {
+                            "type": "number",
+                            "format": "float",
+                            "minimum": 0,
+                            "maximum": 1,
+                            "description": "Classification confidence."
+                          },
+                          "box": {
+                            "title": "BoundingBox",
+                            "type": "object",
+                            "properties": {
+                              "x1": {
+                                "type": "number",
+                                "format": "float",
+                                "description": "Top left corner x."
+                              },
+                              "y1": {
+                                "type": "number",
+                                "format": "float",
+                                "description": "Top left corner y."
+                              },
+                              "x2": {
+                                "type": "number",
+                                "format": "float",
+                                "description": "Bottom right corner x."
+                              },
+                              "y2": {
+                                "type": "number",
+                                "format": "float",
+                                "description": "Bottom right corner y."
+                              }
+                            },
+                            "required": [
+                              "x1",
+                              "y1",
+                              "x2",
+                              "y2"
+                            ]
+                          },
+                          "path": {
+                            "title": "MaskPath",
+                            "type": "object",
+                            "properties": {
+                              "x": {
+                                "type": "array",
+                                "description": "x values.",
+                                "items": {
+                                  "type": "number",
+                                  "format": "float"
+                                }
+                              },
+                              "y": {
+                                "type": "array",
+                                "description": "y values.",
+                                "items": {
+                                  "type": "number",
+                                  "format": "float"
+                                }
+                              }
+                            },
+                            "required": [
+                              "x",
+                              "y"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "object_class",
+                          "confidence",
+                          "box",
+                          "path"
+                        ]
+                      }
+                    },
+                    "image_uri": {
+                      "type": "string",
+                      "description": "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided."
+                    },
+                    "width": {
+                      "type": "integer",
+                      "description": "Width of image, in pixels."
+                    },
+                    "height": {
+                      "type": "integer",
+                      "description": "Height of image, in pixels."
+                    }
+                  },
+                  "required": [
+                    "objects",
+                    "image_uri",
+                    "width",
+                    "height"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/CreateMaskImage": {
+      "post": {
+        "summary": "CreateMaskImage",
+        "operationId": "CreateMaskImage",
+        "tags": [
+          "image-utilities"
+        ],
+        "description": "Create a mask image with a bounding box or path.",
+        "parameters": [
+          {
+            "in": "query",
+            "schema": {
+              "title": "CreateMaskImageIn",
+              "type": "object",
+              "properties": {
+                "width": {
+                  "type": "integer",
+                  "description": "Width of image, in pixels."
+                },
+                "height": {
+                  "type": "integer",
+                  "description": "Height of image, in pixels."
+                },
+                "box": {
+                  "title": "BoundingBox",
+                  "type": "object",
+                  "properties": {
+                    "x1": {
+                      "type": "number",
+                      "format": "float",
+                      "description": "Top left corner x."
+                    },
+                    "y1": {
+                      "type": "number",
+                      "format": "float",
+                      "description": "Top left corner y."
+                    },
+                    "x2": {
+                      "type": "number",
+                      "format": "float",
+                      "description": "Bottom right corner x."
+                    },
+                    "y2": {
+                      "type": "number",
+                      "format": "float",
+                      "description": "Bottom right corner y."
+                    }
+                  },
+                  "required": [
+                    "x1",
+                    "y1",
+                    "x2",
+                    "y2"
+                  ]
+                },
+                "path": {
+                  "title": "MaskPath",
+                  "type": "object",
+                  "properties": {
+                    "x": {
+                      "type": "array",
+                      "description": "x values.",
+                      "items": {
+                        "type": "number",
+                        "format": "float"
+                      }
+                    },
+                    "y": {
+                      "type": "array",
+                      "description": "y values.",
+                      "items": {
+                        "type": "number",
+                        "format": "float"
+                      }
+                    }
+                  },
+                  "required": [
+                    "x",
+                    "y"
+                  ]
+                },
+                "store": {
+                  "type": "string",
+                  "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+                }
+              },
+              "required": [
+                "width",
+                "height"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "CreateMaskImageOut",
+                  "type": "object",
+                  "properties": {
+                    "image_uri": {
+                      "type": "string",
+                      "description": "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided."
+                    }
+                  },
+                  "required": [
+                    "image_uri"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/TranscribeMedia": {
+      "post": {
+        "summary": "TranscribeMedia",
+        "operationId": "TranscribeMedia",
+        "tags": [
+          "audio-recognition"
+        ],
+        "description": "Transcribe speech in an audio or video file.",
+        "parameters": [
+          {
+            "in": "query",
+            "schema": {
+              "title": "TranscribeMediaIn",
+              "type": "object",
+              "properties": {
+                "audio_uri": {
+                  "type": "string",
+                  "description": "Input audio."
+                },
+                "prompt": {
+                  "type": "string",
+                  "description": "Prompt to guide model on the content and context of input audio."
                 },
                 "language": {
                   "type": "string",
                   "default": "en",
-                  "description": "Language of input audio in ISO-639-1 format."
+                  "description": "Language of input audio in [ISO-639-1](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes) format."
+                },
+                "segment": {
+                  "type": "boolean",
+                  "default": false,
+                  "description": "Segment the text into sentences with approximate timestamps."
                 },
                 "align": {
                   "type": "boolean",
@@ -1329,11 +3625,16 @@
                 "diarize": {
                   "type": "boolean",
                   "default": false,
-                  "description": "Identify speakers for each segment. Speaker IDs will be added to each output segment."
+                  "description": "Identify speakers for each segment. Speaker IDs will be included in each segment."
+                },
+                "suggest_chapters": {
+                  "type": "boolean",
+                  "default": false,
+                  "description": "Suggest automatic chapter markers."
                 }
               },
               "required": [
-                "audio_url"
+                "audio_uri"
               ]
             }
           }
@@ -1344,14 +3645,18 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "title": "WhisperResponse",
+                  "title": "TranscribeMediaOut",
                   "type": "object",
                   "properties": {
-                    "data": {
-                      "title": "WhisperOut",
+                    "text": {
+                      "type": "string",
+                      "description": "Transcribed text."
+                    },
+                    "segments": {
                       "type": "array",
+                      "description": "Transcribed segments, if `segment` is enabled.",
                       "items": {
-                        "title": "WhisperSegment",
+                        "title": "TranscribedSegment",
                         "type": "object",
                         "properties": {
                           "text": {
@@ -1376,7 +3681,7 @@
                             "type": "array",
                             "description": "Aligned words, if `align` is enabled.",
                             "items": {
-                              "title": "WhisperWord",
+                              "title": "TranscribedWord",
                               "type": "object",
                               "properties": {
                                 "word": {
@@ -1413,29 +3718,33 @@
                         ]
                       }
                     },
-                    "error": {
-                      "title": "ErrorOut",
-                      "type": "object",
-                      "properties": {
-                        "type": {
-                          "type": "string",
-                          "enum": [
-                            "api_error",
-                            "invalid_request_error"
-                          ],
-                          "description": "The type of error returned."
+                    "chapters": {
+                      "type": "array",
+                      "description": "Chapter markers, if `suggest_chapters` is enabled.",
+                      "items": {
+                        "title": "ChapterMarker",
+                        "type": "object",
+                        "properties": {
+                          "title": {
+                            "type": "string",
+                            "description": "Chapter title."
+                          },
+                          "start": {
+                            "type": "number",
+                            "format": "float",
+                            "description": "Start time of chapter, in seconds."
+                          }
                         },
-                        "message": {
-                          "type": "string",
-                          "description": "A message providing more details about the error."
-                        }
-                      },
-                      "required": [
-                        "type",
-                        "message"
-                      ]
+                        "required": [
+                          "title",
+                          "start"
+                        ]
+                      }
                     }
-                  }
+                  },
+                  "required": [
+                    "text"
+                  ]
                 }
               }
             }
@@ -1443,46 +3752,196 @@
         }
       }
     },
-    "/jina": {
+    "/GenerateSpeech": {
       "post": {
-        "summary": "Jina",
-        "description": "TODO. Trained by [Jina AI](https://huggingface.co/jinaai) and hosted on Substrate.",
-        "operationId": "Jina",
+        "summary": "GenerateSpeech",
+        "operationId": "GenerateSpeech",
         "tags": [
-          "models"
+          "audio-generation"
         ],
+        "description": "Generate speech from text.",
         "parameters": [
           {
             "in": "query",
             "schema": {
-              "title": "JinaIn",
+              "title": "GenerateSpeechIn",
               "type": "object",
               "properties": {
-                "docs": {
+                "text": {
+                  "type": "string",
+                  "description": "Input text."
+                },
+                "audio_uri": {
+                  "type": "string",
+                  "description": "Reference audio used to synthesize the speaker. If unset, a default speaker voice will be used."
+                },
+                "language": {
+                  "type": "string",
+                  "default": "en",
+                  "description": "Language of input text. Supported languages: `en, es, fr, de, it, pt, pl, tr, ru, nl, cs, ar, zh, hu, ko, hi`."
+                },
+                "store": {
+                  "type": "string",
+                  "description": "Use \"hosted\" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the audio data will be returned as a base64-encoded string."
+                }
+              },
+              "required": [
+                "text"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "GenerateSpeechOut",
+                  "type": "object",
+                  "properties": {
+                    "audio_uri": {
+                      "type": "string",
+                      "description": "Base 64-encoded WAV audio bytes, or a hosted audio url if `store` is provided."
+                    }
+                  },
+                  "required": [
+                    "audio_uri"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/EmbedText": {
+      "post": {
+        "summary": "EmbedText",
+        "operationId": "EmbedText",
+        "tags": [
+          "semantic-space"
+        ],
+        "description": "Generate vector embedding for a text document.",
+        "parameters": [
+          {
+            "in": "query",
+            "schema": {
+              "title": "EmbedTextIn",
+              "type": "object",
+              "properties": {
+                "text": {
+                  "type": "string",
+                  "description": "Text to embed."
+                },
+                "model": {
+                  "type": "string",
+                  "enum": [
+                    "jina-v2",
+                    "clip"
+                  ],
+                  "description": "Selected model.",
+                  "default": "jina-v2"
+                },
+                "store": {
+                  "type": "string",
+                  "description": "[Vector store](/docs/vector-stores) identifier."
+                },
+                "metadata": {
+                  "type": "object",
+                  "description": "Metadata that can be used to query the vector store. Ignored if `store` is unset."
+                },
+                "embedded_metadata": {
+                  "type": "object",
+                  "properties": {
+                    "include_keys": {
+                      "type": "array",
+                      "description": "Keys to embed with text.",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "exclude_keys": {
+                      "type": "array",
+                      "description": "Keys to exclude. All other keys will be embedded with text.",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "required": [
+                "text"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "EmbedTextOut",
+                  "type": "object",
+                  "properties": {
+                    "embedding": {
+                      "title": "Embedding",
+                      "type": "object",
+                      "properties": {
+                        "vector": {
+                          "type": "string",
+                          "description": "Embedding vector.",
+                          "items": {
+                            "type": "number",
+                            "format": "float"
+                          }
+                        }
+                      },
+                      "required": [
+                        "vector"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "embedding"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/MultiEmbedText": {
+      "post": {
+        "summary": "MultiEmbedText",
+        "operationId": "MultiEmbedText",
+        "tags": [
+          "semantic-space"
+        ],
+        "description": "Generate vector embeddings for multiple text documents.",
+        "parameters": [
+          {
+            "in": "query",
+            "schema": {
+              "title": "MultiEmbedTextIn",
+              "type": "object",
+              "properties": {
+                "items": {
                   "type": "array",
-                  "description": "Documents to embed.",
+                  "description": "Items to embed.",
                   "items": {
-                    "title": "JinaDoc",
                     "type": "object",
                     "properties": {
                       "text": {
                         "type": "string",
                         "description": "Text to embed."
                       },
-                      "id": {
-                        "type": "string",
-                        "description": "Document id. Required when storing embedding."
-                      },
                       "metadata": {
                         "type": "object",
-                        "description": "Additional metadata to store in embedding document."
-                      },
-                      "embed_metadata_keys": {
-                        "type": "array",
-                        "description": "Contents of `metadata` included to generate embedding.",
-                        "items": {
-                          "type": "string"
-                        }
+                        "description": "Metadata that can be used to query the vector store. Ignored if `store` is unset."
                       }
                     },
                     "required": [
@@ -1490,13 +3949,41 @@
                     ]
                   }
                 },
+                "model": {
+                  "type": "string",
+                  "enum": [
+                    "jina-v2",
+                    "clip"
+                  ],
+                  "description": "Selected model.",
+                  "default": "jina-v2"
+                },
                 "store": {
                   "type": "string",
-                  "description": "Vector store ID in which embedding will be stored."
+                  "description": "[Vector store](/docs/vector-stores) identifier."
+                },
+                "embedded_metadata": {
+                  "type": "object",
+                  "properties": {
+                    "include_keys": {
+                      "type": "array",
+                      "description": "Keys to embed with text.",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "exclude_keys": {
+                      "type": "array",
+                      "description": "Keys to exclude. All other keys will be embedded with text.",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  }
                 }
               },
               "required": [
-                "docs"
+                "items"
               ]
             }
           }
@@ -1507,14 +3994,14 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "title": "JinaResponse",
+                  "title": "MultiEmbedTextOut",
                   "type": "object",
                   "properties": {
-                    "data": {
-                      "title": "JinaOut",
+                    "embeddings": {
                       "type": "array",
+                      "description": "Generated embeddings.",
                       "items": {
-                        "title": "JinaEmbedding",
+                        "title": "Embedding",
                         "type": "object",
                         "properties": {
                           "vector": {
@@ -1524,43 +4011,375 @@
                               "type": "number",
                               "format": "float"
                             }
-                          },
-                          "id": {
-                            "type": "string",
-                            "description": "Document id."
-                          },
-                          "metadata": {
-                            "type": "object",
-                            "description": "Additional metadata stored in embedding document."
                           }
                         },
                         "required": [
                           "vector"
                         ]
                       }
-                    },
-                    "error": {
-                      "title": "ErrorOut",
+                    }
+                  },
+                  "required": [
+                    "embeddings"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/EmbedImage": {
+      "post": {
+        "summary": "EmbedImage",
+        "operationId": "EmbedImage",
+        "tags": [
+          "semantic-space"
+        ],
+        "description": "Generate vector embedding for an image, and optionally store the embedding.",
+        "parameters": [
+          {
+            "in": "query",
+            "schema": {
+              "title": "EmbedImageIn",
+              "type": "object",
+              "properties": {
+                "image_uri": {
+                  "type": "string",
+                  "description": "Image to embed."
+                },
+                "model": {
+                  "type": "string",
+                  "enum": [
+                    "clip"
+                  ],
+                  "description": "Selected model.",
+                  "default": "clip"
+                },
+                "store": {
+                  "type": "string",
+                  "description": "[Vector store](/docs/vector-stores) identifier."
+                }
+              },
+              "required": [
+                "image_uri"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "EmbedImageOut",
+                  "type": "object",
+                  "properties": {
+                    "embedding": {
+                      "title": "Embedding",
                       "type": "object",
                       "properties": {
-                        "type": {
+                        "vector": {
                           "type": "string",
-                          "enum": [
-                            "api_error",
-                            "invalid_request_error"
-                          ],
-                          "description": "The type of error returned."
-                        },
-                        "message": {
-                          "type": "string",
-                          "description": "A message providing more details about the error."
+                          "description": "Embedding vector.",
+                          "items": {
+                            "type": "number",
+                            "format": "float"
+                          }
                         }
                       },
                       "required": [
-                        "type",
-                        "message"
+                        "vector"
                       ]
                     }
+                  },
+                  "required": [
+                    "embedding"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/MultiEmbedImage": {
+      "post": {
+        "summary": "MultiEmbedImage",
+        "operationId": "MultiEmbedImage",
+        "tags": [
+          "semantic-space"
+        ],
+        "description": "Generate vector embeddings for multiple images, and optionally store the embeddings.",
+        "parameters": [
+          {
+            "in": "query",
+            "schema": {
+              "title": "MultiEmbedImageIn",
+              "type": "object",
+              "properties": {
+                "items": {
+                  "type": "array",
+                  "description": "Items to embed.",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "image_uri": {
+                        "type": "string",
+                        "description": "Image to embed."
+                      }
+                    },
+                    "required": [
+                      "image_uri"
+                    ]
+                  }
+                },
+                "store": {
+                  "type": "string",
+                  "description": "[Vector store](/docs/vector-stores) identifier."
+                },
+                "model": {
+                  "type": "string",
+                  "enum": [
+                    "clip"
+                  ],
+                  "description": "Selected model.",
+                  "default": "clip"
+                }
+              },
+              "required": [
+                "items"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "MultiEmbedImageOut",
+                  "type": "object",
+                  "properties": {
+                    "embeddings": {
+                      "type": "array",
+                      "description": "Generated embeddings.",
+                      "items": {
+                        "title": "Embedding",
+                        "type": "object",
+                        "properties": {
+                          "vector": {
+                            "type": "string",
+                            "description": "Embedding vector.",
+                            "items": {
+                              "type": "number",
+                              "format": "float"
+                            }
+                          }
+                        },
+                        "required": [
+                          "vector"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "embeddings"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/vector-stores/create": {
+      "post": {
+        "tags": [
+          "rest-api"
+        ],
+        "summary": "/vector-stores/create",
+        "operationId": "CreateVectorStore",
+        "description": "Create a vector store for storing and querying embeddings.",
+        "parameters": [
+          {
+            "in": "query",
+            "schema": {
+              "title": "VectorStoreParams",
+              "description": "Fields describing a vector store and its associated index.",
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Vector store name.",
+                  "minLength": 1,
+                  "maxLength": 63
+                },
+                "model": {
+                  "type": "string",
+                  "description": "Selected embedding model",
+                  "enum": [
+                    "jina-v2",
+                    "clip"
+                  ]
+                },
+                "m": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 64,
+                  "default": 16,
+                  "description": "The max number of connections per layer for the index."
+                },
+                "ef_construction": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 128,
+                  "description": "The size of the dynamic candidate list for constructing the index graph.",
+                  "default": 64
+                },
+                "metric": {
+                  "type": "string",
+                  "enum": [
+                    "cosine",
+                    "l2",
+                    "inner"
+                  ],
+                  "default": "inner",
+                  "description": "The distance metric to construct the index with."
+                }
+              },
+              "required": [
+                "name",
+                "model"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Vector store created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "VectorStoreParams",
+                  "description": "Fields describing a vector store and its associated index.",
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "description": "Vector store name.",
+                      "minLength": 1,
+                      "maxLength": 63
+                    },
+                    "model": {
+                      "type": "string",
+                      "description": "Selected embedding model",
+                      "enum": [
+                        "jina-v2",
+                        "clip"
+                      ]
+                    },
+                    "m": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 64,
+                      "default": 16,
+                      "description": "The max number of connections per layer for the index."
+                    },
+                    "ef_construction": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 128,
+                      "description": "The size of the dynamic candidate list for constructing the index graph.",
+                      "default": 64
+                    },
+                    "metric": {
+                      "type": "string",
+                      "enum": [
+                        "cosine",
+                        "l2",
+                        "inner"
+                      ],
+                      "default": "inner",
+                      "description": "The distance metric to construct the index with."
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "model"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/vector-stores/list": {
+      "get": {
+        "tags": [
+          "rest-api"
+        ],
+        "summary": "/vector-stores/list",
+        "operationId": "ListVectorStores",
+        "description": "List all vector stores.",
+        "responses": {
+          "200": {
+            "description": "List of vector stores.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "title": "VectorStoreParams",
+                    "description": "Fields describing a vector store and its associated index.",
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "description": "Vector store name.",
+                        "minLength": 1,
+                        "maxLength": 63
+                      },
+                      "model": {
+                        "type": "string",
+                        "description": "Selected embedding model",
+                        "enum": [
+                          "jina-v2",
+                          "clip"
+                        ]
+                      },
+                      "m": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 64,
+                        "default": 16,
+                        "description": "The max number of connections per layer for the index."
+                      },
+                      "ef_construction": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 128,
+                        "description": "The size of the dynamic candidate list for constructing the index graph.",
+                        "default": 64
+                      },
+                      "metric": {
+                        "type": "string",
+                        "enum": [
+                          "cosine",
+                          "l2",
+                          "inner"
+                        ],
+                        "default": "inner",
+                        "description": "The distance metric to construct the index with."
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "model"
+                    ]
                   }
                 }
               }
@@ -1569,126 +4388,465 @@
         }
       }
     },
-    "/clip": {
+    "/vector-stores/delete": {
       "post": {
-        "summary": "CLIP",
-        "description": "TODO. Trained by [Open AI](https://huggingface.co/docs/transformers/model_doc/clip) and hosted on Substrate.",
-        "operationId": "CLIP",
         "tags": [
-          "models"
+          "rest-api"
         ],
+        "summary": "/vector-stores/delete",
+        "operationId": "DeleteVectorStore",
+        "description": "Delete a vector store.",
         "parameters": [
           {
             "in": "query",
             "schema": {
-              "title": "CLIPIn",
+              "title": "DeleteVectorStoreParams",
               "type": "object",
               "properties": {
-                "docs": {
-                  "type": "array",
-                  "description": "Documents to embed.",
-                  "items": {
-                    "title": "CLIPDoc",
-                    "type": "object",
-                    "properties": {
-                      "text": {
-                        "type": "string",
-                        "description": "Text to embed."
-                      },
-                      "image_url": {
-                        "type": "string",
-                        "description": "URL of image to embed."
-                      },
-                      "id": {
-                        "type": "string",
-                        "description": "Document id. Required when storing embedding."
-                      },
-                      "metadata": {
-                        "type": "object",
-                        "description": "Additional metadata to store in embedding document."
-                      },
-                      "embed_metadata_keys": {
-                        "type": "array",
-                        "description": "Contents of `metadata` included to generate embedding.",
-                        "items": {
-                          "type": "string"
-                        }
-                      }
-                    }
-                  }
-                },
-                "store": {
+                "name": {
                   "type": "string",
-                  "description": "Vector store ID in which embedding will be stored."
+                  "description": "Vector store name."
+                },
+                "model": {
+                  "type": "string",
+                  "description": "Selected embedding model",
+                  "enum": [
+                    "jina-v2",
+                    "clip"
+                  ]
                 }
               },
               "required": [
-                "docs"
+                "name",
+                "model"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Vector store deleted."
+          }
+        }
+      }
+    },
+    "/vector-stores/query": {
+      "post": {
+        "tags": [
+          "rest-api"
+        ],
+        "summary": "/vector-stores/query",
+        "operationId": "QueryVectorStore",
+        "description": "Query a vector store for similar vectors.",
+        "parameters": [
+          {
+            "in": "query",
+            "schema": {
+              "title": "QueryVectorStoreParams",
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Vector store to query against."
+                },
+                "model": {
+                  "type": "string",
+                  "description": "Selected embedding model",
+                  "enum": [
+                    "jina-v2",
+                    "clip"
+                  ]
+                },
+                "queryIds": {
+                  "type": "array",
+                  "description": "Document IDs to use for the query.",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "queryVectors": {
+                  "type": "array",
+                  "description": "Vector to use for the query.",
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "type": "number",
+                      "format": "float"
+                    }
+                  }
+                },
+                "queryStrings": {
+                  "type": "array",
+                  "description": "Text to embed and use for the query.",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "topK": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 1000,
+                  "default": 10,
+                  "description": "Number of results to return."
+                },
+                "efSearch": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 1000,
+                  "default": 40,
+                  "description": "The size of the dynamic candidate list for searching the index graph."
+                },
+                "includeValues": {
+                  "type": "boolean",
+                  "default": false,
+                  "description": "Include the values of the vectors in the response."
+                },
+                "includeMetadata": {
+                  "type": "boolean",
+                  "default": false,
+                  "description": "Include the metadata of the vectors in the response."
+                },
+                "filters": {
+                  "type": "object",
+                  "description": "Filter metadata by key-value pairs."
+                }
+              },
+              "required": [
+                "name",
+                "model"
               ]
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Query results.",
             "content": {
               "application/json": {
                 "schema": {
-                  "title": "CLIPResponse",
+                  "title": "QueryVectorStoreResponse",
                   "type": "object",
                   "properties": {
-                    "data": {
-                      "title": "CLIPOut",
+                    "results": {
                       "type": "array",
+                      "description": "Query results.",
                       "items": {
-                        "title": "CLIPEmbedding",
+                        "type": "array",
+                        "items": {
+                          "title": "VectorStoreQueryResult",
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "description": "Document ID."
+                            },
+                            "distance": {
+                              "type": "number",
+                              "format": "float",
+                              "description": "Similarity score."
+                            },
+                            "vector": {
+                              "type": "array",
+                              "description": "Embedding vector.",
+                              "items": {
+                                "type": "number",
+                                "format": "float"
+                              }
+                            },
+                            "metadata": {
+                              "type": "object",
+                              "description": "Document metadata."
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "distance"
+                          ]
+                        }
+                      }
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "Vector store name."
+                    },
+                    "model": {
+                      "type": "string",
+                      "description": "Selected embedding model",
+                      "enum": [
+                        "jina-v2",
+                        "clip"
+                      ]
+                    },
+                    "metric": {
+                      "type": "string",
+                      "enum": [
+                        "cosine",
+                        "l2",
+                        "inner"
+                      ],
+                      "description": "The distance metric used for the query."
+                    }
+                  },
+                  "required": [
+                    "results"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/vectors/fetch": {
+      "post": {
+        "tags": [
+          "rest-api"
+        ],
+        "summary": "Fetch vectors",
+        "operationId": "FetchVectors",
+        "description": "Fetch vectors from a vector store.",
+        "parameters": [
+          {
+            "in": "query",
+            "schema": {
+              "title": "GetVectorsParams",
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Vector store name."
+                },
+                "model": {
+                  "type": "string",
+                  "description": "Selected embedding model",
+                  "enum": [
+                    "jina-v2",
+                    "clip"
+                  ]
+                },
+                "ids": {
+                  "type": "array",
+                  "description": "Document IDs to retrieve.",
+                  "items": {
+                    "type": "string"
+                  },
+                  "maxItems": 100
+                }
+              },
+              "required": [
+                "name",
+                "model",
+                "ids"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Vector data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "GetVectorsResponse",
+                  "type": "object",
+                  "properties": {
+                    "vectors": {
+                      "type": "array",
+                      "description": "Retrieved vectors.",
+                      "items": {
+                        "title": "Vector",
                         "type": "object",
+                        "description": "Canonical representation of document with embedding vector.",
                         "properties": {
-                          "vector": {
+                          "id": {
                             "type": "string",
+                            "description": "Document ID."
+                          },
+                          "vector": {
+                            "type": "array",
                             "description": "Embedding vector.",
                             "items": {
                               "type": "number",
                               "format": "float"
                             }
                           },
-                          "id": {
-                            "type": "string",
-                            "description": "Document id."
-                          },
                           "metadata": {
                             "type": "object",
-                            "description": "Additional metadata stored in embedding document."
+                            "description": "Document metadata.",
+                            "default": {}
                           }
                         },
                         "required": [
-                          "vector"
+                          "id",
+                          "vector",
+                          "metadata"
                         ]
                       }
-                    },
-                    "error": {
-                      "title": "ErrorOut",
-                      "type": "object",
-                      "properties": {
-                        "type": {
-                          "type": "string",
-                          "enum": [
-                            "api_error",
-                            "invalid_request_error"
-                          ],
-                          "description": "The type of error returned."
-                        },
-                        "message": {
-                          "type": "string",
-                          "description": "A message providing more details about the error."
+                    }
+                  },
+                  "required": [
+                    "vectors"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/vectors/update": {
+      "post": {
+        "tags": [
+          "rest-api"
+        ],
+        "summary": "Update vectors",
+        "operationId": "UpdateVectors",
+        "description": "Update vectors in a vector store.",
+        "parameters": [
+          {
+            "in": "query",
+            "schema": {
+              "title": "UpdateVectorsParams",
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Vector store name."
+                },
+                "model": {
+                  "type": "string",
+                  "description": "Selected embedding model",
+                  "enum": [
+                    "jina-v2",
+                    "clip"
+                  ]
+                },
+                "vectors": {
+                  "type": "array",
+                  "description": "Vectors to upsert.",
+                  "items": {
+                    "title": "UpdateVectorParams",
+                    "description": "Document to update.",
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "Document ID."
+                      },
+                      "vector": {
+                        "type": "array",
+                        "description": "Embedding vector.",
+                        "items": {
+                          "type": "number",
+                          "format": "float"
                         }
                       },
-                      "required": [
-                        "type",
-                        "message"
-                      ]
+                      "metadata": {
+                        "type": "object",
+                        "description": "Document metadata.",
+                        "default": {}
+                      }
+                    },
+                    "required": [
+                      "id"
+                    ]
+                  },
+                  "maxItems": 100
+                }
+              },
+              "required": [
+                "name",
+                "model",
+                "vectors"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Count of updated vectors.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "VectorUpdateCountResponse",
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "integer",
+                      "description": "Number of vectors modified."
                     }
-                  }
+                  },
+                  "required": [
+                    "count"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/vectors/delete": {
+      "post": {
+        "tags": [
+          "rest-api"
+        ],
+        "summary": "Delete vectors",
+        "operationId": "DeleteVectors",
+        "description": "Delete vectors in a vector store.",
+        "parameters": [
+          {
+            "in": "query",
+            "schema": {
+              "title": "DeleteVectorsParams",
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Vector store name."
+                },
+                "model": {
+                  "type": "string",
+                  "description": "Selected embedding model",
+                  "enum": [
+                    "jina-v2",
+                    "clip"
+                  ]
+                },
+                "ids": {
+                  "type": "array",
+                  "description": "Document IDs to delete.",
+                  "items": {
+                    "type": "string"
+                  },
+                  "maxItems": 100
+                }
+              },
+              "required": [
+                "name",
+                "model",
+                "ids"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Count of deleted vectors.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "VectorUpdateCountResponse",
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "integer",
+                      "description": "Number of vectors modified."
+                    }
+                  },
+                  "required": [
+                    "count"
+                  ]
                 }
               }
             }
@@ -1699,8 +4857,40 @@
   },
   "tags": [
     {
-      "name": "models",
-      "description": "Models"
+      "name": "language-generation",
+      "description": "Language Generation"
+    },
+    {
+      "name": "vision-language-generation",
+      "description": "Vision Language Generation"
+    },
+    {
+      "name": "image-generation",
+      "description": "Image Generation"
+    },
+    {
+      "name": "object-detection",
+      "description": "Object Detection"
+    },
+    {
+      "name": "image-utilities",
+      "description": "Image Utilities"
+    },
+    {
+      "name": "audio-recognition",
+      "description": "Audio Recognition"
+    },
+    {
+      "name": "audio-generation",
+      "description": "Audio Generation"
+    },
+    {
+      "name": "semantic-space",
+      "description": "Semantic Space"
+    },
+    {
+      "name": "rest-api",
+      "description": "Standalone REST APIs"
     }
   ]
 }

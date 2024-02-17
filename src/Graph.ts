@@ -27,7 +27,8 @@ export class Graph implements Graph.SubstrateGraph {
   static compose(...graphs: [Graph, ...Graph[]]): Graph {
     graphs.forEach((g) => {
       const result = Schema.GraphSchema.safeParse(g);
-      if (!result.success) console.log('[warn] Possibly incompatible Graph:', g);
+      if (!result.success)
+        console.log("[warn] Possibly incompatible Graph:", g);
     });
 
     const initialArgs = Object.assign({}, ...graphs.map((g) => g.initialArgs));
@@ -35,7 +36,10 @@ export class Graph implements Graph.SubstrateGraph {
     return new Graph(initialArgs, dag);
   }
 
-  constructor(initialArgs: Graph.InitialArgs = {}, DAG: DiGraph = new DiGraph()) {
+  constructor(
+    initialArgs: Graph.InitialArgs = {},
+    DAG: DiGraph = new DiGraph()
+  ) {
     if (!(DAG instanceof DiGraph)) {
       throw new TypeError(`Expected DiGraph, got ${DAG}`);
     }
@@ -49,10 +53,11 @@ export class Graph implements Graph.SubstrateGraph {
    */
   withNode(node: Graph.SubstrateNode): Graph {
     const result = Schema.NodeSchema.safeParse(node);
-    if (!result.success) console.warn('[warn] Possibly incompatible Node:', node);
+    if (!result.success)
+      console.warn("[warn] Possibly incompatible Node:", node);
 
     const g = DiGraph.compose(this.graph);
-    g.addNode([node.id, node]);
+    g.addNode([node.id as string, node]);
     return new Graph(this.initialArgs, g);
   }
 
@@ -64,12 +69,13 @@ export class Graph implements Graph.SubstrateGraph {
     const edgeData = adapter ? { adapter } : data;
 
     const result = Schema.EdgeSchema.safeParse([from, to, edgeData]);
-    if (!result.success) console.warn('[warn] Possibly incompatible Edge:', [from, to, edgeData]);
+    if (!result.success)
+      console.warn("[warn] Possibly incompatible Edge:", [from, to, edgeData]);
 
     const g = DiGraph.compose(this.graph);
-    g.addNode([from.id, from]);
-    g.addNode([to.id, to]);
-    g.addEdge([from.id, to.id, edgeData]);
+    g.addNode([from.id as string, from]);
+    g.addNode([to.id as string, to]);
+    g.addEdge([from.id as string, to.id as string, edgeData]);
     return new Graph(this.initialArgs, g);
   }
 
@@ -119,13 +125,14 @@ export class Graph implements Graph.SubstrateGraph {
 
   toJSON(): Graph.SubstrateGraph {
     const json = {
-      nodes:this.nodes,
+      nodes: this.nodes,
       edges: this.edges,
       initial_args: this.initial_args,
     };
 
     const result = Schema.GraphSchema.safeParse(json);
-    if (!result.success) console.warn('[warn] Possibly incompatible Graph', json);
+    if (!result.success)
+      console.warn("[warn] Possibly incompatible Graph", json);
 
     return json;
   }
@@ -154,7 +161,11 @@ export namespace Graph {
   /**
    * `NewSubstrateEdge` represents a new connection between two `Node` items. They are directed from left to right and may also contain `Attributes`.
    */
-  export type NewSubstrateEdge = [Graph.SubstrateNode, Graph.SubstrateNode, Function | {}];
+  export type NewSubstrateEdge = [
+    Graph.SubstrateNode,
+    Graph.SubstrateNode,
+    Function | {},
+  ];
 
   /**
    * `EdgeIds` represents the connection between two `Node` items by `Id`. They are directed from left to right and may also contain `Attributes`.
