@@ -1,5 +1,5 @@
 {
-  "name": "substrate",
+  "name": "@substratelabs/substrate-typescript",
   "version": "0.1.0",
   "description": "The official SDK for the Substrate API",
   "keywords": [],
