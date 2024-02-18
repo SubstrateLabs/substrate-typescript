@@ -12,7 +12,7 @@ export class RawEndpoint {
   }
 
   async endpoint(path: string, args: any) {
-    return this.#request(path, args);
+    return this.#request(`/${path}`, args);
   }
 
   async #request(path: string, args: any): Promise<any> {
