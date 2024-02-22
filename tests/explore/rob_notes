@@ -1,0 +1,159 @@
+# "A NODE": WITH NO REFS
+a = FooNode(foo=1)
+-> FN(foo:1, bar:None, nested:None)
+# presumed JSON
+{
+  class: "FooNode",
+  args: {
+    foo: 1,
+    bar: null,
+    nested: null,
+  }
+}
+
+
+# "B NODE": WITH SIMPLE POINTER REF
+b = FooNode(foo="b", bar=a.ref.foo, nested=[{"nest_id": "first"}, {"nest_id": "second"}])
+-> FN(foo:b, bar:{'__$$SB_GRAPH_OP_ID$$__': 'OPID_1'}, nested:[{'nest_id': 'first'}, {'nest_id': 'second'}])
+# presumed JSON
+{
+  class: "FooNode",
+  args: {
+    foo: "b",
+    bar: {'__$$SB_GRAPH_OP_ID$$__': 'OPID_1'},
+    nested: [{'nest_id': 'first'}, {'nest_id': 'second'}],
+  }
+}
+# SIMPLE REF
+a.ref.foo
+-> {'id': 'OPID_1', 'op_stack': [{'type': 'get', 'args': {'key': 'foo', 'accessor': 'attr', 'op_id': None}}], 'op_graph_edges': [], 'node_graph_edges': [], 'origin_node': 'NODEID_A'}
+{
+  'id': 'OPID_1',
+  'op_stack': [
+    {
+      'type': 'get',
+      'args': {
+        'key': 'foo', 
+        'accessor': 'attr',
+        'op_id': None
+      }
+    }
+  ],
+  'op_graph_edges': [],
+  'node_graph_edges': [],
+  'origin_node': 'NODEID_A'
+}
+
+
+# "C NODE": WITH "COMPOUND REF" AND SIMPLE POINTER REF
+c = FooNode(foo="c", bar=b.ref.nested[a.ref.foo].nest_id, nested={"baz": b.ref.bar})
+-> FN(foo:c, bar:{'__$$SB_GRAPH_OP_ID$$__': 'OPID_2'}, nested:{'baz': {'__$$SB_GRAPH_OP_ID$$__': 'OPID_4'}})
+# presumed JSON
+{
+  class: "FooNode",
+  args: {
+    foo: "c",
+    bar: {'__$$SB_GRAPH_OP_ID$$__': 'OPID_2'},
+    nested: {'baz': {'__$$SB_GRAPH_OP_ID$$__': 'OPID_4'}}
+  }
+}
+# "COMPOUND REF"
+b.ref.nested[a.ref.foo].nest_id
+-> {'id': 'OPID_2', 'op_stack': [{'type': 'get', 'args': {'key': 'nested', 'accessor': 'attr', 'op_id': None}}, {'type': 'get', 'args': {'op_id': 'OPID_3', 'accessor': 'item', 'key': None}}, {'type': 'get', 'args': {'key': 'nest_id', 'accessor': 'attr', 'op_id': None}}], 'op_graph_edges': [('OPID_3', 'OPID_2')], 'node_graph_edges': [('NODEID_A', 'NODEID_B')], 'origin_node': 'NODEID_B'}
+{
+  'id': 'OPID_2', 
+  'op_stack': [
+    {'type': 'get', 'args': {'key': 'nested', 'accessor': 'attr', 'op_id': None}},
+    {'type': 'get', 'args': {'op_id': 'OPID_3', 'accessor': 'item', 'key': None}},
+    {'type': 'get', 'args': {'key': 'nest_id', 'accessor': 'attr', 'op_id': None}}
+  ], 
+  'op_graph_edges': [
+    ('OPID_3', 'OPID_2')
+  ],
+  'node_graph_edges': [
+    ('NODEID_A', 'NODEID_B')
+  ],
+  'origin_node': 'NODEID_B'
+}
+# NB, the above OpStackItem references another Op
+{
+  'id': 'OPID_3', 
+  'op_stack': [
+    {'type': 'get', 'args': {'key': 'foo', 'accessor': 'attr', 'op_id': None}}
+  ],
+  'op_graph_edges': [],
+  'node_graph_edges': [],
+  'origin_node': 'NODEID_A'
+}
+
+# NESTED REF
+b.ref.bar
+{
+  'id': 'OPID_4', 
+  'op_stack': [
+    {'type': 'get', 'args': {'key': 'bar', 'accessor': 'attr', 'op_id': None}}
+  ], 
+  'op_graph_edges': [], 
+  'node_graph_edges': [], 
+  'origin_node': 'NODEID_B'
+}
+# NB - shouldn't this OP contain a NodeGraphEdge that implies that "c" depends on "b": b -> c?
+
+
+
+
+# presumed types
+type FooNode["args"] = {
+  foo: string | number | OpId;
+  bar: string | null | OpId;
+  nested: { nest_id: string}[] | { baz: string } | { baz: OpId } | OpId;
+}
+type Edge<T> = [T["id"], T["id"]];
+type OpId = {
+  __$$SB_GRAPH_OP_ID$$__: string;
+}
+type Op = {
+  id: string;
+  op_stack: OpStackItem[];
+  op_graph_edges: Edge<Op>[];
+  node_graph_edges: Edge<FooNode>[];
+  origin_node: FooNode["id"]; // presumed id of node.
+}
+type OpStackItem = {
+  type: "get";
+  args: {
+    key: string | null; // specifies accessor key, may be null when pointing to value that resolves to string
+    accessor: "attr" | "item" | ...;
+    op_id: Op["id"] | null; // location of value
+  }
+};
+type OpStackItem = GetAttr | GetItem;
+type GetAttr = { // maybe?
+  type: "get";
+  args: {
+    key: string;
+    accessor: "attr";
+    op_id: null;
+  }
+}
+type GetItem = { // maybe?
+  type: "get";
+  args: {
+    key: null;
+    accessor: "item";
+    op_id: Op["id"];
+  }
+}
+
+
+
+
+
+
+
+
+{'id': 'OPID_1', 'op_stack': [{'type': 'get', 'args': {'key': 'foo', 'accessor': 'attr', 'op_id': None}}], 'op_graph_edges': [], 'node_graph_edges': [], 'origin_node': 'NODEID_A'}
+{'id': 'OPID_3', 'op_stack': [{'type': 'get', 'args': {'key': 'foo', 'accessor': 'attr', 'op_id': None}}], 'op_graph_edges': [], 'node_graph_edges': [], 'origin_node': 'NODEID_A'}
+{'id': 'OPID_2', 'op_stack': [{'type': 'get', 'args': {'key': 'nested', 'accessor': 'attr', 'op_id': None}}, {'type': 'get', 'args': {'op_id': 'OPID_3', 'accessor': 'item', 'key': None}}, {'type': 'get', 'args': {'key': 'nest_id', 'accessor': 'attr', 'op_id': None}}], 'op_graph_edges': [('OPID_3', 'OPID_2')], 'node_graph_edges': [('NODEID_A', 'NODEID_B')], 'origin_node': 'NODEID_B'}
+{'id': 'OPID_4', 'op_stack': [{'type': 'get', 'args': {'key': 'bar', 'accessor': 'attr', 'op_id': None}}], 'op_graph_edges': [], 'node_graph_edges': [], 'origin_node': 'NODEID_B'}
+
