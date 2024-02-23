@@ -217,6 +217,7 @@ describe("Graph", () => {
       const b = new Node().setArgs({ c: 1, d: 2 });
       const g = new Graph().withEdge([a, b, { something: "unknown" }]);
       const graphJSON = g.toJSON();
+      console.log(JSON.stringify(graphJSON))
 
       expect(graphJSON.nodes[0]!.args).toEqual({ a: 1, b: 2 });
       expect(graphJSON.edges[0]![2]).toEqual({ something: "unknown" });

@@ -1,5 +1,5 @@
-import { Substrate } from "substrate";
-import { APIResponse } from "substrate/APIResponse";
+import {Substrate} from "substrate";
+import {APIResponse} from "substrate/APIResponse";
 
 /**
  *  Raw access to the Substrate API
@@ -22,8 +22,7 @@ export class RawEndpoint {
     const response = await fetch(url, options);
 
     if (response.ok) {
-      const json = await response.json();
-      return json;
+      return response.json();
     } else {
       const res = new APIResponse(response);
       res.debug();

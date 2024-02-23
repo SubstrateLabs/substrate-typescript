@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from "uuid";
+
 type NodeLike = {
   id: string;
 };
@@ -23,10 +25,14 @@ export type RefFactory = {
   getTarget: (ref: Ref) => Ref;
 };
 
+// This is used internally to allow Ref objects to be used as props via a special string. We might want to make this configurable, but also may be OK with a well-known obscure value.
+const ID_PREFIX = "$$ID:";
+
+// This is a "virtual" property that exists on Proxied Refs and used to get the unproxied Ref.
+const TARGET_PROP = "$target";
+
 export const makeFactory = (refs: RefTable = {}): RefFactory => {
-  const ID_PREFIX = "$$ID:"; // This is used internally to allow Ref objects to be used as props via a special string. We might want to make this configurable, but also may be OK with a well-known obscure value.
-  const TARGET_PROP = "$target"; // This is a "virtual" property that exists on Proxied Refs and used to get the unproxied Ref.
-  const id = () => `${ID_PREFIX}${Object.keys(refs).length}`; // incrementing id, used internally to track refs created by factory.
+  const id = () => `${ID_PREFIX}${uuidv4()}`;
 
   const makeProxiedRef = (node: NodeLike, props: any[] = []): any => {
     const ref: Ref = {

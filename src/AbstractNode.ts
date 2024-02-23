@@ -1,7 +1,9 @@
 import { v4 as uuidv4 } from "uuid";
 import * as Schema from "substrate/API/Schema";
 import { Adapter } from "substrate/Adapter";
+import * as Refs from "substrate/Refs";
 
+const refFactory = Refs.makeFactory();
 /**
  * @internal
  * `AbstractNode` is an abstract class that defines the minumum functionality for implementing other `Node`-classes.
@@ -32,10 +34,14 @@ export abstract class AbstractNode<T extends Schema.Node> {
    */
   _from_adapters?: Adapter.Adapter[];
 
-  constructor(id: string = uuidv4()) {
+  protected constructor(id: string = uuidv4()) {
     const result = Schema.IdSchema.safeParse(id);
     if (!result.success) console.warn('Warning: Possibly incompatible Id', id);
     this.id = id;
+  }
+
+  get ref() {
+    return refFactory.makeProxiedRef(this) as any;
   }
 
   /**

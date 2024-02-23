@@ -1,6 +1,6 @@
 import { expect, describe, test } from "vitest";
-import * as Refs from "./Refs";
-import * as Rob from "./Rob";
+import * as Refs from "substrate/Refs";
+import * as Operation from "substrate/Operation";
 import { DiGraph } from "substrate/DiGraph";
 
 const refFactory = Refs.makeFactory();
@@ -42,7 +42,7 @@ class Graph {
   add(node: NodeLike): Graph {
     this.graph.addNode([node.id, node]);
 
-    const { ops } = Rob.replaceRefsWithOps(node.args, refFactory, this.newId);
+    const { ops } = Operation.replaceRefsWithOps(node.args, refFactory, this.newId);
     ops.forEach((op) => {
       this.graph.addEdge([op.origin_node, node.id, {}]);
     });
@@ -61,7 +61,7 @@ class Graph {
   toJSON() {
     return this.nodes.reduce(
       (acc, node) => {
-        const { args, ops } = Rob.replaceRefsWithOps(
+        const { args, ops } = Operation.replaceRefsWithOps(
           node.args,
           refFactory,
           this.newId,
@@ -103,7 +103,7 @@ const idGenerator = (start: number = 1) => {
 
 describe("Rob's Example", () => {
   test("a.ref.foo", () => {
-    let result = Rob.refOps(refFactory.getTarget(b.args.bar), idGenerator());
+    let result = Operation.refOps(refFactory.getTarget(b.args.bar), idGenerator());
     expect(result).toEqual([
       {
         id: "1",
@@ -118,7 +118,7 @@ describe("Rob's Example", () => {
   });
 
   test("b.ref.nested[a.ref.foo].nest_id", () => {
-    let result = Rob.refOps(refFactory.getTarget(c.args.bar), idGenerator());
+    let result = Operation.refOps(refFactory.getTarget(c.args.bar), idGenerator());
     expect(result).toEqual([
       {
         id: "2",
@@ -156,7 +156,7 @@ describe("Rob's Example", () => {
   });
 
   test("b.ref.bar", () => {
-    let result = Rob.refOps(
+    let result = Operation.refOps(
       refFactory.getTarget(c.args.nested.baz),
       idGenerator(),
     );
@@ -182,7 +182,7 @@ describe("Rob's Example", () => {
     //   bar: b.ref.nested[a.ref.foo].nest_id,
     //   nested: { baz: b.ref.bar },
     // });
-    let { args, ops } = Rob.replaceRefsWithOps(c.args, refFactory, idGenerator());
+    let { args, ops } = Operation.replaceRefsWithOps(c.args, refFactory, idGenerator());
 
     expect(args).toEqual({
       foo: "c",
@@ -232,6 +232,7 @@ describe("Rob's Example", () => {
   test("graph serialization (include ops, op-id replacement)", () => {
     const g = new Graph(idGenerator()).add(a).add(b).add(c);
     const result = g.toJSON();
+    console.log(JSON.stringify(result))
     expect(result.nodes.length).toEqual(3);
     expect(result.ops.length).toEqual(4);
     expect(result).toMatchSnapshot();

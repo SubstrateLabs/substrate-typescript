@@ -1,8 +1,8 @@
 #!/usr/bin/env -S npm run ts-node --transpileOnly
 
-import { Substrate } from "substrate";
+import { Substrate } from "@substratelabs/substrate-typescript";
 
-const SUBSTRATE_API_KEY = process.env["SUBSTRATE_API_KEY"];
+const SUBSTRATE_API_KEY = process.env["SUBSTRATE_API_KEY"] || 'apik_iZEX5aSqBFrmyOAQrSe6c0SWjWfxv0if';
 
 const substrate = new Substrate({ apiKey: SUBSTRATE_API_KEY });
 
@@ -17,5 +17,5 @@ const args = {
   steps: 4,
 };
 
-const result = await substrate.raw.endpoint("GenerateImage", args);
+const result = await substrate.raw.endpoint("stablediffusion", args);
 console.log(JSON.stringify(result));
