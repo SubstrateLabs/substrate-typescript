@@ -2,7 +2,7 @@
 
 import { Substrate } from "@substratelabs/substrate-typescript";
 
-const SUBSTRATE_API_KEY = process.env["SUBSTRATE_API_KEY"] || 'apik_iZEX5aSqBFrmyOAQrSe6c0SWjWfxv0if';
+const SUBSTRATE_API_KEY = process.env["SUBSTRATE_API_KEY"];
 
 const substrate = new Substrate({ apiKey: SUBSTRATE_API_KEY });
 
