@@ -88,7 +88,7 @@ export class Substrate {
       method: "POST",
       headers: this.headers(),
       body: JSON.stringify(body),
-    };
+    }
   }
 
   headers() {

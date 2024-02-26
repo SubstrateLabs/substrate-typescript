@@ -1,6 +1,6 @@
 #!/usr/bin/env -S npm run ts-node --transpileOnly
 
-import { Substrate } from "@substratelabs/substrate-typescript";
+import { Substrate } from "substrate";
 
 const SUBSTRATE_API_KEY = process.env["SUBSTRATE_API_KEY"];
 
