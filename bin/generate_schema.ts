@@ -8,8 +8,12 @@ const ok = (message: string) => console.log("\x1b[32m✓\x1b[0m", message);
 
 execSync(`mkdir -p ${DIR}`);
 
-execSync(`curl ${OPEN_API_URL} > ${DIR}/OpenAPI.json`);
-ok(`Downloaded the OpenAPI schema from ${OPEN_API_URL}`);
+if (process.argv[2] && process.argv[2] === '--local') {
+  console.log('Skipping OpenAPI download');
+} else {
+  execSync(`curl ${OPEN_API_URL} > ${DIR}/OpenAPI.json`);
+  ok(`Downloaded the OpenAPI schema from ${OPEN_API_URL}`);
+}
 
 execSync(
   `npx json-refs resolve ${DIR}/OpenAPI.json > ${DIR}/OpenAPI.resolved.json`
