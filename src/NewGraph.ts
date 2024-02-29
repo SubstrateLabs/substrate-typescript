@@ -8,21 +8,21 @@ const refFactory = Refs.makeFactory();
 
 // simplified graph for demo
 export class NewGraph {
-  newId: any;
+  newOpId: any;
   graph: DiGraph;
 
-  // do we need this to be a generator?
-  idGenerator = (start: number = 1) => {
+  // I think this is mostly for debugging legibility
+  opIdGenerator = (start: number = 1) => {
     let n = start;
     return () => {
-      const id = n.toString();
+      const id = "op_" + n.toString();
       n = n + 1;
       return id;
     };
   };
 
   constructor(DAG: DiGraph = new DiGraph()) {
-    this.newId = this.idGenerator();
+    this.newOpId = this.opIdGenerator();
     this.graph = DAG;
   }
 
@@ -32,10 +32,10 @@ export class NewGraph {
     const { ops } = Operation.replaceRefsWithOps(
       node.args,
       refFactory,
-      this.newId
+      this.newOpId
     );
     ops.forEach((op) => {
-      this.graph.addEdge([op.origin_node, node.id, {}]);
+      this.graph.addEdge([op.origin_node_id, node.id, {}]);
     });
 
     return this;
@@ -55,7 +55,7 @@ export class NewGraph {
         const { args, ops } = Operation.replaceRefsWithOps(
           node.args,
           refFactory,
-          this.newId
+          this.newOpId
         );
 
         return {
