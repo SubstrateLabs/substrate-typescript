@@ -1,6 +1,10 @@
 #!/usr/bin/env -S npm run ts-node --transpileOnly
 
-import { Substrate, GenerateImage, Graph } from "@substratelabs/substrate-typescript";
+import {
+  Substrate,
+  GenerateImage,
+  Graph,
+} from "@substratelabs/substrate-typescript";
 
 const SUBSTRATE_API_KEY = process.env["SUBSTRATE_API_KEY"];
 
@@ -14,13 +18,13 @@ const args: GenerateImage.Args = {
   width: 512,
   height: 512,
   refinement: 8,
+  store: "hosted",
 };
 
-const genImg = new GenerateImage()
-  .setArgs(args)
-  .setOutput();
+const genImg = new GenerateImage().setArgs(args).setOutput();
 
-const graph = new Graph().withNode(genImg)
+const graph = new Graph().withNode(genImg);
+console.log(graph.toJSON());
 
 const result = await substrate.compose(graph);
 console.log(JSON.stringify(result));

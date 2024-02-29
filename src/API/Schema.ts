@@ -1,3 +1,8 @@
+/**
+ * There's some cruft here from previous verions
+ * Remove the adapter + old model schemas
+ * Think about autogeneration
+ * */
 import { z } from "zod";
 // import * as OpenAPIZod from "substrate/API/OpenAPIZod";
 
@@ -98,8 +103,13 @@ export const BaseNodeSchema = z
   .strict();
 export type BaseNode = z.infer<typeof BaseNodeSchema>;
 
-export const ModelNodeSchema = BaseNodeSchema.extend({
-});
+// NOTE: new node schemas - ben
+export const GenerateImageSchema = BaseNodeSchema.strict();
+export type GenerateImage = z.infer<typeof GenerateImageSchema>;
+export const GenerateTextSchema = BaseNodeSchema.strict();
+export type GenerateText = z.infer<typeof GenerateTextSchema>;
+
+export const ModelNodeSchema = BaseNodeSchema.extend({});
 export type ModelNodeInput = BaseNodeInput;
 export type ModelNode = z.infer<typeof ModelNodeSchema>;
 
@@ -123,17 +133,10 @@ export const StableDiffusionArgsSchema = z.object({
   guidance_scale: z.number().optional(),
 });
 export type StableDiffusionInput = z.infer<typeof StableDiffusionArgsSchema>;
-export const GenerateImageSchema = BaseNodeSchema
-  .strict();
-
-export type GenerateImage = z.infer<typeof GenerateImageSchema>;
 
 // NOTE: may be deprecated soon.
 // see: https://github.com/colinhacks/zod/issues/2106
-export const NodeSchema = z.union([
-  BaseNodeSchema,
-  ModelNodeSchema,
-]);
+export const NodeSchema = z.union([BaseNodeSchema, ModelNodeSchema]);
 export type Node = z.infer<typeof NodeSchema>;
 
 export const AdapterCodeSchema = z.object({

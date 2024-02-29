@@ -1,4 +1,5 @@
 #!/usr/bin/env -S npm run ts-node --transpileOnly
+// TODO: remove this example + the raw standalone endpoint call
 
 import { Substrate } from "@substratelabs/substrate-typescript";
 
