@@ -13,7 +13,7 @@ type Params = {
  * Generates images.
  */
 export class GenerateImage extends AbstractNode<GenerateImage.Node> implements GenerateImage.Node {
-  readonly class = "GenerateImage" as const;
+  readonly node = "GenerateImage" as const;
   readonly extra_args = {};
 
   constructor(params: Params = {}) {

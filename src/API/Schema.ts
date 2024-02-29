@@ -90,7 +90,7 @@ export const BaseNodeSchema = z
     id: IdSchema,
     args: BaseNodeArgsSchema.partial(),
     extra_args: z.object({}),
-    _global_output_keys: z.array(z.string()).optional(),
+    node: z.string(),
     _should_output_globally: z.boolean().optional(),
     _to_adapters: z.array(AdapterSchema).optional(),
     _from_adapters: z.array(AdapterSchema).optional(),
