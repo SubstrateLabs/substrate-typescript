@@ -50,9 +50,8 @@ export class NewGraph {
   }
 
   toJSON() {
-    return this.nodes.reduce(
+    let res: any = this.nodes.reduce(
       (acc, node) => {
-        console.log("node", node);
         const { args, ops } = Operation.replaceRefsWithOps(
           node.args,
           refFactory,
@@ -66,5 +65,8 @@ export class NewGraph {
       },
       { nodes: [], ops: [] }
     );
+    res.edges = this.edges;
+    res.initial_args = {}; // TODO
+    return res;
   }
 }

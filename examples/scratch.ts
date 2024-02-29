@@ -2,26 +2,27 @@
 
 import {
   Substrate,
-  GenerateText,
-  Graph,
+  NewGenerateText,
+  NewGraph,
+  // Graph,
 } from "@substratelabs/substrate-typescript";
 
 const SUBSTRATE_API_KEY = process.env["SUBSTRATE_API_KEY"];
 
 const substrate = new Substrate({
   apiKey: SUBSTRATE_API_KEY,
-  baseUrl: "https://api.substrate.run",
+  baseUrl: "https://api-staging.substrate.run",
 });
 
-const args: GenerateText.Args = {
+const a = new NewGenerateText({
   prompt:
     "say something terse and poetic about your existence as an assistant, keep it concise, just one sentence",
-};
+});
+// const b = new NewGenerateText({ args: { prompt: a.ref.text } });
+// const g = new NewGraph().add(a).add(b);
+const g = new NewGraph().add(a);
+const json = g.toJSON();
+console.log(JSON.stringify(json, null, 2));
 
-const genImg = new GenerateText().setArgs(args).setOutput();
-
-const graph = new Graph().withNode(genImg);
-console.log(JSON.stringify(graph.toJSON(), null, 2));
-
-const result = await substrate.compose(graph);
+const result = await substrate.compose(json);
 console.log(JSON.stringify(result));

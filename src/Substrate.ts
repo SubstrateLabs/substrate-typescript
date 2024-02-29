@@ -1,9 +1,9 @@
-import {SubstrateError} from "substrate/Error";
-import {VERSION} from "substrate/version";
+import { SubstrateError } from "substrate/Error";
+import { VERSION } from "substrate/version";
 import OpenAPIjson from "substrate/API/OpenAPI.json";
-import {RawEndpoint} from "substrate/endpoints/RawEndpoint";
-import {Graph} from "substrate/Graph";
-import {APIResponse} from "substrate/APIResponse";
+import { RawEndpoint } from "substrate/endpoints/RawEndpoint";
+import { Graph } from "substrate/Graph";
+import { APIResponse } from "substrate/APIResponse";
 
 type Configuration = {
   /**
@@ -60,7 +60,8 @@ export class Substrate {
   async compose(graph: Graph): Promise<any> {
     const url = this.baseUrl + "/compose";
 
-    const response = await fetch(url, this.requestOptions({ dag: graph }));
+    const req = { dag: graph };
+    const response = await fetch(url, this.requestOptions(req));
 
     if (response.ok) {
       return response.json();
@@ -88,7 +89,7 @@ export class Substrate {
       method: "POST",
       headers: this.headers(),
       body: JSON.stringify(body),
-    }
+    };
   }
 
   headers() {
