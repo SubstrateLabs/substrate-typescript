@@ -1,6 +1,6 @@
 #!/usr/bin/env -S npm run ts-node --transpileOnly
 
-import { Substrate, StableDiffusion, Graph } from "substrate";
+import { Substrate, StableDiffusion, Graph } from "@substratelabs/substrate-typescript";
 
 const SUBSTRATE_API_KEY = process.env["SUBSTRATE_API_KEY"];
 

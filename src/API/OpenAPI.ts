@@ -54,33 +54,47 @@ export interface paths {
      */
     post: operations["MultiControlledGenerateImage"];
   };
-  "/InpaintImage": {
+  "/GenerativeEditImage": {
     /**
-     * InpaintImage
-     * @description Modify part of an image using a mask.
+     * GenerativeEditImage
+     * @description Edit an image with a generative model.
      */
-    post: operations["InpaintImage"];
+    post: operations["GenerativeEditImage"];
   };
-  "/MultiInpaintImage": {
+  "/MultiGenerativeEditImage": {
     /**
-     * MultiInpaintImage
+     * MultiGenerativeEditImage
      * @description Generate multiple image outputs modifying part of an image using a mask.
      */
-    post: operations["MultiInpaintImage"];
+    post: operations["MultiGenerativeEditImage"];
   };
-  "/SegmentImage": {
+  "/FillMask": {
     /**
-     * SegmentImage
-     * @description Detect segments in an image.
+     * FillMask
+     * @description Edit an image with a generative model.
      */
-    post: operations["SegmentImage"];
+    post: operations["FillMask"];
   };
-  "/CreateMaskImage": {
+  "/UpscaleImage": {
     /**
-     * CreateMaskImage
-     * @description Create a mask image with a bounding box or path.
+     * UpscaleImage
+     * @description Upscale an image.
      */
-    post: operations["CreateMaskImage"];
+    post: operations["UpscaleImage"];
+  };
+  "/RemoveBackground": {
+    /**
+     * RemoveBackground
+     * @description Remove the background from an image, with the option to return the foreground as a mask.
+     */
+    post: operations["RemoveBackground"];
+  };
+  "/DetectSegment": {
+    /**
+     * DetectSegment
+     * @description Detect a segment in an image.
+     */
+    post: operations["DetectSegment"];
   };
   "/TranscribeMedia": {
     /**
@@ -505,11 +519,11 @@ export interface components {
           seed: number;
         }[];
     };
-    /** InpaintImageIn */
-    InpaintImageIn: {
+    /** GenerativeEditImageIn */
+    GenerativeEditImageIn: {
       /** @description Input image. */
       image_uri: string;
-      /** @description Mask image that controls which pixels are inpainted. If unset, the entire image is modified (image-to-image). */
+      /** @description Mask image that controls which pixels are inpainted. If unset, the entire image is edited (image-to-image). */
       mask_image_uri?: string;
       /** @description Input prompt. */
       prompt: string;
@@ -543,18 +557,18 @@ export interface components {
       /** @description Seed for deterministic generation. Default is a random seed. */
       seed?: number;
     };
-    /** InpaintImageOut */
-    InpaintImageOut: {
+    /** GenerativeEditImageOut */
+    GenerativeEditImageOut: {
       /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
       image_uri: string;
       /** @description The random noise seed used for generation. */
       seed: number;
     };
-    /** MultiInpaintImageIn */
-    MultiInpaintImageIn: {
+    /** MultiGenerativeEditImageIn */
+    MultiGenerativeEditImageIn: {
       /** @description Input image. */
       image_uri: string;
-      /** @description Mask image that controls which pixels are inpainted. If unset, the entire image is modified (image-to-image). */
+      /** @description Mask image that controls which pixels are edited (inpainting). If unset, the entire image is edited (image-to-image). */
       mask_image_uri?: string;
       /** @description Input prompt. */
       prompt: string;
@@ -596,8 +610,8 @@ export interface components {
       /** @description Random noise seeds. Default is random seeds for each generation. */
       seeds?: number[];
     };
-    /** MultiInpaintImageOut */
-    MultiInpaintImageOut: {
+    /** MultiGenerativeEditImageOut */
+    MultiGenerativeEditImageOut: {
       outputs: {
           /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
           image_uri: string;
@@ -628,117 +642,86 @@ export interface components {
        */
       y2: number;
     };
-    /** MaskPath */
-    MaskPath: {
-      /** @description x values. */
-      x: number[];
-      /** @description y values. */
-      y: number[];
+    /** Point */
+    Point: {
+      /** @description X position. */
+      x: number;
+      /** @description Y position. */
+      y: number;
     };
-    /** ImageSegment */
-    ImageSegment: {
-      /** @description Detected object class. */
-      object_class: string;
-      /**
-       * Format: float
-       * @description Classification confidence.
-       */
-      confidence: number;
-      /** BoundingBox */
-      box: {
-        /**
-         * Format: float
-         * @description Top left corner x.
-         */
-        x1: number;
-        /**
-         * Format: float
-         * @description Top left corner y.
-         */
-        y1: number;
-        /**
-         * Format: float
-         * @description Bottom right corner x.
-         */
-        x2: number;
-        /**
-         * Format: float
-         * @description Bottom right corner y.
-         */
-        y2: number;
-      };
-      /** MaskPath */
-      path: {
-        /** @description x values. */
-        x: number[];
-        /** @description y values. */
-        y: number[];
-      };
-    };
-    /** SegmentImageIn */
-    SegmentImageIn: {
+    /** FillMaskIn */
+    FillMaskIn: {
       /** @description Input image. */
       image_uri: string;
+      /** @description Mask image that controls which pixels are inpainted. */
+      mask_image_uri: string;
+      /**
+       * @description Selected model.
+       * @default big-lama
+       * @enum {string}
+       */
+      model?: "big-lama";
       /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
     };
-    /** SegmentImageOut */
-    SegmentImageOut: {
-      /** @description Detected segments. */
-      objects: {
-          /** @description Detected object class. */
-          object_class: string;
-          /**
-           * Format: float
-           * @description Classification confidence.
-           */
-          confidence: number;
-          /** BoundingBox */
-          box: {
-            /**
-             * Format: float
-             * @description Top left corner x.
-             */
-            x1: number;
-            /**
-             * Format: float
-             * @description Top left corner y.
-             */
-            y1: number;
-            /**
-             * Format: float
-             * @description Bottom right corner x.
-             */
-            x2: number;
-            /**
-             * Format: float
-             * @description Bottom right corner y.
-             */
-            y2: number;
-          };
-          /** MaskPath */
-          path: {
-            /** @description x values. */
-            x: number[];
-            /** @description y values. */
-            y: number[];
-          };
-        }[];
+    /** FillMaskOut */
+    FillMaskOut: {
       /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
       image_uri: string;
-      /** @description Width of image, in pixels. */
-      width: number;
-      /** @description Height of image, in pixels. */
-      height: number;
     };
-    /** CreateMaskImageIn */
-    CreateMaskImageIn: {
-      /** @description Width of image, in pixels. */
-      width: number;
-      /** @description Height of image, in pixels. */
-      height: number;
+    /** RemoveBackgroundIn */
+    RemoveBackgroundIn: {
+      /** @description Input image. */
+      image_uri: string;
+      /** @description Return a mask image instead of the original content. */
+      return_mask?: boolean;
+      /** @description Hex value background color. Transparent if unset. */
+      background_color?: string;
+      /**
+       * @description Selected model.
+       * @default isnet
+       * @enum {string}
+       */
+      model?: "isnet";
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      store?: string;
+    };
+    /** RemoveBackgroundOut */
+    RemoveBackgroundOut: {
+      /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+      image_uri: string;
+    };
+    /** UpscaleImageIn */
+    UpscaleImageIn: {
+      /** @description Input image. */
+      image_uri: string;
+      /**
+       * @description Selected model.
+       * @default real-esrgan-x4
+       * @enum {string}
+       */
+      model?: "real-esrgan-x4";
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      store?: string;
+    };
+    /** UpscaleImageOut */
+    UpscaleImageOut: {
+      /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+      image_uri: string;
+    };
+    /** DetectSegmentIn */
+    DetectSegmentIn: {
+      /** @description Input image. */
+      image_uri: string;
+      /** Point */
+      point_prompt?: {
+        /** @description X position. */
+        x: number;
+        /** @description Y position. */
+        y: number;
+      };
       /** BoundingBox */
-      box?: {
+      box_prompt?: {
         /**
          * Format: float
          * @description Top left corner x.
@@ -760,20 +743,13 @@ export interface components {
          */
         y2: number;
       };
-      /** MaskPath */
-      path?: {
-        /** @description x values. */
-        x: number[];
-        /** @description y values. */
-        y: number[];
-      };
       /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
     };
-    /** CreateMaskImageOut */
-    CreateMaskImageOut: {
-      /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-      image_uri: string;
+    /** DetectSegmentOut */
+    DetectSegmentOut: {
+      /** @description Detected segment in 'mask image' format. Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+      mask_image_uri?: string;
     };
     /** TranscribeMediaIn */
     TranscribeMediaIn: {
@@ -815,12 +791,12 @@ export interface components {
        * Format: float
        * @description Start time of word, in seconds.
        */
-      start: number;
+      start?: number;
       /**
        * Format: float
        * @description End time of word, in seconds.
        */
-      end: number;
+      end?: number;
       /** @description ID of speaker, if `diarize` is enabled. */
       speaker?: string;
     };
@@ -848,12 +824,12 @@ export interface components {
            * Format: float
            * @description Start time of word, in seconds.
            */
-          start: number;
+          start?: number;
           /**
            * Format: float
            * @description End time of word, in seconds.
            */
-          end: number;
+          end?: number;
           /** @description ID of speaker, if `diarize` is enabled. */
           speaker?: string;
         }[];
@@ -896,12 +872,12 @@ export interface components {
                * Format: float
                * @description Start time of word, in seconds.
                */
-              start: number;
+              start?: number;
               /**
                * Format: float
                * @description End time of word, in seconds.
                */
-              end: number;
+              end?: number;
               /** @description ID of speaker, if `diarize` is enabled. */
               speaker?: string;
             }[];
@@ -924,7 +900,7 @@ export interface components {
       /** @description Reference audio used to synthesize the speaker. If unset, a default speaker voice will be used. */
       audio_uri?: string;
       /**
-       * @description Language of input text. Supported languages: `en, es, fr, de, it, pt, pl, tr, ru, nl, cs, ar, zh, hu, ko, hi`.
+       * @description Language of input text. Supported languages: `en, de, fr, es, it, pt, pl, zh, ar, cs, ru, nl, tr, hu, ko`.
        * @default en
        */
       language?: string;
@@ -1208,31 +1184,33 @@ export interface components {
        */
       model: "jina-v2" | "clip";
       /** @description Document IDs to use for the query. */
-      queryIds?: string[];
+      query_ids?: string[];
+      /** @description Image URIs to embed and use for the query. */
+      query_image_uris?: string[];
       /** @description Vector to use for the query. */
-      queryVectors?: number[][];
+      query_vectors?: number[][];
       /** @description Text to embed and use for the query. */
-      queryStrings?: string[];
+      query_strings?: string[];
       /**
        * @description Number of results to return.
        * @default 10
        */
-      topK?: number;
+      top_k?: number;
       /**
        * @description The size of the dynamic candidate list for searching the index graph.
        * @default 40
        */
-      efSearch?: number;
+      ef_search?: number;
       /**
        * @description Include the values of the vectors in the response.
        * @default false
        */
-      includeValues?: boolean;
+      include_values?: boolean;
       /**
        * @description Include the metadata of the vectors in the response.
        * @default false
        */
-      includeMetadata?: boolean;
+      include_metadata?: boolean;
       /** @description Filter metadata by key-value pairs. */
       filters?: Record<string, never>;
     };
@@ -1704,16 +1682,16 @@ export interface operations {
     };
   };
   /**
-   * InpaintImage
-   * @description Modify part of an image using a mask.
+   * GenerativeEditImage
+   * @description Edit an image with a generative model.
    */
-  InpaintImage: {
+  GenerativeEditImage: {
     parameters: {
       query?: {
         undefined?: {
           /** @description Input image. */
           image_uri: string;
-          /** @description Mask image that controls which pixels are inpainted. If unset, the entire image is modified (image-to-image). */
+          /** @description Mask image that controls which pixels are inpainted. If unset, the entire image is edited (image-to-image). */
           mask_image_uri?: string;
           /** @description Input prompt. */
           prompt: string;
@@ -1764,16 +1742,16 @@ export interface operations {
     };
   };
   /**
-   * MultiInpaintImage
+   * MultiGenerativeEditImage
    * @description Generate multiple image outputs modifying part of an image using a mask.
    */
-  MultiInpaintImage: {
+  MultiGenerativeEditImage: {
     parameters: {
       query?: {
         undefined?: {
           /** @description Input image. */
           image_uri: string;
-          /** @description Mask image that controls which pixels are inpainted. If unset, the entire image is modified (image-to-image). */
+          /** @description Mask image that controls which pixels are edited (inpainting). If unset, the entire image is edited (image-to-image). */
           mask_image_uri?: string;
           /** @description Input prompt. */
           prompt: string;
@@ -1834,15 +1812,23 @@ export interface operations {
     };
   };
   /**
-   * SegmentImage
-   * @description Detect segments in an image.
+   * FillMask
+   * @description Edit an image with a generative model.
    */
-  SegmentImage: {
+  FillMask: {
     parameters: {
       query?: {
         undefined?: {
           /** @description Input image. */
           image_uri: string;
+          /** @description Mask image that controls which pixels are inpainted. */
+          mask_image_uri: string;
+          /**
+           * @description Selected model.
+           * @default big-lama
+           * @enum {string}
+           */
+          model?: "big-lama";
           /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
         };
@@ -1853,71 +1839,102 @@ export interface operations {
       200: {
         content: {
           "application/json": {
-            /** @description Detected segments. */
-            objects: {
-                /** @description Detected object class. */
-                object_class: string;
-                /**
-                 * Format: float
-                 * @description Classification confidence.
-                 */
-                confidence: number;
-                /** BoundingBox */
-                box: {
-                  /**
-                   * Format: float
-                   * @description Top left corner x.
-                   */
-                  x1: number;
-                  /**
-                   * Format: float
-                   * @description Top left corner y.
-                   */
-                  y1: number;
-                  /**
-                   * Format: float
-                   * @description Bottom right corner x.
-                   */
-                  x2: number;
-                  /**
-                   * Format: float
-                   * @description Bottom right corner y.
-                   */
-                  y2: number;
-                };
-                /** MaskPath */
-                path: {
-                  /** @description x values. */
-                  x: number[];
-                  /** @description y values. */
-                  y: number[];
-                };
-              }[];
             /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
             image_uri: string;
-            /** @description Width of image, in pixels. */
-            width: number;
-            /** @description Height of image, in pixels. */
-            height: number;
           };
         };
       };
     };
   };
   /**
-   * CreateMaskImage
-   * @description Create a mask image with a bounding box or path.
+   * UpscaleImage
+   * @description Upscale an image.
    */
-  CreateMaskImage: {
+  UpscaleImage: {
     parameters: {
       query?: {
         undefined?: {
-          /** @description Width of image, in pixels. */
-          width: number;
-          /** @description Height of image, in pixels. */
-          height: number;
+          /** @description Input image. */
+          image_uri: string;
+          /**
+           * @description Selected model.
+           * @default real-esrgan-x4
+           * @enum {string}
+           */
+          model?: "real-esrgan-x4";
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+          store?: string;
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": {
+            /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+            image_uri: string;
+          };
+        };
+      };
+    };
+  };
+  /**
+   * RemoveBackground
+   * @description Remove the background from an image, with the option to return the foreground as a mask.
+   */
+  RemoveBackground: {
+    parameters: {
+      query?: {
+        undefined?: {
+          /** @description Input image. */
+          image_uri: string;
+          /** @description Return a mask image instead of the original content. */
+          return_mask?: boolean;
+          /** @description Hex value background color. Transparent if unset. */
+          background_color?: string;
+          /**
+           * @description Selected model.
+           * @default isnet
+           * @enum {string}
+           */
+          model?: "isnet";
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+          store?: string;
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": {
+            /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+            image_uri: string;
+          };
+        };
+      };
+    };
+  };
+  /**
+   * DetectSegment
+   * @description Detect a segment in an image.
+   */
+  DetectSegment: {
+    parameters: {
+      query?: {
+        undefined?: {
+          /** @description Input image. */
+          image_uri: string;
+          /** Point */
+          point_prompt?: {
+            /** @description X position. */
+            x: number;
+            /** @description Y position. */
+            y: number;
+          };
           /** BoundingBox */
-          box?: {
+          box_prompt?: {
             /**
              * Format: float
              * @description Top left corner x.
@@ -1939,13 +1956,6 @@ export interface operations {
              */
             y2: number;
           };
-          /** MaskPath */
-          path?: {
-            /** @description x values. */
-            x: number[];
-            /** @description y values. */
-            y: number[];
-          };
           /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
         };
@@ -1956,8 +1966,8 @@ export interface operations {
       200: {
         content: {
           "application/json": {
-            /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-            image_uri: string;
+            /** @description Detected segment in 'mask image' format. Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+            mask_image_uri?: string;
           };
         };
       };
@@ -2034,12 +2044,12 @@ export interface operations {
                      * Format: float
                      * @description Start time of word, in seconds.
                      */
-                    start: number;
+                    start?: number;
                     /**
                      * Format: float
                      * @description End time of word, in seconds.
                      */
-                    end: number;
+                    end?: number;
                     /** @description ID of speaker, if `diarize` is enabled. */
                     speaker?: string;
                   }[];
@@ -2072,7 +2082,7 @@ export interface operations {
           /** @description Reference audio used to synthesize the speaker. If unset, a default speaker voice will be used. */
           audio_uri?: string;
           /**
-           * @description Language of input text. Supported languages: `en, es, fr, de, it, pt, pl, tr, ru, nl, cs, ar, zh, hu, ko, hi`.
+           * @description Language of input text. Supported languages: `en, de, fr, es, it, pt, pl, zh, ar, cs, ru, nl, tr, hu, ko`.
            * @default en
            */
           language?: string;
@@ -2405,31 +2415,33 @@ export interface operations {
            */
           model: "jina-v2" | "clip";
           /** @description Document IDs to use for the query. */
-          queryIds?: string[];
+          query_ids?: string[];
+          /** @description Image URIs to embed and use for the query. */
+          query_image_uris?: string[];
           /** @description Vector to use for the query. */
-          queryVectors?: number[][];
+          query_vectors?: number[][];
           /** @description Text to embed and use for the query. */
-          queryStrings?: string[];
+          query_strings?: string[];
           /**
            * @description Number of results to return.
            * @default 10
            */
-          topK?: number;
+          top_k?: number;
           /**
            * @description The size of the dynamic candidate list for searching the index graph.
            * @default 40
            */
-          efSearch?: number;
+          ef_search?: number;
           /**
            * @description Include the values of the vectors in the response.
            * @default false
            */
-          includeValues?: boolean;
+          include_values?: boolean;
           /**
            * @description Include the metadata of the vectors in the response.
            * @default false
            */
-          includeMetadata?: boolean;
+          include_metadata?: boolean;
           /** @description Filter metadata by key-value pairs. */
           filters?: Record<string, never>;
         };

@@ -653,8 +653,8 @@
           "outputs"
         ]
       },
-      "InpaintImageIn": {
-        "title": "InpaintImageIn",
+      "GenerativeEditImageIn": {
+        "title": "GenerativeEditImageIn",
         "type": "object",
         "properties": {
           "image_uri": {
@@ -663,7 +663,7 @@
           },
           "mask_image_uri": {
             "type": "string",
-            "description": "Mask image that controls which pixels are inpainted. If unset, the entire image is modified (image-to-image)."
+            "description": "Mask image that controls which pixels are inpainted. If unset, the entire image is edited (image-to-image)."
           },
           "prompt": {
             "type": "string",
@@ -716,8 +716,8 @@
           "prompt"
         ]
       },
-      "InpaintImageOut": {
-        "title": "InpaintImageOut",
+      "GenerativeEditImageOut": {
+        "title": "GenerativeEditImageOut",
         "type": "object",
         "properties": {
           "image_uri": {
@@ -734,8 +734,8 @@
           "seed"
         ]
       },
-      "MultiInpaintImageIn": {
-        "title": "MultiInpaintImageIn",
+      "MultiGenerativeEditImageIn": {
+        "title": "MultiGenerativeEditImageIn",
         "type": "object",
         "properties": {
           "image_uri": {
@@ -744,7 +744,7 @@
           },
           "mask_image_uri": {
             "type": "string",
-            "description": "Mask image that controls which pixels are inpainted. If unset, the entire image is modified (image-to-image)."
+            "description": "Mask image that controls which pixels are edited (inpainting). If unset, the entire image is edited (image-to-image)."
           },
           "prompt": {
             "type": "string",
@@ -813,14 +813,14 @@
           "num_images"
         ]
       },
-      "MultiInpaintImageOut": {
-        "title": "MultiInpaintImageOut",
+      "MultiGenerativeEditImageOut": {
+        "title": "MultiGenerativeEditImageOut",
         "type": "object",
         "properties": {
           "outputs": {
             "type": "array",
             "items": {
-              "title": "InpaintImageOut",
+              "title": "GenerativeEditImageOut",
               "type": "object",
               "properties": {
                 "image_uri": {
@@ -875,25 +875,17 @@
           "y2"
         ]
       },
-      "MaskPath": {
-        "title": "MaskPath",
+      "Point": {
+        "title": "Point",
         "type": "object",
         "properties": {
           "x": {
-            "type": "array",
-            "description": "x values.",
-            "items": {
-              "type": "number",
-              "format": "float"
-            }
+            "type": "integer",
+            "description": "X position."
           },
           "y": {
-            "type": "array",
-            "description": "y values.",
-            "items": {
-              "type": "number",
-              "format": "float"
-            }
+            "type": "integer",
+            "description": "Y position."
           }
         },
         "required": [
@@ -901,95 +893,73 @@
           "y"
         ]
       },
-      "ImageSegment": {
-        "title": "ImageSegment",
-        "type": "object",
-        "properties": {
-          "object_class": {
-            "type": "string",
-            "description": "Detected object class."
-          },
-          "confidence": {
-            "type": "number",
-            "format": "float",
-            "minimum": 0,
-            "maximum": 1,
-            "description": "Classification confidence."
-          },
-          "box": {
-            "title": "BoundingBox",
-            "type": "object",
-            "properties": {
-              "x1": {
-                "type": "number",
-                "format": "float",
-                "description": "Top left corner x."
-              },
-              "y1": {
-                "type": "number",
-                "format": "float",
-                "description": "Top left corner y."
-              },
-              "x2": {
-                "type": "number",
-                "format": "float",
-                "description": "Bottom right corner x."
-              },
-              "y2": {
-                "type": "number",
-                "format": "float",
-                "description": "Bottom right corner y."
-              }
-            },
-            "required": [
-              "x1",
-              "y1",
-              "x2",
-              "y2"
-            ]
-          },
-          "path": {
-            "title": "MaskPath",
-            "type": "object",
-            "properties": {
-              "x": {
-                "type": "array",
-                "description": "x values.",
-                "items": {
-                  "type": "number",
-                  "format": "float"
-                }
-              },
-              "y": {
-                "type": "array",
-                "description": "y values.",
-                "items": {
-                  "type": "number",
-                  "format": "float"
-                }
-              }
-            },
-            "required": [
-              "x",
-              "y"
-            ]
-          }
-        },
-        "required": [
-          "object_class",
-          "confidence",
-          "box",
-          "path"
-        ]
-      },
-      "SegmentImageIn": {
-        "title": "SegmentImageIn",
+      "FillMaskIn": {
+        "title": "FillMaskIn",
         "type": "object",
         "properties": {
           "image_uri": {
             "type": "string",
             "description": "Input image."
           },
+          "mask_image_uri": {
+            "type": "string",
+            "description": "Mask image that controls which pixels are inpainted."
+          },
+          "model": {
+            "type": "string",
+            "enum": [
+              "big-lama"
+            ],
+            "description": "Selected model.",
+            "default": "big-lama"
+          },
+          "store": {
+            "type": "string",
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+          }
+        },
+        "required": [
+          "image_uri",
+          "mask_image_uri"
+        ]
+      },
+      "FillMaskOut": {
+        "title": "FillMaskOut",
+        "type": "object",
+        "properties": {
+          "image_uri": {
+            "type": "string",
+            "description": "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided."
+          }
+        },
+        "required": [
+          "image_uri"
+        ]
+      },
+      "RemoveBackgroundIn": {
+        "title": "RemoveBackgroundIn",
+        "type": "object",
+        "properties": {
+          "image_uri": {
+            "type": "string",
+            "description": "Input image."
+          },
+          "return_mask": {
+            "type": "boolean",
+            "description": "Return a mask image instead of the original content."
+          },
+          "background_color": {
+            "type": "string",
+            "description": "Hex value background color. Transparent if unset."
+          },
+          "model": {
+            "type": "string",
+            "enum": [
+              "isnet"
+            ],
+            "description": "Selected model.",
+            "default": "isnet"
+          },
           "store": {
             "type": "string",
             "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
@@ -999,128 +969,84 @@
           "image_uri"
         ]
       },
-      "SegmentImageOut": {
-        "title": "SegmentImageOut",
+      "RemoveBackgroundOut": {
+        "title": "RemoveBackgroundOut",
         "type": "object",
         "properties": {
-          "objects": {
-            "type": "array",
-            "description": "Detected segments.",
-            "items": {
-              "title": "ImageSegment",
-              "type": "object",
-              "properties": {
-                "object_class": {
-                  "type": "string",
-                  "description": "Detected object class."
-                },
-                "confidence": {
-                  "type": "number",
-                  "format": "float",
-                  "minimum": 0,
-                  "maximum": 1,
-                  "description": "Classification confidence."
-                },
-                "box": {
-                  "title": "BoundingBox",
-                  "type": "object",
-                  "properties": {
-                    "x1": {
-                      "type": "number",
-                      "format": "float",
-                      "description": "Top left corner x."
-                    },
-                    "y1": {
-                      "type": "number",
-                      "format": "float",
-                      "description": "Top left corner y."
-                    },
-                    "x2": {
-                      "type": "number",
-                      "format": "float",
-                      "description": "Bottom right corner x."
-                    },
-                    "y2": {
-                      "type": "number",
-                      "format": "float",
-                      "description": "Bottom right corner y."
-                    }
-                  },
-                  "required": [
-                    "x1",
-                    "y1",
-                    "x2",
-                    "y2"
-                  ]
-                },
-                "path": {
-                  "title": "MaskPath",
-                  "type": "object",
-                  "properties": {
-                    "x": {
-                      "type": "array",
-                      "description": "x values.",
-                      "items": {
-                        "type": "number",
-                        "format": "float"
-                      }
-                    },
-                    "y": {
-                      "type": "array",
-                      "description": "y values.",
-                      "items": {
-                        "type": "number",
-                        "format": "float"
-                      }
-                    }
-                  },
-                  "required": [
-                    "x",
-                    "y"
-                  ]
-                }
-              },
-              "required": [
-                "object_class",
-                "confidence",
-                "box",
-                "path"
-              ]
-            }
-          },
           "image_uri": {
             "type": "string",
             "description": "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided."
-          },
-          "width": {
-            "type": "integer",
-            "description": "Width of image, in pixels."
-          },
-          "height": {
-            "type": "integer",
-            "description": "Height of image, in pixels."
           }
         },
         "required": [
-          "objects",
-          "image_uri",
-          "width",
-          "height"
+          "image_uri"
         ]
       },
-      "CreateMaskImageIn": {
-        "title": "CreateMaskImageIn",
+      "UpscaleImageIn": {
+        "title": "UpscaleImageIn",
         "type": "object",
         "properties": {
-          "width": {
-            "type": "integer",
-            "description": "Width of image, in pixels."
+          "image_uri": {
+            "type": "string",
+            "description": "Input image."
           },
-          "height": {
-            "type": "integer",
-            "description": "Height of image, in pixels."
+          "model": {
+            "type": "string",
+            "enum": [
+              "real-esrgan-x4"
+            ],
+            "description": "Selected model.",
+            "default": "real-esrgan-x4"
           },
-          "box": {
+          "store": {
+            "type": "string",
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+          }
+        },
+        "required": [
+          "image_uri"
+        ]
+      },
+      "UpscaleImageOut": {
+        "title": "UpscaleImageOut",
+        "type": "object",
+        "properties": {
+          "image_uri": {
+            "type": "string",
+            "description": "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided."
+          }
+        },
+        "required": [
+          "image_uri"
+        ]
+      },
+      "DetectSegmentIn": {
+        "title": "DetectSegmentIn",
+        "type": "object",
+        "properties": {
+          "image_uri": {
+            "type": "string",
+            "description": "Input image."
+          },
+          "point_prompt": {
+            "title": "Point",
+            "type": "object",
+            "properties": {
+              "x": {
+                "type": "integer",
+                "description": "X position."
+              },
+              "y": {
+                "type": "integer",
+                "description": "Y position."
+              }
+            },
+            "required": [
+              "x",
+              "y"
+            ]
+          },
+          "box_prompt": {
             "title": "BoundingBox",
             "type": "object",
             "properties": {
@@ -1152,53 +1078,27 @@
               "y2"
             ]
           },
-          "path": {
-            "title": "MaskPath",
-            "type": "object",
-            "properties": {
-              "x": {
-                "type": "array",
-                "description": "x values.",
-                "items": {
-                  "type": "number",
-                  "format": "float"
-                }
-              },
-              "y": {
-                "type": "array",
-                "description": "y values.",
-                "items": {
-                  "type": "number",
-                  "format": "float"
-                }
-              }
-            },
-            "required": [
-              "x",
-              "y"
-            ]
-          },
           "store": {
             "type": "string",
             "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
           }
         },
         "required": [
-          "width",
-          "height"
+          "image_uri"
         ]
       },
-      "CreateMaskImageOut": {
-        "title": "CreateMaskImageOut",
+      "DetectSegmentOut": {
+        "title": "DetectSegmentOut",
         "type": "object",
         "properties": {
-          "image_uri": {
+          "mask_image_uri": {
             "type": "string",
-            "description": "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided."
+            "description": "Detected segment in 'mask image' format. Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided."
           }
         },
         "required": [
-          "image_uri"
+          "box",
+          "path"
         ]
       },
       "TranscribeMediaIn": {
@@ -1267,9 +1167,7 @@
           }
         },
         "required": [
-          "word",
-          "start",
-          "end"
+          "word"
         ]
       },
       "TranscribedSegment": {
@@ -1321,9 +1219,7 @@
                 }
               },
               "required": [
-                "word",
-                "start",
-                "end"
+                "word"
               ]
             }
           }
@@ -1413,9 +1309,7 @@
                       }
                     },
                     "required": [
-                      "word",
-                      "start",
-                      "end"
+                      "word"
                     ]
                   }
                 }
@@ -1470,7 +1364,7 @@
           "language": {
             "type": "string",
             "default": "en",
-            "description": "Language of input text. Supported languages: `en, es, fr, de, it, pt, pl, tr, ru, nl, cs, ar, zh, hu, ko, hi`."
+            "description": "Language of input text. Supported languages: `en, de, fr, es, it, pt, pl, zh, ar, cs, ru, nl, tr, hu, ko`."
           },
           "store": {
             "type": "string",
@@ -2157,14 +2051,21 @@
               "clip"
             ]
           },
-          "queryIds": {
+          "query_ids": {
             "type": "array",
             "description": "Document IDs to use for the query.",
             "items": {
               "type": "string"
             }
           },
-          "queryVectors": {
+          "query_image_uris": {
+            "type": "array",
+            "description": "Image URIs to embed and use for the query.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "query_vectors": {
             "type": "array",
             "description": "Vector to use for the query.",
             "items": {
@@ -2175,33 +2076,33 @@
               }
             }
           },
-          "queryStrings": {
+          "query_strings": {
             "type": "array",
             "description": "Text to embed and use for the query.",
             "items": {
               "type": "string"
             }
           },
-          "topK": {
+          "top_k": {
             "type": "integer",
             "minimum": 1,
             "maximum": 1000,
             "default": 10,
             "description": "Number of results to return."
           },
-          "efSearch": {
+          "ef_search": {
             "type": "integer",
             "minimum": 1,
             "maximum": 1000,
             "default": 40,
             "description": "The size of the dynamic candidate list for searching the index graph."
           },
-          "includeValues": {
+          "include_values": {
             "type": "boolean",
             "default": false,
             "description": "Include the values of the vectors in the response."
           },
-          "includeMetadata": {
+          "include_metadata": {
             "type": "boolean",
             "default": false,
             "description": "Include the metadata of the vectors in the response."
@@ -3079,19 +2980,19 @@
         }
       }
     },
-    "/InpaintImage": {
+    "/GenerativeEditImage": {
       "post": {
-        "summary": "InpaintImage",
-        "operationId": "InpaintImage",
+        "summary": "GenerativeEditImage",
+        "operationId": "GenerativeEditImage",
         "tags": [
           "image-generation"
         ],
-        "description": "Modify part of an image using a mask.",
+        "description": "Edit an image with a generative model.",
         "parameters": [
           {
             "in": "query",
             "schema": {
-              "title": "InpaintImageIn",
+              "title": "GenerativeEditImageIn",
               "type": "object",
               "properties": {
                 "image_uri": {
@@ -3100,7 +3001,7 @@
                 },
                 "mask_image_uri": {
                   "type": "string",
-                  "description": "Mask image that controls which pixels are inpainted. If unset, the entire image is modified (image-to-image)."
+                  "description": "Mask image that controls which pixels are inpainted. If unset, the entire image is edited (image-to-image)."
                 },
                 "prompt": {
                   "type": "string",
@@ -3161,7 +3062,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "title": "InpaintImageOut",
+                  "title": "GenerativeEditImageOut",
                   "type": "object",
                   "properties": {
                     "image_uri": {
@@ -3184,10 +3085,10 @@
         }
       }
     },
-    "/MultiInpaintImage": {
+    "/MultiGenerativeEditImage": {
       "post": {
-        "summary": "MultiInpaintImage",
-        "operationId": "MultiInpaintImage",
+        "summary": "MultiGenerativeEditImage",
+        "operationId": "MultiGenerativeEditImage",
         "tags": [
           "image-generation"
         ],
@@ -3196,7 +3097,7 @@
           {
             "in": "query",
             "schema": {
-              "title": "MultiInpaintImageIn",
+              "title": "MultiGenerativeEditImageIn",
               "type": "object",
               "properties": {
                 "image_uri": {
@@ -3205,7 +3106,7 @@
                 },
                 "mask_image_uri": {
                   "type": "string",
-                  "description": "Mask image that controls which pixels are inpainted. If unset, the entire image is modified (image-to-image)."
+                  "description": "Mask image that controls which pixels are edited (inpainting). If unset, the entire image is edited (image-to-image)."
                 },
                 "prompt": {
                   "type": "string",
@@ -3282,13 +3183,13 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "title": "MultiInpaintImageOut",
+                  "title": "MultiGenerativeEditImageOut",
                   "type": "object",
                   "properties": {
                     "outputs": {
                       "type": "array",
                       "items": {
-                        "title": "InpaintImageOut",
+                        "title": "GenerativeEditImageOut",
                         "type": "object",
                         "properties": {
                           "image_uri": {
@@ -3317,24 +3218,99 @@
         }
       }
     },
-    "/SegmentImage": {
+    "/FillMask": {
       "post": {
-        "summary": "SegmentImage",
-        "operationId": "SegmentImage",
+        "summary": "FillMask",
+        "operationId": "FillMask",
         "tags": [
-          "object-detection"
+          "image-generation"
         ],
-        "description": "Detect segments in an image.",
+        "description": "Edit an image with a generative model.",
         "parameters": [
           {
             "in": "query",
             "schema": {
-              "title": "SegmentImageIn",
+              "title": "FillMaskIn",
               "type": "object",
               "properties": {
                 "image_uri": {
                   "type": "string",
                   "description": "Input image."
+                },
+                "mask_image_uri": {
+                  "type": "string",
+                  "description": "Mask image that controls which pixels are inpainted."
+                },
+                "model": {
+                  "type": "string",
+                  "enum": [
+                    "big-lama"
+                  ],
+                  "description": "Selected model.",
+                  "default": "big-lama"
+                },
+                "store": {
+                  "type": "string",
+                  "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+                }
+              },
+              "required": [
+                "image_uri",
+                "mask_image_uri"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "FillMaskOut",
+                  "type": "object",
+                  "properties": {
+                    "image_uri": {
+                      "type": "string",
+                      "description": "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided."
+                    }
+                  },
+                  "required": [
+                    "image_uri"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/UpscaleImage": {
+      "post": {
+        "summary": "UpscaleImage",
+        "operationId": "UpscaleImage",
+        "tags": [
+          "image-utilities"
+        ],
+        "description": "Upscale an image.",
+        "parameters": [
+          {
+            "in": "query",
+            "schema": {
+              "title": "UpscaleImageIn",
+              "type": "object",
+              "properties": {
+                "image_uri": {
+                  "type": "string",
+                  "description": "Input image."
+                },
+                "model": {
+                  "type": "string",
+                  "enum": [
+                    "real-esrgan-x4"
+                  ],
+                  "description": "Selected model.",
+                  "default": "real-esrgan-x4"
                 },
                 "store": {
                   "type": "string",
@@ -3353,112 +3329,16 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "title": "SegmentImageOut",
+                  "title": "UpscaleImageOut",
                   "type": "object",
                   "properties": {
-                    "objects": {
-                      "type": "array",
-                      "description": "Detected segments.",
-                      "items": {
-                        "title": "ImageSegment",
-                        "type": "object",
-                        "properties": {
-                          "object_class": {
-                            "type": "string",
-                            "description": "Detected object class."
-                          },
-                          "confidence": {
-                            "type": "number",
-                            "format": "float",
-                            "minimum": 0,
-                            "maximum": 1,
-                            "description": "Classification confidence."
-                          },
-                          "box": {
-                            "title": "BoundingBox",
-                            "type": "object",
-                            "properties": {
-                              "x1": {
-                                "type": "number",
-                                "format": "float",
-                                "description": "Top left corner x."
-                              },
-                              "y1": {
-                                "type": "number",
-                                "format": "float",
-                                "description": "Top left corner y."
-                              },
-                              "x2": {
-                                "type": "number",
-                                "format": "float",
-                                "description": "Bottom right corner x."
-                              },
-                              "y2": {
-                                "type": "number",
-                                "format": "float",
-                                "description": "Bottom right corner y."
-                              }
-                            },
-                            "required": [
-                              "x1",
-                              "y1",
-                              "x2",
-                              "y2"
-                            ]
-                          },
-                          "path": {
-                            "title": "MaskPath",
-                            "type": "object",
-                            "properties": {
-                              "x": {
-                                "type": "array",
-                                "description": "x values.",
-                                "items": {
-                                  "type": "number",
-                                  "format": "float"
-                                }
-                              },
-                              "y": {
-                                "type": "array",
-                                "description": "y values.",
-                                "items": {
-                                  "type": "number",
-                                  "format": "float"
-                                }
-                              }
-                            },
-                            "required": [
-                              "x",
-                              "y"
-                            ]
-                          }
-                        },
-                        "required": [
-                          "object_class",
-                          "confidence",
-                          "box",
-                          "path"
-                        ]
-                      }
-                    },
                     "image_uri": {
                       "type": "string",
                       "description": "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided."
-                    },
-                    "width": {
-                      "type": "integer",
-                      "description": "Width of image, in pixels."
-                    },
-                    "height": {
-                      "type": "integer",
-                      "description": "Height of image, in pixels."
                     }
                   },
                   "required": [
-                    "objects",
-                    "image_uri",
-                    "width",
-                    "height"
+                    "image_uri"
                   ]
                 }
               }
@@ -3467,30 +3347,114 @@
         }
       }
     },
-    "/CreateMaskImage": {
+    "/RemoveBackground": {
       "post": {
-        "summary": "CreateMaskImage",
-        "operationId": "CreateMaskImage",
+        "summary": "RemoveBackground",
+        "operationId": "RemoveBackground",
         "tags": [
           "image-utilities"
         ],
-        "description": "Create a mask image with a bounding box or path.",
+        "description": "Remove the background from an image, with the option to return the foreground as a mask.",
         "parameters": [
           {
             "in": "query",
             "schema": {
-              "title": "CreateMaskImageIn",
+              "title": "RemoveBackgroundIn",
               "type": "object",
               "properties": {
-                "width": {
-                  "type": "integer",
-                  "description": "Width of image, in pixels."
+                "image_uri": {
+                  "type": "string",
+                  "description": "Input image."
                 },
-                "height": {
-                  "type": "integer",
-                  "description": "Height of image, in pixels."
+                "return_mask": {
+                  "type": "boolean",
+                  "description": "Return a mask image instead of the original content."
                 },
-                "box": {
+                "background_color": {
+                  "type": "string",
+                  "description": "Hex value background color. Transparent if unset."
+                },
+                "model": {
+                  "type": "string",
+                  "enum": [
+                    "isnet"
+                  ],
+                  "description": "Selected model.",
+                  "default": "isnet"
+                },
+                "store": {
+                  "type": "string",
+                  "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+                }
+              },
+              "required": [
+                "image_uri"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "RemoveBackgroundOut",
+                  "type": "object",
+                  "properties": {
+                    "image_uri": {
+                      "type": "string",
+                      "description": "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided."
+                    }
+                  },
+                  "required": [
+                    "image_uri"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/DetectSegment": {
+      "post": {
+        "summary": "DetectSegment",
+        "operationId": "DetectSegment",
+        "tags": [
+          "object-detection"
+        ],
+        "description": "Detect a segment in an image.",
+        "parameters": [
+          {
+            "in": "query",
+            "schema": {
+              "title": "DetectSegmentIn",
+              "type": "object",
+              "properties": {
+                "image_uri": {
+                  "type": "string",
+                  "description": "Input image."
+                },
+                "point_prompt": {
+                  "title": "Point",
+                  "type": "object",
+                  "properties": {
+                    "x": {
+                      "type": "integer",
+                      "description": "X position."
+                    },
+                    "y": {
+                      "type": "integer",
+                      "description": "Y position."
+                    }
+                  },
+                  "required": [
+                    "x",
+                    "y"
+                  ]
+                },
+                "box_prompt": {
                   "title": "BoundingBox",
                   "type": "object",
                   "properties": {
@@ -3522,40 +3486,13 @@
                     "y2"
                   ]
                 },
-                "path": {
-                  "title": "MaskPath",
-                  "type": "object",
-                  "properties": {
-                    "x": {
-                      "type": "array",
-                      "description": "x values.",
-                      "items": {
-                        "type": "number",
-                        "format": "float"
-                      }
-                    },
-                    "y": {
-                      "type": "array",
-                      "description": "y values.",
-                      "items": {
-                        "type": "number",
-                        "format": "float"
-                      }
-                    }
-                  },
-                  "required": [
-                    "x",
-                    "y"
-                  ]
-                },
                 "store": {
                   "type": "string",
                   "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
                 }
               },
               "required": [
-                "width",
-                "height"
+                "image_uri"
               ]
             }
           }
@@ -3566,16 +3503,17 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "title": "CreateMaskImageOut",
+                  "title": "DetectSegmentOut",
                   "type": "object",
                   "properties": {
-                    "image_uri": {
+                    "mask_image_uri": {
                       "type": "string",
-                      "description": "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided."
+                      "description": "Detected segment in 'mask image' format. Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided."
                     }
                   },
                   "required": [
-                    "image_uri"
+                    "box",
+                    "path"
                   ]
                 }
               }
@@ -3704,9 +3642,7 @@
                                 }
                               },
                               "required": [
-                                "word",
-                                "start",
-                                "end"
+                                "word"
                               ]
                             }
                           }
@@ -3778,7 +3714,7 @@
                 "language": {
                   "type": "string",
                   "default": "en",
-                  "description": "Language of input text. Supported languages: `en, es, fr, de, it, pt, pl, tr, ru, nl, cs, ar, zh, hu, ko, hi`."
+                  "description": "Language of input text. Supported languages: `en, de, fr, es, it, pt, pl, zh, ar, cs, ru, nl, tr, hu, ko`."
                 },
                 "store": {
                   "type": "string",
@@ -4457,14 +4393,21 @@
                     "clip"
                   ]
                 },
-                "queryIds": {
+                "query_ids": {
                   "type": "array",
                   "description": "Document IDs to use for the query.",
                   "items": {
                     "type": "string"
                   }
                 },
-                "queryVectors": {
+                "query_image_uris": {
+                  "type": "array",
+                  "description": "Image URIs to embed and use for the query.",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "query_vectors": {
                   "type": "array",
                   "description": "Vector to use for the query.",
                   "items": {
@@ -4475,33 +4418,33 @@
                     }
                   }
                 },
-                "queryStrings": {
+                "query_strings": {
                   "type": "array",
                   "description": "Text to embed and use for the query.",
                   "items": {
                     "type": "string"
                   }
                 },
-                "topK": {
+                "top_k": {
                   "type": "integer",
                   "minimum": 1,
                   "maximum": 1000,
                   "default": 10,
                   "description": "Number of results to return."
                 },
-                "efSearch": {
+                "ef_search": {
                   "type": "integer",
                   "minimum": 1,
                   "maximum": 1000,
                   "default": 40,
                   "description": "The size of the dynamic candidate list for searching the index graph."
                 },
-                "includeValues": {
+                "include_values": {
                   "type": "boolean",
                   "default": false,
                   "description": "Include the values of the vectors in the response."
                 },
-                "includeMetadata": {
+                "include_metadata": {
                   "type": "boolean",
                   "default": false,
                   "description": "Include the metadata of the vectors in the response."

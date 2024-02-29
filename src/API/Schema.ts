@@ -88,10 +88,9 @@ export type BaseNodeInput = z.infer<typeof BaseNodeArgsSchema>;
 export const BaseNodeSchema = z
   .object({
     id: IdSchema,
-    class: z.literal("Node"),
     args: BaseNodeArgsSchema.partial(),
     extra_args: z.object({}),
-    _global_output_keys: z.array(z.string()).optional(),
+    node: z.string(),
     _should_output_globally: z.boolean().optional(),
     _to_adapters: z.array(AdapterSchema).optional(),
     _from_adapters: z.array(AdapterSchema).optional(),
@@ -100,7 +99,6 @@ export const BaseNodeSchema = z
 export type BaseNode = z.infer<typeof BaseNodeSchema>;
 
 export const ModelNodeSchema = BaseNodeSchema.extend({
-  class: z.literal("ModelNode"),
 });
 export type ModelNodeInput = BaseNodeInput;
 export type ModelNode = z.infer<typeof ModelNodeSchema>;
@@ -125,26 +123,16 @@ export const StableDiffusionArgsSchema = z.object({
   guidance_scale: z.number().optional(),
 });
 export type StableDiffusionInput = z.infer<typeof StableDiffusionArgsSchema>;
-
-export const StableDiffusionSchema = ModelNodeSchema.omit({
-  class: true,
-})
-  .extend({
-    class: z.literal("SDXL"),
-    args: StableDiffusionArgsSchema.partial(),
-    extra_args: z.object({
-      model: z.enum(["sdxl"]),
-    }),
-  })
+export const GenerateImageSchema = BaseNodeSchema
   .strict();
-export type StableDiffusion = z.infer<typeof StableDiffusionSchema>;
+
+export type GenerateImage = z.infer<typeof GenerateImageSchema>;
 
 // NOTE: may be deprecated soon.
 // see: https://github.com/colinhacks/zod/issues/2106
-export const NodeSchema = z.discriminatedUnion("class", [
+export const NodeSchema = z.union([
   BaseNodeSchema,
   ModelNodeSchema,
-  StableDiffusionSchema,
 ]);
 export type Node = z.infer<typeof NodeSchema>;
 

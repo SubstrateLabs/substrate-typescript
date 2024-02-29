@@ -382,13 +382,13 @@ export const componentsSchema = z.object({
         }),
       ),
     }),
-    InpaintImageIn: z.object({
+    GenerativeEditImageIn: z.object({
       image_uri: z.string().describe("Input image."),
       mask_image_uri: z
         .string()
         .optional()
         .describe(
-          "Mask image that controls which pixels are inpainted. If unset, the entire image is modified (image-to-image).",
+          "Mask image that controls which pixels are inpainted. If unset, the entire image is edited (image-to-image).",
         ),
       prompt: z.string().describe("Input prompt."),
       output_resolution: z
@@ -427,7 +427,7 @@ export const componentsSchema = z.object({
           "Seed for deterministic generation. Default is a random seed.",
         ),
     }),
-    InpaintImageOut: z.object({
+    GenerativeEditImageOut: z.object({
       image_uri: z
         .string()
         .describe(
@@ -435,13 +435,13 @@ export const componentsSchema = z.object({
         ),
       seed: z.number().describe("The random noise seed used for generation."),
     }),
-    MultiInpaintImageIn: z.object({
+    MultiGenerativeEditImageIn: z.object({
       image_uri: z.string().describe("Input image."),
       mask_image_uri: z
         .string()
         .optional()
         .describe(
-          "Mask image that controls which pixels are inpainted. If unset, the entire image is modified (image-to-image).",
+          "Mask image that controls which pixels are edited (inpainting). If unset, the entire image is edited (image-to-image).",
         ),
       prompt: z.string().describe("Input prompt."),
       num_images: z.number().describe("Number of images to generate."),
@@ -488,7 +488,7 @@ export const componentsSchema = z.object({
           "Random noise seeds. Default is random seeds for each generation.",
         ),
     }),
-    MultiInpaintImageOut: z.object({
+    MultiGenerativeEditImageOut: z.object({
       outputs: z.array(
         z.object({
           image_uri: z
@@ -508,26 +508,20 @@ export const componentsSchema = z.object({
       x2: z.number().describe("Bottom right corner x."),
       y2: z.number().describe("Bottom right corner y."),
     }),
-    MaskPath: z.object({
-      x: z.array(z.number()).describe("x values."),
-      y: z.array(z.number()).describe("y values."),
+    Point: z.object({
+      x: z.number().describe("X position."),
+      y: z.number().describe("Y position."),
     }),
-    ImageSegment: z.object({
-      object_class: z.string().describe("Detected object class."),
-      confidence: z.number().describe("Classification confidence."),
-      box: z.object({
-        x1: z.number().describe("Top left corner x."),
-        y1: z.number().describe("Top left corner y."),
-        x2: z.number().describe("Bottom right corner x."),
-        y2: z.number().describe("Bottom right corner y."),
-      }),
-      path: z.object({
-        x: z.array(z.number()).describe("x values."),
-        y: z.array(z.number()).describe("y values."),
-      }),
-    }),
-    SegmentImageIn: z.object({
+    FillMaskIn: z.object({
       image_uri: z.string().describe("Input image."),
+      mask_image_uri: z
+        .string()
+        .describe("Mask image that controls which pixels are inpainted."),
+      model: z
+        .literal("big-lama")
+        .optional()
+        .describe("Selected model.")
+        .default("big-lama"),
       store: z
         .string()
         .optional()
@@ -535,37 +529,72 @@ export const componentsSchema = z.object({
           'Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string.',
         ),
     }),
-    SegmentImageOut: z.object({
-      objects: z
-        .array(
-          z.object({
-            object_class: z.string().describe("Detected object class."),
-            confidence: z.number().describe("Classification confidence."),
-            box: z.object({
-              x1: z.number().describe("Top left corner x."),
-              y1: z.number().describe("Top left corner y."),
-              x2: z.number().describe("Bottom right corner x."),
-              y2: z.number().describe("Bottom right corner y."),
-            }),
-            path: z.object({
-              x: z.array(z.number()).describe("x values."),
-              y: z.array(z.number()).describe("y values."),
-            }),
-          }),
-        )
-        .describe("Detected segments."),
+    FillMaskOut: z.object({
       image_uri: z
         .string()
         .describe(
           "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided.",
         ),
-      width: z.number().describe("Width of image, in pixels."),
-      height: z.number().describe("Height of image, in pixels."),
     }),
-    CreateMaskImageIn: z.object({
-      width: z.number().describe("Width of image, in pixels."),
-      height: z.number().describe("Height of image, in pixels."),
-      box: z
+    RemoveBackgroundIn: z.object({
+      image_uri: z.string().describe("Input image."),
+      return_mask: z
+        .boolean()
+        .optional()
+        .describe("Return a mask image instead of the original content."),
+      background_color: z
+        .string()
+        .optional()
+        .describe("Hex value background color. Transparent if unset."),
+      model: z
+        .literal("isnet")
+        .optional()
+        .describe("Selected model.")
+        .default("isnet"),
+      store: z
+        .string()
+        .optional()
+        .describe(
+          'Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string.',
+        ),
+    }),
+    RemoveBackgroundOut: z.object({
+      image_uri: z
+        .string()
+        .describe(
+          "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided.",
+        ),
+    }),
+    UpscaleImageIn: z.object({
+      image_uri: z.string().describe("Input image."),
+      model: z
+        .literal("real-esrgan-x4")
+        .optional()
+        .describe("Selected model.")
+        .default("real-esrgan-x4"),
+      store: z
+        .string()
+        .optional()
+        .describe(
+          'Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string.',
+        ),
+    }),
+    UpscaleImageOut: z.object({
+      image_uri: z
+        .string()
+        .describe(
+          "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided.",
+        ),
+    }),
+    DetectSegmentIn: z.object({
+      image_uri: z.string().describe("Input image."),
+      point_prompt: z
+        .object({
+          x: z.number().describe("X position."),
+          y: z.number().describe("Y position."),
+        })
+        .optional(),
+      box_prompt: z
         .object({
           x1: z.number().describe("Top left corner x."),
           y1: z.number().describe("Top left corner y."),
@@ -573,12 +602,6 @@ export const componentsSchema = z.object({
           y2: z.number().describe("Bottom right corner y."),
         })
         .optional(),
-      path: z
-        .object({
-          x: z.array(z.number()).describe("x values."),
-          y: z.array(z.number()).describe("y values."),
-        })
-        .optional(),
       store: z
         .string()
         .optional()
@@ -586,11 +609,12 @@ export const componentsSchema = z.object({
           'Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string.',
         ),
     }),
-    CreateMaskImageOut: z.object({
-      image_uri: z
+    DetectSegmentOut: z.object({
+      mask_image_uri: z
         .string()
+        .optional()
         .describe(
-          "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided.",
+          "Detected segment in 'mask image' format. Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided.",
         ),
     }),
     TranscribeMediaIn: z.object({
@@ -637,8 +661,8 @@ export const componentsSchema = z.object({
     }),
     TranscribedWord: z.object({
       word: z.string().describe("Text of word."),
-      start: z.number().describe("Start time of word, in seconds."),
-      end: z.number().describe("End time of word, in seconds."),
+      start: z.number().optional().describe("Start time of word, in seconds."),
+      end: z.number().optional().describe("End time of word, in seconds."),
       speaker: z
         .string()
         .optional()
@@ -656,8 +680,14 @@ export const componentsSchema = z.object({
         .array(
           z.object({
             word: z.string().describe("Text of word."),
-            start: z.number().describe("Start time of word, in seconds."),
-            end: z.number().describe("End time of word, in seconds."),
+            start: z
+              .number()
+              .optional()
+              .describe("Start time of word, in seconds."),
+            end: z
+              .number()
+              .optional()
+              .describe("End time of word, in seconds."),
             speaker: z
               .string()
               .optional()
@@ -687,8 +717,14 @@ export const componentsSchema = z.object({
               .array(
                 z.object({
                   word: z.string().describe("Text of word."),
-                  start: z.number().describe("Start time of word, in seconds."),
-                  end: z.number().describe("End time of word, in seconds."),
+                  start: z
+                    .number()
+                    .optional()
+                    .describe("Start time of word, in seconds."),
+                  end: z
+                    .number()
+                    .optional()
+                    .describe("End time of word, in seconds."),
                   speaker: z
                     .string()
                     .optional()
@@ -723,7 +759,7 @@ export const componentsSchema = z.object({
         .string()
         .optional()
         .describe(
-          "Language of input text. Supported languages: `en, es, fr, de, it, pt, pl, tr, ru, nl, cs, ar, zh, hu, ko, hi`.",
+          "Language of input text. Supported languages: `en, de, fr, es, it, pt, pl, zh, ar, cs, ru, nl, tr, hu, ko`.",
         )
         .default("en"),
       store: z
@@ -1023,36 +1059,40 @@ export const componentsSchema = z.object({
       model: z
         .union([z.literal("jina-v2"), z.literal("clip")])
         .describe("Selected embedding model"),
-      queryIds: z
+      query_ids: z
         .array(z.string())
         .optional()
         .describe("Document IDs to use for the query."),
-      queryVectors: z
+      query_image_uris: z
+        .array(z.string())
+        .optional()
+        .describe("Image URIs to embed and use for the query."),
+      query_vectors: z
         .array(z.array(z.number()))
         .optional()
         .describe("Vector to use for the query."),
-      queryStrings: z
+      query_strings: z
         .array(z.string())
         .optional()
         .describe("Text to embed and use for the query."),
-      topK: z
+      top_k: z
         .number()
         .optional()
         .describe("Number of results to return.")
         .default(10),
-      efSearch: z
+      ef_search: z
         .number()
         .optional()
         .describe(
           "The size of the dynamic candidate list for searching the index graph.",
         )
         .default(40),
-      includeValues: z
+      include_values: z
         .boolean()
         .optional()
         .describe("Include the values of the vectors in the response.")
         .default(false),
-      includeMetadata: z
+      include_metadata: z
         .boolean()
         .optional()
         .describe("Include the metadata of the vectors in the response.")
