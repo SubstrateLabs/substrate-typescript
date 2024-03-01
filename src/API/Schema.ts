@@ -178,10 +178,6 @@ export type ComposeArgs = z.infer<typeof ComposeArgsSchema>;
 export const EmbeddingMetaSchema = z.object({
   doc_id: z.string(),
   doc: z.string(),
-
-  // TODO:
-  // class Config:
-  //     extra = Extra.allow
 });
 
 export const EmbeddingRowSchema = z.object({

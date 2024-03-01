@@ -44,6 +44,7 @@ exports[`Rob's Example > graph serialization (include ops, op-id replacement) 1`
   ],
   "ops": [
     {
+      "class": "Node",
       "id": "5",
       "node_graph_edges": [],
       "op_graph_edges": [],
@@ -57,9 +58,10 @@ exports[`Rob's Example > graph serialization (include ops, op-id replacement) 1`
           "type": "get",
         },
       ],
-      "origin_node": "a",
+      "origin_node_id": "a",
     },
     {
+      "class": "Node",
       "id": "7",
       "node_graph_edges": [],
       "op_graph_edges": [],
@@ -73,9 +75,10 @@ exports[`Rob's Example > graph serialization (include ops, op-id replacement) 1`
           "type": "get",
         },
       ],
-      "origin_node": "a",
+      "origin_node_id": "a",
     },
     {
+      "class": "Node",
       "id": "6",
       "node_graph_edges": [
         [
@@ -115,9 +118,10 @@ exports[`Rob's Example > graph serialization (include ops, op-id replacement) 1`
           "type": "get",
         },
       ],
-      "origin_node": "b",
+      "origin_node_id": "b",
     },
     {
+      "class": "Node",
       "id": "8",
       "node_graph_edges": [],
       "op_graph_edges": [],
@@ -131,7 +135,7 @@ exports[`Rob's Example > graph serialization (include ops, op-id replacement) 1`
           "type": "get",
         },
       ],
-      "origin_node": "b",
+      "origin_node_id": "b",
     },
   ],
 }

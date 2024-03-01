@@ -1,7 +1,19 @@
 import * as Refs from "substrate/Refs";
-import { v4 as uuidv4 } from "uuid";
+// import { v4 as uuidv4 } from "uuid";
 
 const refFactory = Refs.makeFactory();
+
+// TODO: this is for debugging legibility
+const nodeIdGenerator = (start: number = 1) => {
+  let n = start;
+  return () => {
+    const id = "node_" + n.toString();
+    n = n + 1;
+    return id;
+  };
+};
+
+const generator = nodeIdGenerator();
 
 // simplified node for demo
 export class NewNode {
@@ -9,7 +21,7 @@ export class NewNode {
   node: string;
   args: any = {};
 
-  constructor(id: string = uuidv4()) {
+  constructor(id: string = generator()) {
     this.id = id;
   }
 

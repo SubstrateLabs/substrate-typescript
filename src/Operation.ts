@@ -10,10 +10,11 @@ type OpId = {
 
 type Op = {
   id: string;
+  class: string;
   op_stack: OpStackItem[];
   op_graph_edges: Edge<Op>[];
   node_graph_edges: Edge<HasId>[];
-  origin_node: HasId["id"]; // Node Id
+  origin_node_id: HasId["id"]; // Node Id
 };
 
 type OpStackItem = GetOp<GetItemArgs> | GetOp<GetAttrArgs>; // maybe others eg. Set, Transform, tbd
@@ -49,10 +50,11 @@ type NewId = () => string;
 export const refOps = (ref: Ref, id: NewId): NonEmptyArray<Op> => {
   let op = {
     id: id(),
+    class: "Node",
     op_stack: [] as OpStackItem[],
     op_graph_edges: [] as Edge<Op>[],
     node_graph_edges: [] as Edge<HasId>[],
-    origin_node: ref.node.id,
+    origin_node_id: ref.node.id,
   };
   let ops: NonEmptyArray<Op> = [op];
 

@@ -45,7 +45,7 @@ class Graph {
     const { ops } = Operation.replaceRefsWithOps(
       node.args,
       refFactory,
-      this.newId
+      this.newId,
     );
     ops.forEach((op) => {
       this.graph.addEdge([op.origin_node, node.id, {}]);
@@ -68,7 +68,7 @@ class Graph {
         const { args, ops } = Operation.replaceRefsWithOps(
           node.args,
           refFactory,
-          this.newId
+          this.newId,
         );
 
         return {
@@ -76,7 +76,7 @@ class Graph {
           ops: [...acc.ops, ...ops],
         };
       },
-      { nodes: [], ops: [] }
+      { nodes: [], ops: [] },
     );
   }
 }
@@ -107,17 +107,18 @@ describe("Rob's Example", () => {
   test("a.ref.foo", () => {
     let result = Operation.refOps(
       refFactory.getTarget(b.args.bar),
-      idGenerator()
+      idGenerator(),
     );
     expect(result).toEqual([
       {
+        class: "Node",
         id: "1",
         op_stack: [
           { type: "get", args: { key: "foo", accessor: "attr", op_id: null } },
         ],
         op_graph_edges: [],
         node_graph_edges: [],
-        origin_node: "a",
+        origin_node_id: "a",
       },
     ]);
   });
@@ -125,10 +126,11 @@ describe("Rob's Example", () => {
   test("b.ref.nested[a.ref.foo].nest_id", () => {
     let result = Operation.refOps(
       refFactory.getTarget(c.args.bar),
-      idGenerator()
+      idGenerator(),
     );
     expect(result).toEqual([
       {
+        class: "Node",
         id: "2",
         op_stack: [
           {
@@ -138,9 +140,10 @@ describe("Rob's Example", () => {
         ],
         op_graph_edges: [],
         node_graph_edges: [],
-        origin_node: "a",
+        origin_node_id: "a",
       },
       {
+        class: "Node",
         id: "1",
         op_stack: [
           {
@@ -158,7 +161,7 @@ describe("Rob's Example", () => {
         ],
         op_graph_edges: [["2", "1"]],
         node_graph_edges: [["a", "b"]],
-        origin_node: "b",
+        origin_node_id: "b",
       },
     ]);
   });
@@ -166,10 +169,11 @@ describe("Rob's Example", () => {
   test("b.ref.bar", () => {
     let result = Operation.refOps(
       refFactory.getTarget(c.args.nested.baz),
-      idGenerator()
+      idGenerator(),
     );
     expect(result).toEqual([
       {
+        class: "Node",
         id: "1",
         op_stack: [
           {
@@ -179,7 +183,7 @@ describe("Rob's Example", () => {
         ],
         op_graph_edges: [],
         node_graph_edges: [],
-        origin_node: "b",
+        origin_node_id: "b",
       },
     ]);
   });
@@ -193,7 +197,7 @@ describe("Rob's Example", () => {
     let { args, ops } = Operation.replaceRefsWithOps(
       c.args,
       refFactory,
-      idGenerator()
+      idGenerator(),
     );
 
     expect(args).toEqual({
@@ -204,15 +208,17 @@ describe("Rob's Example", () => {
 
     expect(ops).toEqual([
       {
+        class: "Node",
         id: "2",
         op_stack: [
           { type: "get", args: { accessor: "attr", key: "foo", op_id: null } },
         ],
         op_graph_edges: [],
         node_graph_edges: [],
-        origin_node: "a",
+        origin_node_id: "a",
       },
       {
+        class: "Node",
         id: "1",
         op_stack: [
           {
@@ -227,16 +233,17 @@ describe("Rob's Example", () => {
         ],
         op_graph_edges: [["2", "1"]],
         node_graph_edges: [["a", "b"]],
-        origin_node: "b",
+        origin_node_id: "b",
       },
       {
+        class: "Node",
         id: "3",
         op_stack: [
           { type: "get", args: { accessor: "attr", key: "bar", op_id: null } },
         ],
         op_graph_edges: [],
         node_graph_edges: [],
-        origin_node: "b",
+        origin_node_id: "b",
       },
     ]);
   });
