@@ -36,7 +36,7 @@ export abstract class AbstractNode<T extends Schema.Node> {
 
   protected constructor(id: string = uuidv4()) {
     const result = Schema.IdSchema.safeParse(id);
-    if (!result.success) console.warn('Warning: Possibly incompatible Id', id);
+    if (!result.success) console.warn("Warning: Possibly incompatible Id", id);
     this.id = id;
   }
 

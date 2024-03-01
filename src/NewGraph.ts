@@ -45,7 +45,7 @@ export class NewGraph {
         const { args, ops } = Operation.replaceRefsWithOps(
           node.args,
           refFactory,
-          this.newOpId
+          this.newOpId,
         );
 
         return {
@@ -53,7 +53,7 @@ export class NewGraph {
           ops: [...acc.ops, ...ops],
         };
       },
-      { nodes: [], ops: [] }
+      { nodes: [], ops: [] },
     );
     res.edges = this.edges;
     res.initial_args = {}; // TODO
