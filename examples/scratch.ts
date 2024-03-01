@@ -15,18 +15,13 @@ const substrate = new Substrate({
   apiKey: SUBSTRATE_API_KEY,
   baseUrl: "https://api-staging.substrate.run",
 });
-
 const a = new NewGenerateText({
-  prompt:
-    "say something terse and poetic about your existence as an assistant, keep it concise, just one sentence",
+  prompt: "ask me a short trivia question in one sentence",
 });
-const b = new NewGenerateText({
-  args: { prompt: a.ref.text },
-});
-// const g = new NewGraph().add(a).add(b);
-const g = new NewGraph().add(a).add(b);
+const b = new NewGenerateText({ prompt: a.ref.text });
+const g = new NewGraph();
+g.add(a);
+g.add(b);
 const json = g.toJSON();
-console.log(JSON.stringify(json, null, 2));
-
 const result = await substrate.compose(json);
-console.log(JSON.stringify(result));
+console.log(JSON.stringify(result, null, 2));

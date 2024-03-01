@@ -28,16 +28,6 @@ export class NewGraph {
 
   add(node: NodeLike): NewGraph {
     this.graph.addNode([node.id, node]);
-
-    const { ops } = Operation.replaceRefsWithOps(
-      node.args,
-      refFactory,
-      this.newOpId
-    );
-    ops.forEach((op) => {
-      this.graph.addEdge([op.origin_node_id, node.id, {}]);
-    });
-
     return this;
   }
 
