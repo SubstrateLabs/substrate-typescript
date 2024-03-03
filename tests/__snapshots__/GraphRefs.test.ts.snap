@@ -1,0 +1,144 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Rob's Example > graph serialization (include ops, op-id replacement) 1`] = `
+{
+  "edges": [],
+  "initial_args": {},
+  "nodes": [
+    {
+      "args": {},
+      "class": "FooNode",
+      "id": "a",
+    },
+    {
+      "args": {
+        "bar": {
+          "__$$SB_GRAPH_OP_ID$$__": "op_1",
+        },
+        "foo": "b",
+        "nested": [
+          {
+            "nest_id": "first",
+          },
+          {
+            "nest_id": "second",
+          },
+        ],
+      },
+      "class": "FooNode",
+      "id": "b",
+    },
+    {
+      "args": {
+        "bar": {
+          "__$$SB_GRAPH_OP_ID$$__": "op_2",
+        },
+        "foo": "c",
+        "nested": {
+          "baz": {
+            "__$$SB_GRAPH_OP_ID$$__": "op_4",
+          },
+        },
+      },
+      "class": "FooNode",
+      "id": "c",
+    },
+  ],
+  "ops": [
+    {
+      "class": "Node",
+      "id": "op_1",
+      "node_graph_edges": [],
+      "op_graph_edges": [],
+      "op_stack": [
+        {
+          "args": {
+            "accessor": "attr",
+            "key": "foo",
+            "op_id": null,
+          },
+          "type": "get",
+        },
+      ],
+      "origin_node_id": "a",
+    },
+    {
+      "class": "Node",
+      "id": "op_3",
+      "node_graph_edges": [],
+      "op_graph_edges": [],
+      "op_stack": [
+        {
+          "args": {
+            "accessor": "attr",
+            "key": "foo",
+            "op_id": null,
+          },
+          "type": "get",
+        },
+      ],
+      "origin_node_id": "a",
+    },
+    {
+      "class": "Node",
+      "id": "op_2",
+      "node_graph_edges": [
+        [
+          "a",
+          "b",
+        ],
+      ],
+      "op_graph_edges": [
+        [
+          "op_3",
+          "op_2",
+        ],
+      ],
+      "op_stack": [
+        {
+          "args": {
+            "accessor": "attr",
+            "key": "nested",
+            "op_id": null,
+          },
+          "type": "get",
+        },
+        {
+          "args": {
+            "accessor": "item",
+            "key": null,
+            "op_id": "op_3",
+          },
+          "type": "get",
+        },
+        {
+          "args": {
+            "accessor": "attr",
+            "key": "nest_id",
+            "op_id": null,
+          },
+          "type": "get",
+        },
+      ],
+      "origin_node_id": "b",
+    },
+    {
+      "class": "Node",
+      "id": "op_4",
+      "node_graph_edges": [],
+      "op_graph_edges": [],
+      "op_stack": [
+        {
+          "args": {
+            "accessor": "attr",
+            "key": "bar",
+            "op_id": null,
+          },
+          "type": "get",
+        },
+      ],
+      "origin_node_id": "b",
+    },
+  ],
+}
+`;

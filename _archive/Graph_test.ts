@@ -1,6 +1,6 @@
 import { vi, afterEach, expect, describe, test } from "vitest";
 import { Graph } from "substrate/Graph";
-import { BaseNode as Node } from "substrate/BaseNode";
+import { BaseNode as Node } from "substrate/_archive/BaseNode";
 
 describe("Graph", () => {
   const warnMock = vi.spyOn(console, "warn").mockImplementation(() => {});

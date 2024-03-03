@@ -1,7 +1,7 @@
 import { expect, describe, test } from "vitest";
 import * as Refs from "substrate/Refs";
 import * as Operation from "substrate/Operation";
-import { DiGraph } from "substrate/DiGraph";
+import { Graph } from "substrate/Graph";
 
 const refFactory = Refs.makeFactory();
 
@@ -24,60 +24,6 @@ class FooNode {
       id: this.id,
       args: this.args,
     };
-  }
-}
-
-type NodeLike = { id: string; args: Object };
-
-// simplified graph for demo
-class Graph {
-  newId: any;
-  graph: DiGraph;
-
-  constructor(newId: any, DAG: DiGraph = new DiGraph()) {
-    this.newId = newId;
-    this.graph = DAG;
-  }
-
-  add(node: NodeLike): Graph {
-    this.graph.addNode([node.id, node]);
-
-    const { ops } = Operation.replaceRefsWithOps(
-      node.args,
-      refFactory,
-      this.newId,
-    );
-    ops.forEach((op) => {
-      this.graph.addEdge([op.origin_node, node.id, {}]);
-    });
-
-    return this;
-  }
-
-  get nodes() {
-    return this.graph.nodes.map(([_nodeId, node]) => node);
-  }
-
-  get edges() {
-    return this.graph.edges;
-  }
-
-  toJSON() {
-    return this.nodes.reduce(
-      (acc, node) => {
-        const { args, ops } = Operation.replaceRefsWithOps(
-          node.args,
-          refFactory,
-          this.newId,
-        );
-
-        return {
-          nodes: [...acc.nodes, { ...node.toJSON(), args }],
-          ops: [...acc.ops, ...ops],
-        };
-      },
-      { nodes: [], ops: [] },
-    );
   }
 }
 
@@ -249,15 +195,11 @@ describe("Rob's Example", () => {
   });
 
   test("graph serialization (include ops, op-id replacement)", () => {
-    const g = new Graph(idGenerator()).add(a).add(b).add(c);
+    const g = new Graph().add(a).add(b).add(c);
     const result = g.toJSON();
     // console.log(JSON.stringify(result))
     expect(result.nodes.length).toEqual(3);
     expect(result.ops.length).toEqual(4);
     expect(result).toMatchSnapshot();
-  });
-
-  test("ok", () => {
-    expect("ok").toEqual("ok");
   });
 });

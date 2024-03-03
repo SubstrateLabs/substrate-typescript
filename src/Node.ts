@@ -3,7 +3,6 @@ import * as Refs from "substrate/Refs";
 
 const refFactory = Refs.makeFactory();
 
-// TODO: this is for debugging legibility
 const nodeIdGenerator = (start: number = 1) => {
   let n = start;
   return () => {
@@ -16,7 +15,7 @@ const nodeIdGenerator = (start: number = 1) => {
 const generator = nodeIdGenerator();
 
 // simplified node for demo
-export class NewNode {
+export class Node {
   id: string;
   node: string;
   args: any = {};

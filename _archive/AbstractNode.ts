@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 import * as Schema from "substrate/API/Schema";
-import { Adapter } from "substrate/Adapter";
+import { Adapter } from "substrate/_archive/Adapter";
 import * as Refs from "substrate/Refs";
 
 const refFactory = Refs.makeFactory();

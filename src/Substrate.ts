@@ -1,9 +1,9 @@
 import { SubstrateError } from "substrate/Error";
 import { VERSION } from "substrate/version";
 import OpenAPIjson from "substrate/API/OpenAPI.json";
-import { RawEndpoint } from "substrate/endpoints/RawEndpoint";
 import { Graph } from "substrate/Graph";
 import { APIResponse } from "substrate/APIResponse";
+import { RawEndpoint } from "substrate/_archive/RawEndpoint";
 
 type Configuration = {
   /**
@@ -40,7 +40,7 @@ export class Substrate {
   constructor({ apiKey, userAgent, baseUrl, apiVersion }: Configuration) {
     if (!apiKey) {
       throw new SubstrateError(
-        "An API Key is required. Specify it when constructing the Substrate client: `new Substrate({ apiKey: 'API_KEY' })`"
+        "An API Key is required. Specify it when constructing the Substrate client: `new Substrate({ apiKey: 'API_KEY' })`",
       );
     }
     this.apiKey = apiKey;
@@ -51,6 +51,7 @@ export class Substrate {
 
   /**
    *  raw endpoint
+   *  TODO: remove this after migrating `explore`
    */
   raw = new RawEndpoint(this);
 

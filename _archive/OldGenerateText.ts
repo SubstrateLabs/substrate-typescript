@@ -1,18 +1,18 @@
 import * as Schema from "substrate/API/Schema";
 import * as OpenAPI from "substrate/API/OpenAPI";
-import { AbstractNode } from "substrate/AbstractNode";
+import { AbstractNode } from "substrate/_archive/AbstractNode";
 
 type Params = {
   id?: Schema.Id;
-  args?: GenerateText.Args;
+  args?: OldGenerateText.Args;
 };
 
 /**
- * Old-style node definition - maybe moving away from this
+ * NOTE(ben): Old-style node definition, leaving here for reference
  */
-export class GenerateText
-  extends AbstractNode<GenerateText.Node>
-  implements GenerateText.Node
+export class OldGenerateText
+  extends AbstractNode<OldGenerateText.Node>
+  implements OldGenerateText.Node
 {
   readonly node = "GenerateText" as const;
   readonly extra_args = {};
@@ -22,12 +22,12 @@ export class GenerateText
     this.setArgs(params.args);
   }
 
-  override setArgs(args: GenerateText.Args = {}) {
+  override setArgs(args: OldGenerateText.Args = {}) {
     return super.setArgs(args);
   }
 }
 
-export namespace GenerateText {
+export namespace OldGenerateText {
   /**
    * `Args` are the default inputs given to the `Node` when it executes. These values may be overridden by values coming from parent nodes in the `Graph`.
    */
