@@ -6,17 +6,17 @@ exports[`Graph > a.ref.foo 1`] = `
   "initial_args": {},
   "nodes": [
     {
-      "_should_output_globally": true,
+      "_should_output_globally": false,
       "args": {
         "num": 1,
         "str": "a_str",
       },
       "extra_args": {},
       "id": "a",
-      "node": "GenerateText",
+      "node": "FooNode",
     },
     {
-      "_should_output_globally": true,
+      "_should_output_globally": false,
       "args": {
         "nested": [
           {
@@ -33,10 +33,10 @@ exports[`Graph > a.ref.foo 1`] = `
       },
       "extra_args": {},
       "id": "b",
-      "node": "GenerateText",
+      "node": "FooNode",
     },
     {
-      "_should_output_globally": true,
+      "_should_output_globally": false,
       "args": {
         "nested": {
           "key": {
@@ -52,7 +52,7 @@ exports[`Graph > a.ref.foo 1`] = `
       },
       "extra_args": {},
       "id": "c",
-      "node": "GenerateText",
+      "node": "FooNode",
     },
   ],
   "ops": [

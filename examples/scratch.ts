@@ -1,6 +1,7 @@
 #!/usr/bin/env -S npm run ts-node --transpileOnly
 /*
- * TODO: string concatenation doesn't work
+ * - Ref broken since refactor
+ * - String concat – does it work?
  */
 
 import {
