@@ -4,8 +4,14 @@ import { Node } from "substrate/Node";
 export class FooNode extends Node {}
 
 describe("Node", () => {
-  test("node set to class name", () => {
+  test(".node", () => {
     const n = new FooNode();
     expect(n.node).toEqual("FooNode");
+  });
+
+  test(".output()", () => {
+    const n = new FooNode().output();
+    expect(n).toBeInstanceOf(FooNode);
+    expect(n._output).toBeTruthy();
   });
 });

@@ -18,11 +18,12 @@ const substrate = new Substrate({
 });
 const a = new GenerateText({
   prompt: "ask me a short trivia question in one sentence",
-});
-// const b = new GenerateText({ prompt: a.ref.text });
+}).output();
+const b = new GenerateText({ prompt: a.ref.text }).output();
 const g = new Graph();
 g.add(a);
-// g.add(b);
+g.add(b);
 const json = g.toJSON();
+// console.log(JSON.stringify(json, null, 2));
 const result = await substrate.compose(json);
 console.log(JSON.stringify(result, null, 2));

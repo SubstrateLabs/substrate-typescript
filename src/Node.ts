@@ -18,12 +18,17 @@ export class Node {
   id: string;
   node: string;
   args: any = {};
-  output: boolean = false;
+  _output: boolean = false;
 
   constructor(args: any = {}) {
     this.node = this.constructor.name;
     this.id = generator(this.node);
     this.args = args;
+  }
+
+  output(): this {
+    this._output = true;
+    return this;
   }
 
   get ref() {
@@ -35,8 +40,7 @@ export class Node {
       node: this.node,
       id: this.id,
       args: this.args,
-      _should_output_globally: this.output,
-      extra_args: {}, // TODO: still needed?
+      _should_output_globally: this._output,
     };
   }
 }
