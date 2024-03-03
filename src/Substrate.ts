@@ -3,7 +3,6 @@ import { VERSION } from "substrate/version";
 import OpenAPIjson from "substrate/API/OpenAPI.json";
 import { Graph } from "substrate/Graph";
 import { APIResponse } from "substrate/APIResponse";
-import { RawEndpoint } from "substrate/_archive/RawEndpoint";
 
 type Configuration = {
   /**
@@ -48,12 +47,6 @@ export class Substrate {
     this.baseUrl = baseUrl ?? "https://api.substrate.run";
     this.apiVersion = apiVersion ?? OpenAPIjson["info"]["version"];
   }
-
-  /**
-   *  raw endpoint
-   *  TODO: remove this after migrating `explore`
-   */
-  raw = new RawEndpoint(this);
 
   /**
    *  [compose](https://www.substrate.run/api-ref#compose).
