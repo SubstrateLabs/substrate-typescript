@@ -1,7 +1,6 @@
 import { expect, describe, test } from "vitest";
 import * as Refs from "substrate/Refs";
 import * as Operation from "substrate/Operation";
-import { Graph } from "substrate/Graph";
 
 const refFactory = Refs.makeFactory();
 
@@ -49,7 +48,7 @@ const idGenerator = (start: number = 1) => {
   };
 };
 
-describe("Rob's Example", () => {
+describe("Operation", () => {
   test("a.ref.foo", () => {
     let result = Operation.refOps(
       refFactory.getTarget(b.args.bar),
@@ -135,11 +134,6 @@ describe("Rob's Example", () => {
   });
 
   test("replace refs: c.args", () => {
-    // const c = new FooNode("c", {
-    //   foo: "c",
-    //   bar: b.ref.nested[a.ref.foo].nest_id,
-    //   nested: { baz: b.ref.bar },
-    // });
     let { args, ops } = Operation.replaceRefsWithOps(
       c.args,
       refFactory,
@@ -192,14 +186,5 @@ describe("Rob's Example", () => {
         origin_node_id: "b",
       },
     ]);
-  });
-
-  test("graph serialization (include ops, op-id replacement)", () => {
-    const g = new Graph().add(a).add(b).add(c);
-    const result = g.toJSON();
-    // console.log(JSON.stringify(result))
-    expect(result.nodes.length).toEqual(3);
-    expect(result.ops.length).toEqual(4);
-    expect(result).toMatchSnapshot();
   });
 });

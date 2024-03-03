@@ -1,59 +1,172 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Graph > .withEdge > edge with code > arrow functions are encoded as \`AdapterCode\` 1`] = `
-[
-  [
-    "a",
-    "b",
+exports[`Graph > a.ref.foo 1`] = `
+{
+  "edges": [],
+  "initial_args": {},
+  "nodes": [
     {
-      "adapter": AdapterCode {
-        "code": "(x) => ({ y: x })",
-        "runtime": "deno",
-        "runtime_version": "1.2.6",
+      "_should_output_globally": true,
+      "args": {
+        "num": 1,
+        "str": "a_str",
       },
+      "extra_args": {},
+      "id": "a",
+      "node": "GenerateText",
+    },
+    {
+      "_should_output_globally": true,
+      "args": {
+        "nested": [
+          {
+            "key": "b_val_1",
+          },
+          {
+            "key": "b_val_2",
+          },
+        ],
+        "num": {
+          "__$$SB_GRAPH_OP_ID$$__": "op_1",
+        },
+        "str": "b_str",
+      },
+      "extra_args": {},
+      "id": "b",
+      "node": "GenerateText",
+    },
+    {
+      "_should_output_globally": true,
+      "args": {
+        "nested": {
+          "key": {
+            "__$$SB_GRAPH_OP_ID$$__": "op_5",
+          },
+        },
+        "num": {
+          "__$$SB_GRAPH_OP_ID$$__": "op_2",
+        },
+        "str": {
+          "__$$SB_GRAPH_OP_ID$$__": "op_3",
+        },
+      },
+      "extra_args": {},
+      "id": "c",
+      "node": "GenerateText",
     },
   ],
-  [
-    "b",
-    "c",
+  "ops": [
     {
-      "adapter": AdapterCode {
-        "code": "(x) => ({ y: x })",
-        "runtime": "deno",
-        "runtime_version": "1.2.6",
-      },
+      "class": "Node",
+      "id": "op_1",
+      "node_graph_edges": [],
+      "op_graph_edges": [],
+      "op_stack": [
+        {
+          "args": {
+            "accessor": "attr",
+            "key": "num",
+            "op_id": null,
+          },
+          "type": "get",
+        },
+      ],
+      "origin_node_id": "a",
+    },
+    {
+      "class": "Node",
+      "id": "op_2",
+      "node_graph_edges": [],
+      "op_graph_edges": [],
+      "op_stack": [
+        {
+          "args": {
+            "accessor": "attr",
+            "key": "num",
+            "op_id": null,
+          },
+          "type": "get",
+        },
+      ],
+      "origin_node_id": "b",
+    },
+    {
+      "class": "Node",
+      "id": "op_4",
+      "node_graph_edges": [],
+      "op_graph_edges": [],
+      "op_stack": [
+        {
+          "args": {
+            "accessor": "attr",
+            "key": "num",
+            "op_id": null,
+          },
+          "type": "get",
+        },
+      ],
+      "origin_node_id": "a",
+    },
+    {
+      "class": "Node",
+      "id": "op_3",
+      "node_graph_edges": [
+        [
+          "a",
+          "b",
+        ],
+      ],
+      "op_graph_edges": [
+        [
+          "op_4",
+          "op_3",
+        ],
+      ],
+      "op_stack": [
+        {
+          "args": {
+            "accessor": "attr",
+            "key": "nested",
+            "op_id": null,
+          },
+          "type": "get",
+        },
+        {
+          "args": {
+            "accessor": "item",
+            "key": null,
+            "op_id": "op_4",
+          },
+          "type": "get",
+        },
+        {
+          "args": {
+            "accessor": "attr",
+            "key": "key",
+            "op_id": null,
+          },
+          "type": "get",
+        },
+      ],
+      "origin_node_id": "b",
+    },
+    {
+      "class": "Node",
+      "id": "op_5",
+      "node_graph_edges": [],
+      "op_graph_edges": [],
+      "op_stack": [
+        {
+          "args": {
+            "accessor": "attr",
+            "key": "str",
+            "op_id": null,
+          },
+          "type": "get",
+        },
+      ],
+      "origin_node_id": "b",
     },
   ],
-]
-`;
-
-exports[`Graph > .withEdge > edge with code > functions are encoded as \`AdapterCode\` 1`] = `
-[
-  [
-    "a",
-    "b",
-    {
-      "adapter": AdapterCode {
-        "code": "function(x) {
-          return { y: x };
-        }",
-        "runtime": "deno",
-        "runtime_version": "1.2.6",
-      },
-    },
-  ],
-  [
-    "b",
-    "c",
-    {
-      "adapter": AdapterCode {
-        "code": "function(x) {
-            return { y: x };
-          }",
-        "runtime": "deno",
-        "runtime_version": "1.2.6",
-      },
-    },
-  ],
-]
+}
 `;
