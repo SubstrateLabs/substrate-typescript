@@ -1,7 +1,6 @@
 import { DiGraph } from "substrate/DiGraph";
 import * as Schema from "substrate/API/Schema";
 import { SubstrateError } from "substrate/Error";
-import { AdapterCode } from "substrate/_archive/AdapterCode";
 
 /**
  * NOTE(ben): Starting a new simplified Graph, leaving this for reference
@@ -63,32 +62,32 @@ export class OldGraph implements OldGraph.SubstrateGraph {
     return new OldGraph(this.initialArgs, g);
   }
 
-  /**
-   * Returns a new graph that includes provided edge.
-   */
-  withEdge([from, to, data = {}]: OldGraph.NewSubstrateEdge): OldGraph {
-    const adapter = AdapterCode.tryParse(data);
-    const edgeData = adapter ? { adapter } : data;
+  // /**
+  //  * Returns a new graph that includes provided edge.
+  //  */
+  // withEdge([from, to, data = {}]: OldGraph.NewSubstrateEdge): OldGraph {
+  //   const adapter = AdapterCode.tryParse(data);
+  //   const edgeData = adapter ? { adapter } : data;
 
-    const result = Schema.EdgeSchema.safeParse([from, to, edgeData]);
-    if (!result.success)
-      console.warn("[warn] Possibly incompatible Edge:", [from, to, edgeData]);
+  //   const result = Schema.EdgeSchema.safeParse([from, to, edgeData]);
+  //   if (!result.success)
+  //     console.warn("[warn] Possibly incompatible Edge:", [from, to, edgeData]);
 
-    const g = DiGraph.compose(this.graph);
-    g.addNode([from.id as string, from]);
-    g.addNode([to.id as string, to]);
-    g.addEdge([from.id as string, to.id as string, edgeData]);
-    return new OldGraph(this.initialArgs, g);
-  }
+  //   const g = DiGraph.compose(this.graph);
+  //   g.addNode([from.id as string, from]);
+  //   g.addNode([to.id as string, to]);
+  //   g.addEdge([from.id as string, to.id as string, edgeData]);
+  //   return new OldGraph(this.initialArgs, g);
+  // }
 
-  /**
-   * Returns a new graph that includes provided edges.
-   */
-  withEdges(edges: OldGraph.NewSubstrateEdge[]): OldGraph {
-    return edges.reduce((graph, edge, _1, _2) => {
-      return graph.withEdge(edge);
-    }, this as OldGraph);
-  }
+  // /**
+  //  * Returns a new graph that includes provided edges.
+  //  */
+  // withEdges(edges: OldGraph.NewSubstrateEdge[]): OldGraph {
+  //   return edges.reduce((graph, edge, _1, _2) => {
+  //     return graph.withEdge(edge);
+  //   }, this as OldGraph);
+  // }
 
   /**
    * Returns the number of nodes in the graph.

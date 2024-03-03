@@ -1,12 +1,12 @@
 import * as Refs from "substrate/Refs";
-// import { v4 as uuidv4 } from "uuid";
+import { nanoid } from "nanoid";
 
 const refFactory = Refs.makeFactory();
 
 const nodeIdGenerator = (start: number = 1) => {
   let n = start;
   return (node: string) => {
-    const id = `${node + "_" || "node_"}` + n.toString();
+    const id = `node${n.toString()}_${node}_${nanoid(8)}}`;
     n = n + 1;
     return id;
   };
@@ -20,7 +20,7 @@ export class Node {
   args: any = {};
   _output: boolean = false;
 
-  constructor(args: any = {}) {
+  constructor(args: any) {
     this.node = this.constructor.name;
     this.id = generator(this.node);
     this.args = args;
@@ -31,7 +31,7 @@ export class Node {
     return this;
   }
 
-  get ref() {
+  get future() {
     return refFactory.makeProxiedRef(this) as any;
   }
 

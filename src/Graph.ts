@@ -1,6 +1,7 @@
 import { DiGraph } from "substrate/DiGraph";
 import * as Operation from "substrate/Operation";
 import * as Refs from "substrate/Refs";
+import { nanoid } from "nanoid";
 
 type NodeLike = { id: string; args: Object };
 
@@ -14,7 +15,7 @@ export class Graph {
   opIdGenerator = (start: number = 1) => {
     let n = start;
     return () => {
-      const id = "op_" + n.toString();
+      const id = `op${n.toString()}_${nanoid(8)}`;
       n = n + 1;
       return id;
     };

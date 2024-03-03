@@ -4,7 +4,7 @@ import { Node } from "substrate/Node";
 
 export class FooNode extends Node {
   constructor(args: any = {}) {
-    super();
+    super(args);
     this.args = args;
   }
 }
@@ -15,14 +15,14 @@ describe("Graph", () => {
     a.id = "a";
     const b = new FooNode({
       str: "b_str",
-      num: a.ref.num,
+      num: a.future.num,
       nested: [{ key: "b_val_1" }, { key: "b_val_2" }],
     });
     b.id = "b";
     const c = new FooNode({
-      num: b.ref.num,
-      str: b.ref.nested[a.ref.num].key,
-      nested: { key: b.ref.str },
+      num: b.future.num,
+      str: b.future.nested[a.future.num].key,
+      nested: { key: b.future.str },
     });
     c.id = "c";
     const g = new Graph().add(a).add(b).add(c);
@@ -60,6 +60,5 @@ describe("Graph", () => {
     expect(op5.op_stack[0].args.key).toEqual("str"); // b.nested
     expect(result.nodes.length).toEqual(3);
     expect(result.ops.length).toEqual(5); // 5 refs
-    expect(result).toMatchSnapshot();
   });
 });

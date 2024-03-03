@@ -1,8 +1,4 @@
 #!/usr/bin/env -S npm run ts-node --transpileOnly
-/*
- * - Ref broken since refactor
- * - String concat – does it work?
- */
 
 import {
   Substrate,
@@ -19,7 +15,7 @@ const substrate = new Substrate({
 const a = new GenerateText({
   prompt: "ask me a short trivia question in one sentence",
 }).output();
-const b = new GenerateText({ prompt: a.ref.text }).output();
+const b = new GenerateText({ prompt: a.future.text }).output();
 const g = new Graph();
 g.add(a);
 g.add(b);

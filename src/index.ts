@@ -2,7 +2,7 @@
  *
  */
 export { Graph } from "substrate/Graph";
-export { GenerateText } from "substrate/GenerateText";
+export { GenerateText } from "substrate/Nodes";
 export { SubstrateError } from "substrate/Error";
 
 import { Substrate } from "substrate/Substrate";
