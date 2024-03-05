@@ -21,6 +21,8 @@ describe("Node", () => {
   test(".node", () => {
     const n = new FooNode({});
     expect(n.node).toEqual("FooNode");
+    expect(n.id.startsWith("FooNode"));
+    expect(n.id.includes("_"));
   });
 
   test(".output()", () => {

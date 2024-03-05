@@ -6,7 +6,7 @@ const refFactory = Refs.makeFactory();
 const nodeIdGenerator = (start: number = 1) => {
   let n = start;
   return (node: string) => {
-    const id = `node${n.toString()}_${node}_${nanoid(8)}}`;
+    const id = `${node}${n.toString()}_${nanoid(8)}}`;
     n = n + 1;
     return id;
   };
