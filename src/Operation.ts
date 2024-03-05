@@ -1,4 +1,4 @@
-import { Ref } from "./Refs";
+import { Ref, ID_PREFIX, ID_SUFFIX } from "./Refs";
 
 type NonEmptyArray<T> = T[] & { 0: T };
 
@@ -87,6 +87,24 @@ export const replaceRefsWithOps = (args: any, refFactory: any, newId: any) => {
       return obj.map((item) => traverse(item));
     }
 
+    // console.log("obj", obj);
+    if (typeof obj === "string" && obj.includes(ID_PREFIX)) {
+      const tokens: string[] = [];
+      let remainingString = obj;
+      const regex = `${ID_PREFIX}(.*?)${ID_SUFFIX}`;
+      const idPattern = new RegExp(regex, "g");
+      let match: RegExpExecArray | null;
+
+      // My vague idea here is to take a string that contains ops, and convert that into a series of string-concats
+      while ((match = idPattern.exec(obj)) !== null) {
+        const refId = match[0];
+        console.log("refId", refId);
+        const ref = refFactory.refs[refId];
+        console.log("REF IN FACTORY", ref);
+        tokens.push(match[0]);
+        remainingString = remainingString.replace(match[0], "{}");
+      }
+    }
     if (typeof obj === "object") {
       if (refFactory.isRef(obj)) {
         const ref = refFactory.getTarget(obj);

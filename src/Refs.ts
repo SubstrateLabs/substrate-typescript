@@ -26,13 +26,14 @@ export type RefFactory = {
 };
 
 // This is used internally to allow Ref objects to be used as props via a special string. We might want to make this configurable, but also may be OK with a well-known obscure value.
-const ID_PREFIX = "$$ID:";
+export const ID_PREFIX = "__ID:";
+export const ID_SUFFIX = ":ID__";
 
 // This is a "virtual" property that exists on Proxied Refs and used to get the unproxied Ref.
 const TARGET_PROP = "$target";
 
 export const makeFactory = (refs: RefTable = {}): RefFactory => {
-  const id = () => `${ID_PREFIX}${nanoid(8)}`;
+  const id = () => `${ID_PREFIX}${nanoid(8)}${ID_SUFFIX}`;
 
   const makeProxiedRef = (node: NodeLike, props: any[] = []): any => {
     const ref: Ref = {
@@ -65,7 +66,10 @@ export const makeFactory = (refs: RefTable = {}): RefFactory => {
          * private lookup table.
          */
         if (prop === Symbol.toPrimitive) {
-          return () => target.id;
+          return () => {
+            // Here we want to return target.id but also
+            return target.id;
+          };
         }
 
         if (typeof prop !== "string") throw new Error("is this possible?");
@@ -75,7 +79,8 @@ export const makeFactory = (refs: RefTable = {}): RefFactory => {
           : { t: "Key", value: prop };
         const props = [...ref.props, nextProp];
 
-        return makeProxiedRef(target.node, props);
+        const proxiedRef = makeProxiedRef(target.node, props);
+        return proxiedRef;
       },
     });
   };

@@ -1,7 +1,8 @@
-import * as Refs from "substrate/Refs";
+// import * as Refs from "substrate/Refs";
+import { refFactory } from "./Graph";
 import { nanoid } from "nanoid";
 
-const refFactory = Refs.makeFactory();
+// const refFactory = Refs.makeFactory();
 
 const nodeIdGenerator = (start: number = 1) => {
   let n = start;

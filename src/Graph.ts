@@ -5,7 +5,7 @@ import { nanoid } from "nanoid";
 
 type NodeLike = { id: string; args: Object };
 
-const refFactory = Refs.makeFactory();
+export const refFactory = Refs.makeFactory();
 
 export class Graph {
   newOpId: any;
@@ -40,6 +40,7 @@ export class Graph {
   }
 
   toJSON() {
+    console.log("toJSON::refFactory.refs", refFactory.refs);
     let res: any = this.nodes.reduce(
       (acc, node) => {
         const { args, ops } = Operation.replaceRefsWithOps(
