@@ -1,7 +1,7 @@
 import { DiGraph } from "substrate/DiGraph";
 import * as Operation from "substrate/Operation";
 import * as Refs from "substrate/Refs";
-import { nanoid } from "nanoid";
+import { v4 as uuidv4 } from "uuid";
 
 type NodeLike = { id: string; args: Object };
 
@@ -15,7 +15,7 @@ export class Graph {
   opIdGenerator = (start: number = 1) => {
     let n = start;
     return () => {
-      const id = `op${n.toString()}_${nanoid(8)}`;
+      const id = `op${n.toString()}_${uuidv4().slice(0, 8)}`;
       n = n + 1;
       return id;
     };
