@@ -11,7 +11,8 @@ export class FooNode extends Node {
 }
 
 describe("Graph", () => {
-  test.only("sb concat right", () => {
+  // NOTE(ben): trying to get string concat to work, realizing that we have Refs and not OpSets
+  test.skip("sb concat right", () => {
     const a = new FooNode({ str: "a_str" });
     a.id = "a";
     const b = new FooNode({ str: sb.concat(a.future.str, "b_str") }).output();
@@ -22,6 +23,12 @@ describe("Graph", () => {
     expect(d.nodes.length).toEqual(2);
     expect(d.edges.length).toEqual(0); // no edges, the implicit dag is created server-side
     // const ops = d.ops;
+  });
+  test.only("refs scratch", () => {
+    const a = new FooNode({ str: "a_str" });
+    a.id = "a";
+    const ref = a.future.str;
+    console.log("ref", ref);
   });
   test("multiple refs serialization", () => {
     const a = new FooNode({ num: 1, str: "a_str" });

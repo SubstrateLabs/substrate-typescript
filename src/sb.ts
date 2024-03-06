@@ -1,4 +1,4 @@
-import { Operation, Edge, OpSet, HasId, ConcatArgs } from "./Operation";
+import { Operation, OpSet, ConcatArgs } from "./Operation";
 
 export class sb {
   public static concat(...args: Array<string | OpSet>): string | OpSet {
@@ -18,6 +18,7 @@ export class sb {
     }
   }
 
+  // NOTE: This concats OpSets, but we have Refs
   private static concat_two(
     left: string | OpSet,
     right: string | OpSet,
@@ -44,7 +45,6 @@ export class sb {
         op_stack: left.op_stack.concat([op]),
         op_graph_edges: left.op_graph_edges,
       };
-      // TODO-nec? left.set_edges()
       return os;
     } else if (!isLeftFuture && isRightFuture) {
       const args: ConcatArgs = {
@@ -64,7 +64,6 @@ export class sb {
         op_stack: right.op_stack.concat([op]),
         op_graph_edges: right.op_graph_edges,
       };
-      // TODO-nec? right.set_edges()
       return os;
     } else if (isLeftFuture && !isRightFuture) {
       const args: ConcatArgs = {
@@ -84,7 +83,6 @@ export class sb {
         op_stack: left.op_stack.concat([op]),
         op_graph_edges: left.op_graph_edges,
       };
-      // TODO-nec? right.set_edges()
       return os;
     } else {
       // !isLeftFuture && !isRightFuture

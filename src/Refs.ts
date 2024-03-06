@@ -1,4 +1,4 @@
-import { nanoid } from "nanoid";
+import { v4 as uuidv4 } from "uuid";
 
 type NodeLike = {
   id: string;
@@ -32,7 +32,7 @@ const ID_PREFIX = "$$ID:";
 const TARGET_PROP = "$target";
 
 export const makeFactory = (refs: RefTable = {}): RefFactory => {
-  const id = () => `${ID_PREFIX}${nanoid(8)}`;
+  const id = () => `${ID_PREFIX}${uuidv4().slice(0, 8)}`;
 
   const makeProxiedRef = (node: NodeLike, props: any[] = []): any => {
     const ref: Ref = {
