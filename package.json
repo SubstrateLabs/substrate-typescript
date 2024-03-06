@@ -42,7 +42,6 @@
     "vitest": "^1.0.4"
   },
   "dependencies": {
-    "nanoid": "^5.0.6",
     "zod": "^3.22.4"
   }
 }
