@@ -10,7 +10,7 @@ export class FooNode extends Node {
 }
 
 describe("Graph", () => {
-  test("a.ref.foo", () => {
+  test("multiple", () => {
     const a = new FooNode({ num: 1, str: "a_str" });
     a.id = "a";
     const b = new FooNode({
@@ -26,8 +26,9 @@ describe("Graph", () => {
     });
     c.id = "c";
     const g = new Graph().add(a).add(b).add(c);
-    console.log();
     const result = g.toJSON();
+    expect(result.nodes.length).toEqual(3);
+    expect(result.edges.length).toEqual(0); // no edges, the implicit dag is created server-side
     const ops = result.ops;
     const a_json = result.nodes[0];
     expect(a_json.id).toEqual("a");
