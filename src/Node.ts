@@ -1,12 +1,12 @@
 import * as Refs from "substrate/Refs";
-import { nanoid } from "nanoid";
+import { v4 as uuidv4 } from "uuid";
 
 const refFactory = Refs.makeFactory();
 
 const nodeIdGenerator = (start: number = 1) => {
   let n = start;
   return (node: string) => {
-    const id = `${node}${n.toString()}_${nanoid(8)}}`;
+    const id = `${node}${n.toString()}_${uuidv4().slice(0, 8)}`;
     n = n + 1;
     return id;
   };
