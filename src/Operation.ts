@@ -28,8 +28,8 @@ type GetOp<T extends GetArgs> = {
   type: "get";
   args: T;
 };
-type ConcatDirection = "left" | "right";
-type ConcatArgs = {
+export type ConcatDirection = "left" | "right";
+export type ConcatArgs = {
   op_id: OpSet["id"] | null;
   val: string | null;
   direction: ConcatDirection | null;
