@@ -2,44 +2,31 @@ import { Ref } from "./Refs";
 
 type NonEmptyArray<T> = T[] & { 0: T };
 
-export type HasId = { id: string };
-export type Edge<T extends HasId> = [T["id"], T["id"]];
+type HasId = { id: string };
+type Edge<T extends HasId> = [T["id"], T["id"]];
 type OpId = {
   __$$SB_GRAPH_OP_ID$$__: string;
 };
 
-export type OpSet = {
+type Op = {
   id: string;
   class: string;
-  op_stack: Operation[];
-  op_graph_edges: Edge<OpSet>[];
+  op_stack: OpStackItem[];
+  op_graph_edges: Edge<Op>[];
   node_graph_edges: Edge<HasId>[];
-  origin_node_id: HasId["id"];
+  origin_node_id: HasId["id"]; // Node Id
 };
 
-export type Operation =
-  | GetOp<GetItemArgs>
-  | GetOp<GetAttrArgs>
-  | StringConcatOp<ConcatArgs>;
-type GetItemArgs = { accessor: "item"; key: null; op_id: OpSet["id"] };
+type OpStackItem = GetOp<GetItemArgs> | GetOp<GetAttrArgs>; // maybe others eg. Set, Transform, tbd
+type GetItemArgs = { accessor: "item"; key: null; op_id: Op["id"] };
 type GetAttrArgs = { accessor: "attr"; key: string; op_id: null };
 type GetArgs = GetItemArgs | GetAttrArgs;
 type GetOp<T extends GetArgs> = {
   type: "get";
   args: T;
 };
-export type ConcatDirection = "left" | "right";
-export type ConcatArgs = {
-  op_id: OpSet["id"] | null;
-  val: string | null;
-  direction: ConcatDirection | null;
-};
-type StringConcatOp<T extends ConcatArgs> = {
-  type: "string-concat";
-  args: T;
-};
 
-const getItemOp = (opId: OpSet["id"]): GetOp<GetItemArgs> => ({
+const getItemOp = (opId: Op["id"]): GetOp<GetItemArgs> => ({
   type: "get",
   args: {
     accessor: "item",
@@ -60,22 +47,21 @@ const getAttrOp = (key: string): GetOp<GetAttrArgs> => ({
 // a type of function that generates ids
 type NewId = () => string;
 
-// Creates a list of Ops from the given Ref
-export const refOps = (ref: Ref, id: NewId): NonEmptyArray<OpSet> => {
-  let op: OpSet = {
+export const refOps = (ref: Ref, id: NewId): NonEmptyArray<Op> => {
+  let op = {
     id: id(),
     class: "Node",
-    op_stack: [] as Operation[],
-    op_graph_edges: [] as Edge<OpSet>[],
+    op_stack: [] as OpStackItem[],
+    op_graph_edges: [] as Edge<Op>[],
     node_graph_edges: [] as Edge<HasId>[],
     origin_node_id: ref.node.id,
   };
-  let ops: NonEmptyArray<OpSet> = [op];
+  let ops: NonEmptyArray<Op> = [op];
 
   ref.props.forEach((prop) => {
     if (prop.t === "Ref") {
       const [refOp, ...restRefOps] = refOps(prop.value, () => id());
-      ops = [refOp, ...restRefOps].concat(ops) as NonEmptyArray<OpSet>;
+      ops = [refOp, ...restRefOps].concat(ops) as NonEmptyArray<Op>;
 
       op.op_graph_edges.push([refOp.id, op.id]);
       op.node_graph_edges.push([prop.value.node.id, ref.node.id]);
@@ -89,12 +75,12 @@ export const refOps = (ref: Ref, id: NewId): NonEmptyArray<OpSet> => {
   return ops;
 };
 
-export const opId = (id: OpSet["id"]): OpId => ({
+export const opId = (id: Op["id"]): OpId => ({
   __$$SB_GRAPH_OP_ID$$__: id,
 });
 
 export const replaceRefsWithOps = (args: any, refFactory: any, newId: any) => {
-  let collectedOps: OpSet[] = [];
+  let collectedOps: Op[] = [];
 
   const traverse = (obj: any): any => {
     if (Array.isArray(obj)) {
