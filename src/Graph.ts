@@ -8,11 +8,11 @@ type NodeLike = { id: string; args: Object };
 const refFactory = Refs.makeFactory();
 
 export class Graph {
-  newOpId: any;
+  newFutureId: any;
   graph: DiGraph;
 
   constructor(DAG: DiGraph = new DiGraph()) {
-    this.newOpId = idGenerator("op");
+    this.newFutureId = idGenerator("future");
     this.graph = DAG;
   }
 
@@ -35,7 +35,7 @@ export class Graph {
         const { args, ops } = Operation.replaceRefsWithOps(
           node.args,
           refFactory,
-          this.newOpId,
+          this.newFutureId,
         );
 
         return {
