@@ -37,10 +37,10 @@ describe("Graph", () => {
     // verify the contents of a single future
     const f1 = futures[0];
     expect(Object.values(b_json.args.num)[0]).toEqual(f1.id);
-    expect(f1.origin_node_id).toEqual("a");
-    expect(f1.op_stack.length).toEqual(1);
-    expect(f1.op_stack[0].type).toEqual("get");
-    expect(f1.op_stack[0].args.key).toEqual("num");
+    expect(f1.directive.type).toEqual("trace");
+    expect(f1.directive.origin_node_id).toEqual("a");
+    expect(f1.directive.op_stack.length).toEqual(1);
+    expect(f1.directive.op_stack[0].key).toEqual("num");
     expect(b_json.args.nested).toBeInstanceOf(Array);
     const c_json = result.nodes[2];
     expect(c_json.args.nested.key).toBeInstanceOf(Object); // f5
@@ -48,16 +48,16 @@ describe("Graph", () => {
     expect(c_json.args.str).toBeInstanceOf(Object); // f3
     // verify the contents of a composite future, b.nested[a.num].key
     const f4 = futures[2]; // f4 (a.num)
-    expect(f4.origin_node_id).toEqual("a");
-    expect(f4.op_stack[0].args.key).toEqual("num");
+    expect(f4.directive.origin_node_id).toEqual("a");
+    expect(f4.directive.op_stack[0].key).toEqual("num");
     const f3 = futures[3]; // b.nested[a.num].key
-    expect(f3.origin_node_id).toEqual("b");
-    expect(f3.op_stack[0].args.key).toEqual("nested"); // b.nested
-    expect(f3.op_stack[1].args.future_id).toEqual(f4.id); // [a.num]
-    expect(f3.op_stack[2].args.key).toEqual("key"); // .key
+    expect(f3.directive.origin_node_id).toEqual("b");
+    expect(f3.directive.op_stack[0].key).toEqual("nested"); // b.nested
+    expect(f3.directive.op_stack[1].future_id).toEqual(f4.id); // [a.num]
+    expect(f3.directive.op_stack[2].key).toEqual("key"); // .key
     const f5 = futures[4]; // b.str
-    expect(f5.origin_node_id).toEqual("b");
-    expect(f5.op_stack[0].args.key).toEqual("str"); // b.nested
+    expect(f5.directive.origin_node_id).toEqual("b");
+    expect(f5.directive.op_stack[0].key).toEqual("str"); // b.nested
     expect(result.nodes.length).toEqual(3);
     expect(result.futures.length).toEqual(5); // 5 futures
   });
