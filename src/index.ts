@@ -1,6 +1,3 @@
-/**
- *
- */
 export { Graph } from "substrate/Graph";
 export { GenerateText } from "substrate/Nodes";
 export { SubstrateError } from "substrate/Error";
