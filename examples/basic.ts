@@ -1,5 +1,9 @@
 #!/usr/bin/env -S npm run ts-node --transpileOnly
 
+/**
+ basic GenerateText->GenerateText example
+*/
+
 import {
   Substrate,
   GenerateText,

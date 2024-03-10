@@ -46,6 +46,7 @@ export class Graph {
       { nodes: [], futures: [] },
     );
     res.edges = this.edges;
+    res.initial_args = {}; // TODO: think about how/whether to expose initial_args
     return res;
   }
 }

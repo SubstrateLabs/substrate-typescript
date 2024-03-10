@@ -10,7 +10,7 @@ export class FooNode extends Node {
 }
 
 describe("Graph", () => {
-  test("a.ref.foo", () => {
+  test("relatively complex graph serialization example", () => {
     const a = new FooNode({ num: 1, str: "a_str" });
     a.id = "a";
     const b = new FooNode({
