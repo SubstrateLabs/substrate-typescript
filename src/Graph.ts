@@ -1,5 +1,5 @@
 import { DiGraph } from "substrate/DiGraph";
-import * as Operation from "substrate/Operation";
+import * as Future from "substrate/Future";
 import * as Refs from "substrate/Refs";
 import { idGenerator } from "substrate/idGenerator";
 
@@ -32,7 +32,7 @@ export class Graph {
   toJSON() {
     let res: any = this.nodes.reduce(
       (acc, node) => {
-        const { args, ops } = Operation.replaceRefsWithOps(
+        const { args, futures } = Future.replaceRefsWithFutures(
           node.args,
           refFactory,
           this.newFutureId,
@@ -40,13 +40,12 @@ export class Graph {
 
         return {
           nodes: [...acc.nodes, { ...node.toJSON(), args }],
-          ops: [...acc.ops, ...ops],
+          futures: [...acc.futures, ...futures],
         };
       },
-      { nodes: [], ops: [] },
+      { nodes: [], futures: [] },
     );
     res.edges = this.edges;
-    res.initial_args = {}; // TODO
     return res;
   }
 }

@@ -28,37 +28,37 @@ describe("Graph", () => {
     const g = new Graph().add(a).add(b).add(c);
     console.log();
     const result = g.toJSON();
-    const ops = result.ops;
+    const futures = result.futures;
     const a_json = result.nodes[0];
     expect(a_json.id).toEqual("a");
     expect(a_json.args.num).toEqual(1);
     const b_json = result.nodes[1];
-    expect(b_json.args.num).toBeInstanceOf(Object); // op1
-    // verify the contents of a single ref
-    const op1 = ops[0];
-    expect(Object.values(b_json.args.num)[0]).toEqual(op1.id);
-    expect(op1.origin_node_id).toEqual("a");
-    expect(op1.op_stack.length).toEqual(1);
-    expect(op1.op_stack[0].type).toEqual("get");
-    expect(op1.op_stack[0].args.key).toEqual("num");
+    expect(b_json.args.num).toBeInstanceOf(Object); // f1
+    // verify the contents of a single future
+    const f1 = futures[0];
+    expect(Object.values(b_json.args.num)[0]).toEqual(f1.id);
+    expect(f1.origin_node_id).toEqual("a");
+    expect(f1.op_stack.length).toEqual(1);
+    expect(f1.op_stack[0].type).toEqual("get");
+    expect(f1.op_stack[0].args.key).toEqual("num");
     expect(b_json.args.nested).toBeInstanceOf(Array);
     const c_json = result.nodes[2];
-    expect(c_json.args.nested.key).toBeInstanceOf(Object); // op5
-    expect(c_json.args.num).toBeInstanceOf(Object); // op2
-    expect(c_json.args.str).toBeInstanceOf(Object); // op3
-    // verify the contents of a composite ref, b.nested[a.num].key
-    const op4 = ops[2]; // op4 (a.num)
-    expect(op4.origin_node_id).toEqual("a");
-    expect(op4.op_stack[0].args.key).toEqual("num");
-    const op3 = ops[3]; // b.nested[a.num].key
-    expect(op3.origin_node_id).toEqual("b");
-    expect(op3.op_stack[0].args.key).toEqual("nested"); // b.nested
-    expect(op3.op_stack[1].args.op_id).toEqual(op4.id); // [a.num]
-    expect(op3.op_stack[2].args.key).toEqual("key"); // .key
-    const op5 = ops[4]; // b.str
-    expect(op5.origin_node_id).toEqual("b");
-    expect(op5.op_stack[0].args.key).toEqual("str"); // b.nested
+    expect(c_json.args.nested.key).toBeInstanceOf(Object); // f5
+    expect(c_json.args.num).toBeInstanceOf(Object); // f2
+    expect(c_json.args.str).toBeInstanceOf(Object); // f3
+    // verify the contents of a composite future, b.nested[a.num].key
+    const f4 = futures[2]; // f4 (a.num)
+    expect(f4.origin_node_id).toEqual("a");
+    expect(f4.op_stack[0].args.key).toEqual("num");
+    const f3 = futures[3]; // b.nested[a.num].key
+    expect(f3.origin_node_id).toEqual("b");
+    expect(f3.op_stack[0].args.key).toEqual("nested"); // b.nested
+    expect(f3.op_stack[1].args.future_id).toEqual(f4.id); // [a.num]
+    expect(f3.op_stack[2].args.key).toEqual("key"); // .key
+    const f5 = futures[4]; // b.str
+    expect(f5.origin_node_id).toEqual("b");
+    expect(f5.op_stack[0].args.key).toEqual("str"); // b.nested
     expect(result.nodes.length).toEqual(3);
-    expect(result.ops.length).toEqual(5); // 5 refs
+    expect(result.futures.length).toEqual(5); // 5 futures
   });
 });
