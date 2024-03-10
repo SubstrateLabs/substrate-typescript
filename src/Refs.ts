@@ -1,4 +1,4 @@
-import { nanoid } from "nanoid";
+import { randomString } from "substrate/idGenerator";
 
 type NodeLike = {
   id: string;
@@ -32,7 +32,7 @@ const ID_PREFIX = "$$ID:";
 const TARGET_PROP = "$target";
 
 export const makeFactory = (refs: RefTable = {}): RefFactory => {
-  const id = () => `${ID_PREFIX}${nanoid(8)}`;
+  const id = () => `${ID_PREFIX}${randomString(8)}`;
 
   const makeProxiedRef = (node: NodeLike, props: any[] = []): any => {
     const ref: Ref = {

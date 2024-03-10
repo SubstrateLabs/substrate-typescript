@@ -1,7 +1,7 @@
 import { DiGraph } from "substrate/DiGraph";
 import * as Operation from "substrate/Operation";
 import * as Refs from "substrate/Refs";
-import { nanoid } from "nanoid";
+import { idGenerator } from "substrate/idGenerator";
 
 type NodeLike = { id: string; args: Object };
 
@@ -11,18 +11,8 @@ export class Graph {
   newOpId: any;
   graph: DiGraph;
 
-  // Generate incrementing ids for debugging legibility
-  opIdGenerator = (start: number = 1) => {
-    let n = start;
-    return () => {
-      const id = `op${n.toString()}_${nanoid(8)}`;
-      n = n + 1;
-      return id;
-    };
-  };
-
   constructor(DAG: DiGraph = new DiGraph()) {
-    this.newOpId = this.opIdGenerator();
+    this.newOpId = idGenerator("op");
     this.graph = DAG;
   }
 
