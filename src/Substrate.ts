@@ -1,6 +1,6 @@
 import { SubstrateError } from "substrate/Error";
 import { VERSION } from "substrate/version";
-import OpenAPIjson from "substrate/API/OpenAPI.json";
+import OpenAPIjson from "substrate/openapi.json";
 import { Graph } from "substrate/Graph";
 import { APIResponse } from "substrate/APIResponse";
 
