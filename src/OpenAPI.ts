@@ -89,12 +89,12 @@ export interface paths {
      */
     post: operations["RemoveBackground"];
   };
-  "/DetectSegment": {
+  "/DetectSegments": {
     /**
-     * DetectSegment
-     * @description Detect a segment in an image.
+     * DetectSegments
+     * @description Detect segments in an image given point(s) or bounding box(es).
      */
-    post: operations["DetectSegment"];
+    post: operations["DetectSegments"];
   };
   "/TranscribeMedia": {
     /**
@@ -143,49 +143,49 @@ export interface paths {
      * /vector-stores/create
      * @description Create a vector store for storing and querying embeddings.
      */
-    post: operations["CreateVectorStore"];
+    post: operations["/vector-stores/create"];
   };
   "/vector-stores/list": {
     /**
      * /vector-stores/list
      * @description List all vector stores.
      */
-    get: operations["ListVectorStores"];
+    get: operations["/vector-stores/list"];
   };
   "/vector-stores/delete": {
     /**
      * /vector-stores/delete
      * @description Delete a vector store.
      */
-    post: operations["DeleteVectorStore"];
+    post: operations["/vector-stores/delete"];
   };
   "/vector-stores/query": {
     /**
      * /vector-stores/query
      * @description Query a vector store for similar vectors.
      */
-    post: operations["QueryVectorStore"];
+    post: operations["/vector-stores/query"];
   };
   "/vectors/fetch": {
     /**
-     * Fetch vectors
+     * /vectors/fetch
      * @description Fetch vectors from a vector store.
      */
-    post: operations["FetchVectors"];
+    post: operations["/vectors/fetch"];
   };
   "/vectors/update": {
     /**
-     * Update vectors
+     * /vectors/update
      * @description Update vectors in a vector store.
      */
-    post: operations["UpdateVectors"];
+    post: operations["/vectors/update"];
   };
   "/vectors/delete": {
     /**
-     * Delete vectors
+     * /vectors/delete
      * @description Delete vectors in a vector store.
      */
-    post: operations["DeleteVectors"];
+    post: operations["/vectors/delete"];
   };
 }
 
@@ -326,14 +326,22 @@ export interface components {
     };
     /** GenerateImageIn */
     GenerateImageIn: {
-      /** @description Input prompt. */
+      /** @description Text prompt. */
       prompt: string;
+      /** @description Image prompt. */
+      image_prompt_uri?: string;
       /**
        * @description Selected model.
        * @default stablediffusion-xl
        * @enum {string}
        */
-      model?: "stablediffusion-xl" | "stablediffusion-1.5";
+      model?: "stablediffusion-xl";
+      /**
+       * Format: float
+       * @description Controls the influence of the image prompt on the generated output.
+       * @default 5
+       */
+      image_influence?: number;
       /** @description Negative input prompt. */
       negative_prompt?: string;
       /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
@@ -342,18 +350,6 @@ export interface components {
       width?: number;
       /** @description Height of output image, in pixels. */
       height?: number;
-      /**
-       * Format: float
-       * @description Controls how long to run the image refinement process.
-       * @default 6
-       */
-      refinement?: number;
-      /**
-       * Format: float
-       * @description Controls the influence of the input prompt on the generated output.
-       * @default 2
-       */
-      prompt_influence?: number;
       /** @description Seed for deterministic generation. Default is a random seed. */
       seed?: number;
     };
@@ -366,8 +362,10 @@ export interface components {
     };
     /** MultiGenerateImageIn */
     MultiGenerateImageIn: {
-      /** @description Input prompt. */
+      /** @description Text prompt. */
       prompt: string;
+      /** @description Image prompt. */
+      image_prompt_uri?: string;
       /** @description Number of images to generate. */
       num_images: number;
       /**
@@ -375,7 +373,13 @@ export interface components {
        * @default stablediffusion-xl
        * @enum {string}
        */
-      model?: "stablediffusion-xl" | "stablediffusion-1.5";
+      model?: "stablediffusion-xl";
+      /**
+       * Format: float
+       * @description Controls the influence of the image prompt on the generated output.
+       * @default 5
+       */
+      image_influence?: number;
       /** @description Negative input prompt. */
       negative_prompt?: string;
       /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
@@ -384,17 +388,6 @@ export interface components {
       width?: number;
       /** @description Height of output image, in pixels. */
       height?: number;
-      /**
-       * Format: float
-       * @description Controls how long to run the image refinement process.
-       * @default 6
-       */
-      refinement?: number;
-      /**
-       * Format: float
-       * @description Controls the influence of the input prompt on the generated output.
-       */
-      prompt_influence?: number;
       /** @description Random noise seeds. Default is random seeds for each generation. */
       seeds?: number[];
     };
@@ -415,117 +408,8 @@ export interface components {
        * @description Strategy to control generation using the input image.
        * @enum {string}
        */
-      control_method: "edge" | "upscale" | "depth" | "qr";
-      /** @description Input prompt. */
-      prompt: string;
-      /**
-       * @description Resolution of the output image, in pixels.
-       * @default 1024
-       */
-      output_resolution?: number;
-      /**
-       * @description Selected model.
-       * @default stablediffusion-xl
-       * @enum {string}
-       */
-      model?: "stablediffusion-1.5" | "stablediffusion-xl";
-      /** @description Negative input prompt. */
-      negative_prompt?: string;
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
-      store?: string;
-      /**
-       * Format: float
-       * @description Controls how long to run the image refinement process.
-       * @default 6
-       */
-      refinement?: number;
-      /**
-       * Format: float
-       * @description Controls the influence of the input image on the generated output.
-       * @default 9
-       */
-      image_influence?: number;
-      /**
-       * Format: float
-       * @description Controls the influence of the input prompt on the generated output.
-       * @default 2
-       */
-      prompt_influence?: number;
-      /** @description Seed for deterministic generation. Default is a random seed. */
-      seed?: number;
-    };
-    /** ControlledGenerateImageOut */
-    ControlledGenerateImageOut: {
-      /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-      image_uri: string;
-      /** @description The random noise seed used for generation. */
-      seed: number;
-    };
-    /** MultiControlledGenerateImageIn */
-    MultiControlledGenerateImageIn: {
-      /** @description Input image. */
-      image_uri: string;
-      /**
-       * @description Strategy to control generation using the input image.
-       * @enum {string}
-       */
-      control_method: "edge" | "upscale" | "depth" | "qr";
-      /** @description Input prompt. */
-      prompt: string;
-      /** @description Number of images to generate. */
-      num_images: number;
-      /**
-       * @description Resolution of the output image, in pixels.
-       * @default 1024
-       */
-      output_resolution?: number;
-      /**
-       * @description Selected model.
-       * @default stablediffusion-1.5
-       * @enum {string}
-       */
-      model?: "stablediffusion-1.5";
-      /** @description Negative input prompt. */
-      negative_prompt?: string;
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
-      store?: string;
-      /**
-       * Format: float
-       * @description Controls how long to run the image refinement process.
-       * @default 6
-       */
-      refinement?: number;
-      /**
-       * Format: float
-       * @description Controls the influence of the input image on the generated output.
-       * @default 9
-       */
-      image_influence?: number;
-      /**
-       * Format: float
-       * @description Controls the influence of the input prompt on the generated output.
-       * @default 2
-       */
-      prompt_influence?: number;
-      /** @description Random noise seeds. Default is random seeds for each generation. */
-      seeds?: number[];
-    };
-    /** MultiControlledGenerateImageOut */
-    MultiControlledGenerateImageOut: {
-      outputs: {
-          /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-          image_uri: string;
-          /** @description The random noise seed used for generation. */
-          seed: number;
-        }[];
-    };
-    /** GenerativeEditImageIn */
-    GenerativeEditImageIn: {
-      /** @description Input image. */
-      image_uri: string;
-      /** @description Mask image that controls which pixels are inpainted. If unset, the entire image is edited (image-to-image). */
-      mask_image_uri?: string;
-      /** @description Input prompt. */
+      control_method: "edge" | "depth" | "illusion";
+      /** @description Text prompt. */
       prompt: string;
       /**
        * @description Resolution of the output image, in pixels.
@@ -544,16 +428,103 @@ export interface components {
       store?: string;
       /**
        * Format: float
-       * @description Controls how long to run the image refinement process.
-       * @default 6
+       * @description Controls the influence of the input image on the generated output.
+       * @default 9
        */
-      refinement?: number;
+      image_influence?: number;
+      /** @description Seed for deterministic generation. Default is a random seed. */
+      seed?: number;
+    };
+    /** ControlledGenerateImageOut */
+    ControlledGenerateImageOut: {
+      /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+      image_uri: string;
+      /** @description The random noise seed used for generation. */
+      seed: number;
+    };
+    /** MultiControlledGenerateImageIn */
+    MultiControlledGenerateImageIn: {
+      /** @description Input image. */
+      image_uri: string;
+      /**
+       * @description Strategy to control generation using the input image.
+       * @enum {string}
+       */
+      control_method: "edge" | "depth" | "illusion";
+      /** @description Text prompt. */
+      prompt: string;
+      /** @description Number of images to generate. */
+      num_images: number;
+      /**
+       * @description Resolution of the output image, in pixels.
+       * @default 1024
+       */
+      output_resolution?: number;
+      /**
+       * @description Selected model.
+       * @default stablediffusion-xl
+       * @enum {string}
+       */
+      model?: "stablediffusion-xl";
+      /** @description Negative input prompt. */
+      negative_prompt?: string;
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      store?: string;
       /**
        * Format: float
-       * @description Controls the influence of the input prompt on the generated output.
+       * @description Controls the influence of the input image on the generated output.
+       * @default 9
+       */
+      image_influence?: number;
+      /** @description Random noise seeds. Default is random seeds for each generation. */
+      seeds?: number[];
+    };
+    /** MultiControlledGenerateImageOut */
+    MultiControlledGenerateImageOut: {
+      outputs: {
+          /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+          image_uri: string;
+          /** @description The random noise seed used for generation. */
+          seed: number;
+        }[];
+    };
+    /** GenerativeEditImageIn */
+    GenerativeEditImageIn: {
+      /** @description Original image. */
+      image_uri: string;
+      /** @description Text prompt. */
+      prompt: string;
+      /** @description Mask image that controls which pixels are inpainted. If unset, the entire image is edited (image-to-image). */
+      mask_image_uri?: string;
+      /** @description Image prompt. */
+      image_prompt_uri?: string;
+      /**
+       * @description Resolution of the output image, in pixels.
+       * @default 1024
+       */
+      output_resolution?: number;
+      /**
+       * @description Selected model.
+       * @default stablediffusion-xl
+       * @enum {string}
+       */
+      model?: "stablediffusion-xl";
+      /**
+       * Format: float
+       * @description Controls the strength of the generation process.
+       * @default 8
+       */
+      strength?: number;
+      /**
+       * Format: float
+       * @description Controls the influence of the image prompt on the generated output.
        * @default 5
        */
-      prompt_influence?: number;
+      image_prompt_influence?: number;
+      /** @description Negative input prompt. */
+      negative_prompt?: string;
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      store?: string;
       /** @description Seed for deterministic generation. Default is a random seed. */
       seed?: number;
     };
@@ -566,12 +537,14 @@ export interface components {
     };
     /** MultiGenerativeEditImageIn */
     MultiGenerativeEditImageIn: {
-      /** @description Input image. */
+      /** @description Original image. */
       image_uri: string;
+      /** @description Text prompt. */
+      prompt: string;
       /** @description Mask image that controls which pixels are edited (inpainting). If unset, the entire image is edited (image-to-image). */
       mask_image_uri?: string;
-      /** @description Input prompt. */
-      prompt: string;
+      /** @description Image prompt. */
+      image_prompt_uri?: string;
       /** @description Number of images to generate. */
       num_images: number;
       /**
@@ -581,32 +554,26 @@ export interface components {
       output_resolution?: number;
       /**
        * @description Selected model.
-       * @default stablediffusion-1.5
+       * @default stablediffusion-xl
        * @enum {string}
        */
-      model?: "stablediffusion-1.5";
+      model?: "stablediffusion-xl";
       /** @description Negative input prompt. */
       negative_prompt?: string;
       /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
       /**
        * Format: float
-       * @description Controls how long to run the image refinement process.
-       * @default 6
+       * @description Controls the strength of the generation process.
+       * @default 8
        */
-      refinement?: number;
+      strength?: number;
       /**
        * Format: float
-       * @description Controls the influence of the input image on the generated output.
-       * @default 9
+       * @description Controls the influence of the image prompt on the generated output.
+       * @default 5
        */
-      image_influence?: number;
-      /**
-       * Format: float
-       * @description Controls the influence of the input prompt on the generated output.
-       * @default 2
-       */
-      prompt_influence?: number;
+      image_prompt_influence?: number;
       /** @description Random noise seeds. Default is random seeds for each generation. */
       seeds?: number[];
     };
@@ -709,47 +676,53 @@ export interface components {
       /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
       image_uri: string;
     };
-    /** DetectSegmentIn */
-    DetectSegmentIn: {
+    /** DetectSegmentsIn */
+    DetectSegmentsIn: {
       /** @description Input image. */
       image_uri: string;
-      /** Point */
-      point_prompt?: {
-        /** @description X position. */
-        x: number;
-        /** @description Y position. */
-        y: number;
-      };
-      /** BoundingBox */
-      box_prompt?: {
-        /**
-         * Format: float
-         * @description Top left corner x.
-         */
-        x1: number;
-        /**
-         * Format: float
-         * @description Top left corner y.
-         */
-        y1: number;
-        /**
-         * Format: float
-         * @description Bottom right corner x.
-         */
-        x2: number;
-        /**
-         * Format: float
-         * @description Bottom right corner y.
-         */
-        y2: number;
-      };
+      /** @description Point prompts, to detect a segment under the point. One of `point_prompt` or `box_prompt` must be set. */
+      point_prompts?: {
+          /** @description X position. */
+          x: number;
+          /** @description Y position. */
+          y: number;
+        }[];
+      /** @description Box prompts, to detect a segment within the bounding box. One of `point_prompt` or `box_prompt` must be set. */
+      box_prompts?: {
+          /**
+           * Format: float
+           * @description Top left corner x.
+           */
+          x1: number;
+          /**
+           * Format: float
+           * @description Top left corner y.
+           */
+          y1: number;
+          /**
+           * Format: float
+           * @description Bottom right corner x.
+           */
+          x2: number;
+          /**
+           * Format: float
+           * @description Bottom right corner y.
+           */
+          y2: number;
+        }[];
+      /**
+       * @description Selected model.
+       * @default segment-anything
+       * @enum {string}
+       */
+      model?: "segment-anything";
       /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
     };
-    /** DetectSegmentOut */
-    DetectSegmentOut: {
-      /** @description Detected segment in 'mask image' format. Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-      mask_image_uri?: string;
+    /** DetectSegmentsOut */
+    DetectSegmentsOut: {
+      /** @description Detected segments in 'mask image' format. Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+      mask_image_uri: string;
     };
     /** TranscribeMediaIn */
     TranscribeMediaIn: {
@@ -1087,10 +1060,7 @@ export interface components {
       id: string;
       /** @description Embedding vector. */
       vector: number[];
-      /**
-       * @description Document metadata.
-       * @default {}
-       */
+      /** @description Document metadata. */
       metadata: Record<string, never>;
     };
     /** GetVectorsParams */
@@ -1113,10 +1083,7 @@ export interface components {
           id: string;
           /** @description Embedding vector. */
           vector: number[];
-          /**
-           * @description Document metadata.
-           * @default {}
-           */
+          /** @description Document metadata. */
           metadata: Record<string, never>;
         }[];
     };
@@ -1134,10 +1101,7 @@ export interface components {
       id: string;
       /** @description Embedding vector. */
       vector?: number[];
-      /**
-       * @description Document metadata.
-       * @default {}
-       */
+      /** @description Document metadata. */
       metadata?: Record<string, never>;
     };
     /** UpdateVectorsParams */
@@ -1155,10 +1119,7 @@ export interface components {
           id: string;
           /** @description Embedding vector. */
           vector?: number[];
-          /**
-           * @description Document metadata.
-           * @default {}
-           */
+          /** @description Document metadata. */
           metadata?: Record<string, never>;
         }[];
     };
@@ -1189,7 +1150,7 @@ export interface components {
       query_image_uris?: string[];
       /** @description Vector to use for the query. */
       query_vectors?: number[][];
-      /** @description Text to embed and use for the query. */
+      /** @description Texts to embed and use for the query. */
       query_strings?: string[];
       /**
        * @description Number of results to return.
@@ -1434,14 +1395,22 @@ export interface operations {
     parameters: {
       query?: {
         undefined?: {
-          /** @description Input prompt. */
+          /** @description Text prompt. */
           prompt: string;
+          /** @description Image prompt. */
+          image_prompt_uri?: string;
           /**
            * @description Selected model.
            * @default stablediffusion-xl
            * @enum {string}
            */
-          model?: "stablediffusion-xl" | "stablediffusion-1.5";
+          model?: "stablediffusion-xl";
+          /**
+           * Format: float
+           * @description Controls the influence of the image prompt on the generated output.
+           * @default 5
+           */
+          image_influence?: number;
           /** @description Negative input prompt. */
           negative_prompt?: string;
           /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
@@ -1450,18 +1419,6 @@ export interface operations {
           width?: number;
           /** @description Height of output image, in pixels. */
           height?: number;
-          /**
-           * Format: float
-           * @description Controls how long to run the image refinement process.
-           * @default 6
-           */
-          refinement?: number;
-          /**
-           * Format: float
-           * @description Controls the influence of the input prompt on the generated output.
-           * @default 2
-           */
-          prompt_influence?: number;
           /** @description Seed for deterministic generation. Default is a random seed. */
           seed?: number;
         };
@@ -1489,8 +1446,10 @@ export interface operations {
     parameters: {
       query?: {
         undefined?: {
-          /** @description Input prompt. */
+          /** @description Text prompt. */
           prompt: string;
+          /** @description Image prompt. */
+          image_prompt_uri?: string;
           /** @description Number of images to generate. */
           num_images: number;
           /**
@@ -1498,7 +1457,13 @@ export interface operations {
            * @default stablediffusion-xl
            * @enum {string}
            */
-          model?: "stablediffusion-xl" | "stablediffusion-1.5";
+          model?: "stablediffusion-xl";
+          /**
+           * Format: float
+           * @description Controls the influence of the image prompt on the generated output.
+           * @default 5
+           */
+          image_influence?: number;
           /** @description Negative input prompt. */
           negative_prompt?: string;
           /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
@@ -1507,17 +1472,6 @@ export interface operations {
           width?: number;
           /** @description Height of output image, in pixels. */
           height?: number;
-          /**
-           * Format: float
-           * @description Controls how long to run the image refinement process.
-           * @default 6
-           */
-          refinement?: number;
-          /**
-           * Format: float
-           * @description Controls the influence of the input prompt on the generated output.
-           */
-          prompt_influence?: number;
           /** @description Random noise seeds. Default is random seeds for each generation. */
           seeds?: number[];
         };
@@ -1553,8 +1507,8 @@ export interface operations {
            * @description Strategy to control generation using the input image.
            * @enum {string}
            */
-          control_method: "edge" | "upscale" | "depth" | "qr";
-          /** @description Input prompt. */
+          control_method: "edge" | "depth" | "illusion";
+          /** @description Text prompt. */
           prompt: string;
           /**
            * @description Resolution of the output image, in pixels.
@@ -1566,29 +1520,17 @@ export interface operations {
            * @default stablediffusion-xl
            * @enum {string}
            */
-          model?: "stablediffusion-1.5" | "stablediffusion-xl";
+          model?: "stablediffusion-xl";
           /** @description Negative input prompt. */
           negative_prompt?: string;
           /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
           /**
            * Format: float
-           * @description Controls how long to run the image refinement process.
-           * @default 6
-           */
-          refinement?: number;
-          /**
-           * Format: float
            * @description Controls the influence of the input image on the generated output.
            * @default 9
            */
           image_influence?: number;
-          /**
-           * Format: float
-           * @description Controls the influence of the input prompt on the generated output.
-           * @default 2
-           */
-          prompt_influence?: number;
           /** @description Seed for deterministic generation. Default is a random seed. */
           seed?: number;
         };
@@ -1622,8 +1564,8 @@ export interface operations {
            * @description Strategy to control generation using the input image.
            * @enum {string}
            */
-          control_method: "edge" | "upscale" | "depth" | "qr";
-          /** @description Input prompt. */
+          control_method: "edge" | "depth" | "illusion";
+          /** @description Text prompt. */
           prompt: string;
           /** @description Number of images to generate. */
           num_images: number;
@@ -1634,32 +1576,20 @@ export interface operations {
           output_resolution?: number;
           /**
            * @description Selected model.
-           * @default stablediffusion-1.5
+           * @default stablediffusion-xl
            * @enum {string}
            */
-          model?: "stablediffusion-1.5";
+          model?: "stablediffusion-xl";
           /** @description Negative input prompt. */
           negative_prompt?: string;
           /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
           /**
            * Format: float
-           * @description Controls how long to run the image refinement process.
-           * @default 6
-           */
-          refinement?: number;
-          /**
-           * Format: float
            * @description Controls the influence of the input image on the generated output.
            * @default 9
            */
           image_influence?: number;
-          /**
-           * Format: float
-           * @description Controls the influence of the input prompt on the generated output.
-           * @default 2
-           */
-          prompt_influence?: number;
           /** @description Random noise seeds. Default is random seeds for each generation. */
           seeds?: number[];
         };
@@ -1689,12 +1619,14 @@ export interface operations {
     parameters: {
       query?: {
         undefined?: {
-          /** @description Input image. */
+          /** @description Original image. */
           image_uri: string;
+          /** @description Text prompt. */
+          prompt: string;
           /** @description Mask image that controls which pixels are inpainted. If unset, the entire image is edited (image-to-image). */
           mask_image_uri?: string;
-          /** @description Input prompt. */
-          prompt: string;
+          /** @description Image prompt. */
+          image_prompt_uri?: string;
           /**
            * @description Resolution of the output image, in pixels.
            * @default 1024
@@ -1706,22 +1638,22 @@ export interface operations {
            * @enum {string}
            */
           model?: "stablediffusion-xl";
+          /**
+           * Format: float
+           * @description Controls the strength of the generation process.
+           * @default 8
+           */
+          strength?: number;
+          /**
+           * Format: float
+           * @description Controls the influence of the image prompt on the generated output.
+           * @default 5
+           */
+          image_prompt_influence?: number;
           /** @description Negative input prompt. */
           negative_prompt?: string;
           /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
-          /**
-           * Format: float
-           * @description Controls how long to run the image refinement process.
-           * @default 6
-           */
-          refinement?: number;
-          /**
-           * Format: float
-           * @description Controls the influence of the input prompt on the generated output.
-           * @default 5
-           */
-          prompt_influence?: number;
           /** @description Seed for deterministic generation. Default is a random seed. */
           seed?: number;
         };
@@ -1749,12 +1681,14 @@ export interface operations {
     parameters: {
       query?: {
         undefined?: {
-          /** @description Input image. */
+          /** @description Original image. */
           image_uri: string;
+          /** @description Text prompt. */
+          prompt: string;
           /** @description Mask image that controls which pixels are edited (inpainting). If unset, the entire image is edited (image-to-image). */
           mask_image_uri?: string;
-          /** @description Input prompt. */
-          prompt: string;
+          /** @description Image prompt. */
+          image_prompt_uri?: string;
           /** @description Number of images to generate. */
           num_images: number;
           /**
@@ -1764,32 +1698,26 @@ export interface operations {
           output_resolution?: number;
           /**
            * @description Selected model.
-           * @default stablediffusion-1.5
+           * @default stablediffusion-xl
            * @enum {string}
            */
-          model?: "stablediffusion-1.5";
+          model?: "stablediffusion-xl";
           /** @description Negative input prompt. */
           negative_prompt?: string;
           /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
           /**
            * Format: float
-           * @description Controls how long to run the image refinement process.
-           * @default 6
+           * @description Controls the strength of the generation process.
+           * @default 8
            */
-          refinement?: number;
+          strength?: number;
           /**
            * Format: float
-           * @description Controls the influence of the input image on the generated output.
-           * @default 9
+           * @description Controls the influence of the image prompt on the generated output.
+           * @default 5
            */
-          image_influence?: number;
-          /**
-           * Format: float
-           * @description Controls the influence of the input prompt on the generated output.
-           * @default 2
-           */
-          prompt_influence?: number;
+          image_prompt_influence?: number;
           /** @description Random noise seeds. Default is random seeds for each generation. */
           seeds?: number[];
         };
@@ -1917,45 +1845,51 @@ export interface operations {
     };
   };
   /**
-   * DetectSegment
-   * @description Detect a segment in an image.
+   * DetectSegments
+   * @description Detect segments in an image given point(s) or bounding box(es).
    */
-  DetectSegment: {
+  DetectSegments: {
     parameters: {
       query?: {
         undefined?: {
           /** @description Input image. */
           image_uri: string;
-          /** Point */
-          point_prompt?: {
-            /** @description X position. */
-            x: number;
-            /** @description Y position. */
-            y: number;
-          };
-          /** BoundingBox */
-          box_prompt?: {
-            /**
-             * Format: float
-             * @description Top left corner x.
-             */
-            x1: number;
-            /**
-             * Format: float
-             * @description Top left corner y.
-             */
-            y1: number;
-            /**
-             * Format: float
-             * @description Bottom right corner x.
-             */
-            x2: number;
-            /**
-             * Format: float
-             * @description Bottom right corner y.
-             */
-            y2: number;
-          };
+          /** @description Point prompts, to detect a segment under the point. One of `point_prompt` or `box_prompt` must be set. */
+          point_prompts?: {
+              /** @description X position. */
+              x: number;
+              /** @description Y position. */
+              y: number;
+            }[];
+          /** @description Box prompts, to detect a segment within the bounding box. One of `point_prompt` or `box_prompt` must be set. */
+          box_prompts?: {
+              /**
+               * Format: float
+               * @description Top left corner x.
+               */
+              x1: number;
+              /**
+               * Format: float
+               * @description Top left corner y.
+               */
+              y1: number;
+              /**
+               * Format: float
+               * @description Bottom right corner x.
+               */
+              x2: number;
+              /**
+               * Format: float
+               * @description Bottom right corner y.
+               */
+              y2: number;
+            }[];
+          /**
+           * @description Selected model.
+           * @default segment-anything
+           * @enum {string}
+           */
+          model?: "segment-anything";
           /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
         };
@@ -1966,8 +1900,8 @@ export interface operations {
       200: {
         content: {
           "application/json": {
-            /** @description Detected segment in 'mask image' format. Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-            mask_image_uri?: string;
+            /** @description Detected segments in 'mask image' format. Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+            mask_image_uri: string;
           };
         };
       };
@@ -2273,7 +2207,7 @@ export interface operations {
    * /vector-stores/create
    * @description Create a vector store for storing and querying embeddings.
    */
-  CreateVectorStore: {
+  "/vector-stores/create": {
     parameters: {
       query?: {
         undefined?: {
@@ -2305,7 +2239,7 @@ export interface operations {
     };
     responses: {
       /** @description Vector store created. */
-      201: {
+      200: {
         content: {
           "application/json": {
             /** @description Vector store name. */
@@ -2340,7 +2274,7 @@ export interface operations {
    * /vector-stores/list
    * @description List all vector stores.
    */
-  ListVectorStores: {
+  "/vector-stores/list": {
     responses: {
       /** @description List of vector stores. */
       200: {
@@ -2378,7 +2312,7 @@ export interface operations {
    * /vector-stores/delete
    * @description Delete a vector store.
    */
-  DeleteVectorStore: {
+  "/vector-stores/delete": {
     parameters: {
       query?: {
         undefined?: {
@@ -2403,7 +2337,7 @@ export interface operations {
    * /vector-stores/query
    * @description Query a vector store for similar vectors.
    */
-  QueryVectorStore: {
+  "/vector-stores/query": {
     parameters: {
       query?: {
         undefined?: {
@@ -2420,7 +2354,7 @@ export interface operations {
           query_image_uris?: string[];
           /** @description Vector to use for the query. */
           query_vectors?: number[][];
-          /** @description Text to embed and use for the query. */
+          /** @description Texts to embed and use for the query. */
           query_strings?: string[];
           /**
            * @description Number of results to return.
@@ -2484,10 +2418,10 @@ export interface operations {
     };
   };
   /**
-   * Fetch vectors
+   * /vectors/fetch
    * @description Fetch vectors from a vector store.
    */
-  FetchVectors: {
+  "/vectors/fetch": {
     parameters: {
       query?: {
         undefined?: {
@@ -2514,10 +2448,7 @@ export interface operations {
                 id: string;
                 /** @description Embedding vector. */
                 vector: number[];
-                /**
-                 * @description Document metadata.
-                 * @default {}
-                 */
+                /** @description Document metadata. */
                 metadata: Record<string, never>;
               }[];
           };
@@ -2526,10 +2457,10 @@ export interface operations {
     };
   };
   /**
-   * Update vectors
+   * /vectors/update
    * @description Update vectors in a vector store.
    */
-  UpdateVectors: {
+  "/vectors/update": {
     parameters: {
       query?: {
         undefined?: {
@@ -2546,10 +2477,7 @@ export interface operations {
               id: string;
               /** @description Embedding vector. */
               vector?: number[];
-              /**
-               * @description Document metadata.
-               * @default {}
-               */
+              /** @description Document metadata. */
               metadata?: Record<string, never>;
             }[];
         };
@@ -2568,10 +2496,10 @@ export interface operations {
     };
   };
   /**
-   * Delete vectors
+   * /vectors/delete
    * @description Delete vectors in a vector store.
    */
-  DeleteVectors: {
+  "/vectors/delete": {
     parameters: {
       query?: {
         undefined?: {

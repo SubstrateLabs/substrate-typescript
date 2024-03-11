@@ -139,15 +139,20 @@ export const componentsSchema = z.object({
       text: z.string().describe("Text response."),
     }),
     GenerateImageIn: z.object({
-      prompt: z.string().describe("Input prompt."),
+      prompt: z.string().describe("Text prompt."),
+      image_prompt_uri: z.string().optional().describe("Image prompt."),
       model: z
-        .union([
-          z.literal("stablediffusion-xl"),
-          z.literal("stablediffusion-1.5"),
-        ])
+        .literal("stablediffusion-xl")
         .optional()
         .describe("Selected model.")
         .default("stablediffusion-xl"),
+      image_influence: z
+        .number()
+        .optional()
+        .describe(
+          "Controls the influence of the image prompt on the generated output.",
+        )
+        .default(5),
       negative_prompt: z.string().optional().describe("Negative input prompt."),
       store: z
         .string()
@@ -163,18 +168,6 @@ export const componentsSchema = z.object({
         .number()
         .optional()
         .describe("Height of output image, in pixels."),
-      refinement: z
-        .number()
-        .optional()
-        .describe("Controls how long to run the image refinement process.")
-        .default(6),
-      prompt_influence: z
-        .number()
-        .optional()
-        .describe(
-          "Controls the influence of the input prompt on the generated output.",
-        )
-        .default(2),
       seed: z
         .number()
         .optional()
@@ -191,16 +184,21 @@ export const componentsSchema = z.object({
       seed: z.number().describe("The random noise seed used for generation."),
     }),
     MultiGenerateImageIn: z.object({
-      prompt: z.string().describe("Input prompt."),
+      prompt: z.string().describe("Text prompt."),
+      image_prompt_uri: z.string().optional().describe("Image prompt."),
       num_images: z.number().describe("Number of images to generate."),
       model: z
-        .union([
-          z.literal("stablediffusion-xl"),
-          z.literal("stablediffusion-1.5"),
-        ])
+        .literal("stablediffusion-xl")
         .optional()
         .describe("Selected model.")
         .default("stablediffusion-xl"),
+      image_influence: z
+        .number()
+        .optional()
+        .describe(
+          "Controls the influence of the image prompt on the generated output.",
+        )
+        .default(5),
       negative_prompt: z.string().optional().describe("Negative input prompt."),
       store: z
         .string()
@@ -216,17 +214,6 @@ export const componentsSchema = z.object({
         .number()
         .optional()
         .describe("Height of output image, in pixels."),
-      refinement: z
-        .number()
-        .optional()
-        .describe("Controls how long to run the image refinement process.")
-        .default(6),
-      prompt_influence: z
-        .number()
-        .optional()
-        .describe(
-          "Controls the influence of the input prompt on the generated output.",
-        ),
       seeds: z
         .array(z.number())
         .optional()
@@ -251,24 +238,16 @@ export const componentsSchema = z.object({
     ControlledGenerateImageIn: z.object({
       image_uri: z.string().describe("Input image."),
       control_method: z
-        .union([
-          z.literal("edge"),
-          z.literal("upscale"),
-          z.literal("depth"),
-          z.literal("qr"),
-        ])
+        .union([z.literal("edge"), z.literal("depth"), z.literal("illusion")])
         .describe("Strategy to control generation using the input image."),
-      prompt: z.string().describe("Input prompt."),
+      prompt: z.string().describe("Text prompt."),
       output_resolution: z
         .number()
         .optional()
         .describe("Resolution of the output image, in pixels.")
         .default(1024),
       model: z
-        .union([
-          z.literal("stablediffusion-1.5"),
-          z.literal("stablediffusion-xl"),
-        ])
+        .literal("stablediffusion-xl")
         .optional()
         .describe("Selected model.")
         .default("stablediffusion-xl"),
@@ -279,11 +258,6 @@ export const componentsSchema = z.object({
         .describe(
           'Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string.',
         ),
-      refinement: z
-        .number()
-        .optional()
-        .describe("Controls how long to run the image refinement process.")
-        .default(6),
       image_influence: z
         .number()
         .optional()
@@ -291,13 +265,6 @@ export const componentsSchema = z.object({
           "Controls the influence of the input image on the generated output.",
         )
         .default(9),
-      prompt_influence: z
-        .number()
-        .optional()
-        .describe(
-          "Controls the influence of the input prompt on the generated output.",
-        )
-        .default(2),
       seed: z
         .number()
         .optional()
@@ -316,14 +283,9 @@ export const componentsSchema = z.object({
     MultiControlledGenerateImageIn: z.object({
       image_uri: z.string().describe("Input image."),
       control_method: z
-        .union([
-          z.literal("edge"),
-          z.literal("upscale"),
-          z.literal("depth"),
-          z.literal("qr"),
-        ])
+        .union([z.literal("edge"), z.literal("depth"), z.literal("illusion")])
         .describe("Strategy to control generation using the input image."),
-      prompt: z.string().describe("Input prompt."),
+      prompt: z.string().describe("Text prompt."),
       num_images: z.number().describe("Number of images to generate."),
       output_resolution: z
         .number()
@@ -331,10 +293,10 @@ export const componentsSchema = z.object({
         .describe("Resolution of the output image, in pixels.")
         .default(1024),
       model: z
-        .literal("stablediffusion-1.5")
+        .literal("stablediffusion-xl")
         .optional()
         .describe("Selected model.")
-        .default("stablediffusion-1.5"),
+        .default("stablediffusion-xl"),
       negative_prompt: z.string().optional().describe("Negative input prompt."),
       store: z
         .string()
@@ -342,11 +304,6 @@ export const componentsSchema = z.object({
         .describe(
           'Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string.',
         ),
-      refinement: z
-        .number()
-        .optional()
-        .describe("Controls how long to run the image refinement process.")
-        .default(6),
       image_influence: z
         .number()
         .optional()
@@ -354,13 +311,6 @@ export const componentsSchema = z.object({
           "Controls the influence of the input image on the generated output.",
         )
         .default(9),
-      prompt_influence: z
-        .number()
-        .optional()
-        .describe(
-          "Controls the influence of the input prompt on the generated output.",
-        )
-        .default(2),
       seeds: z
         .array(z.number())
         .optional()
@@ -383,14 +333,70 @@ export const componentsSchema = z.object({
       ),
     }),
     GenerativeEditImageIn: z.object({
-      image_uri: z.string().describe("Input image."),
+      image_uri: z.string().describe("Original image."),
+      prompt: z.string().describe("Text prompt."),
       mask_image_uri: z
         .string()
         .optional()
         .describe(
           "Mask image that controls which pixels are inpainted. If unset, the entire image is edited (image-to-image).",
         ),
-      prompt: z.string().describe("Input prompt."),
+      image_prompt_uri: z.string().optional().describe("Image prompt."),
+      output_resolution: z
+        .number()
+        .optional()
+        .describe("Resolution of the output image, in pixels.")
+        .default(1024),
+      model: z
+        .literal("stablediffusion-xl")
+        .optional()
+        .describe("Selected model.")
+        .default("stablediffusion-xl"),
+      strength: z
+        .number()
+        .optional()
+        .describe("Controls the strength of the generation process.")
+        .default(8),
+      image_prompt_influence: z
+        .number()
+        .optional()
+        .describe(
+          "Controls the influence of the image prompt on the generated output.",
+        )
+        .default(5),
+      negative_prompt: z.string().optional().describe("Negative input prompt."),
+      store: z
+        .string()
+        .optional()
+        .describe(
+          'Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string.',
+        ),
+      seed: z
+        .number()
+        .optional()
+        .describe(
+          "Seed for deterministic generation. Default is a random seed.",
+        ),
+    }),
+    GenerativeEditImageOut: z.object({
+      image_uri: z
+        .string()
+        .describe(
+          "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided.",
+        ),
+      seed: z.number().describe("The random noise seed used for generation."),
+    }),
+    MultiGenerativeEditImageIn: z.object({
+      image_uri: z.string().describe("Original image."),
+      prompt: z.string().describe("Text prompt."),
+      mask_image_uri: z
+        .string()
+        .optional()
+        .describe(
+          "Mask image that controls which pixels are edited (inpainting). If unset, the entire image is edited (image-to-image).",
+        ),
+      image_prompt_uri: z.string().optional().describe("Image prompt."),
+      num_images: z.number().describe("Number of images to generate."),
       output_resolution: z
         .number()
         .optional()
@@ -408,79 +414,18 @@ export const componentsSchema = z.object({
         .describe(
           'Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string.',
         ),
-      refinement: z
+      strength: z
         .number()
         .optional()
-        .describe("Controls how long to run the image refinement process.")
-        .default(6),
-      prompt_influence: z
+        .describe("Controls the strength of the generation process.")
+        .default(8),
+      image_prompt_influence: z
         .number()
         .optional()
         .describe(
-          "Controls the influence of the input prompt on the generated output.",
+          "Controls the influence of the image prompt on the generated output.",
         )
         .default(5),
-      seed: z
-        .number()
-        .optional()
-        .describe(
-          "Seed for deterministic generation. Default is a random seed.",
-        ),
-    }),
-    GenerativeEditImageOut: z.object({
-      image_uri: z
-        .string()
-        .describe(
-          "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided.",
-        ),
-      seed: z.number().describe("The random noise seed used for generation."),
-    }),
-    MultiGenerativeEditImageIn: z.object({
-      image_uri: z.string().describe("Input image."),
-      mask_image_uri: z
-        .string()
-        .optional()
-        .describe(
-          "Mask image that controls which pixels are edited (inpainting). If unset, the entire image is edited (image-to-image).",
-        ),
-      prompt: z.string().describe("Input prompt."),
-      num_images: z.number().describe("Number of images to generate."),
-      output_resolution: z
-        .number()
-        .optional()
-        .describe("Resolution of the output image, in pixels.")
-        .default(1024),
-      model: z
-        .literal("stablediffusion-1.5")
-        .optional()
-        .describe("Selected model.")
-        .default("stablediffusion-1.5"),
-      negative_prompt: z.string().optional().describe("Negative input prompt."),
-      store: z
-        .string()
-        .optional()
-        .describe(
-          'Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string.',
-        ),
-      refinement: z
-        .number()
-        .optional()
-        .describe("Controls how long to run the image refinement process.")
-        .default(6),
-      image_influence: z
-        .number()
-        .optional()
-        .describe(
-          "Controls the influence of the input image on the generated output.",
-        )
-        .default(9),
-      prompt_influence: z
-        .number()
-        .optional()
-        .describe(
-          "Controls the influence of the input prompt on the generated output.",
-        )
-        .default(2),
       seeds: z
         .array(z.number())
         .optional()
@@ -586,22 +531,37 @@ export const componentsSchema = z.object({
           "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided.",
         ),
     }),
-    DetectSegmentIn: z.object({
+    DetectSegmentsIn: z.object({
       image_uri: z.string().describe("Input image."),
-      point_prompt: z
-        .object({
-          x: z.number().describe("X position."),
-          y: z.number().describe("Y position."),
-        })
-        .optional(),
-      box_prompt: z
-        .object({
-          x1: z.number().describe("Top left corner x."),
-          y1: z.number().describe("Top left corner y."),
-          x2: z.number().describe("Bottom right corner x."),
-          y2: z.number().describe("Bottom right corner y."),
-        })
-        .optional(),
+      point_prompts: z
+        .array(
+          z.object({
+            x: z.number().describe("X position."),
+            y: z.number().describe("Y position."),
+          }),
+        )
+        .optional()
+        .describe(
+          "Point prompts, to detect a segment under the point. One of `point_prompt` or `box_prompt` must be set.",
+        ),
+      box_prompts: z
+        .array(
+          z.object({
+            x1: z.number().describe("Top left corner x."),
+            y1: z.number().describe("Top left corner y."),
+            x2: z.number().describe("Bottom right corner x."),
+            y2: z.number().describe("Bottom right corner y."),
+          }),
+        )
+        .optional()
+        .describe(
+          "Box prompts, to detect a segment within the bounding box. One of `point_prompt` or `box_prompt` must be set.",
+        ),
+      model: z
+        .literal("segment-anything")
+        .optional()
+        .describe("Selected model.")
+        .default("segment-anything"),
       store: z
         .string()
         .optional()
@@ -609,12 +569,11 @@ export const componentsSchema = z.object({
           'Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string.',
         ),
     }),
-    DetectSegmentOut: z.object({
+    DetectSegmentsOut: z.object({
       mask_image_uri: z
         .string()
-        .optional()
         .describe(
-          "Detected segment in 'mask image' format. Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided.",
+          "Detected segments in 'mask image' format. Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided.",
         ),
     }),
     TranscribeMediaIn: z.object({
@@ -985,9 +944,8 @@ export const componentsSchema = z.object({
         id: z.string().describe("Document ID."),
         vector: z.array(z.number()).describe("Embedding vector."),
         metadata: z
-          .record(z.never().describe("Document metadata.").default("{}"))
-          .describe("Document metadata.")
-          .default("{}"),
+          .record(z.never().describe("Document metadata."))
+          .describe("Document metadata."),
       })
       .describe("Canonical representation of document with embedding vector."),
     GetVectorsParams: z.object({
@@ -1004,9 +962,8 @@ export const componentsSchema = z.object({
             id: z.string().describe("Document ID."),
             vector: z.array(z.number()).describe("Embedding vector."),
             metadata: z
-              .record(z.never().describe("Document metadata.").default("{}"))
-              .describe("Document metadata.")
-              .default("{}"),
+              .record(z.never().describe("Document metadata."))
+              .describe("Document metadata."),
           }),
         )
         .describe("Retrieved vectors."),
@@ -1019,10 +976,9 @@ export const componentsSchema = z.object({
         id: z.string().describe("Document ID."),
         vector: z.array(z.number()).optional().describe("Embedding vector."),
         metadata: z
-          .record(z.never().describe("Document metadata.").default("{}"))
+          .record(z.never().describe("Document metadata."))
           .optional()
-          .describe("Document metadata.")
-          .default("{}"),
+          .describe("Document metadata."),
       })
       .describe("Document to update."),
     UpdateVectorsParams: z.object({
@@ -1039,10 +995,9 @@ export const componentsSchema = z.object({
               .optional()
               .describe("Embedding vector."),
             metadata: z
-              .record(z.never().describe("Document metadata.").default("{}"))
+              .record(z.never().describe("Document metadata."))
               .optional()
-              .describe("Document metadata.")
-              .default("{}"),
+              .describe("Document metadata."),
           }),
         )
         .describe("Vectors to upsert."),
@@ -1074,7 +1029,7 @@ export const componentsSchema = z.object({
       query_strings: z
         .array(z.string())
         .optional()
-        .describe("Text to embed and use for the query."),
+        .describe("Texts to embed and use for the query."),
       top_k: z
         .number()
         .optional()

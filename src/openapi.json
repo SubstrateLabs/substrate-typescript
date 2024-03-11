@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Substrate API",
-    "version": "2024-02-01",
+    "version": "2024-03-11",
     "contact": {
       "email": "support@substrate.run"
     },
@@ -22,10 +22,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "api_error",
-              "invalid_request_error"
-            ],
+            "enum": ["api_error", "invalid_request_error"],
             "description": "The type of error returned."
           },
           "message": {
@@ -33,10 +30,7 @@
             "description": "A message providing more details about the error."
           }
         },
-        "required": [
-          "type",
-          "message"
-        ]
+        "required": ["type", "message"]
       },
       "ResponseFormat": {
         "title": "ResponseFormat",
@@ -44,10 +38,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "json_object",
-              "text"
-            ],
+            "enum": ["json_object", "text"],
             "description": "Type of response.",
             "default": "text"
           },
@@ -56,9 +47,7 @@
             "description": "JSON schema to guide `json_object` response."
           }
         },
-        "required": [
-          "type"
-        ]
+        "required": ["type"]
       },
       "GenerateTextIn": {
         "title": "GenerateTextIn",
@@ -70,9 +59,7 @@
           },
           "model": {
             "type": "string",
-            "enum": [
-              "mistral-7b-instruct"
-            ],
+            "enum": ["mistral-7b-instruct"],
             "description": "Selected model.",
             "default": "mistral-7b-instruct"
           },
@@ -93,9 +80,7 @@
             "default": 800
           }
         },
-        "required": [
-          "prompt"
-        ]
+        "required": ["prompt"]
       },
       "MultiGenerateTextIn": {
         "title": "MultiGenerateTextIn",
@@ -111,9 +96,7 @@
           },
           "model": {
             "type": "string",
-            "enum": [
-              "mistral-7b-instruct"
-            ],
+            "enum": ["mistral-7b-instruct"],
             "description": "Selected model.",
             "default": "mistral-7b-instruct"
           },
@@ -134,10 +117,7 @@
             "default": 800
           }
         },
-        "required": [
-          "prompt",
-          "num_choices"
-        ]
+        "required": ["prompt", "num_choices"]
       },
       "GenerateTextOut": {
         "title": "GenerateTextOut",
@@ -164,9 +144,7 @@
             }
           }
         },
-        "required": [
-          "choices"
-        ]
+        "required": ["choices"]
       },
       "GenerateTextVisionIn": {
         "title": "GenerateTextVisionIn",
@@ -185,9 +163,7 @@
           },
           "model": {
             "type": "string",
-            "enum": [
-              "firellava-13b"
-            ],
+            "enum": ["firellava-13b"],
             "description": "Selected model.",
             "default": "firellava-13b"
           },
@@ -204,10 +180,7 @@
             "default": 800
           }
         },
-        "required": [
-          "prompt",
-          "image_uri"
-        ]
+        "required": ["prompt", "image_uri"]
       },
       "GenerateTextVisionOut": {
         "title": "GenerateTextVisionOut",
@@ -218,9 +191,7 @@
             "description": "Text response."
           }
         },
-        "required": [
-          "text"
-        ]
+        "required": ["text"]
       },
       "GenerateImageIn": {
         "title": "GenerateImageIn",
@@ -228,16 +199,25 @@
         "properties": {
           "prompt": {
             "type": "string",
-            "description": "Input prompt."
+            "description": "Text prompt."
+          },
+          "image_prompt_uri": {
+            "type": "string",
+            "description": "Image prompt."
           },
           "model": {
             "type": "string",
-            "enum": [
-              "stablediffusion-xl",
-              "stablediffusion-1.5"
-            ],
+            "enum": ["stablediffusion-xl"],
             "description": "Selected model.",
             "default": "stablediffusion-xl"
+          },
+          "image_influence": {
+            "type": "number",
+            "format": "float",
+            "description": "Controls the influence of the image prompt on the generated output.",
+            "minimum": 0,
+            "maximum": 10,
+            "default": 5
           },
           "negative_prompt": {
             "type": "string",
@@ -255,30 +235,12 @@
             "type": "integer",
             "description": "Height of output image, in pixels."
           },
-          "refinement": {
-            "type": "number",
-            "format": "float",
-            "description": "Controls how long to run the image refinement process.",
-            "minimum": 0,
-            "maximum": 10,
-            "default": 6
-          },
-          "prompt_influence": {
-            "type": "number",
-            "format": "float",
-            "description": "Controls the influence of the input prompt on the generated output.",
-            "minimum": 0,
-            "maximum": 10,
-            "default": 2
-          },
           "seed": {
             "type": "integer",
             "description": "Seed for deterministic generation. Default is a random seed."
           }
         },
-        "required": [
-          "prompt"
-        ]
+        "required": ["prompt"]
       },
       "GenerateImageOut": {
         "title": "GenerateImageOut",
@@ -293,10 +255,7 @@
             "description": "The random noise seed used for generation."
           }
         },
-        "required": [
-          "image_uri",
-          "seed"
-        ]
+        "required": ["image_uri", "seed"]
       },
       "MultiGenerateImageIn": {
         "title": "MultiGenerateImageIn",
@@ -304,7 +263,11 @@
         "properties": {
           "prompt": {
             "type": "string",
-            "description": "Input prompt."
+            "description": "Text prompt."
+          },
+          "image_prompt_uri": {
+            "type": "string",
+            "description": "Image prompt."
           },
           "num_images": {
             "type": "integer",
@@ -312,12 +275,17 @@
           },
           "model": {
             "type": "string",
-            "enum": [
-              "stablediffusion-xl",
-              "stablediffusion-1.5"
-            ],
+            "enum": ["stablediffusion-xl"],
             "description": "Selected model.",
             "default": "stablediffusion-xl"
+          },
+          "image_influence": {
+            "type": "number",
+            "format": "float",
+            "description": "Controls the influence of the image prompt on the generated output.",
+            "minimum": 0,
+            "maximum": 10,
+            "default": 5
           },
           "negative_prompt": {
             "type": "string",
@@ -335,21 +303,6 @@
             "type": "integer",
             "description": "Height of output image, in pixels."
           },
-          "refinement": {
-            "type": "number",
-            "format": "float",
-            "description": "Controls how long to run the image refinement process.",
-            "minimum": 0,
-            "maximum": 10,
-            "default": 6
-          },
-          "prompt_influence": {
-            "type": "number",
-            "format": "float",
-            "minimum": 0,
-            "maximum": 10,
-            "description": "Controls the influence of the input prompt on the generated output."
-          },
           "seeds": {
             "description": "Random noise seeds. Default is random seeds for each generation.",
             "type": "array",
@@ -358,10 +311,7 @@
             }
           }
         },
-        "required": [
-          "prompt",
-          "num_images"
-        ]
+        "required": ["prompt", "num_images"]
       },
       "MultiGenerateImageOut": {
         "title": "MultiGenerateImageOut",
@@ -374,9 +324,7 @@
             }
           }
         },
-        "required": [
-          "outputs"
-        ]
+        "required": ["outputs"]
       },
       "ControlledGenerateImageIn": {
         "title": "ControlledGenerateImageIn",
@@ -388,17 +336,12 @@
           },
           "control_method": {
             "type": "string",
-            "enum": [
-              "edge",
-              "upscale",
-              "depth",
-              "qr"
-            ],
+            "enum": ["edge", "depth", "illusion"],
             "description": "Strategy to control generation using the input image."
           },
           "prompt": {
             "type": "string",
-            "description": "Input prompt."
+            "description": "Text prompt."
           },
           "output_resolution": {
             "type": "integer",
@@ -407,10 +350,7 @@
           },
           "model": {
             "type": "string",
-            "enum": [
-              "stablediffusion-1.5",
-              "stablediffusion-xl"
-            ],
+            "enum": ["stablediffusion-xl"],
             "description": "Selected model.",
             "default": "stablediffusion-xl"
           },
@@ -422,14 +362,6 @@
             "type": "string",
             "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
           },
-          "refinement": {
-            "type": "number",
-            "format": "float",
-            "description": "Controls how long to run the image refinement process.",
-            "minimum": 0,
-            "maximum": 10,
-            "default": 6
-          },
           "image_influence": {
             "type": "number",
             "format": "float",
@@ -438,24 +370,12 @@
             "maximum": 10,
             "default": 9
           },
-          "prompt_influence": {
-            "type": "number",
-            "format": "float",
-            "description": "Controls the influence of the input prompt on the generated output.",
-            "minimum": 0,
-            "maximum": 10,
-            "default": 2
-          },
           "seed": {
             "type": "integer",
             "description": "Seed for deterministic generation. Default is a random seed."
           }
         },
-        "required": [
-          "image_uri",
-          "control_method",
-          "prompt"
-        ]
+        "required": ["image_uri", "control_method", "prompt"]
       },
       "ControlledGenerateImageOut": {
         "title": "ControlledGenerateImageOut",
@@ -470,10 +390,7 @@
             "description": "The random noise seed used for generation."
           }
         },
-        "required": [
-          "image_uri",
-          "seed"
-        ]
+        "required": ["image_uri", "seed"]
       },
       "MultiControlledGenerateImageIn": {
         "title": "MultiControlledGenerateImageIn",
@@ -485,17 +402,12 @@
           },
           "control_method": {
             "type": "string",
-            "enum": [
-              "edge",
-              "upscale",
-              "depth",
-              "qr"
-            ],
+            "enum": ["edge", "depth", "illusion"],
             "description": "Strategy to control generation using the input image."
           },
           "prompt": {
             "type": "string",
-            "description": "Input prompt."
+            "description": "Text prompt."
           },
           "num_images": {
             "type": "integer",
@@ -508,11 +420,9 @@
           },
           "model": {
             "type": "string",
-            "enum": [
-              "stablediffusion-1.5"
-            ],
+            "enum": ["stablediffusion-xl"],
             "description": "Selected model.",
-            "default": "stablediffusion-1.5"
+            "default": "stablediffusion-xl"
           },
           "negative_prompt": {
             "type": "string",
@@ -522,14 +432,6 @@
             "type": "string",
             "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
           },
-          "refinement": {
-            "type": "number",
-            "format": "float",
-            "description": "Controls how long to run the image refinement process.",
-            "minimum": 0,
-            "maximum": 10,
-            "default": 6
-          },
           "image_influence": {
             "type": "number",
             "format": "float",
@@ -537,14 +439,6 @@
             "minimum": 0,
             "maximum": 10,
             "default": 9
-          },
-          "prompt_influence": {
-            "type": "number",
-            "format": "float",
-            "description": "Controls the influence of the input prompt on the generated output.",
-            "minimum": 0,
-            "maximum": 10,
-            "default": 2
           },
           "seeds": {
             "description": "Random noise seeds. Default is random seeds for each generation.",
@@ -554,12 +448,7 @@
             }
           }
         },
-        "required": [
-          "image_uri",
-          "control_method",
-          "prompt",
-          "num_images"
-        ]
+        "required": ["image_uri", "control_method", "prompt", "num_images"]
       },
       "MultiControlledGenerateImageOut": {
         "title": "MultiControlledGenerateImageOut",
@@ -572,9 +461,7 @@
             }
           }
         },
-        "required": [
-          "outputs"
-        ]
+        "required": ["outputs"]
       },
       "GenerativeEditImageIn": {
         "title": "GenerativeEditImageIn",
@@ -582,15 +469,19 @@
         "properties": {
           "image_uri": {
             "type": "string",
-            "description": "Input image."
+            "description": "Original image."
+          },
+          "prompt": {
+            "type": "string",
+            "description": "Text prompt."
           },
           "mask_image_uri": {
             "type": "string",
             "description": "Mask image that controls which pixels are inpainted. If unset, the entire image is edited (image-to-image)."
           },
-          "prompt": {
+          "image_prompt_uri": {
             "type": "string",
-            "description": "Input prompt."
+            "description": "Image prompt."
           },
           "output_resolution": {
             "type": "integer",
@@ -599,11 +490,25 @@
           },
           "model": {
             "type": "string",
-            "enum": [
-              "stablediffusion-xl"
-            ],
+            "enum": ["stablediffusion-xl"],
             "description": "Selected model.",
             "default": "stablediffusion-xl"
+          },
+          "strength": {
+            "type": "number",
+            "format": "float",
+            "description": "Controls the strength of the generation process.",
+            "minimum": 0,
+            "maximum": 10,
+            "default": 8
+          },
+          "image_prompt_influence": {
+            "type": "number",
+            "format": "float",
+            "description": "Controls the influence of the image prompt on the generated output.",
+            "minimum": 0,
+            "maximum": 10,
+            "default": 5
           },
           "negative_prompt": {
             "type": "string",
@@ -613,31 +518,12 @@
             "type": "string",
             "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
           },
-          "refinement": {
-            "type": "number",
-            "format": "float",
-            "description": "Controls how long to run the image refinement process.",
-            "minimum": 0,
-            "maximum": 10,
-            "default": 6
-          },
-          "prompt_influence": {
-            "type": "number",
-            "format": "float",
-            "description": "Controls the influence of the input prompt on the generated output.",
-            "minimum": 0,
-            "maximum": 10,
-            "default": 5
-          },
           "seed": {
             "type": "integer",
             "description": "Seed for deterministic generation. Default is a random seed."
           }
         },
-        "required": [
-          "image_uri",
-          "prompt"
-        ]
+        "required": ["image_uri", "prompt"]
       },
       "GenerativeEditImageOut": {
         "title": "GenerativeEditImageOut",
@@ -652,10 +538,7 @@
             "description": "The random noise seed used for generation."
           }
         },
-        "required": [
-          "image_uri",
-          "seed"
-        ]
+        "required": ["image_uri", "seed"]
       },
       "MultiGenerativeEditImageIn": {
         "title": "MultiGenerativeEditImageIn",
@@ -663,15 +546,19 @@
         "properties": {
           "image_uri": {
             "type": "string",
-            "description": "Input image."
+            "description": "Original image."
+          },
+          "prompt": {
+            "type": "string",
+            "description": "Text prompt."
           },
           "mask_image_uri": {
             "type": "string",
             "description": "Mask image that controls which pixels are edited (inpainting). If unset, the entire image is edited (image-to-image)."
           },
-          "prompt": {
+          "image_prompt_uri": {
             "type": "string",
-            "description": "Input prompt."
+            "description": "Image prompt."
           },
           "num_images": {
             "type": "integer",
@@ -684,11 +571,9 @@
           },
           "model": {
             "type": "string",
-            "enum": [
-              "stablediffusion-1.5"
-            ],
+            "enum": ["stablediffusion-xl"],
             "description": "Selected model.",
-            "default": "stablediffusion-1.5"
+            "default": "stablediffusion-xl"
           },
           "negative_prompt": {
             "type": "string",
@@ -698,29 +583,21 @@
             "type": "string",
             "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
           },
-          "refinement": {
+          "strength": {
             "type": "number",
             "format": "float",
-            "description": "Controls how long to run the image refinement process.",
+            "description": "Controls the strength of the generation process.",
             "minimum": 0,
             "maximum": 10,
-            "default": 6
+            "default": 8
           },
-          "image_influence": {
+          "image_prompt_influence": {
             "type": "number",
             "format": "float",
-            "description": "Controls the influence of the input image on the generated output.",
+            "description": "Controls the influence of the image prompt on the generated output.",
             "minimum": 0,
             "maximum": 10,
-            "default": 9
-          },
-          "prompt_influence": {
-            "type": "number",
-            "format": "float",
-            "description": "Controls the influence of the input prompt on the generated output.",
-            "minimum": 0,
-            "maximum": 10,
-            "default": 2
+            "default": 5
           },
           "seeds": {
             "description": "Random noise seeds. Default is random seeds for each generation.",
@@ -730,11 +607,7 @@
             }
           }
         },
-        "required": [
-          "image_uri",
-          "prompt",
-          "num_images"
-        ]
+        "required": ["image_uri", "prompt", "num_images"]
       },
       "MultiGenerativeEditImageOut": {
         "title": "MultiGenerativeEditImageOut",
@@ -747,9 +620,7 @@
             }
           }
         },
-        "required": [
-          "outputs"
-        ]
+        "required": ["outputs"]
       },
       "BoundingBox": {
         "title": "BoundingBox",
@@ -776,12 +647,7 @@
             "description": "Bottom right corner y."
           }
         },
-        "required": [
-          "x1",
-          "y1",
-          "x2",
-          "y2"
-        ]
+        "required": ["x1", "y1", "x2", "y2"]
       },
       "Point": {
         "title": "Point",
@@ -796,10 +662,7 @@
             "description": "Y position."
           }
         },
-        "required": [
-          "x",
-          "y"
-        ]
+        "required": ["x", "y"]
       },
       "FillMaskIn": {
         "title": "FillMaskIn",
@@ -815,9 +678,7 @@
           },
           "model": {
             "type": "string",
-            "enum": [
-              "big-lama"
-            ],
+            "enum": ["big-lama"],
             "description": "Selected model.",
             "default": "big-lama"
           },
@@ -826,10 +687,7 @@
             "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
           }
         },
-        "required": [
-          "image_uri",
-          "mask_image_uri"
-        ]
+        "required": ["image_uri", "mask_image_uri"]
       },
       "FillMaskOut": {
         "title": "FillMaskOut",
@@ -840,9 +698,7 @@
             "description": "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided."
           }
         },
-        "required": [
-          "image_uri"
-        ]
+        "required": ["image_uri"]
       },
       "RemoveBackgroundIn": {
         "title": "RemoveBackgroundIn",
@@ -862,9 +718,7 @@
           },
           "model": {
             "type": "string",
-            "enum": [
-              "isnet"
-            ],
+            "enum": ["isnet"],
             "description": "Selected model.",
             "default": "isnet"
           },
@@ -873,9 +727,7 @@
             "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
           }
         },
-        "required": [
-          "image_uri"
-        ]
+        "required": ["image_uri"]
       },
       "RemoveBackgroundOut": {
         "title": "RemoveBackgroundOut",
@@ -886,9 +738,7 @@
             "description": "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided."
           }
         },
-        "required": [
-          "image_uri"
-        ]
+        "required": ["image_uri"]
       },
       "UpscaleImageIn": {
         "title": "UpscaleImageIn",
@@ -900,9 +750,7 @@
           },
           "model": {
             "type": "string",
-            "enum": [
-              "real-esrgan-x4"
-            ],
+            "enum": ["real-esrgan-x4"],
             "description": "Selected model.",
             "default": "real-esrgan-x4"
           },
@@ -911,9 +759,7 @@
             "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
           }
         },
-        "required": [
-          "image_uri"
-        ]
+        "required": ["image_uri"]
       },
       "UpscaleImageOut": {
         "title": "UpscaleImageOut",
@@ -924,48 +770,53 @@
             "description": "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided."
           }
         },
-        "required": [
-          "image_uri"
-        ]
+        "required": ["image_uri"]
       },
-      "DetectSegmentIn": {
-        "title": "DetectSegmentIn",
+      "DetectSegmentsIn": {
+        "title": "DetectSegmentsIn",
         "type": "object",
         "properties": {
           "image_uri": {
             "type": "string",
             "description": "Input image."
           },
-          "point_prompt": {
-            "description": "Point prompt, to detect a segment under the point. One of `point_prompt` or `box_prompt` must be set.",
-            "$ref": "#/components/schemas/Point"
+          "point_prompts": {
+            "description": "Point prompts, to detect a segment under the point. One of `point_prompt` or `box_prompt` must be set.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Point"
+            }
           },
-          "box_prompt": {
-            "description": "Box prompt, to detect a segment within the bounding box. One of `point_prompt` or `box_prompt` must be set.",
-            "$ref": "#/components/schemas/BoundingBox"
+          "box_prompts": {
+            "description": "Box prompts, to detect a segment within the bounding box. One of `point_prompt` or `box_prompt` must be set.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BoundingBox"
+            }
+          },
+          "model": {
+            "type": "string",
+            "enum": ["segment-anything"],
+            "description": "Selected model.",
+            "default": "segment-anything"
           },
           "store": {
             "type": "string",
             "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
           }
         },
-        "required": [
-          "image_uri"
-        ]
+        "required": ["image_uri"]
       },
-      "DetectSegmentOut": {
-        "title": "DetectSegmentOut",
+      "DetectSegmentsOut": {
+        "title": "DetectSegmentsOut",
         "type": "object",
         "properties": {
           "mask_image_uri": {
             "type": "string",
-            "description": "Detected segment in 'mask image' format. Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided."
+            "description": "Detected segments in 'mask image' format. Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided."
           }
         },
-        "required": [
-          "box",
-          "path"
-        ]
+        "required": ["mask_image_uri"]
       },
       "TranscribeMediaIn": {
         "title": "TranscribeMediaIn",
@@ -1005,9 +856,7 @@
             "description": "Suggest automatic chapter markers."
           }
         },
-        "required": [
-          "audio_uri"
-        ]
+        "required": ["audio_uri"]
       },
       "TranscribedWord": {
         "title": "TranscribedWord",
@@ -1032,9 +881,7 @@
             "description": "ID of speaker, if `diarize` is enabled."
           }
         },
-        "required": [
-          "word"
-        ]
+        "required": ["word"]
       },
       "TranscribedSegment": {
         "title": "TranscribedSegment",
@@ -1066,11 +913,7 @@
             }
           }
         },
-        "required": [
-          "text",
-          "start",
-          "end"
-        ]
+        "required": ["text", "start", "end"]
       },
       "ChapterMarker": {
         "title": "ChapterMarker",
@@ -1086,10 +929,7 @@
             "description": "Start time of chapter, in seconds."
           }
         },
-        "required": [
-          "title",
-          "start"
-        ]
+        "required": ["title", "start"]
       },
       "TranscribeMediaOut": {
         "title": "TranscribeMediaOut",
@@ -1114,9 +954,7 @@
             }
           }
         },
-        "required": [
-          "text"
-        ]
+        "required": ["text"]
       },
       "GenerateSpeechIn": {
         "title": "GenerateSpeechIn",
@@ -1140,9 +978,7 @@
             "description": "Use \"hosted\" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the audio data will be returned as a base64-encoded string."
           }
         },
-        "required": [
-          "text"
-        ]
+        "required": ["text"]
       },
       "GenerateSpeechOut": {
         "title": "GenerateSpeechOut",
@@ -1153,9 +989,7 @@
             "description": "Base 64-encoded WAV audio bytes, or a hosted audio url if `store` is provided."
           }
         },
-        "required": [
-          "audio_uri"
-        ]
+        "required": ["audio_uri"]
       },
       "Embedding": {
         "title": "Embedding",
@@ -1170,9 +1004,7 @@
             }
           }
         },
-        "required": [
-          "vector"
-        ]
+        "required": ["vector"]
       },
       "EmbedTextIn": {
         "title": "EmbedTextIn",
@@ -1184,10 +1016,7 @@
           },
           "model": {
             "type": "string",
-            "enum": [
-              "jina-v2",
-              "clip"
-            ],
+            "enum": ["jina-v2", "clip"],
             "description": "Selected model.",
             "default": "jina-v2"
           },
@@ -1205,9 +1034,7 @@
             "$ref": "#/components/schemas/EmbeddedMetadataSelect"
           }
         },
-        "required": [
-          "text"
-        ]
+        "required": ["text"]
       },
       "EmbedTextOut": {
         "title": "EmbedTextOut",
@@ -1219,9 +1046,7 @@
             "$ref": "#/components/schemas/Embedding"
           }
         },
-        "required": [
-          "embedding"
-        ]
+        "required": ["embedding"]
       },
       "EmbedTextItem": {
         "type": "object",
@@ -1235,9 +1060,7 @@
             "description": "Metadata that can be used to query the vector store. Ignored if `store` is unset."
           }
         },
-        "required": [
-          "text"
-        ]
+        "required": ["text"]
       },
       "MultiEmbedTextIn": {
         "title": "MultiEmbedTextIn",
@@ -1252,10 +1075,7 @@
           },
           "model": {
             "type": "string",
-            "enum": [
-              "jina-v2",
-              "clip"
-            ],
+            "enum": ["jina-v2", "clip"],
             "description": "Selected model.",
             "default": "jina-v2"
           },
@@ -1269,9 +1089,7 @@
             "$ref": "#/components/schemas/EmbeddedMetadataSelect"
           }
         },
-        "required": [
-          "items"
-        ]
+        "required": ["items"]
       },
       "MultiEmbedTextOut": {
         "title": "MultiEmbedTextOut",
@@ -1285,9 +1103,7 @@
             }
           }
         },
-        "required": [
-          "embeddings"
-        ]
+        "required": ["embeddings"]
       },
       "EmbeddedMetadataSelect": {
         "type": "object",
@@ -1318,9 +1134,7 @@
           },
           "model": {
             "type": "string",
-            "enum": [
-              "clip"
-            ],
+            "enum": ["clip"],
             "description": "Selected model.",
             "default": "clip"
           },
@@ -1329,9 +1143,7 @@
             "description": "[Vector store](/docs/vector-stores) identifier."
           }
         },
-        "required": [
-          "image_uri"
-        ]
+        "required": ["image_uri"]
       },
       "EmbedImageOut": {
         "title": "EmbedImageOut",
@@ -1343,9 +1155,7 @@
             "$ref": "#/components/schemas/Embedding"
           }
         },
-        "required": [
-          "embedding"
-        ]
+        "required": ["embedding"]
       },
       "EmbedImageItem": {
         "type": "object",
@@ -1355,9 +1165,7 @@
             "description": "Image to embed."
           }
         },
-        "required": [
-          "image_uri"
-        ]
+        "required": ["image_uri"]
       },
       "MultiEmbedImageIn": {
         "title": "MultiEmbedImageIn",
@@ -1376,16 +1184,12 @@
           },
           "model": {
             "type": "string",
-            "enum": [
-              "clip"
-            ],
+            "enum": ["clip"],
             "description": "Selected model.",
             "default": "clip"
           }
         },
-        "required": [
-          "items"
-        ]
+        "required": ["items"]
       },
       "MultiEmbedImageOut": {
         "title": "MultiEmbedImageOut",
@@ -1399,9 +1203,7 @@
             }
           }
         },
-        "required": [
-          "embeddings"
-        ]
+        "required": ["embeddings"]
       },
       "VectorStoreParams": {
         "title": "VectorStoreParams",
@@ -1417,10 +1219,7 @@
           "model": {
             "type": "string",
             "description": "Selected embedding model",
-            "enum": [
-              "jina-v2",
-              "clip"
-            ]
+            "enum": ["jina-v2", "clip"]
           },
           "m": {
             "type": "integer",
@@ -1438,19 +1237,12 @@
           },
           "metric": {
             "type": "string",
-            "enum": [
-              "cosine",
-              "l2",
-              "inner"
-            ],
+            "enum": ["cosine", "l2", "inner"],
             "default": "inner",
             "description": "The distance metric to construct the index with."
           }
         },
-        "required": [
-          "name",
-          "model"
-        ]
+        "required": ["name", "model"]
       },
       "DeleteVectorStoreParams": {
         "title": "DeleteVectorStoreParams",
@@ -1463,16 +1255,10 @@
           "model": {
             "type": "string",
             "description": "Selected embedding model",
-            "enum": [
-              "jina-v2",
-              "clip"
-            ]
+            "enum": ["jina-v2", "clip"]
           }
         },
-        "required": [
-          "name",
-          "model"
-        ]
+        "required": ["name", "model"]
       },
       "Vector": {
         "title": "Vector",
@@ -1493,15 +1279,10 @@
           },
           "metadata": {
             "type": "object",
-            "description": "Document metadata.",
-            "default": {}
+            "description": "Document metadata."
           }
         },
-        "required": [
-          "id",
-          "vector",
-          "metadata"
-        ]
+        "required": ["id", "vector", "metadata"]
       },
       "GetVectorsParams": {
         "title": "GetVectorsParams",
@@ -1514,10 +1295,7 @@
           "model": {
             "type": "string",
             "description": "Selected embedding model",
-            "enum": [
-              "jina-v2",
-              "clip"
-            ]
+            "enum": ["jina-v2", "clip"]
           },
           "ids": {
             "type": "array",
@@ -1528,11 +1306,7 @@
             "maxItems": 100
           }
         },
-        "required": [
-          "name",
-          "model",
-          "ids"
-        ]
+        "required": ["name", "model", "ids"]
       },
       "GetVectorsResponse": {
         "title": "GetVectorsResponse",
@@ -1546,9 +1320,7 @@
             }
           }
         },
-        "required": [
-          "vectors"
-        ]
+        "required": ["vectors"]
       },
       "VectorUpdateCountResponse": {
         "title": "VectorUpdateCountResponse",
@@ -1559,9 +1331,7 @@
             "description": "Number of vectors modified."
           }
         },
-        "required": [
-          "count"
-        ]
+        "required": ["count"]
       },
       "UpdateVectorParams": {
         "title": "UpdateVectorParams",
@@ -1582,13 +1352,10 @@
           },
           "metadata": {
             "type": "object",
-            "description": "Document metadata.",
-            "default": {}
+            "description": "Document metadata."
           }
         },
-        "required": [
-          "id"
-        ]
+        "required": ["id"]
       },
       "UpdateVectorsParams": {
         "title": "UpdateVectorsParams",
@@ -1601,10 +1368,7 @@
           "model": {
             "type": "string",
             "description": "Selected embedding model",
-            "enum": [
-              "jina-v2",
-              "clip"
-            ]
+            "enum": ["jina-v2", "clip"]
           },
           "vectors": {
             "type": "array",
@@ -1615,11 +1379,7 @@
             "maxItems": 100
           }
         },
-        "required": [
-          "name",
-          "model",
-          "vectors"
-        ]
+        "required": ["name", "model", "vectors"]
       },
       "DeleteVectorsParams": {
         "title": "DeleteVectorsParams",
@@ -1632,10 +1392,7 @@
           "model": {
             "type": "string",
             "description": "Selected embedding model",
-            "enum": [
-              "jina-v2",
-              "clip"
-            ]
+            "enum": ["jina-v2", "clip"]
           },
           "ids": {
             "type": "array",
@@ -1646,11 +1403,7 @@
             "maxItems": 100
           }
         },
-        "required": [
-          "name",
-          "model",
-          "ids"
-        ]
+        "required": ["name", "model", "ids"]
       },
       "QueryVectorStoreParams": {
         "title": "QueryVectorStoreParams",
@@ -1663,10 +1416,7 @@
           "model": {
             "type": "string",
             "description": "Selected embedding model",
-            "enum": [
-              "jina-v2",
-              "clip"
-            ]
+            "enum": ["jina-v2", "clip"]
           },
           "query_ids": {
             "type": "array",
@@ -1695,7 +1445,7 @@
           },
           "query_strings": {
             "type": "array",
-            "description": "Text to embed and use for the query.",
+            "description": "Texts to embed and use for the query.",
             "items": {
               "type": "string"
             }
@@ -1729,10 +1479,7 @@
             "description": "Filter metadata by key-value pairs."
           }
         },
-        "required": [
-          "name",
-          "model"
-        ]
+        "required": ["name", "model"]
       },
       "VectorStoreQueryResult": {
         "title": "VectorStoreQueryResult",
@@ -1760,10 +1507,7 @@
             "description": "Document metadata."
           }
         },
-        "required": [
-          "id",
-          "distance"
-        ]
+        "required": ["id", "distance"]
       },
       "QueryVectorStoreResponse": {
         "title": "QueryVectorStoreResponse",
@@ -1786,24 +1530,15 @@
           "model": {
             "type": "string",
             "description": "Selected embedding model",
-            "enum": [
-              "jina-v2",
-              "clip"
-            ]
+            "enum": ["jina-v2", "clip"]
           },
           "metric": {
             "type": "string",
-            "enum": [
-              "cosine",
-              "l2",
-              "inner"
-            ],
+            "enum": ["cosine", "l2", "inner"],
             "description": "The distance metric used for the query."
           }
         },
-        "required": [
-          "results"
-        ]
+        "required": ["results"]
       }
     }
   },
@@ -1812,9 +1547,7 @@
       "post": {
         "summary": "GenerateText",
         "operationId": "GenerateText",
-        "tags": [
-          "language-generation"
-        ],
+        "tags": ["language-generation"],
         "description": "Generate text using a language model.",
         "parameters": [
           {
@@ -1842,9 +1575,7 @@
       "post": {
         "summary": "MultiGenerateText",
         "operationId": "MultiGenerateText",
-        "tags": [
-          "language-generation"
-        ],
+        "tags": ["language-generation"],
         "description": "Generate multiple text choices using a language model.",
         "parameters": [
           {
@@ -1872,9 +1603,7 @@
       "post": {
         "summary": "GenerateTextVision",
         "operationId": "GenerateTextVision",
-        "tags": [
-          "vision-language-generation"
-        ],
+        "tags": ["vision-language-generation"],
         "description": "Generate text by prompting with text and images using a vision-language model.",
         "parameters": [
           {
@@ -1902,9 +1631,7 @@
       "post": {
         "summary": "GenerateImage",
         "operationId": "GenerateImage",
-        "tags": [
-          "image-generation"
-        ],
+        "tags": ["image-generation"],
         "description": "Generate an image.",
         "parameters": [
           {
@@ -1932,9 +1659,7 @@
       "post": {
         "summary": "MultiGenerateImage",
         "operationId": "MultiGenerateImage",
-        "tags": [
-          "image-generation"
-        ],
+        "tags": ["image-generation"],
         "description": "Generate multiple images.",
         "parameters": [
           {
@@ -1962,9 +1687,7 @@
       "post": {
         "summary": "ControlledGenerateImage",
         "operationId": "ControlledGenerateImage",
-        "tags": [
-          "image-generation"
-        ],
+        "tags": ["image-generation"],
         "description": "Generate an image with generation controlled by an input image.",
         "parameters": [
           {
@@ -1992,9 +1715,7 @@
       "post": {
         "summary": "MultiControlledGenerateImage",
         "operationId": "MultiControlledGenerateImage",
-        "tags": [
-          "image-generation"
-        ],
+        "tags": ["image-generation"],
         "description": "Generate multiple image outputs with generation controlled by an input image.",
         "parameters": [
           {
@@ -2022,9 +1743,7 @@
       "post": {
         "summary": "GenerativeEditImage",
         "operationId": "GenerativeEditImage",
-        "tags": [
-          "image-generation"
-        ],
+        "tags": ["image-generation"],
         "description": "Edit an image with a generative model.",
         "parameters": [
           {
@@ -2052,9 +1771,7 @@
       "post": {
         "summary": "MultiGenerativeEditImage",
         "operationId": "MultiGenerativeEditImage",
-        "tags": [
-          "image-generation"
-        ],
+        "tags": ["image-generation"],
         "description": "Generate multiple image outputs modifying part of an image using a mask.",
         "parameters": [
           {
@@ -2082,9 +1799,7 @@
       "post": {
         "summary": "FillMask",
         "operationId": "FillMask",
-        "tags": [
-          "image-generation"
-        ],
+        "tags": ["image-generation"],
         "description": "Edit an image with a generative model.",
         "parameters": [
           {
@@ -2112,9 +1827,7 @@
       "post": {
         "summary": "UpscaleImage",
         "operationId": "UpscaleImage",
-        "tags": [
-          "image-utilities"
-        ],
+        "tags": ["image-utilities"],
         "description": "Upscale an image.",
         "parameters": [
           {
@@ -2142,9 +1855,7 @@
       "post": {
         "summary": "RemoveBackground",
         "operationId": "RemoveBackground",
-        "tags": [
-          "image-utilities"
-        ],
+        "tags": ["image-utilities"],
         "description": "Remove the background from an image, with the option to return the foreground as a mask.",
         "parameters": [
           {
@@ -2168,19 +1879,17 @@
         }
       }
     },
-    "/DetectSegment": {
+    "/DetectSegments": {
       "post": {
-        "summary": "DetectSegment",
-        "operationId": "DetectSegment",
-        "tags": [
-          "object-detection"
-        ],
-        "description": "Detect a segment in an image.",
+        "summary": "DetectSegments",
+        "operationId": "DetectSegments",
+        "tags": ["object-detection"],
+        "description": "Detect segments in an image given point(s) or bounding box(es).",
         "parameters": [
           {
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/DetectSegmentIn"
+              "$ref": "#/components/schemas/DetectSegmentsIn"
             }
           }
         ],
@@ -2190,7 +1899,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DetectSegmentOut"
+                  "$ref": "#/components/schemas/DetectSegmentsOut"
                 }
               }
             }
@@ -2202,9 +1911,7 @@
       "post": {
         "summary": "TranscribeMedia",
         "operationId": "TranscribeMedia",
-        "tags": [
-          "audio-recognition"
-        ],
+        "tags": ["audio-recognition"],
         "description": "Transcribe speech in an audio or video file.",
         "parameters": [
           {
@@ -2232,9 +1939,7 @@
       "post": {
         "summary": "GenerateSpeech",
         "operationId": "GenerateSpeech",
-        "tags": [
-          "audio-generation"
-        ],
+        "tags": ["audio-generation"],
         "description": "Generate speech from text.",
         "parameters": [
           {
@@ -2262,9 +1967,7 @@
       "post": {
         "summary": "EmbedText",
         "operationId": "EmbedText",
-        "tags": [
-          "semantic-space"
-        ],
+        "tags": ["semantic-space"],
         "description": "Generate vector embedding for a text document.",
         "parameters": [
           {
@@ -2292,9 +1995,7 @@
       "post": {
         "summary": "MultiEmbedText",
         "operationId": "MultiEmbedText",
-        "tags": [
-          "semantic-space"
-        ],
+        "tags": ["semantic-space"],
         "description": "Generate vector embeddings for multiple text documents.",
         "parameters": [
           {
@@ -2322,9 +2023,7 @@
       "post": {
         "summary": "EmbedImage",
         "operationId": "EmbedImage",
-        "tags": [
-          "semantic-space"
-        ],
+        "tags": ["semantic-space"],
         "description": "Generate vector embedding for an image, and optionally store the embedding.",
         "parameters": [
           {
@@ -2352,9 +2051,7 @@
       "post": {
         "summary": "MultiEmbedImage",
         "operationId": "MultiEmbedImage",
-        "tags": [
-          "semantic-space"
-        ],
+        "tags": ["semantic-space"],
         "description": "Generate vector embeddings for multiple images, and optionally store the embeddings.",
         "parameters": [
           {
@@ -2380,11 +2077,9 @@
     },
     "/vector-stores/create": {
       "post": {
-        "tags": [
-          "rest-api"
-        ],
+        "tags": ["rest-api"],
         "summary": "/vector-stores/create",
-        "operationId": "CreateVectorStore",
+        "operationId": "/vector-stores/create",
         "description": "Create a vector store for storing and querying embeddings.",
         "parameters": [
           {
@@ -2395,7 +2090,7 @@
           }
         ],
         "responses": {
-          "201": {
+          "200": {
             "description": "Vector store created.",
             "content": {
               "application/json": {
@@ -2410,11 +2105,9 @@
     },
     "/vector-stores/list": {
       "get": {
-        "tags": [
-          "rest-api"
-        ],
+        "tags": ["rest-api"],
         "summary": "/vector-stores/list",
-        "operationId": "ListVectorStores",
+        "operationId": "/vector-stores/list",
         "description": "List all vector stores.",
         "responses": {
           "200": {
@@ -2435,11 +2128,9 @@
     },
     "/vector-stores/delete": {
       "post": {
-        "tags": [
-          "rest-api"
-        ],
+        "tags": ["rest-api"],
         "summary": "/vector-stores/delete",
-        "operationId": "DeleteVectorStore",
+        "operationId": "/vector-stores/delete",
         "description": "Delete a vector store.",
         "parameters": [
           {
@@ -2458,11 +2149,9 @@
     },
     "/vector-stores/query": {
       "post": {
-        "tags": [
-          "rest-api"
-        ],
+        "tags": ["rest-api"],
         "summary": "/vector-stores/query",
-        "operationId": "QueryVectorStore",
+        "operationId": "/vector-stores/query",
         "description": "Query a vector store for similar vectors.",
         "parameters": [
           {
@@ -2488,11 +2177,9 @@
     },
     "/vectors/fetch": {
       "post": {
-        "tags": [
-          "rest-api"
-        ],
-        "summary": "Fetch vectors",
-        "operationId": "FetchVectors",
+        "tags": ["rest-api"],
+        "summary": "/vectors/fetch",
+        "operationId": "/vectors/fetch",
         "description": "Fetch vectors from a vector store.",
         "parameters": [
           {
@@ -2518,11 +2205,9 @@
     },
     "/vectors/update": {
       "post": {
-        "tags": [
-          "rest-api"
-        ],
-        "summary": "Update vectors",
-        "operationId": "UpdateVectors",
+        "tags": ["rest-api"],
+        "summary": "/vectors/update",
+        "operationId": "/vectors/update",
         "description": "Update vectors in a vector store.",
         "parameters": [
           {
@@ -2548,11 +2233,9 @@
     },
     "/vectors/delete": {
       "post": {
-        "tags": [
-          "rest-api"
-        ],
-        "summary": "Delete vectors",
-        "operationId": "DeleteVectors",
+        "tags": ["rest-api"],
+        "summary": "/vectors/delete",
+        "operationId": "/vectors/delete",
         "description": "Delete vectors in a vector store.",
         "parameters": [
           {
