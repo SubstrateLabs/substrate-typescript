@@ -61,7 +61,7 @@ export const makeFactory = (refs: RefTable = {}): RefFactory => {
          * to pass it as a paramter to `e[]` - because proxy objects cannot be transformed
          * into primitive types, we're specifying here to use a function that resolves to the
          * internal `proxyId`. When `e[]` recieves a property access of a string that starts
-         * with the special `$proxyId:` part it will use the actual `ref1` value using a
+         * with the special `ID_PREFIX` part it will use the actual `ref1` value using a
          * private lookup table.
          */
         if (prop === Symbol.toPrimitive) {
