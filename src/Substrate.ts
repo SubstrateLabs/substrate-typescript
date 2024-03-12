@@ -66,18 +66,6 @@ export class Substrate {
     }
   }
 
-  /**
-   *  Visualize the `Graph` on the Substrate website.
-   */
-  visualize(graph: Graph) {
-    const json = JSON.stringify({ dag: graph });
-    const bytes = new TextEncoder().encode(json);
-    const utf16 = String.fromCodePoint(...bytes);
-    const base64 = btoa(utf16);
-
-    return `https://www.substrate.run/visualize/${base64}`;
-  }
-
   requestOptions(body: any) {
     return {
       method: "POST",
