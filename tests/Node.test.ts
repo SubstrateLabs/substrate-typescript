@@ -26,8 +26,8 @@ describe("Node", () => {
   });
 
   test(".output()", () => {
-    const n = new FooNode({}).output();
+    const n = new FooNode({}).subscribe();
     expect(n).toBeInstanceOf(FooNode);
-    expect(n._output).toBeTruthy();
+    expect(n._subscribed).toBeTruthy();
   });
 });
