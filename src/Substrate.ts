@@ -2,7 +2,7 @@ import { SubstrateError } from "substrate/Error";
 import { VERSION } from "substrate/version";
 import OpenAPIjson from "substrate/openapi.json";
 import { Graph, NodeLike } from "substrate/Graph";
-import { APIResponse } from "substrate/APIResponse";
+import { SubstrateResponse } from "substrate/SubstrateResponse";
 
 type Configuration = {
   /**
@@ -55,14 +55,14 @@ export class Substrate {
       graph.add(node);
     }
     const req = { dag: graph };
-    const response = await fetch(url, this.requestOptions(req));
-
-    if (response.ok) {
-      return response.json();
+    const apiResponse = await fetch(url, this.requestOptions(req));
+    if (apiResponse.ok) {
+      const json = await apiResponse.json();
+      return new SubstrateResponse(apiResponse, json);
     } else {
-      const res = new APIResponse(response);
+      const res = new SubstrateResponse(apiResponse);
       res.debug();
-      return;
+      return res;
     }
   }
 

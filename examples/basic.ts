@@ -15,5 +15,6 @@ const a = new GenerateText({
   prompt: "ask me a short trivia question in one sentence",
 }).subscribe();
 const b = new GenerateText({ prompt: a.future.text }).subscribe();
-const result = await substrate.run(a, b);
-console.log(JSON.stringify(result, null, 2));
+const res = await substrate.run(a, b);
+const b_res = res.get(b);
+console.log(b_res);
