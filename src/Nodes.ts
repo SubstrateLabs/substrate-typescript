@@ -1,6 +1,6 @@
 /**
 * GENERATED FILE ꩜ SUBSTRATE
-* 20240311.20240312150924
+* 20240311.20240313112632
 */
 
 import * as OpenAPI from "substrate/OpenAPI";
