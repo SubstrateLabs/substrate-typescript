@@ -3,7 +3,7 @@ import * as Future from "substrate/Future";
 import * as Refs from "substrate/Refs";
 import { idGenerator } from "substrate/idGenerator";
 
-type NodeLike = { id: string; args: Object };
+export type NodeLike = { id: string; args: Object };
 
 const refFactory = Refs.makeFactory();
 

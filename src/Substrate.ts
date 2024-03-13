@@ -1,21 +1,17 @@
 import { SubstrateError } from "substrate/Error";
 import { VERSION } from "substrate/version";
 import OpenAPIjson from "substrate/openapi.json";
-import { Graph } from "substrate/Graph";
+import { Graph, NodeLike } from "substrate/Graph";
 import { APIResponse } from "substrate/APIResponse";
 
 type Configuration = {
   /**
-   * Your [Substrate API Key](https://www.substrate.run/api-ref#Authentication).
-   *
-   * Used to authenticate requests made to the Substrate API.
+   * [docs/authentication](https://docs.substrate.run/#authentication)
    */
   apiKey?: string | undefined;
 
   /**
-   * Determines which [Version](https://www.substrate.run/api-ref#Versioning) of the Substrate API to use.
-   *
-   * Defaults to the latest compatible version with this library.
+   * [docs/versioning](https://docs.substrate.run/versioning)
    */
   apiVersion?: string | undefined;
 
@@ -25,7 +21,7 @@ type Configuration = {
 };
 
 /**
- * API client for interacting with the [Substrate API](https://www.substrate.run/api-ref).
+ * [docs/introduction](https://docs.substrate.run)
  */
 export class Substrate {
   apiKey: string;
@@ -34,7 +30,7 @@ export class Substrate {
   apiVersion: string;
 
   /**
-   * API client for interacting with the [Substrate API](https://www.substrate.run/api-ref).
+   * Initialize the Substrate SDK.
    */
   constructor({ apiKey, userAgent, baseUrl, apiVersion }: Configuration) {
     if (!apiKey) {
@@ -49,11 +45,15 @@ export class Substrate {
   }
 
   /**
-   *  [compose](https://www.substrate.run/api-ref#compose).
+   *  Run the given nodes.
    */
-  async compose(graph: Graph): Promise<any> {
+  async run(...nodes: NodeLike[]): Promise<any> {
     const url = this.baseUrl + "/compose";
 
+    const graph = new Graph();
+    for (const node of nodes) {
+      graph.add(node);
+    }
     const req = { dag: graph };
     const response = await fetch(url, this.requestOptions(req));
 
