@@ -156,4 +156,136 @@ describe("Future", () => {
       },
     ]);
   });
+
+  describe("stringConcat", () => {
+    test("static values", () => {
+      const a = new FooNode("a", { x: Future.stringConcat("1", "2", "3"), y: "y" });
+      let { args, futures } = Future.replaceRefsWithFutures(
+        a.args,
+        refFactory,
+        idGenerator(),
+      );
+
+      expect(args).toEqual({ x: { __$$SB_GRAPH_OP_ID$$__: "1" }, y: "y" });
+
+      expect(futures).toEqual([
+        {
+          directive: {
+            items: [
+              {
+                future_id: null,
+                val: "1",
+              },
+              {
+                future_id: null,
+                val: "2",
+              },
+              {
+                future_id: null,
+                val: "3",
+              },
+            ],
+            type: "string-concat",
+          },
+          id: "1",
+        },
+      ]);
+    });
+
+    test("static value and ref", () => {
+      const a = new FooNode("a");
+      const b = new FooNode("b", { x: Future.stringConcat("x", a.ref.foo) });
+      let { args, futures } = Future.replaceRefsWithFutures(
+        b.args,
+        refFactory,
+        idGenerator(),
+      );
+
+      // NOTE: the id here is "2" because "1" is used by a.ref.bar
+      expect(args).toEqual({ x: { __$$SB_GRAPH_OP_ID$$__: "2" } });
+
+      expect(futures).toEqual([
+        {
+          id: "1",
+          directive: {
+            type: "trace",
+            op_stack: [{ key: "foo", accessor: "attr", future_id: null }],
+            origin_node_id: "a",
+          },
+        },
+        {
+          id: "2",
+          directive: {
+            items: [
+              {
+                future_id: null,
+                val: "x",
+              },
+              {
+                future_id: "1",
+                val: null,
+              },
+            ],
+            type: "string-concat",
+          },
+        },
+      ]);
+    });
+
+    test("nested stringConcats", () => {
+      const a = new FooNode("a");
+      const b = new FooNode("b", { x: Future.stringConcat("x", Future.stringConcat("y", a.ref.foo)) });
+      let { args, futures } = Future.replaceRefsWithFutures(
+        b.args,
+        refFactory,
+        idGenerator(),
+      );
+
+      // NOTE: the id here is "3" because "1" is used by a.ref.foo and "2" is the intermediate StringConcat.
+      expect(args).toEqual({ x: { __$$SB_GRAPH_OP_ID$$__: "3" } });
+
+      expect(futures).toEqual([
+        {
+          id: "1",
+          directive: {
+            type: "trace",
+            op_stack: [{ key: "foo", accessor: "attr", future_id: null }],
+            origin_node_id: "a",
+          },
+        },
+        {
+          id: "2",
+          directive: {
+            items: [
+              {
+                future_id: null,
+                val: "y",
+              },
+              {
+                future_id: "1",
+                val: null,
+              },
+            ],
+            type: "string-concat",
+          },
+        },
+        {
+          id: "3",
+          directive: {
+            items: [
+              {
+                future_id: null,
+                val: "x",
+              },
+              {
+                future_id: "2",
+                val: null,
+              },
+            ],
+            type: "string-concat",
+          },
+        },
+      ]);
+    });
+  });
 });
