@@ -1,4 +1,4 @@
-import { randomString } from "substrate/idGenerator";
+import { idGenerator } from "substrate/idGenerator";
 
 /**
  * @internal
@@ -19,125 +19,183 @@ import { randomString } from "substrate/idGenerator";
  *
  *  In order to handle some limitations of how things might be accessed we're using a few tricks:
  *
- *    - One limitation of creating these "infinite" proxies is that we need a way to "unproxy"
- *      the object to access the underlying data it's tracking. Because every access on the
- *      object also flows through the proxy we're using a special property that returns the
- *      original target. In this case we're using `$$target` for now (See `TARGET_PROP`).
- *      For example,
+ *    - "Proxy management" (isProxy, unProxy) -> using "virtual prop", `$$target`
  *
- *          const a = new Node();
- *          const proxy = a.future.foo.bar;
- *          const target = a.future.foo.bar.$$target; // allows us to access the underlying data
+ *    - "Property accessors/indexing" (isPrimitive) -> using "lookup table" and `$$LookupTableId`
  *
- *    - Another limitation is when using a proxy as a property access or array index value with
- *      a proxy object. This is because when the property/index value is sent to the proxy the
- *      value cannot be interpreted as a "primitive" value (string, number). We intercept this
- *      case by first checking if the value `=== Symbol.toPrimitive` and if it is we can return
- *      something else. If we keep track of all proxies we ever create this way we can look up
- *      the corresponding proxy by first converting the proxy into a primitive value that maps
- *      to the proxy value in a lookup table. When the proxied object being accessed receives
- *      a property that we know is a "proxy id" (See `ID_PREFIX`) we access our lookup table to
- *      find the other proxy and keep track of that in the underlying data. For example,
- *
- *          const a = new Node();
- *          const proxy = a.future.foo.bar[a.future.baz]; // using the resolved `baz` to access a value in `foo.bar`
- *
+ *    - "TypeScript index type" (eg. "X cannot be used as an index type. typescript (2538)" for proxy indexing) -> no solution yet.
+ *        - tried using clever type intersections and assertions eg. `type StringyFuture = Future & string` + `return new Future() as StringyFuture`
+ *        - tried using a Record<any, any> vs any
+ *        - tried intersecting on the Proxied type, eg. `Proxied & { [k: any]: any }`
+ *        - maybe the solution here is type erasure + type assertions with "generated types" (eg. taking API schema types and generated complementary "future" variants)
+ *          - like `return proxy as any as GeneratedFutureTypeFor["SomeType"]`
+ *        - currently using sprinkled `@ts-expect-error: ...`
  */
 
 /**
- * We're currently only using these on Node objects, and at the least they must have an `id` field
+ * Throws an error when we encounter an impossible situation.
  */
-type NodeLike = {
-  id: string;
+const impossible = (msg: string): never => {
+  throw new Error(msg);
 };
+
+type HasId = { id: string };
+
+type LookupTableId = `$$LookupTableId:${string}`;
+type Storable = HasId;
+export class LookupTable {
+  kv: Record<LookupTableId, Storable> = {};
+
+  id(object: Storable): LookupTableId {
+    return `$$LookupTableId:${object.id}`;
+  }
+
+  isLookupTableId(maybeId: string): maybeId is LookupTableId {
+    return maybeId.startsWith("$$LookupTableId:");
+  }
+
+  has(id: LookupTableId): boolean {
+    return id in this.kv;
+  }
+
+  read(id: LookupTableId): Storable | undefined {
+    return this.kv[id];
+  }
+
+  write(object: Storable) {
+    this.kv[this.id(object)] = object;
+  }
+}
+
+type NodeLike = HasId;
+type TraceProp = string | HasId;
 
 /**
- * `Prop` is short for property and is a type of value that is a property access on an object. It can
- * be either a string value like `a.b.c` or `a.b[1]` or a ProxyTarget like `a.b[x.y]`.
+ * TODO: is there a better name for this? I'm using `context` here to refer to
+ * the closure created that contains a reference to the LookupTable that we need
+ * to use in the Proxy and Future code (primarily within side-effects).
  */
-export type Prop =
-  | { t: "String"; value: string }
-  | { t: "ProxyTarget"; value: ProxyTarget };
+export const makeContext = (
+  lookupTable: LookupTable = new LookupTable(),
+  futureId = idGenerator("future"),
+  targetProp: string = "$$target",
+) => {
+  class Future {
+    id: string;
+    constructor(id: string = futureId()) {
+      this.id = id;
+    }
 
-/**
- * Internal data we keep track of within a Proxy to serialize it later on.
- */
-export type ProxyTarget = {
-  t: "ProxyTarget";
-  id: string;
-  node: NodeLike;
-  props: Prop[];
-};
+    // We're using the `toPrimitive` method here to do some tricky things. This
+    // method is called when an object is being used as a property accessor, aka
+    // an "index type". For example, when using a Future within a future-proxy:
+    //
+    //    const proxy = node.future.a.b.c[new Future()] <- called here
+    //
+    // When we call this we'll be writing this object to our hidden `LookupTable`
+    // and returning a `LookupTableId` that's a compatible "index type" (string).
+    //
+    // Later on when we want to use the original Future, we use the `LookupTableId`
+    // to find it.
+    [Symbol.toPrimitive]() {
+      lookupTable.write(this);
+      return lookupTable.id(this);
+    }
+  }
 
-// All Proxy objects created by the ProxyFactory are stored in this lookup table and used to support being
-// able to use a "Future as an property accessor".
-export type ProxyTable = Record<ProxyTarget["id"], ProxyTarget>;
+  class Trace extends Future {
+    node: NodeLike;
+    props: TraceProp[];
 
-export type ProxyFactory = {
-  makeProxy: (node: NodeLike, props?: any[]) => any;
-  proxyTable: ProxyTable;
-};
+    constructor(node: NodeLike, props: TraceProp[] = [], id?: string) {
+      super(id);
+      this.node = node;
+      this.props = props;
+    }
+  }
 
-// This is used internally to allow Ref objects to be used as props via a special string.
-const ID_PREFIX = "$$ID:";
+  type Concatable<T extends Proxyable> =
+    | string
+    | StringConcat
+    | Proxyable
+    | Proxied<T>;
 
-// This is a "virtual" property that exists on a Proxy created by the ProxyFactory and used to get the ProxyTarget from it.
-const TARGET_PROP = "$$target";
+  class StringConcat extends Future {
+    items: Concatable<Proxyable>[];
 
-export const isProxy = (object: Object): boolean => {
-  return TARGET_PROP in object;
-};
+    constructor(items: Concatable<Proxyable>[] = [], id?: string) {
+      super(id);
+      this.items = items;
+    }
+  }
 
-export const isProxyTarget = (object: Object): boolean => {
-  return "t" in object && object.t === "ProxyTarget";
-};
+  type Proxyable = Trace;
+  type Proxied<T extends Proxyable> = T & { $$target: any };
 
-export const getTarget = (object: any): ProxyTarget | null => {
-  return isProxy(object) ? (object[TARGET_PROP] as ProxyTarget) : null;
-};
-
-export const makeFactory = (proxyTable: ProxyTable = {}): ProxyFactory => {
-  const id = () => `${ID_PREFIX}${randomString(8)}`;
-
-  const makeProxy = (node: NodeLike, props: Prop[] = []): any => {
-    const target: ProxyTarget = {
-      t: "ProxyTarget",
-      id: id(),
-      node,
-      props,
-    };
-    proxyTable[target.id] = target;
+  // NOTE: the `any` here should be `<T extends Proxyable>Proxy<T>`, but I'm
+  // not sure how to make this type yet.
+  const makeProxy = <T extends Proxyable>(target: T): any => {
+    lookupTable.write(target);
 
     return new Proxy(target, {
-      has(target: ProxyTarget, prop: any) {
-        if (prop === TARGET_PROP) return true; // True when `prop` is our special value.
-        return prop in target; // Otherwise perform the default behavior.
+      has(target: Proxyable, prop: any) {
+        if (prop === targetProp) return true; // True when `prop` is our special value.
+        return Reflect.has(target, prop); // Otherwise perform the default behavior.
       },
-      get(target: ProxyTarget, prop: any, _receiver: any) {
-        // When prop is our special value, return the ProxyTarget instead of a new Proxy.
-        if (prop === TARGET_PROP) return target;
 
-        // See explaination in "Limitations" description above.
-        if (prop === Symbol.toPrimitive) {
-          return () => target.id;
+      get(target: Proxyable, prop: any, _receiver: any) {
+        // When prop is our special value, return the target (Trace) instead of a new Proxy.
+        if (prop === targetProp) return target;
+
+        if (typeof prop === "symbol") {
+          // See explaination in "Limitations" description above.
+          if (prop === Symbol.toPrimitive) {
+            return () => lookupTable.id(target);
+          }
+
+          // TODO: not sure how to handle other symbols for now, eg. Symbol.iterator
+          return;
         }
 
-        if (typeof prop !== "string") throw new Error("is this possible?");
+        // TODO: can prop be anything else here? I think even numbers are treated as
+        // strings in this context - but verify.
+        if (typeof prop !== "string") {
+          impossible(`Expected a string for prop, but got ${typeof prop}`);
+        }
 
         // When the `prop` is a special ProxyTable id, we lookup the ProxyTarget and use
         // that value as the `nextProp` in the current target. Otherwise we use the string
         // value we get.
-        const nextProp: Prop =
-          prop.startsWith(ID_PREFIX) && proxyTable[prop]
-            ? { t: "ProxyTarget", value: proxyTable[prop]! }
-            : { t: "String", value: prop };
+        const nextProp =
+          lookupTable.isLookupTableId(prop) && lookupTable.has(prop)
+            ? lookupTable.read(prop)
+            : prop;
+
+        if (typeof nextProp === "undefined") {
+          impossible(`Expected to find a value for ${prop}, but didn't.`);
+        }
 
         // Create a new proxy with all the props accessed so far and return it.
         // This is what gives us the "infinite" proxying ability.
-        return makeProxy(target.node, [...target.props, nextProp]);
+        const newProps = [...target.props, nextProp] as TraceProp[];
+
+        const newProxy = makeProxy(new Trace(target.node, newProps));
+        if (isProxy(newProxy)) return newProxy; // predicate lets the typechecker know we have a Proxied<T>
+        impossible(`Expected to create a Proxy, but created ${newProxy}`);
       },
     });
   };
 
-  return { makeProxy, proxyTable };
+  const isProxy = <T extends Proxyable>(
+    maybeProxy: T | Object,
+  ): maybeProxy is Proxied<T> => {
+    return targetProp in maybeProxy;
+  };
+
+  const unProxy = <T extends Proxyable>(proxied: Proxied<T>): T => {
+    // @ts-ignore: ignoring that the virtual targetProp may not be there on this type.
+    return proxied[targetProp];
+  };
+
+  return { Future, Trace, StringConcat, makeProxy, isProxy, unProxy };
 };
