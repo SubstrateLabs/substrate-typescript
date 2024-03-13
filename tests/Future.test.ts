@@ -1,291 +1,136 @@
 import { expect, describe, test } from "vitest";
-import * as Refs from "substrate/Refs";
 import * as Future from "substrate/Future";
 
-const refFactory = Refs.makeFactory();
+describe("Proxy, Future (Trace, StringConcat)", () => {
+  describe("Basic proxy use", () => {
+    test("Can create a proxy, get it's target, & test whether it's a proxy or not", () => {
+      const ctx = Future.makeContext();
 
-class FooNode {
-  id: string;
-  args: any;
+      const t = new ctx.Trace({ id: "a" });
+      const p = ctx.makeProxy(t);
 
-  constructor(id: string, args: any = {}) {
-    this.id = id;
-    this.args = args;
-  }
+      // NOTE: this will fail as expected, but with a call stack exceeded error due to how the proxying is working.
+      // expect(p).toBe(t);
 
-  get ref() {
-    return refFactory.makeProxiedRef(this) as any;
-  }
-
-  toJSON() {
-    return {
-      class: "FooNode",
-      id: this.id,
-      args: this.args,
-    };
-  }
-}
-
-// Rob's Example
-const a = new FooNode("a");
-const b = new FooNode("b", {
-  foo: "b",
-  bar: a.ref.foo,
-  nested: [{ nest_id: "first" }, { nest_id: "second" }],
-});
-const c = new FooNode("c", {
-  foo: "c",
-  bar: b.ref.nested[a.ref.foo].nest_id,
-  nested: { baz: b.ref.bar },
-});
-
-const idGenerator = (start: number = 1) => {
-  let n = start;
-  return () => {
-    const id = n.toString();
-    n = n + 1;
-    return id;
-  };
-};
-
-describe("Future", () => {
-  test("a.ref.foo", () => {
-    let result = Future.refFutures(
-      refFactory.getTarget(b.args.bar),
-      idGenerator(),
-    );
-    expect(result).toEqual([
-      {
-        id: "1",
-        directive: {
-          type: "trace",
-          op_stack: [{ key: "foo", accessor: "attr", future_id: null }],
-          origin_node_id: "a",
-        },
-      },
-    ]);
-  });
-
-  test("b.ref.nested[a.ref.foo].nest_id", () => {
-    let result = Future.refFutures(
-      refFactory.getTarget(c.args.bar),
-      idGenerator(),
-    );
-    expect(result).toEqual([
-      {
-        id: "2",
-        directive: {
-          type: "trace",
-          op_stack: [{ key: "foo", accessor: "attr", future_id: null }],
-          origin_node_id: "a",
-        },
-      },
-      {
-        id: "1",
-        directive: {
-          type: "trace",
-          op_stack: [
-            { key: "nested", accessor: "attr", future_id: null },
-            { key: null, accessor: "item", future_id: "2" },
-            { key: "nest_id", accessor: "attr", future_id: null },
-          ],
-          origin_node_id: "b",
-        },
-      },
-    ]);
-  });
-
-  test("b.ref.bar", () => {
-    let result = Future.refFutures(
-      refFactory.getTarget(c.args.nested.baz),
-      idGenerator(),
-    );
-    expect(result).toEqual([
-      {
-        id: "1",
-        directive: {
-          type: "trace",
-          op_stack: [{ key: "bar", accessor: "attr", future_id: null }],
-          origin_node_id: "b",
-        },
-      },
-    ]);
-  });
-
-  test("replace refs: c.args", () => {
-    let { args, futures } = Future.replaceRefsWithFutures(
-      c.args,
-      refFactory,
-      idGenerator(),
-    );
-
-    expect(args).toEqual({
-      foo: "c",
-      bar: { __$$SB_GRAPH_OP_ID$$__: "1" },
-      nested: { baz: { __$$SB_GRAPH_OP_ID$$__: "3" } },
+      expect(p).not.toBe(t);
+      expect(ctx.unProxy(p)).toBe(t);
+      expect(ctx.isProxy(p)).toBe(true);
+      expect(ctx.isProxy(t)).toBe(false);
     });
 
-    expect(futures).toEqual([
-      {
-        id: "2",
-        directive: {
-          type: "trace",
-          op_stack: [{ accessor: "attr", key: "foo", future_id: null }],
-          origin_node_id: "a",
-        },
-      },
-      {
-        id: "1",
-        directive: {
-          type: "trace",
-          op_stack: [
-            { accessor: "attr", key: "nested", future_id: null },
-            { accessor: "item", key: null, future_id: "2" },
-            { accessor: "attr", key: "nest_id", future_id: null },
-          ],
-          origin_node_id: "b",
-        },
-      },
-      {
-        id: "3",
-        directive: {
-          type: "trace",
-          op_stack: [{ accessor: "attr", key: "bar", future_id: null }],
-          origin_node_id: "b",
-        },
-      },
-    ]);
-  });
+    test("Can access primative properties on proxy arbitrarily", () => {
+      const ctx = Future.makeContext();
 
-  describe("stringConcat", () => {
-    test("static values", () => {
-      const a = new FooNode("a", { x: Future.stringConcat("1", "2", "3"), y: "y" });
-      let { args, futures } = Future.replaceRefsWithFutures(
-        a.args,
-        refFactory,
-        idGenerator(),
-      );
+      const t = new ctx.Trace({ id: "a" });
+      const p = ctx.makeProxy(t);
 
-      expect(args).toEqual({ x: { __$$SB_GRAPH_OP_ID$$__: "1" }, y: "y" });
+      const p1 = p.a.b;
+      const p1t = ctx.unProxy(p1);
+      expect(p1t.id).not.toEqual(t.id);
+      expect(p1t.props).toEqual(["a", "b"]);
 
-      expect(futures).toEqual([
-        {
-          directive: {
-            items: [
-              {
-                future_id: null,
-                val: "1",
-              },
-              {
-                future_id: null,
-                val: "2",
-              },
-              {
-                future_id: null,
-                val: "3",
-              },
-            ],
-            type: "string-concat",
-          },
-          id: "1",
-        },
-      ]);
+      const p2 = p.a.b.c;
+      const p2t = ctx.unProxy(p2);
+      expect(p2t.id).not.toEqual(t.id);
+      expect(p2t.props).toEqual(["a", "b", "c"]);
+
+      const p3 = p.a["d"];
+      const p3t = ctx.unProxy(p3);
+      expect(p3t.id).not.toEqual(t.id);
+      expect(p3t.props).toEqual(["a", "d"]);
+
+      const p4 = p.a[123];
+      const p4t = ctx.unProxy(p4);
+      expect(p4t.id).not.toEqual(t.id);
+      expect(p4t.props).toEqual(["a", "123"]);
     });
 
-    test("static value and ref", () => {
-      const a = new FooNode("a");
-      const b = new FooNode("b", { x: Future.stringConcat("x", a.ref.foo) });
-      let { args, futures } = Future.replaceRefsWithFutures(
-        b.args,
-        refFactory,
-        idGenerator(),
-      );
+    test("Can access properties on proxy via `Future`", () => {
+      const ctx = Future.makeContext();
 
-      // NOTE: the id here is "2" because "1" is used by a.ref.bar
-      expect(args).toEqual({ x: { __$$SB_GRAPH_OP_ID$$__: "2" } });
+      const f = new ctx.Future();
 
-      expect(futures).toEqual([
-        {
-          id: "1",
-          directive: {
-            type: "trace",
-            op_stack: [{ key: "foo", accessor: "attr", future_id: null }],
-            origin_node_id: "a",
-          },
-        },
-        {
-          id: "2",
-          directive: {
-            items: [
-              {
-                future_id: null,
-                val: "x",
-              },
-              {
-                future_id: "1",
-                val: null,
-              },
-            ],
-            type: "string-concat",
-          },
-        },
-      ]);
+      const t = new ctx.Trace({ id: "a" });
+      const p = ctx.makeProxy(t);
+
+      // @ts-expect-error: Type cannot be used as an index type.
+      const p1 = p.a.b[f];
+      expect(ctx.unProxy(p1).props).toEqual(["a", "b", f]);
     });
 
-    test("nested stringConcats", () => {
-      const a = new FooNode("a");
-      const b = new FooNode("b", { x: Future.stringConcat("x", Future.stringConcat("y", a.ref.foo)) });
-      let { args, futures } = Future.replaceRefsWithFutures(
-        b.args,
-        refFactory,
-        idGenerator(),
-      );
+    test("Can access properties on proxy via `Trace`", () => {
+      const ctx = Future.makeContext();
 
-      // NOTE: the id here is "3" because "1" is used by a.ref.foo and "2" is the intermediate StringConcat.
-      expect(args).toEqual({ x: { __$$SB_GRAPH_OP_ID$$__: "3" } });
+      const ta = new ctx.Trace({ id: "a" });
+      const tb = new ctx.Trace({ id: "b" });
 
-      expect(futures).toEqual([
-        {
-          id: "1",
-          directive: {
-            type: "trace",
-            op_stack: [{ key: "foo", accessor: "attr", future_id: null }],
-            origin_node_id: "a",
-          },
-        },
-        {
-          id: "2",
-          directive: {
-            items: [
-              {
-                future_id: null,
-                val: "y",
-              },
-              {
-                future_id: "1",
-                val: null,
-              },
-            ],
-            type: "string-concat",
-          },
-        },
-        {
-          id: "3",
-          directive: {
-            items: [
-              {
-                future_id: null,
-                val: "x",
-              },
-              {
-                future_id: "2",
-                val: null,
-              },
-            ],
-            type: "string-concat",
-          },
-        },
-      ]);
+      const pa = ctx.makeProxy(ta);
+
+      // @ts-expect-error: Type cannot be used as an index type.
+      const p1 = pa.a.b[tb];
+      expect(ctx.unProxy(p1).props).toEqual(["a", "b", tb]);
+    });
+
+    test("Can access properties on proxy via `StringConcat` (w/ static items)", () => {
+      const ctx = Future.makeContext();
+
+      const t = new ctx.Trace({ id: "a" });
+      const p = ctx.makeProxy(t);
+      const s = new ctx.StringConcat(["a", "e"]);
+
+      // @ts-expect-error: Type cannot be used as an index type.
+      const p1 = p.f.g[s];
+      expect(ctx.unProxy(p1).props).toEqual(["f", "g", s]);
+    });
+
+    test("Can access properties on proxy via `StringConcat` (w/ nested StringConcats)", () => {
+      const ctx = Future.makeContext();
+
+      const t = new ctx.Trace({ id: "a" });
+      const p = ctx.makeProxy(t);
+      const s1 = new ctx.StringConcat(["a", "e"]);
+      const s2 = new ctx.StringConcat([s1, s1]);
+      const s3 = new ctx.StringConcat([s1, s2]);
+
+      // @ts-expect-error: Type cannot be used as an index type.
+      const p1 = p.f.g[s3];
+      const t1 = ctx.unProxy(p1);
+      expect(t1.props).toEqual(["f", "g", s3]);
+    });
+
+    test("Can access properties on proxy via `StringConcat` (w/ proxy items)", () => {
+      const table = new Future.LookupTable();
+      const ctx = Future.makeContext(table);
+
+      const ta = new ctx.Trace({ id: "a" });
+      const pa = ctx.makeProxy(ta);
+
+      const tb = new ctx.Trace({ id: "b" });
+      const pb = ctx.makeProxy(tb);
+
+      const s = new ctx.StringConcat([pb.a, pb.b]);
+
+      // @ts-expect-error: Type cannot be used as an index type.
+      const p = pa.x.y[s];
+      const t = ctx.unProxy(p);
+
+      expect(t.props).toEqual(["x", "y", s]);
+    });
+
+    test("Can access properties on proxy via `Proxy` instance", () => {
+      const ctx = Future.makeContext();
+
+      const ta = new ctx.Trace({ id: "a" });
+      const pa = ctx.makeProxy(ta);
+
+      const tb = new ctx.Trace({ id: "b" });
+      const pb = ctx.makeProxy(tb);
+
+      const p1 = pa.a.b.c[pb];
+      expect(ctx.unProxy(p1).props).toEqual(["a", "b", "c", tb]);
+
+      const p2 = pb.d.e.f[p1];
+      expect(ctx.unProxy(p2).props).toEqual(["d", "e", "f", ctx.unProxy(p1)]);
     });
   });
 });

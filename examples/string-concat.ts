@@ -18,10 +18,10 @@ const substrate = new Substrate({
   baseUrl: "https://api-staging.substrate.run",
 });
 const a = new GenerateText({
-  prompt: "give me a random number",
+  prompt: "random number: ",
 }).output();
 const b = new GenerateText({
-  prompt: Functions.stringConcat("increment the following number: ", a.future.text as string) as any,
+  prompt: Functions.stringConcat(a.future.text as string, " - ", a.future.text as string) as any,
 }).output();
 const g = new Graph();
 g.add(a);

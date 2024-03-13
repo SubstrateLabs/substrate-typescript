@@ -1,185 +1,201 @@
-/**
- * See `substratecore/base_future.py`
- */
-import { Ref } from "./Refs";
+import { idGenerator } from "substrate/idGenerator";
 
-type NonEmptyArray<T> = T[] & { 0: T };
+/**
+ * @internal
+ *
+ * In order to create `Future` values that are represented by indexing into objects/arrays we're using
+ * the Proxy API.
+ *
+ * In practice when we use something like:
+ *
+ *    const a = new Node();
+ *    const b = new Node({ x: a.future.foo.bar })
+ *
+ *  What we'd like is for `a.future.foo.bar` to represent the eventual of running `a` that and
+ *  specifically uses that eventual value (eg. `{ a: { b: -VALUE- }}`) as the input to node `b`.
+ *
+ *  We can use the Proxy API to allow for "infinite" access into these objects and as they are
+ *  accessed deeper and deeper it can remember the path it took.
+ *
+ *  In order to handle some limitations of how things might be accessed we're using a few tricks:
+ *
+ *    - "Proxy management" (isProxy, unProxy) -> using "virtual prop", `$$target`
+ *
+ *    - "Property accessors/indexing" (isPrimitive) -> using "lookup table" and `$$LookupTableId`
+ *
+ *    - "TypeScript index type" (eg. "X cannot be used as an index type. typescript (2538)" for proxy indexing) -> no solution yet.
+ *        - tried using clever type intersections and assertions eg. `type StringyFuture = Future & string` + `return new Future() as StringyFuture`
+ *        - tried using a Record<any, any> vs any
+ *        - tried intersecting on the Proxied type, eg. `Proxied & { [k: any]: any }`
+ *        - maybe the solution here is type erasure + type assertions with "generated types" (eg. taking API schema types and generated complementary "future" variants)
+ *          - like `return proxy as any as GeneratedFutureTypeFor["SomeType"]`
+ *        - currently using sprinkled `@ts-expect-error: ...`
+ */
+
+/**
+ * Throws an error when we encounter an impossible situation.
+ */
+const impossible = (msg: string): never => {
+  throw new Error(msg);
+};
 
 type HasId = { id: string };
-type FutureIdPlaceholder = {
-  __$$SB_GRAPH_OP_ID$$__: string;
-};
 
-type Concatable = {
-  future_id: Future["id"] | null;
-  val: string | null;
-};
+type LookupTableId = `$$LookupTableId:${string}`;
+type Storable = HasId;
+export class LookupTable {
+  kv: Record<LookupTableId, Storable> = {};
 
-type ConcatDirective = {
-  items: Concatable[];
-  type: "string-concat";
-};
+  id(object: Storable): LookupTableId {
+    return `$$LookupTableId:${object.id}`;
+  }
 
-type TraceType = "attr" | "item";
-type TraceOperation = {
-  future_id: Future["id"] | null;
-  key: string | number | null;
-  accessor: TraceType;
-};
+  isLookupTableId(maybeId: string): maybeId is LookupTableId {
+    return maybeId.startsWith("$$LookupTableId:");
+  }
 
-type TraceDirective = {
-  op_stack: TraceOperation[];
-  origin_node_id: HasId["id"];
-  type: "trace";
-};
+  has(id: LookupTableId): boolean {
+    return id in this.kv;
+  }
 
-type Directive = TraceDirective | ConcatDirective;
+  read(id: LookupTableId): Storable | undefined {
+    return this.kv[id];
+  }
 
-type Future = {
-  id: string;
-  directive: Directive;
-};
+  write(object: Storable) {
+    this.kv[this.id(object)] = object;
+  }
+}
 
-const itemTraceOperation = (opId: Future["id"]): TraceOperation => ({
-  future_id: opId,
-  accessor: "item",
-  key: null,
-});
-
-const attrTraceOperation = (key: string): TraceOperation => ({
-  key: key,
-  future_id: null,
-  accessor: "attr",
-});
-
-type NewId = () => string; // id generator
+type NodeLike = HasId;
+type TraceProp = string | HasId;
 
 /**
- * TODO: using this to also handle "function-'refs'" some intermediate type that can be identified and then transformed
- * into a Future.
- *
- * I'm starting to wonder where the line is between "refs" and "futures". Refs need to be replaced with "placeholders" now,
- * but they only accomodate "Trace" directives and they are also referred to as "futures" to the user - which seems to make
- * them seem ambigious/confusing. Future types here have no top-level discriminator and can't be used inline at the moment,
- * so if we'd like to do that we'd need to test a value by a nested prop existence, eg does future.directive exist?, then replace
- * this future with a placeholder and move to the futures list.
- *
- * -> maybe that is the simpler way to get it kind of working now and this can be internally refactored after.
- *
- * -> maybe StringConcat is just a "kind" of "Ref"
+ * TODO: is there a better name for this? I'm using `context` here to refer to
+ * the closure created that contains a reference to the LookupTable that we need
+ * to use in the Proxy and Future code (primarily within side-effects).
  */
-const isFuture = (object: Object) => {
-  return ("id" in object) && ("directive" in object);
-};
-
-type StringConcat = {
-  t: "StringConcat";
-  values: (string | Ref)[];
-}
-// Ref must resolve to a string for this to work, but we're not checking this right now.
-export const stringConcat = (...values: (string | Ref | StringConcat)[]): StringConcat => {
-  return {
-    t: "StringConcat",
-    values
-  };
-};
-
-export const refFutures = (ref: Ref, id: NewId): NonEmptyArray<Future> => {
-  const directive: TraceDirective = {
-    type: "trace",
-    op_stack: [] as TraceOperation[],
-    origin_node_id: ref.node.id,
-  };
-  let future = {
-    id: id(),
-    directive: directive,
-  };
-  let futures: NonEmptyArray<Future> = [future];
-
-  ref.props.forEach((prop) => {
-    if (prop.t === "Ref") {
-      const [refFuture, ...restRefFutures] = refFutures(prop.value, () => id());
-      futures = [refFuture, ...restRefFutures].concat(
-        futures,
-      ) as NonEmptyArray<Future>;
-
-      future.directive.op_stack.push(itemTraceOperation(refFuture.id));
-    } else if (prop.t === "Key") {
-      future.directive.op_stack.push(attrTraceOperation(prop.value));
-    }
-  });
-
-  return futures;
-};
-
-const FUTURE_PLACEHOLDER_KEY = "__$$SB_GRAPH_OP_ID$$__";
-export const futureIdPlaceholder = (id: Future["id"]): FutureIdPlaceholder => ({
-  [FUTURE_PLACEHOLDER_KEY]: id,
-});
-const isFutureIdPlaceholder = (maybePlaceholder: any) => {
-  return typeof maybePlaceholder === "object" && (FUTURE_PLACEHOLDER_KEY in maybePlaceholder);
-}
-
-export const replaceRefsWithFutures = (
-  args: any,
-  refFactory: any,
-  newId: any,
+export const makeContext = (
+  lookupTable: LookupTable = new LookupTable(),
+  futureId = idGenerator("future"),
+  targetProp: string = "$$target",
 ) => {
-  let collectedFutures: Future[] = [];
-
-  const traverse = (obj: any): any => {
-    if (Array.isArray(obj)) {
-      return obj.map((item) => traverse(item));
+  class Future {
+    id: string;
+    constructor(id: string = futureId()) {
+      this.id = id;
     }
 
-    if (typeof obj === "object") {
-      if (refFactory.isRef(obj)) {
-        const ref = refFactory.getTarget(obj);
-        const futures = refFutures(ref, newId);
-        collectedFutures = collectedFutures.concat(futures);
-        const entryFuture = futures.at(-1);
-        return futureIdPlaceholder(entryFuture!.id);
-      } else if (obj.t === "StringConcat") {
-        // 1) loop over all the values and add any futures to the collection, keep track of the concatables
-        const concatables: Concatable[] = [];
-        for (let value of obj.values) {
-          if (typeof value === "string") {
-            concatables.push({ val: value, future_id: null });
-          } else {
-            const maybePlaceholder = traverse(value);
-            if (isFutureIdPlaceholder(maybePlaceholder)) {
-              concatables.push({ future_id: maybePlaceholder[FUTURE_PLACEHOLDER_KEY], val: null });
-            }
+    // We're using the `toPrimitive` method here to do some tricky things. This
+    // method is called when an object is being used as a property accessor, aka
+    // an "index type". For example, when using a Future within a future-proxy:
+    //
+    //    const proxy = node.future.a.b.c[new Future()] <- called here
+    //
+    // When we call this we'll be writing this object to our hidden `LookupTable`
+    // and returning a `LookupTableId` that's a compatible "index type" (string).
+    //
+    // Later on when we want to use the original Future, we use the `LookupTableId`
+    // to find it.
+    [Symbol.toPrimitive]() {
+      lookupTable.write(this);
+      return lookupTable.id(this);
+    }
+  }
+
+  class Trace extends Future {
+    node: NodeLike;
+    props: TraceProp[];
+
+    constructor(node: NodeLike, props: TraceProp[] = [], id?: string) {
+      super(id);
+      this.node = node;
+      this.props = props;
+    }
+  }
+
+  type Concatable<T extends Proxyable> =
+    | string
+    | StringConcat
+    | Proxyable
+    | Proxied<T>;
+
+  class StringConcat extends Future {
+    items: Concatable<Proxyable>[];
+
+    constructor(items: Concatable<Proxyable>[] = [], id?: string) {
+      super(id);
+      this.items = items;
+    }
+  }
+
+  type Proxyable = Trace;
+  type Proxied<T extends Proxyable> = T & { $$target: any };
+
+  // NOTE: the `any` here should be `<T extends Proxyable>Proxy<T>`, but I'm
+  // not sure how to make this type yet.
+  const makeProxy = <T extends Proxyable>(target: T): any => {
+    lookupTable.write(target);
+
+    return new Proxy(target, {
+      has(target: Proxyable, prop: any) {
+        if (prop === targetProp) return true; // True when `prop` is our special value.
+        return Reflect.has(target, prop); // Otherwise perform the default behavior.
+      },
+
+      get(target: Proxyable, prop: any, _receiver: any) {
+        // When prop is our special value, return the target (Trace) instead of a new Proxy.
+        if (prop === targetProp) return target;
+
+        if (typeof prop === "symbol") {
+          // See explaination in "Limitations" description above.
+          if (prop === Symbol.toPrimitive) {
+            return () => lookupTable.id(target);
           }
+
+          // TODO: not sure how to handle other symbols for now, eg. Symbol.iterator
+          return;
         }
 
-        // 2) create a new "string-concat" future with the list of processed values
-        const future: Future = {
-          id: newId(),
-          directive: {
-            items: concatables,
-            type: "string-concat",
-          }
-        };
+        // TODO: can prop be anything else here? I think even numbers are treated as
+        // strings in this context - but verify.
+        if (typeof prop !== "string") {
+          impossible(`Expected a string for prop, but got ${typeof prop}`);
+        }
 
-        // 3) add the new future to the collectedFutures list
-        collectedFutures.push(future);
+        // When the `prop` is a special ProxyTable id, we lookup the ProxyTarget and use
+        // that value as the `nextProp` in the current target. Otherwise we use the string
+        // value we get.
+        const nextProp =
+          lookupTable.isLookupTableId(prop) && lookupTable.has(prop)
+            ? lookupTable.read(prop)
+            : prop;
 
-        // 4) return the placeholder
-        return futureIdPlaceholder(future.id)
-      } else {
-        return Object.keys(obj).reduce((a: any, k: any) => {
-          a[k] = traverse(obj[k]);
-          return a;
-        }, {});
-      }
-    }
+        if (typeof nextProp === "undefined") {
+          impossible(`Expected to find a value for ${prop}, but didn't.`);
+        }
 
-    return obj;
+        // Create a new proxy with all the props accessed so far and return it.
+        // This is what gives us the "infinite" proxying ability.
+        const newProps = [...target.props, nextProp] as TraceProp[];
+
+        const newProxy = makeProxy(new Trace(target.node, newProps));
+        if (isProxy(newProxy)) return newProxy; // predicate lets the typechecker know we have a Proxied<T>
+        impossible(`Expected to create a Proxy, but created ${newProxy}`);
+      },
+    });
   };
 
-  return {
-    args: traverse(args),
-    futures: collectedFutures,
+  const isProxy = <T extends Proxyable>(
+    maybeProxy: T | Object,
+  ): maybeProxy is Proxied<T> => {
+    return targetProp in maybeProxy;
   };
+
+  const unProxy = <T extends Proxyable>(proxied: Proxied<T>): T => {
+    // @ts-ignore: ignoring that the virtual targetProp may not be there on this type.
+    return proxied[targetProp];
+  };
+
+  return { Future, Trace, StringConcat, makeProxy, isProxy, unProxy };
 };
