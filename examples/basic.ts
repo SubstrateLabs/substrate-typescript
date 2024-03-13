@@ -13,7 +13,7 @@ const substrate = new Substrate({
 });
 const a = new GenerateText({
   prompt: "ask me a short trivia question in one sentence",
-}).output();
-const b = new GenerateText({ prompt: a.future.text }).output();
+}).subscribe();
+const b = new GenerateText({ prompt: a.future.text }).subscribe();
 const result = await substrate.run(a, b);
 console.log(JSON.stringify(result, null, 2));

@@ -9,7 +9,7 @@ export class Node {
   id: string;
   node: string;
   args: any = {};
-  _output: boolean = false;
+  _subscribed: boolean = false;
 
   constructor(args: any) {
     this.node = this.constructor.name;
@@ -17,11 +17,17 @@ export class Node {
     this.args = args;
   }
 
-  output(): this {
-    this._output = true;
+  /**
+   * Subscribe to the output of this node.
+   */
+  subscribe(): this {
+    this._subscribed = true;
     return this;
   }
 
+  /**
+   * Reference the future output of this node.
+   */
   get future() {
     return refFactory.makeProxiedRef(this) as any;
   }
@@ -31,7 +37,7 @@ export class Node {
       node: this.node,
       id: this.id,
       args: this.args,
-      _should_output_globally: this._output,
+      _should_output_globally: this._subscribed,
     };
   }
 }
