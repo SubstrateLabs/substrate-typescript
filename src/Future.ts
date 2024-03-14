@@ -19,7 +19,7 @@ import { idGenerator } from "substrate/idGenerator";
  *
  *  In order to handle some limitations of how things might be accessed we're using a few tricks:
  *
- *    - "Proxy management" (isProxy, unProxy) -> using "virtual prop", `$$target`
+ *    - "Proxy management" (isProxy, unproxy) -> using "virtual prop", `$$target`
  *
  *    - "Property accessors/indexing" (isPrimitive) -> using "lookup table" and `$$LookupTableId`
  *
@@ -40,6 +40,7 @@ const impossible = (msg: string): never => {
 };
 
 type HasId = { id: string };
+type NodeLike = HasId;
 
 type LookupTableId = `$$LookupTableId:${string}`;
 type Storable = HasId;
@@ -67,9 +68,6 @@ export class LookupTable {
   }
 }
 
-type NodeLike = HasId;
-type TraceProp = string | HasId;
-
 /**
  * TODO: is there a better name for this? I'm using `context` here to refer to
  * the closure created that contains a reference to the LookupTable that we need
@@ -80,10 +78,14 @@ export const makeContext = (
   futureId = idGenerator("future"),
   targetProp: string = "$$target",
 ) => {
-  class Future {
+  abstract class Future {
     id: string;
     constructor(id: string = futureId()) {
       this.id = id;
+    }
+
+    toPlaceholder() {
+      return { __$$SB_GRAPH_OP_ID$$__: this.id };
     }
 
     // We're using the `toPrimitive` method here to do some tricky things. This
@@ -101,7 +103,27 @@ export const makeContext = (
       lookupTable.write(this);
       return lookupTable.id(this);
     }
+
+    abstract referencedFutures(): FutureJSON[];
+    abstract toJSON(): FutureJSON;
   }
+
+  type FutureJSON = {
+    id: string;
+    directive: TraceDirective | StringConcatDirective;
+  };
+
+  type TraceProp = string | Future;
+  type TraceOperation = {
+    future_id: Future["id"] | null;
+    key: string | number | null;
+    accessor: "item" | "attr";
+  };
+  type TraceDirective = {
+    op_stack: TraceOperation[];
+    origin_node_id: HasId["id"];
+    type: "trace";
+  };
 
   class Trace extends Future {
     node: NodeLike;
@@ -112,20 +134,124 @@ export const makeContext = (
       this.node = node;
       this.props = props;
     }
+
+    static TraceOperation = {
+      future: (futureId: Future["id"]): TraceOperation => ({
+        future_id: futureId,
+        key: null,
+        accessor: "attr", // TODO: how to infer the result here - maybe impossible?
+      }),
+      attr: (key: string): TraceOperation => ({
+        future_id: null,
+        key,
+        accessor: "attr",
+      }),
+      item: (key: number): TraceOperation => ({
+        future_id: null,
+        key,
+        accessor: "item",
+      }),
+    };
+
+    #unproxiedProps(): TraceProp[] {
+      return this.props.map((prop) => {
+        if (prop instanceof Future) return isProxy(prop) ? unproxy(prop) : prop;
+        return prop;
+      });
+    }
+
+    #opStack(): TraceOperation[] {
+      return this.#unproxiedProps().map((prop) => {
+        if (prop instanceof Future) {
+          return Trace.TraceOperation.future(prop.id);
+        }
+
+        // here we know we're dealing with a prop name or numeric index
+        // TODO: infer that a numeric prop is an item?
+        return Trace.TraceOperation.attr(prop);
+      });
+    }
+
+    override referencedFutures(): FutureJSON[] {
+      const futures = this.#unproxiedProps().filter(
+        (p) => p instanceof Future,
+      ) as Future[];
+      return futures.flatMap((f) => [f.toJSON(), ...f.referencedFutures()]);
+    }
+
+    override toJSON(): FutureJSON {
+      return {
+        id: this.id,
+        directive: {
+          type: "trace",
+          op_stack: this.#opStack(),
+          origin_node_id: this.node.id,
+        },
+      };
+    }
   }
 
-  type Concatable<T extends Proxyable> =
-    | string
-    | StringConcat
-    | Proxyable
-    | Proxied<T>;
+  type StringConcatItem = string | Future;
+
+  type StringConcatDirective = {
+    items: Concatable[];
+    type: "string-concat";
+  };
+  // TODO: maybe I could make a better name for the distinction betweem the serialized
+  // Concatble the API wants and the intermediate type that we use within the SDK.
+  type Concatable = {
+    future_id: Future["id"] | null;
+    val: string | null;
+  };
 
   class StringConcat extends Future {
-    items: Concatable<Proxyable>[];
+    items: StringConcatItem[];
 
-    constructor(items: Concatable<Proxyable>[] = [], id?: string) {
+    constructor(items: StringConcatItem[] = [], id?: string) {
       super(id);
       this.items = items;
+    }
+
+    static stringConcat(...items: StringConcatItem[]): StringConcat {
+      return new StringConcat(items);
+    }
+
+    static Concatable = {
+      string: (val: string) => ({ future_id: null, val }),
+      future: (futureId: Future["id"]) => ({ future_id: futureId, val: null }),
+    };
+
+    #unproxiedItems(): StringConcatItem[] {
+      return this.items.map((item) => {
+        if (item instanceof Future) return isProxy(item) ? unproxy(item) : item;
+        return item;
+      });
+    }
+
+    #concatableItems(): Concatable[] {
+      return this.#unproxiedItems().map((item: StringConcatItem) => {
+        if (item instanceof Future) {
+          return StringConcat.Concatable.future(item.id);
+        }
+        return StringConcat.Concatable.string(item);
+      });
+    }
+
+    override referencedFutures(): FutureJSON[] {
+      const futures = this.#unproxiedItems().filter(
+        (p) => p instanceof Future,
+      ) as Future[];
+      return futures.flatMap((f) => [f.toJSON(), ...f.referencedFutures()]);
+    }
+
+    override toJSON(): FutureJSON {
+      return {
+        id: this.id,
+        directive: {
+          type: "string-concat",
+          items: this.#concatableItems(),
+        },
+      };
     }
   }
 
@@ -192,10 +318,18 @@ export const makeContext = (
     return targetProp in maybeProxy;
   };
 
-  const unProxy = <T extends Proxyable>(proxied: Proxied<T>): T => {
+  const unproxy = <T extends Proxyable>(proxied: Proxied<T>): T => {
     // @ts-ignore: ignoring that the virtual targetProp may not be there on this type.
     return proxied[targetProp];
   };
 
-  return { Future, Trace, StringConcat, makeProxy, isProxy, unProxy };
+  return {
+    Future,
+    Trace,
+    StringConcat,
+    stringConcat: StringConcat.stringConcat,
+    makeProxy,
+    isProxy,
+    unproxy,
+  };
 };

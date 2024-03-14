@@ -3,7 +3,6 @@
 * 20240315.20240316
 */
 
-export { NodeLike } from "substrate/Graph";
 export { SubstrateError } from "substrate/Error";
 export {
   GenerateText,
@@ -27,6 +26,9 @@ export {
   MultiEmbedImage,
   } from "substrate/Nodes";
 
-export { Substrate };
+import { pub } from "substrate/sb";
+export const sb = pub;
+
 import { Substrate } from "substrate/Substrate";
+export { Substrate };
 export default Substrate;

@@ -1,8 +1,6 @@
-import * as Refs from "substrate/Refs";
 import { idGenerator } from "substrate/idGenerator";
 import { SubstrateResponse } from "./SubstrateResponse";
-
-const refFactory = Refs.makeFactory();
+import { context } from "substrate/sb";
 
 const generator = idGenerator("node");
 
@@ -30,7 +28,9 @@ export class Node {
    * Reference the future output of this node.
    */
   get future() {
-    return refFactory.makeProxiedRef(this) as any;
+    const trace = new context.Trace(this);
+    const proxy = context.makeProxy(trace);
+    return proxy as any;
   }
 
   /*

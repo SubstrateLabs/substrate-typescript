@@ -8,7 +8,7 @@ describe("GenerateText", () => {
     expect(n.node).toEqual("GenerateText");
   });
 
-  test("ref", () => {
+  test(".future", () => {
     const a = new GenerateText({ prompt: "foo" });
     const b = new GenerateText({ prompt: a.future.text });
     expect(b).toBeInstanceOf(GenerateText);
