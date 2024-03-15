@@ -1,7 +1,7 @@
 import { expect, describe, test } from "vitest";
 import { Substrate } from "substrate/Substrate";
 import { Node } from "substrate/Node";
-import sb from "substrate/sb";
+import { context } from "substrate/sb";
 
 describe("Substrate", () => {
   describe(".serialize", () => {
@@ -9,11 +9,13 @@ describe("Substrate", () => {
       const ss = new Substrate({ apiKey: "apiKey" });
 
       const a = new Node({ a: 123 });
-      const b = new Node({ b: a.future.x, c: new sb.StringConcat(["x", "y"]) });
+      const b = new Node({ b: a.future.x, c: new context.StringConcat(["x", "y"]) });
 
       const result = ss.serialize([a, b]);
 
       expect(result).toEqual({
+        edges: [],
+        initial_args: {},
         nodes: [
           {
             node: "Node",

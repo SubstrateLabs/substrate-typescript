@@ -8,6 +8,7 @@ import { Node } from "substrate/Node";
 import { SubstrateResponse } from "./SubstrateResponse";
 import { AsFuture } from "substrate/Future";
 
+
 /**
  * Generate text using a language model.
  *

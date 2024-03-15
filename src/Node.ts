@@ -4,7 +4,7 @@ import { context } from "substrate/sb";
 
 const generator = idGenerator("node");
 
-export class Node<Args = any> {
+export class Node<Args = Object> {
   id: string;
   node: string;
   args: Args;
