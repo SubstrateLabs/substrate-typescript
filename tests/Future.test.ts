@@ -63,9 +63,8 @@ describe("Proxy, Future", () => {
 
       const t = new ctx.Trace({ id: "a" });
       const p = ctx.makeProxy(t);
-      const s = new ctx.StringConcat(["a", "e"]);
+      const s = new ctx.StringConcat.stringConcat(["a", "e"]);
 
-      // @ts-expect-error: Type cannot be used as an index type.
       const p1 = p.f.g[s];
       expect(ctx.unproxy(p1).props).toEqual(["f", "g", s]);
     });

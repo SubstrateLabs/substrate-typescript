@@ -8,7 +8,6 @@ import {
 
 const SUBSTRATE_API_KEY = process.env["SUBSTRATE_API_KEY"];
 
-// @ts-ignore
 const substrate = new Substrate({
   apiKey: SUBSTRATE_API_KEY,
   baseUrl: "https://api-staging.substrate.run",

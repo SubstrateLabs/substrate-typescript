@@ -105,6 +105,20 @@ export abstract class Future<T> {
 }
 
 /**
+ * Transforms a type `T` into a `Future<T> & T`.
+ *
+ * When applied to an object it will transform the inner fields recursively too.
+ */
+export type AsFuture<T> = T extends object
+  ? {
+      [P in keyof T]-?: undefined extends T[P]
+        ? Future<T[P] | undefined> & AsFuture<T[P]>
+        : Future<T[P]> & AsFuture<T[P]>;
+    }
+  : Future<T> & T;
+
+
+/**
  * TODO: is there a better name for this? I'm using `context` here to refer to
  * the closure created that contains a reference to the LookupTable that we need
  * to use in the Proxy and Future code (primarily within side-effects).
