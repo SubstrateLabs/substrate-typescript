@@ -13,13 +13,13 @@ const substrate = new Substrate({
   baseUrl: "https://api-staging.substrate.run",
 });
 
-const a = new GenerateText({
-  prompt: "name a random capital city",
-}).output();
+const a = new GenerateText({ prompt: "name a random capital city", }).subscribe();
 
 const concatenated = sb.stringConcat("tell me about visiting ", a.future.text);
 
-const b = new GenerateText({ prompt: concatenated }).output();
+const b = new GenerateText({ prompt: concatenated }).subscribe();
 
 const result = await substrate.run(a, b);
-console.log(JSON.stringify(result, null, 2));
+
+console.log("result.get(a) =", result.get(a));
+console.log("result.get(b) =", result.get(b));
