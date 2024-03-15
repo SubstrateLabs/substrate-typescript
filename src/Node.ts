@@ -4,13 +4,13 @@ import { context } from "substrate/sb";
 
 const generator = idGenerator("node");
 
-export class Node {
+export class Node<Args = any> {
   id: string;
   node: string;
-  args: any = {};
+  args: Args;
   _subscribed: boolean = false;
 
-  constructor(args: any) {
+  constructor(args: Args) {
     this.node = this.constructor.name;
     this.id = generator(this.node);
     this.args = args;
@@ -28,9 +28,7 @@ export class Node {
    * Reference the future output of this node.
    */
   get future() {
-    const trace = new context.Trace(this);
-    const proxy = context.makeProxy(trace);
-    return proxy as any;
+    return context.Trace.proxy(this) as any;
   }
 
   /*

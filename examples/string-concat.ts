@@ -3,24 +3,24 @@
 import {
   Substrate,
   GenerateText,
-  sb
+  sb,
 } from "@substratelabs/substrate-typescript";
 
 const SUBSTRATE_API_KEY = process.env["SUBSTRATE_API_KEY"];
 
+// @ts-ignore
 const substrate = new Substrate({
   apiKey: SUBSTRATE_API_KEY,
   baseUrl: "https://api-staging.substrate.run",
 });
 
 const a = new GenerateText({
-  prompt: "make up a 4 new funny words and list them this format and nothing more: `words = [string, string, string, string]`",
+  prompt: "name a random capital city",
 }).output();
 
-const b = new GenerateText({
-  prompt: sb.stringConcat("write a poem using only the following words: ", a.future.text as any) as any
-}).output();
+const concatenated = sb.stringConcat("tell me about visiting ", a.future.text);
 
+const b = new GenerateText({ prompt: concatenated }).output();
 
 const result = await substrate.run(a, b);
 console.log(JSON.stringify(result, null, 2));

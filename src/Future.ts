@@ -23,13 +23,7 @@ import { idGenerator } from "substrate/idGenerator";
  *
  *    - "Property accessors/indexing" (isPrimitive) -> using "lookup table" and `$$LookupTableId`
  *
- *    - "TypeScript index type" (eg. "X cannot be used as an index type. typescript (2538)" for proxy indexing) -> no solution yet.
- *        - tried using clever type intersections and assertions eg. `type StringyFuture = Future & string` + `return new Future() as StringyFuture`
- *        - tried using a Record<any, any> vs any
- *        - tried intersecting on the Proxied type, eg. `Proxied & { [k: any]: any }`
- *        - maybe the solution here is type erasure + type assertions with "generated types" (eg. taking API schema types and generated complementary "future" variants)
- *          - like `return proxy as any as GeneratedFutureTypeFor["SomeType"]`
- *        - currently using sprinkled `@ts-expect-error: ...`
+ *    - "TypeScript index type" (eg. "X cannot be used as an index type. typescript (2538)" for proxy indexing) -> Clever type casting (See `AsFuture`);
  */
 
 /**
@@ -68,6 +62,48 @@ export class LookupTable {
   }
 }
 
+type FutureJSON = {
+  id: string;
+  directive: TraceDirective | StringConcatDirective;
+};
+
+type TraceOperation = {
+  future_id: Future<any>["id"] | null;
+  key: string | number | null;
+  accessor: "item" | "attr";
+};
+
+type TraceDirective = {
+  op_stack: TraceOperation[];
+  origin_node_id: HasId["id"];
+  type: "trace";
+};
+
+type StringConcatDirective = {
+  items: Concatable[];
+  type: "string-concat";
+};
+
+type Concatable = {
+  future_id: Future<any>["id"] | null;
+  val: string | null;
+};
+
+export abstract class Future<T> {
+  t: T;
+  id: string;
+  constructor(id: string) {
+    this.id = id;
+  }
+
+  toPlaceholder() {
+    return { __$$SB_GRAPH_OP_ID$$__: this.id };
+  }
+
+  abstract referencedFutures(): FutureJSON[];
+  abstract toJSON(): FutureJSON;
+}
+
 /**
  * TODO: is there a better name for this? I'm using `context` here to refer to
  * the closure created that contains a reference to the LookupTable that we need
@@ -78,14 +114,9 @@ export const makeContext = (
   futureId = idGenerator("future"),
   targetProp: string = "$$target",
 ) => {
-  abstract class Future {
-    id: string;
+  abstract class InContextFuture extends Future<any> {
     constructor(id: string = futureId()) {
-      this.id = id;
-    }
-
-    toPlaceholder() {
-      return { __$$SB_GRAPH_OP_ID$$__: this.id };
+      super(id);
     }
 
     // We're using the `toPrimitive` method here to do some tricky things. This
@@ -103,29 +134,11 @@ export const makeContext = (
       lookupTable.write(this);
       return lookupTable.id(this);
     }
-
-    abstract referencedFutures(): FutureJSON[];
-    abstract toJSON(): FutureJSON;
   }
 
-  type FutureJSON = {
-    id: string;
-    directive: TraceDirective | StringConcatDirective;
-  };
+  type TraceProp = string | InContextFuture;
 
-  type TraceProp = string | Future;
-  type TraceOperation = {
-    future_id: Future["id"] | null;
-    key: string | number | null;
-    accessor: "item" | "attr";
-  };
-  type TraceDirective = {
-    op_stack: TraceOperation[];
-    origin_node_id: HasId["id"];
-    type: "trace";
-  };
-
-  class Trace extends Future {
+  class Trace extends InContextFuture {
     node: NodeLike;
     props: TraceProp[];
 
@@ -136,7 +149,7 @@ export const makeContext = (
     }
 
     static TraceOperation = {
-      future: (futureId: Future["id"]): TraceOperation => ({
+      future: (futureId: InContextFuture["id"]): TraceOperation => ({
         future_id: futureId,
         key: null,
         accessor: "attr", // TODO: how to infer the result here - maybe impossible?
@@ -152,6 +165,12 @@ export const makeContext = (
         accessor: "item",
       }),
     };
+
+    static proxy(n: NodeLike) {
+      const trace = new Trace(n);
+      const proxy = makeProxy(trace);
+      return proxy;
+    }
 
     #unproxiedProps(): TraceProp[] {
       return this.props.map((prop) => {
@@ -174,8 +193,8 @@ export const makeContext = (
 
     override referencedFutures(): FutureJSON[] {
       const futures = this.#unproxiedProps().filter(
-        (p) => p instanceof Future,
-      ) as Future[];
+        (p) => p instanceof InContextFuture,
+      ) as InContextFuture[];
       return futures.flatMap((f) => [f.toJSON(), ...f.referencedFutures()]);
     }
 
@@ -191,34 +210,26 @@ export const makeContext = (
     }
   }
 
-  type StringConcatItem = string | Future;
+  type StringConcatItem = string | InContextFuture;
 
-  type StringConcatDirective = {
-    items: Concatable[];
-    type: "string-concat";
-  };
-  // TODO: maybe I could make a better name for the distinction betweem the serialized
-  // Concatble the API wants and the intermediate type that we use within the SDK.
-  type Concatable = {
-    future_id: Future["id"] | null;
-    val: string | null;
-  };
-
-  class StringConcat extends Future {
+  class StringConcat extends InContextFuture {
     items: StringConcatItem[];
 
-    constructor(items: StringConcatItem[] = [], id?: string) {
+    constructor(items: StringConcatItem[] = [], id: string = futureId()) {
       super(id);
       this.items = items;
     }
 
-    static stringConcat(...items: StringConcatItem[]): StringConcat {
-      return new StringConcat(items);
+    static stringConcat(...items: StringConcatItem[]): Future<string> & string {
+      return new StringConcat(items) as any as Future<string> & string;
     }
 
     static Concatable = {
       string: (val: string) => ({ future_id: null, val }),
-      future: (futureId: Future["id"]) => ({ future_id: futureId, val: null }),
+      future: (futureId: InContextFuture["id"]) => ({
+        future_id: futureId,
+        val: null,
+      }),
     };
 
     #unproxiedItems(): StringConcatItem[] {
@@ -230,7 +241,7 @@ export const makeContext = (
 
     #concatableItems(): Concatable[] {
       return this.#unproxiedItems().map((item: StringConcatItem) => {
-        if (item instanceof Future) {
+        if (item instanceof InContextFuture) {
           return StringConcat.Concatable.future(item.id);
         }
         return StringConcat.Concatable.string(item);
@@ -240,7 +251,7 @@ export const makeContext = (
     override referencedFutures(): FutureJSON[] {
       const futures = this.#unproxiedItems().filter(
         (p) => p instanceof Future,
-      ) as Future[];
+      ) as InContextFuture[];
       return futures.flatMap((f) => [f.toJSON(), ...f.referencedFutures()]);
     }
 

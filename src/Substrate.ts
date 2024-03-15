@@ -48,7 +48,7 @@ export class Substrate {
   /**
    *  Run the given nodes.
    */
-  async run(...nodes: Node[]): Promise<any> {
+  async run(...nodes: Node<any>[]): Promise<any> {
     const url = this.baseUrl + "/compose";
     const req = { dag: this.serialize(nodes) };
     const apiResponse = await fetch(url, this.requestOptions(req));
@@ -62,7 +62,7 @@ export class Substrate {
     }
   }
 
-  serialize(nodes: Node[]) {
+  serialize(nodes: Node<any>[]) {
     // TODO: refactor and annotate this.
     const traverse = (obj: any, futures: Set<any>): any => {
       if (Array.isArray(obj)) {
