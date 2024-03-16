@@ -1,6 +1,6 @@
 {
   "name": "@substratelabs/substrate-typescript",
-  "version": "020240311.0.1",
+  "version": "020240313.0.1",
   "description": "The official SDK for the Substrate API",
   "keywords": [],
   "type": "module",
