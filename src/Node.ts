@@ -1,5 +1,7 @@
 import * as Refs from "substrate/Refs";
 import { idGenerator } from "substrate/idGenerator";
+import { SubstrateResponse } from "./SubstrateResponse";
+import * as OpenAPI from "substrate/OpenAPI";
 
 const refFactory = Refs.makeFactory();
 
@@ -30,6 +32,24 @@ export class Node {
    */
   get future() {
     return refFactory.makeProxiedRef(this) as any;
+  }
+
+  /*
+   * Get the response for a given node.
+   */
+  output(response: SubstrateResponse): any {
+    if (!response.json) {
+      throw new Error(`Invalid response`);
+    }
+    const json = response.json;
+    if (json && json.data) {
+      const data = json.data;
+      const nodeId = this.id;
+      if (data[nodeId]) {
+        return data[nodeId];
+      }
+    }
+    throw new Error(`Node ${this.id} not found in response`);
   }
 
   toJSON() {
