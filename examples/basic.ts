@@ -16,5 +16,5 @@ const a = new GenerateText({
 }).subscribe();
 const b = new GenerateText({ prompt: a.future.text }).subscribe();
 const res = await substrate.run(a, b);
-const b_res = res.get(b);
-console.log(b_res);
+const b_res = b.output(res);
+console.log(b_res.text);
