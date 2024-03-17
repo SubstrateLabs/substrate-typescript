@@ -1,27 +1,26 @@
 /**
-* @GENERATED FILE ꩜ SUBSTRATE
-* 20240315.20240316
-*/
+ * @GENERATED FILE ꩜ SUBSTRATE
+ * 20240315.20240316
+ */
 
 import * as OpenAPI from "substrate/OpenAPI";
-import { Node } from "substrate/Node"
+import { Node } from "substrate/Node";
 import { SubstrateResponse } from "./SubstrateResponse";
-
 
 /**
  * Generate text using a language model.
  *
  * Input arguments:
- * - `prompt` 
+ * - `prompt`
  * - `model` (optional)
  * - `response_format` (optional)
  * - `temperature` (optional)
  * - `max_tokens` (optional)
- * 
+ *
  * Output fields:
  * - `text` (optional)
  * - `json_object` (optional)
- * 
+ *
  * https://substrate.run/library#GenerateText
  */
 export class GenerateText extends Node {
@@ -29,12 +28,16 @@ export class GenerateText extends Node {
    * Generate text using a language model.
    *
    * Input arguments:
-   * - `prompt` 
+   * - `prompt`
    * - `model` (optional)
    * - `response_format` (optional)
    * - `temperature` (optional)
    * - `max_tokens` (optional)
-   * 
+   *
+   * Output fields:
+   * - `future.text` (optional)
+   * - `future.json_object` (optional)
+   *
    * https://substrate.run/library#GenerateText
    */
   constructor(args: Partial<OpenAPI.components["schemas"]["GenerateTextIn"]>) {
@@ -42,12 +45,10 @@ export class GenerateText extends Node {
   }
 
   /*
-   * Retrieve this node's output from a response.
+   * Retrieve this node's output from a response. Fields:
+   * - `future.text` (optional)
+   * - `future.json_object` (optional)
    *
-   * Output fields:
-   * - `text` (optional)
-   * - `json_object` (optional)
-   * 
    * https://substrate.run/library#GenerateText
    */
   override output(
@@ -62,7 +63,7 @@ export class GenerateText extends Node {
    * Output fields:
    * - `text` (optional)
    * - `json_object` (optional)
-   * 
+   *
    * https://substrate.run/library#GenerateText
    */
   override get future(): OpenAPI.components["schemas"]["GenerateTextOut"] {
@@ -74,16 +75,16 @@ export class GenerateText extends Node {
  * Generate multiple text choices using a language model.
  *
  * Input arguments:
- * - `prompt` 
- * - `num_choices` 
+ * - `prompt`
+ * - `num_choices`
  * - `model` (optional)
  * - `response_format` (optional)
  * - `temperature` (optional)
  * - `max_tokens` (optional)
- * 
+ *
  * Output fields:
- * - `choices` 
- * 
+ * - `choices`
+ *
  * https://substrate.run/library#MultiGenerateText
  */
 export class MultiGenerateText extends Node {
@@ -91,25 +92,28 @@ export class MultiGenerateText extends Node {
    * Generate multiple text choices using a language model.
    *
    * Input arguments:
-   * - `prompt` 
-   * - `num_choices` 
+   * - `prompt`
+   * - `num_choices`
    * - `model` (optional)
    * - `response_format` (optional)
    * - `temperature` (optional)
    * - `max_tokens` (optional)
-   * 
+   *
+   * Output fields:
+   * - `future.choices`
+   *
    * https://substrate.run/library#MultiGenerateText
    */
-  constructor(args: Partial<OpenAPI.components["schemas"]["MultiGenerateTextIn"]>) {
+  constructor(
+    args: Partial<OpenAPI.components["schemas"]["MultiGenerateTextIn"]>,
+  ) {
     super(args);
   }
 
   /*
-   * Retrieve this node's output from a response.
+   * Retrieve this node's output from a response. Fields:
+   * - `future.choices`
    *
-   * Output fields:
-   * - `choices` 
-   * 
    * https://substrate.run/library#MultiGenerateText
    */
   override output(
@@ -122,8 +126,8 @@ export class MultiGenerateText extends Node {
    * Future reference to this node's output.
    *
    * Output fields:
-   * - `choices` 
-   * 
+   * - `choices`
+   *
    * https://substrate.run/library#MultiGenerateText
    */
   override get future(): OpenAPI.components["schemas"]["MultiGenerateTextOut"] {
@@ -135,15 +139,15 @@ export class MultiGenerateText extends Node {
  * Generate text by prompting with text and images using a vision-language model.
  *
  * Input arguments:
- * - `prompt` 
+ * - `prompt`
  * - `image_uris` (optional)
  * - `model` (optional)
  * - `temperature` (optional)
  * - `max_tokens` (optional)
- * 
+ *
  * Output fields:
- * - `text` 
- * 
+ * - `text`
+ *
  * https://substrate.run/library#GenerateTextVision
  */
 export class GenerateTextVision extends Node {
@@ -151,24 +155,27 @@ export class GenerateTextVision extends Node {
    * Generate text by prompting with text and images using a vision-language model.
    *
    * Input arguments:
-   * - `prompt` 
+   * - `prompt`
    * - `image_uris` (optional)
    * - `model` (optional)
    * - `temperature` (optional)
    * - `max_tokens` (optional)
-   * 
+   *
+   * Output fields:
+   * - `future.text`
+   *
    * https://substrate.run/library#GenerateTextVision
    */
-  constructor(args: Partial<OpenAPI.components["schemas"]["GenerateTextVisionIn"]>) {
+  constructor(
+    args: Partial<OpenAPI.components["schemas"]["GenerateTextVisionIn"]>,
+  ) {
     super(args);
   }
 
   /*
-   * Retrieve this node's output from a response.
+   * Retrieve this node's output from a response. Fields:
+   * - `future.text`
    *
-   * Output fields:
-   * - `text` 
-   * 
    * https://substrate.run/library#GenerateTextVision
    */
   override output(
@@ -181,8 +188,8 @@ export class GenerateTextVision extends Node {
    * Future reference to this node's output.
    *
    * Output fields:
-   * - `text` 
-   * 
+   * - `text`
+   *
    * https://substrate.run/library#GenerateTextVision
    */
   override get future(): OpenAPI.components["schemas"]["GenerateTextVisionOut"] {
@@ -194,7 +201,7 @@ export class GenerateTextVision extends Node {
  * Generate an image.
  *
  * Input arguments:
- * - `prompt` 
+ * - `prompt`
  * - `image_prompt_uri` (optional)
  * - `model` (optional)
  * - `image_influence` (optional)
@@ -203,11 +210,11 @@ export class GenerateTextVision extends Node {
  * - `width` (optional)
  * - `height` (optional)
  * - `seed` (optional)
- * 
+ *
  * Output fields:
- * - `image_uri` 
- * - `seed` 
- * 
+ * - `image_uri`
+ * - `seed`
+ *
  * https://substrate.run/library#GenerateImage
  */
 export class GenerateImage extends Node {
@@ -215,7 +222,7 @@ export class GenerateImage extends Node {
    * Generate an image.
    *
    * Input arguments:
-   * - `prompt` 
+   * - `prompt`
    * - `image_prompt_uri` (optional)
    * - `model` (optional)
    * - `image_influence` (optional)
@@ -224,7 +231,11 @@ export class GenerateImage extends Node {
    * - `width` (optional)
    * - `height` (optional)
    * - `seed` (optional)
-   * 
+   *
+   * Output fields:
+   * - `future.image_uri`
+   * - `future.seed`
+   *
    * https://substrate.run/library#GenerateImage
    */
   constructor(args: Partial<OpenAPI.components["schemas"]["GenerateImageIn"]>) {
@@ -232,12 +243,10 @@ export class GenerateImage extends Node {
   }
 
   /*
-   * Retrieve this node's output from a response.
+   * Retrieve this node's output from a response. Fields:
+   * - `future.image_uri`
+   * - `future.seed`
    *
-   * Output fields:
-   * - `image_uri` 
-   * - `seed` 
-   * 
    * https://substrate.run/library#GenerateImage
    */
   override output(
@@ -250,9 +259,9 @@ export class GenerateImage extends Node {
    * Future reference to this node's output.
    *
    * Output fields:
-   * - `image_uri` 
-   * - `seed` 
-   * 
+   * - `image_uri`
+   * - `seed`
+   *
    * https://substrate.run/library#GenerateImage
    */
   override get future(): OpenAPI.components["schemas"]["GenerateImageOut"] {
@@ -264,9 +273,9 @@ export class GenerateImage extends Node {
  * Generate multiple images.
  *
  * Input arguments:
- * - `prompt` 
+ * - `prompt`
  * - `image_prompt_uri` (optional)
- * - `num_images` 
+ * - `num_images`
  * - `model` (optional)
  * - `image_influence` (optional)
  * - `negative_prompt` (optional)
@@ -274,10 +283,10 @@ export class GenerateImage extends Node {
  * - `width` (optional)
  * - `height` (optional)
  * - `seeds` (optional)
- * 
+ *
  * Output fields:
- * - `outputs` 
- * 
+ * - `outputs`
+ *
  * https://substrate.run/library#MultiGenerateImage
  */
 export class MultiGenerateImage extends Node {
@@ -285,9 +294,9 @@ export class MultiGenerateImage extends Node {
    * Generate multiple images.
    *
    * Input arguments:
-   * - `prompt` 
+   * - `prompt`
    * - `image_prompt_uri` (optional)
-   * - `num_images` 
+   * - `num_images`
    * - `model` (optional)
    * - `image_influence` (optional)
    * - `negative_prompt` (optional)
@@ -295,19 +304,22 @@ export class MultiGenerateImage extends Node {
    * - `width` (optional)
    * - `height` (optional)
    * - `seeds` (optional)
-   * 
+   *
+   * Output fields:
+   * - `future.outputs`
+   *
    * https://substrate.run/library#MultiGenerateImage
    */
-  constructor(args: Partial<OpenAPI.components["schemas"]["MultiGenerateImageIn"]>) {
+  constructor(
+    args: Partial<OpenAPI.components["schemas"]["MultiGenerateImageIn"]>,
+  ) {
     super(args);
   }
 
   /*
-   * Retrieve this node's output from a response.
+   * Retrieve this node's output from a response. Fields:
+   * - `future.outputs`
    *
-   * Output fields:
-   * - `outputs` 
-   * 
    * https://substrate.run/library#MultiGenerateImage
    */
   override output(
@@ -320,8 +332,8 @@ export class MultiGenerateImage extends Node {
    * Future reference to this node's output.
    *
    * Output fields:
-   * - `outputs` 
-   * 
+   * - `outputs`
+   *
    * https://substrate.run/library#MultiGenerateImage
    */
   override get future(): OpenAPI.components["schemas"]["MultiGenerateImageOut"] {
@@ -333,20 +345,20 @@ export class MultiGenerateImage extends Node {
  * Generate an image with generation controlled by an input image.
  *
  * Input arguments:
- * - `image_uri` 
- * - `control_method` 
- * - `prompt` 
+ * - `image_uri`
+ * - `control_method`
+ * - `prompt`
  * - `output_resolution` (optional)
  * - `model` (optional)
  * - `negative_prompt` (optional)
  * - `store` (optional)
  * - `image_influence` (optional)
  * - `seed` (optional)
- * 
+ *
  * Output fields:
- * - `image_uri` 
- * - `seed` 
- * 
+ * - `image_uri`
+ * - `seed`
+ *
  * https://substrate.run/library#ControlledGenerateImage
  */
 export class ControlledGenerateImage extends Node {
@@ -354,29 +366,33 @@ export class ControlledGenerateImage extends Node {
    * Generate an image with generation controlled by an input image.
    *
    * Input arguments:
-   * - `image_uri` 
-   * - `control_method` 
-   * - `prompt` 
+   * - `image_uri`
+   * - `control_method`
+   * - `prompt`
    * - `output_resolution` (optional)
    * - `model` (optional)
    * - `negative_prompt` (optional)
    * - `store` (optional)
    * - `image_influence` (optional)
    * - `seed` (optional)
-   * 
+   *
+   * Output fields:
+   * - `future.image_uri`
+   * - `future.seed`
+   *
    * https://substrate.run/library#ControlledGenerateImage
    */
-  constructor(args: Partial<OpenAPI.components["schemas"]["ControlledGenerateImageIn"]>) {
+  constructor(
+    args: Partial<OpenAPI.components["schemas"]["ControlledGenerateImageIn"]>,
+  ) {
     super(args);
   }
 
   /*
-   * Retrieve this node's output from a response.
+   * Retrieve this node's output from a response. Fields:
+   * - `future.image_uri`
+   * - `future.seed`
    *
-   * Output fields:
-   * - `image_uri` 
-   * - `seed` 
-   * 
    * https://substrate.run/library#ControlledGenerateImage
    */
   override output(
@@ -389,9 +405,9 @@ export class ControlledGenerateImage extends Node {
    * Future reference to this node's output.
    *
    * Output fields:
-   * - `image_uri` 
-   * - `seed` 
-   * 
+   * - `image_uri`
+   * - `seed`
+   *
    * https://substrate.run/library#ControlledGenerateImage
    */
   override get future(): OpenAPI.components["schemas"]["ControlledGenerateImageOut"] {
@@ -403,20 +419,20 @@ export class ControlledGenerateImage extends Node {
  * Generate multiple image outputs with generation controlled by an input image.
  *
  * Input arguments:
- * - `image_uri` 
- * - `control_method` 
- * - `prompt` 
- * - `num_images` 
+ * - `image_uri`
+ * - `control_method`
+ * - `prompt`
+ * - `num_images`
  * - `output_resolution` (optional)
  * - `model` (optional)
  * - `negative_prompt` (optional)
  * - `store` (optional)
  * - `image_influence` (optional)
  * - `seeds` (optional)
- * 
+ *
  * Output fields:
- * - `outputs` 
- * 
+ * - `outputs`
+ *
  * https://substrate.run/library#MultiControlledGenerateImage
  */
 export class MultiControlledGenerateImage extends Node {
@@ -424,29 +440,34 @@ export class MultiControlledGenerateImage extends Node {
    * Generate multiple image outputs with generation controlled by an input image.
    *
    * Input arguments:
-   * - `image_uri` 
-   * - `control_method` 
-   * - `prompt` 
-   * - `num_images` 
+   * - `image_uri`
+   * - `control_method`
+   * - `prompt`
+   * - `num_images`
    * - `output_resolution` (optional)
    * - `model` (optional)
    * - `negative_prompt` (optional)
    * - `store` (optional)
    * - `image_influence` (optional)
    * - `seeds` (optional)
-   * 
+   *
+   * Output fields:
+   * - `future.outputs`
+   *
    * https://substrate.run/library#MultiControlledGenerateImage
    */
-  constructor(args: Partial<OpenAPI.components["schemas"]["MultiControlledGenerateImageIn"]>) {
+  constructor(
+    args: Partial<
+      OpenAPI.components["schemas"]["MultiControlledGenerateImageIn"]
+    >,
+  ) {
     super(args);
   }
 
   /*
-   * Retrieve this node's output from a response.
+   * Retrieve this node's output from a response. Fields:
+   * - `future.outputs`
    *
-   * Output fields:
-   * - `outputs` 
-   * 
    * https://substrate.run/library#MultiControlledGenerateImage
    */
   override output(
@@ -459,8 +480,8 @@ export class MultiControlledGenerateImage extends Node {
    * Future reference to this node's output.
    *
    * Output fields:
-   * - `outputs` 
-   * 
+   * - `outputs`
+   *
    * https://substrate.run/library#MultiControlledGenerateImage
    */
   override get future(): OpenAPI.components["schemas"]["MultiControlledGenerateImageOut"] {
@@ -472,8 +493,8 @@ export class MultiControlledGenerateImage extends Node {
  * Edit an image with a generative model.
  *
  * Input arguments:
- * - `image_uri` 
- * - `prompt` 
+ * - `image_uri`
+ * - `prompt`
  * - `mask_image_uri` (optional)
  * - `image_prompt_uri` (optional)
  * - `output_resolution` (optional)
@@ -483,11 +504,11 @@ export class MultiControlledGenerateImage extends Node {
  * - `negative_prompt` (optional)
  * - `store` (optional)
  * - `seed` (optional)
- * 
+ *
  * Output fields:
- * - `image_uri` 
- * - `seed` 
- * 
+ * - `image_uri`
+ * - `seed`
+ *
  * https://substrate.run/library#GenerativeEditImage
  */
 export class GenerativeEditImage extends Node {
@@ -495,8 +516,8 @@ export class GenerativeEditImage extends Node {
    * Edit an image with a generative model.
    *
    * Input arguments:
-   * - `image_uri` 
-   * - `prompt` 
+   * - `image_uri`
+   * - `prompt`
    * - `mask_image_uri` (optional)
    * - `image_prompt_uri` (optional)
    * - `output_resolution` (optional)
@@ -506,20 +527,24 @@ export class GenerativeEditImage extends Node {
    * - `negative_prompt` (optional)
    * - `store` (optional)
    * - `seed` (optional)
-   * 
+   *
+   * Output fields:
+   * - `future.image_uri`
+   * - `future.seed`
+   *
    * https://substrate.run/library#GenerativeEditImage
    */
-  constructor(args: Partial<OpenAPI.components["schemas"]["GenerativeEditImageIn"]>) {
+  constructor(
+    args: Partial<OpenAPI.components["schemas"]["GenerativeEditImageIn"]>,
+  ) {
     super(args);
   }
 
   /*
-   * Retrieve this node's output from a response.
+   * Retrieve this node's output from a response. Fields:
+   * - `future.image_uri`
+   * - `future.seed`
    *
-   * Output fields:
-   * - `image_uri` 
-   * - `seed` 
-   * 
    * https://substrate.run/library#GenerativeEditImage
    */
   override output(
@@ -532,9 +557,9 @@ export class GenerativeEditImage extends Node {
    * Future reference to this node's output.
    *
    * Output fields:
-   * - `image_uri` 
-   * - `seed` 
-   * 
+   * - `image_uri`
+   * - `seed`
+   *
    * https://substrate.run/library#GenerativeEditImage
    */
   override get future(): OpenAPI.components["schemas"]["GenerativeEditImageOut"] {
@@ -546,11 +571,11 @@ export class GenerativeEditImage extends Node {
  * Generate multiple image outputs modifying part of an image using a mask.
  *
  * Input arguments:
- * - `image_uri` 
- * - `prompt` 
+ * - `image_uri`
+ * - `prompt`
  * - `mask_image_uri` (optional)
  * - `image_prompt_uri` (optional)
- * - `num_images` 
+ * - `num_images`
  * - `output_resolution` (optional)
  * - `model` (optional)
  * - `negative_prompt` (optional)
@@ -558,10 +583,10 @@ export class GenerativeEditImage extends Node {
  * - `strength` (optional)
  * - `image_prompt_influence` (optional)
  * - `seeds` (optional)
- * 
+ *
  * Output fields:
- * - `outputs` 
- * 
+ * - `outputs`
+ *
  * https://substrate.run/library#MultiGenerativeEditImage
  */
 export class MultiGenerativeEditImage extends Node {
@@ -569,11 +594,11 @@ export class MultiGenerativeEditImage extends Node {
    * Generate multiple image outputs modifying part of an image using a mask.
    *
    * Input arguments:
-   * - `image_uri` 
-   * - `prompt` 
+   * - `image_uri`
+   * - `prompt`
    * - `mask_image_uri` (optional)
    * - `image_prompt_uri` (optional)
-   * - `num_images` 
+   * - `num_images`
    * - `output_resolution` (optional)
    * - `model` (optional)
    * - `negative_prompt` (optional)
@@ -581,19 +606,22 @@ export class MultiGenerativeEditImage extends Node {
    * - `strength` (optional)
    * - `image_prompt_influence` (optional)
    * - `seeds` (optional)
-   * 
+   *
+   * Output fields:
+   * - `future.outputs`
+   *
    * https://substrate.run/library#MultiGenerativeEditImage
    */
-  constructor(args: Partial<OpenAPI.components["schemas"]["MultiGenerativeEditImageIn"]>) {
+  constructor(
+    args: Partial<OpenAPI.components["schemas"]["MultiGenerativeEditImageIn"]>,
+  ) {
     super(args);
   }
 
   /*
-   * Retrieve this node's output from a response.
+   * Retrieve this node's output from a response. Fields:
+   * - `future.outputs`
    *
-   * Output fields:
-   * - `outputs` 
-   * 
    * https://substrate.run/library#MultiGenerativeEditImage
    */
   override output(
@@ -606,8 +634,8 @@ export class MultiGenerativeEditImage extends Node {
    * Future reference to this node's output.
    *
    * Output fields:
-   * - `outputs` 
-   * 
+   * - `outputs`
+   *
    * https://substrate.run/library#MultiGenerativeEditImage
    */
   override get future(): OpenAPI.components["schemas"]["MultiGenerativeEditImageOut"] {
@@ -619,14 +647,14 @@ export class MultiGenerativeEditImage extends Node {
  * Edit an image with a generative model.
  *
  * Input arguments:
- * - `image_uri` 
- * - `mask_image_uri` 
+ * - `image_uri`
+ * - `mask_image_uri`
  * - `model` (optional)
  * - `store` (optional)
- * 
+ *
  * Output fields:
- * - `image_uri` 
- * 
+ * - `image_uri`
+ *
  * https://substrate.run/library#FillMask
  */
 export class FillMask extends Node {
@@ -634,11 +662,14 @@ export class FillMask extends Node {
    * Edit an image with a generative model.
    *
    * Input arguments:
-   * - `image_uri` 
-   * - `mask_image_uri` 
+   * - `image_uri`
+   * - `mask_image_uri`
    * - `model` (optional)
    * - `store` (optional)
-   * 
+   *
+   * Output fields:
+   * - `future.image_uri`
+   *
    * https://substrate.run/library#FillMask
    */
   constructor(args: Partial<OpenAPI.components["schemas"]["FillMaskIn"]>) {
@@ -646,11 +677,9 @@ export class FillMask extends Node {
   }
 
   /*
-   * Retrieve this node's output from a response.
+   * Retrieve this node's output from a response. Fields:
+   * - `future.image_uri`
    *
-   * Output fields:
-   * - `image_uri` 
-   * 
    * https://substrate.run/library#FillMask
    */
   override output(
@@ -663,8 +692,8 @@ export class FillMask extends Node {
    * Future reference to this node's output.
    *
    * Output fields:
-   * - `image_uri` 
-   * 
+   * - `image_uri`
+   *
    * https://substrate.run/library#FillMask
    */
   override get future(): OpenAPI.components["schemas"]["FillMaskOut"] {
@@ -676,13 +705,13 @@ export class FillMask extends Node {
  * Upscale an image.
  *
  * Input arguments:
- * - `image_uri` 
+ * - `image_uri`
  * - `model` (optional)
  * - `store` (optional)
- * 
+ *
  * Output fields:
- * - `image_uri` 
- * 
+ * - `image_uri`
+ *
  * https://substrate.run/library#UpscaleImage
  */
 export class UpscaleImage extends Node {
@@ -690,10 +719,13 @@ export class UpscaleImage extends Node {
    * Upscale an image.
    *
    * Input arguments:
-   * - `image_uri` 
+   * - `image_uri`
    * - `model` (optional)
    * - `store` (optional)
-   * 
+   *
+   * Output fields:
+   * - `future.image_uri`
+   *
    * https://substrate.run/library#UpscaleImage
    */
   constructor(args: Partial<OpenAPI.components["schemas"]["UpscaleImageIn"]>) {
@@ -701,11 +733,9 @@ export class UpscaleImage extends Node {
   }
 
   /*
-   * Retrieve this node's output from a response.
+   * Retrieve this node's output from a response. Fields:
+   * - `future.image_uri`
    *
-   * Output fields:
-   * - `image_uri` 
-   * 
    * https://substrate.run/library#UpscaleImage
    */
   override output(
@@ -718,8 +748,8 @@ export class UpscaleImage extends Node {
    * Future reference to this node's output.
    *
    * Output fields:
-   * - `image_uri` 
-   * 
+   * - `image_uri`
+   *
    * https://substrate.run/library#UpscaleImage
    */
   override get future(): OpenAPI.components["schemas"]["UpscaleImageOut"] {
@@ -731,15 +761,15 @@ export class UpscaleImage extends Node {
  * Remove the background from an image, with the option to return the foreground as a mask.
  *
  * Input arguments:
- * - `image_uri` 
+ * - `image_uri`
  * - `return_mask` (optional)
  * - `background_color` (optional)
  * - `model` (optional)
  * - `store` (optional)
- * 
+ *
  * Output fields:
- * - `image_uri` 
- * 
+ * - `image_uri`
+ *
  * https://substrate.run/library#RemoveBackground
  */
 export class RemoveBackground extends Node {
@@ -747,24 +777,27 @@ export class RemoveBackground extends Node {
    * Remove the background from an image, with the option to return the foreground as a mask.
    *
    * Input arguments:
-   * - `image_uri` 
+   * - `image_uri`
    * - `return_mask` (optional)
    * - `background_color` (optional)
    * - `model` (optional)
    * - `store` (optional)
-   * 
+   *
+   * Output fields:
+   * - `future.image_uri`
+   *
    * https://substrate.run/library#RemoveBackground
    */
-  constructor(args: Partial<OpenAPI.components["schemas"]["RemoveBackgroundIn"]>) {
+  constructor(
+    args: Partial<OpenAPI.components["schemas"]["RemoveBackgroundIn"]>,
+  ) {
     super(args);
   }
 
   /*
-   * Retrieve this node's output from a response.
+   * Retrieve this node's output from a response. Fields:
+   * - `future.image_uri`
    *
-   * Output fields:
-   * - `image_uri` 
-   * 
    * https://substrate.run/library#RemoveBackground
    */
   override output(
@@ -777,8 +810,8 @@ export class RemoveBackground extends Node {
    * Future reference to this node's output.
    *
    * Output fields:
-   * - `image_uri` 
-   * 
+   * - `image_uri`
+   *
    * https://substrate.run/library#RemoveBackground
    */
   override get future(): OpenAPI.components["schemas"]["RemoveBackgroundOut"] {
@@ -790,15 +823,15 @@ export class RemoveBackground extends Node {
  * Detect segments in an image given point(s) or bounding box(es).
  *
  * Input arguments:
- * - `image_uri` 
+ * - `image_uri`
  * - `point_prompts` (optional)
  * - `box_prompts` (optional)
  * - `model` (optional)
  * - `store` (optional)
- * 
+ *
  * Output fields:
- * - `mask_image_uri` 
- * 
+ * - `mask_image_uri`
+ *
  * https://substrate.run/library#DetectSegments
  */
 export class DetectSegments extends Node {
@@ -806,24 +839,27 @@ export class DetectSegments extends Node {
    * Detect segments in an image given point(s) or bounding box(es).
    *
    * Input arguments:
-   * - `image_uri` 
+   * - `image_uri`
    * - `point_prompts` (optional)
    * - `box_prompts` (optional)
    * - `model` (optional)
    * - `store` (optional)
-   * 
+   *
+   * Output fields:
+   * - `future.mask_image_uri`
+   *
    * https://substrate.run/library#DetectSegments
    */
-  constructor(args: Partial<OpenAPI.components["schemas"]["DetectSegmentsIn"]>) {
+  constructor(
+    args: Partial<OpenAPI.components["schemas"]["DetectSegmentsIn"]>,
+  ) {
     super(args);
   }
 
   /*
-   * Retrieve this node's output from a response.
+   * Retrieve this node's output from a response. Fields:
+   * - `future.mask_image_uri`
    *
-   * Output fields:
-   * - `mask_image_uri` 
-   * 
    * https://substrate.run/library#DetectSegments
    */
   override output(
@@ -836,8 +872,8 @@ export class DetectSegments extends Node {
    * Future reference to this node's output.
    *
    * Output fields:
-   * - `mask_image_uri` 
-   * 
+   * - `mask_image_uri`
+   *
    * https://substrate.run/library#DetectSegments
    */
   override get future(): OpenAPI.components["schemas"]["DetectSegmentsOut"] {
@@ -849,19 +885,19 @@ export class DetectSegments extends Node {
  * Transcribe speech in an audio or video file.
  *
  * Input arguments:
- * - `audio_uri` 
+ * - `audio_uri`
  * - `prompt` (optional)
  * - `language` (optional)
  * - `segment` (optional)
  * - `align` (optional)
  * - `diarize` (optional)
  * - `suggest_chapters` (optional)
- * 
+ *
  * Output fields:
- * - `text` 
+ * - `text`
  * - `segments` (optional)
  * - `chapters` (optional)
- * 
+ *
  * https://substrate.run/library#TranscribeMedia
  */
 export class TranscribeMedia extends Node {
@@ -869,28 +905,33 @@ export class TranscribeMedia extends Node {
    * Transcribe speech in an audio or video file.
    *
    * Input arguments:
-   * - `audio_uri` 
+   * - `audio_uri`
    * - `prompt` (optional)
    * - `language` (optional)
    * - `segment` (optional)
    * - `align` (optional)
    * - `diarize` (optional)
    * - `suggest_chapters` (optional)
-   * 
+   *
+   * Output fields:
+   * - `future.text`
+   * - `future.segments` (optional)
+   * - `future.chapters` (optional)
+   *
    * https://substrate.run/library#TranscribeMedia
    */
-  constructor(args: Partial<OpenAPI.components["schemas"]["TranscribeMediaIn"]>) {
+  constructor(
+    args: Partial<OpenAPI.components["schemas"]["TranscribeMediaIn"]>,
+  ) {
     super(args);
   }
 
   /*
-   * Retrieve this node's output from a response.
+   * Retrieve this node's output from a response. Fields:
+   * - `future.text`
+   * - `future.segments` (optional)
+   * - `future.chapters` (optional)
    *
-   * Output fields:
-   * - `text` 
-   * - `segments` (optional)
-   * - `chapters` (optional)
-   * 
    * https://substrate.run/library#TranscribeMedia
    */
   override output(
@@ -903,10 +944,10 @@ export class TranscribeMedia extends Node {
    * Future reference to this node's output.
    *
    * Output fields:
-   * - `text` 
+   * - `text`
    * - `segments` (optional)
    * - `chapters` (optional)
-   * 
+   *
    * https://substrate.run/library#TranscribeMedia
    */
   override get future(): OpenAPI.components["schemas"]["TranscribeMediaOut"] {
@@ -918,14 +959,14 @@ export class TranscribeMedia extends Node {
  * Generate speech from text.
  *
  * Input arguments:
- * - `text` 
+ * - `text`
  * - `audio_uri` (optional)
  * - `language` (optional)
  * - `store` (optional)
- * 
+ *
  * Output fields:
- * - `audio_uri` 
- * 
+ * - `audio_uri`
+ *
  * https://substrate.run/library#GenerateSpeech
  */
 export class GenerateSpeech extends Node {
@@ -933,23 +974,26 @@ export class GenerateSpeech extends Node {
    * Generate speech from text.
    *
    * Input arguments:
-   * - `text` 
+   * - `text`
    * - `audio_uri` (optional)
    * - `language` (optional)
    * - `store` (optional)
-   * 
+   *
+   * Output fields:
+   * - `future.audio_uri`
+   *
    * https://substrate.run/library#GenerateSpeech
    */
-  constructor(args: Partial<OpenAPI.components["schemas"]["GenerateSpeechIn"]>) {
+  constructor(
+    args: Partial<OpenAPI.components["schemas"]["GenerateSpeechIn"]>,
+  ) {
     super(args);
   }
 
   /*
-   * Retrieve this node's output from a response.
+   * Retrieve this node's output from a response. Fields:
+   * - `future.audio_uri`
    *
-   * Output fields:
-   * - `audio_uri` 
-   * 
    * https://substrate.run/library#GenerateSpeech
    */
   override output(
@@ -962,8 +1006,8 @@ export class GenerateSpeech extends Node {
    * Future reference to this node's output.
    *
    * Output fields:
-   * - `audio_uri` 
-   * 
+   * - `audio_uri`
+   *
    * https://substrate.run/library#GenerateSpeech
    */
   override get future(): OpenAPI.components["schemas"]["GenerateSpeechOut"] {
@@ -975,15 +1019,15 @@ export class GenerateSpeech extends Node {
  * Generate vector embedding for a text document.
  *
  * Input arguments:
- * - `text` 
+ * - `text`
  * - `model` (optional)
  * - `store` (optional)
  * - `metadata` (optional)
  * - `embedded_metadata` (optional)
- * 
+ *
  * Output fields:
- * - `embedding` 
- * 
+ * - `embedding`
+ *
  * https://substrate.run/library#EmbedText
  */
 export class EmbedText extends Node {
@@ -991,12 +1035,15 @@ export class EmbedText extends Node {
    * Generate vector embedding for a text document.
    *
    * Input arguments:
-   * - `text` 
+   * - `text`
    * - `model` (optional)
    * - `store` (optional)
    * - `metadata` (optional)
    * - `embedded_metadata` (optional)
-   * 
+   *
+   * Output fields:
+   * - `future.embedding`
+   *
    * https://substrate.run/library#EmbedText
    */
   constructor(args: Partial<OpenAPI.components["schemas"]["EmbedTextIn"]>) {
@@ -1004,11 +1051,9 @@ export class EmbedText extends Node {
   }
 
   /*
-   * Retrieve this node's output from a response.
+   * Retrieve this node's output from a response. Fields:
+   * - `future.embedding`
    *
-   * Output fields:
-   * - `embedding` 
-   * 
    * https://substrate.run/library#EmbedText
    */
   override output(
@@ -1021,8 +1066,8 @@ export class EmbedText extends Node {
    * Future reference to this node's output.
    *
    * Output fields:
-   * - `embedding` 
-   * 
+   * - `embedding`
+   *
    * https://substrate.run/library#EmbedText
    */
   override get future(): OpenAPI.components["schemas"]["EmbedTextOut"] {
@@ -1034,14 +1079,14 @@ export class EmbedText extends Node {
  * Generate vector embeddings for multiple text documents.
  *
  * Input arguments:
- * - `items` 
+ * - `items`
  * - `model` (optional)
  * - `store` (optional)
  * - `embedded_metadata` (optional)
- * 
+ *
  * Output fields:
- * - `embeddings` 
- * 
+ * - `embeddings`
+ *
  * https://substrate.run/library#MultiEmbedText
  */
 export class MultiEmbedText extends Node {
@@ -1049,23 +1094,26 @@ export class MultiEmbedText extends Node {
    * Generate vector embeddings for multiple text documents.
    *
    * Input arguments:
-   * - `items` 
+   * - `items`
    * - `model` (optional)
    * - `store` (optional)
    * - `embedded_metadata` (optional)
-   * 
+   *
+   * Output fields:
+   * - `future.embeddings`
+   *
    * https://substrate.run/library#MultiEmbedText
    */
-  constructor(args: Partial<OpenAPI.components["schemas"]["MultiEmbedTextIn"]>) {
+  constructor(
+    args: Partial<OpenAPI.components["schemas"]["MultiEmbedTextIn"]>,
+  ) {
     super(args);
   }
 
   /*
-   * Retrieve this node's output from a response.
+   * Retrieve this node's output from a response. Fields:
+   * - `future.embeddings`
    *
-   * Output fields:
-   * - `embeddings` 
-   * 
    * https://substrate.run/library#MultiEmbedText
    */
   override output(
@@ -1078,8 +1126,8 @@ export class MultiEmbedText extends Node {
    * Future reference to this node's output.
    *
    * Output fields:
-   * - `embeddings` 
-   * 
+   * - `embeddings`
+   *
    * https://substrate.run/library#MultiEmbedText
    */
   override get future(): OpenAPI.components["schemas"]["MultiEmbedTextOut"] {
@@ -1091,13 +1139,13 @@ export class MultiEmbedText extends Node {
  * Generate vector embedding for an image, and optionally store the embedding.
  *
  * Input arguments:
- * - `image_uri` 
+ * - `image_uri`
  * - `model` (optional)
  * - `store` (optional)
- * 
+ *
  * Output fields:
- * - `embedding` 
- * 
+ * - `embedding`
+ *
  * https://substrate.run/library#EmbedImage
  */
 export class EmbedImage extends Node {
@@ -1105,10 +1153,13 @@ export class EmbedImage extends Node {
    * Generate vector embedding for an image, and optionally store the embedding.
    *
    * Input arguments:
-   * - `image_uri` 
+   * - `image_uri`
    * - `model` (optional)
    * - `store` (optional)
-   * 
+   *
+   * Output fields:
+   * - `future.embedding`
+   *
    * https://substrate.run/library#EmbedImage
    */
   constructor(args: Partial<OpenAPI.components["schemas"]["EmbedImageIn"]>) {
@@ -1116,11 +1167,9 @@ export class EmbedImage extends Node {
   }
 
   /*
-   * Retrieve this node's output from a response.
+   * Retrieve this node's output from a response. Fields:
+   * - `future.embedding`
    *
-   * Output fields:
-   * - `embedding` 
-   * 
    * https://substrate.run/library#EmbedImage
    */
   override output(
@@ -1133,8 +1182,8 @@ export class EmbedImage extends Node {
    * Future reference to this node's output.
    *
    * Output fields:
-   * - `embedding` 
-   * 
+   * - `embedding`
+   *
    * https://substrate.run/library#EmbedImage
    */
   override get future(): OpenAPI.components["schemas"]["EmbedImageOut"] {
@@ -1146,13 +1195,13 @@ export class EmbedImage extends Node {
  * Generate vector embeddings for multiple images, and optionally store the embeddings.
  *
  * Input arguments:
- * - `items` 
+ * - `items`
  * - `store` (optional)
  * - `model` (optional)
- * 
+ *
  * Output fields:
- * - `embeddings` 
- * 
+ * - `embeddings`
+ *
  * https://substrate.run/library#MultiEmbedImage
  */
 export class MultiEmbedImage extends Node {
@@ -1160,22 +1209,25 @@ export class MultiEmbedImage extends Node {
    * Generate vector embeddings for multiple images, and optionally store the embeddings.
    *
    * Input arguments:
-   * - `items` 
+   * - `items`
    * - `store` (optional)
    * - `model` (optional)
-   * 
+   *
+   * Output fields:
+   * - `future.embeddings`
+   *
    * https://substrate.run/library#MultiEmbedImage
    */
-  constructor(args: Partial<OpenAPI.components["schemas"]["MultiEmbedImageIn"]>) {
+  constructor(
+    args: Partial<OpenAPI.components["schemas"]["MultiEmbedImageIn"]>,
+  ) {
     super(args);
   }
 
   /*
-   * Retrieve this node's output from a response.
+   * Retrieve this node's output from a response. Fields:
+   * - `future.embeddings`
    *
-   * Output fields:
-   * - `embeddings` 
-   * 
    * https://substrate.run/library#MultiEmbedImage
    */
   override output(
@@ -1188,12 +1240,11 @@ export class MultiEmbedImage extends Node {
    * Future reference to this node's output.
    *
    * Output fields:
-   * - `embeddings` 
-   * 
+   * - `embeddings`
+   *
    * https://substrate.run/library#MultiEmbedImage
    */
   override get future(): OpenAPI.components["schemas"]["MultiEmbedImageOut"] {
     return super.future;
   }
 }
-

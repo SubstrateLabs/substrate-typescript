@@ -1,7 +1,6 @@
 import * as Refs from "substrate/Refs";
 import { idGenerator } from "substrate/idGenerator";
 import { SubstrateResponse } from "./SubstrateResponse";
-import * as OpenAPI from "substrate/OpenAPI";
 
 const refFactory = Refs.makeFactory();
 
