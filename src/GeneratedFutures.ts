@@ -39,6 +39,17 @@
  * second downside is that we need to have some complicated mechanism to
  * track these values since the runtime will convert them into strings when
  * used in `[]` - since we still need a reference to the `Future` we're using.
+ *
+ * This file is exploring an alternative to both of these issues that might
+ * come with less hacks.
+ *
+ * The main idea behind this approach is that if we could statically generate
+ * objects that represent every possible field we could eliminate the need
+ * for the Proxy API usage and type assertions. This can work if we also
+ * limit the dynamic access using the `[]` syntax as well. I'd like to 
+ * propose an alternative API on Future objects that provides methods for the
+ * type of dynamic property access we want, eg. `.get(path)` and `.at(index)`.
+ *
  **/
 
 /** ------- Future Types */
