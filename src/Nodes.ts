@@ -6,6 +6,8 @@
 import * as OpenAPI from "substrate/OpenAPI";
 import { Node } from "substrate/Node";
 import { SubstrateResponse } from "./SubstrateResponse";
+import { AsFuture } from "substrate/Future";
+
 
 /**
  * Generate text using a language model.
@@ -23,7 +25,7 @@ import { SubstrateResponse } from "./SubstrateResponse";
  *
  * https://substrate.run/library#GenerateText
  */
-export class GenerateText extends Node {
+export class GenerateText extends Node<Partial<OpenAPI.components["schemas"]["GenerateTextIn"]>> {
   /**
    * Generate text using a language model.
    *
@@ -66,7 +68,7 @@ export class GenerateText extends Node {
    *
    * https://substrate.run/library#GenerateText
    */
-  override get future(): OpenAPI.components["schemas"]["GenerateTextOut"] {
+  override get future(): AsFuture<OpenAPI.components["schemas"]["GenerateTextOut"]> {
     return super.future;
   }
 }

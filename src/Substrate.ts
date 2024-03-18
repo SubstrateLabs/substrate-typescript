@@ -1,8 +1,9 @@
 import { SubstrateError } from "substrate/Error";
 import { VERSION } from "substrate/version";
 import OpenAPIjson from "substrate/openapi.json";
-import { Graph, NodeLike } from "substrate/Graph";
 import { SubstrateResponse } from "substrate/SubstrateResponse";
+import { Node } from "substrate/Node";
+import { context } from "substrate/sb";
 
 type Configuration = {
   /**
@@ -47,14 +48,9 @@ export class Substrate {
   /**
    *  Run the given nodes.
    */
-  async run(...nodes: NodeLike[]): Promise<any> {
+  async run(...nodes: Node[]): Promise<SubstrateResponse> {
     const url = this.baseUrl + "/compose";
-
-    const graph = new Graph();
-    for (const node of nodes) {
-      graph.add(node);
-    }
-    const req = { dag: graph };
+    const req = { dag: this.serialize(nodes) };
     const apiResponse = await fetch(url, this.requestOptions(req));
     if (apiResponse.ok) {
       const json = await apiResponse.json();
@@ -64,6 +60,46 @@ export class Substrate {
       res.debug();
       return res;
     }
+  }
+
+  serialize(nodes: Node[]) {
+    // TODO: refactor and annotate this.
+    const traverse = (obj: any, futures: Set<any>): any => {
+      if (Array.isArray(obj)) {
+        return obj.map((item) => traverse(item, futures));
+      }
+
+      if (obj instanceof context.Future) {
+        const future = context.isProxy(obj) ? context.unproxy(obj) : obj;
+        futures.add(future.toJSON());
+        future.referencedFutures().forEach((rf) => futures.add(rf));
+        return future.toPlaceholder();
+      }
+
+      if (typeof obj === "object") {
+        return Object.keys(obj).reduce((acc: any, k: any) => {
+          acc[k] = traverse(obj[k], futures);
+          return acc;
+        }, {});
+      }
+
+      return obj;
+    };
+
+    const futures = new Set<any>();
+    const ns: Object[] = [];
+
+    for (const node of nodes) {
+      const args = traverse(node.args, futures);
+      ns.push({ ...node.toJSON(), args });
+    };
+
+    return {
+      nodes: ns,
+      futures: Array.from(futures),
+      edges: [],
+      initial_args: {},
+    };
   }
 
   requestOptions(body: any) {
