@@ -19,7 +19,7 @@ const concatenated = sb.stringConcat("tell me about visiting ", a.future.text);
 
 const b = new GenerateText({ prompt: concatenated }).subscribe();
 
-const result = await substrate.run(a, b);
+const res = await substrate.run(a, b);
 
-console.log("result.get(a) =", result.get(a));
-console.log("result.get(b) =", result.get(b));
+console.log("a.output(res) =", a.output(res));
+console.log("b.output(res) =", b.output(res));

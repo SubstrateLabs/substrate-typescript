@@ -55,7 +55,7 @@ export class GenerateText extends Node<Partial<OpenAPI.components["schemas"]["Ge
    */
   override output(
     response: SubstrateResponse,
-  ): AsFuture<OpenAPI.components["schemas"]["GenerateTextOut"]> {
+  ): OpenAPI.components["schemas"]["GenerateTextOut"] {
     return super.output(response);
   }
 
@@ -68,7 +68,7 @@ export class GenerateText extends Node<Partial<OpenAPI.components["schemas"]["Ge
    *
    * https://substrate.run/library#GenerateText
    */
-  override get future(): OpenAPI.components["schemas"]["GenerateTextOut"] {
+  override get future(): AsFuture<OpenAPI.components["schemas"]["GenerateTextOut"]> {
     return super.future;
   }
 }
