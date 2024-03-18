@@ -161,26 +161,26 @@ type GenerateTextOut = {
 // TODO: I'm not sure that this actually works very well for intellisense, but it can
 // at least help prevent bad access into an object, though tbh it's more characters to
 // write it out and the return value's type is getting lost (nto sure how to fix yet).
-type GenerateTextOutFuture_Paths =
-  | `text`
-  | `arr`
-  | `arr[${number}]`
-  | `num`
-  | `dict`
-  | `dict.a`
-  | `dict.b`
-  | `dict.b[${number}]`
-  | `dict.c`
-  | `dict.c[${number}]`
-  | `dict.c[${number}].x`
-  | `dict.c[${number}].y`
-  | `json_object`
-  | `json_object.${string}`;
+// type GenerateTextOutFuture_Paths =
+//   | `text`
+//   | `arr`
+//   | `arr[${number}]`
+//   | `num`
+//   | `dict`
+//   | `dict.a`
+//   | `dict.b`
+//   | `dict.b[${number}]`
+//   | `dict.c`
+//   | `dict.c[${number}]`
+//   | `dict.c[${number}].x`
+//   | `dict.c[${number}].y`
+//   | `json_object`
+//   | `json_object.${string}`;
 
 class GenerateTextOutFuture extends FutureObject {
-  override get(path: GenerateTextOutFuture_Paths) {
-    return super.get(path);
-  }
+  // override get(path: GenerateTextOutFuture_Paths) {
+  //   return super.get(path);
+  // }
 
   get text() {
     return new GenerateTextOutFuture$text(nextProps(this, "text"));
