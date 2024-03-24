@@ -20,7 +20,7 @@ describe("Substrate", () => {
             args: {
               a: 123,
             },
-            _should_output_globally: false,
+            _should_output_globally: true,
           },
           {
             node: "Node",
@@ -33,7 +33,7 @@ describe("Substrate", () => {
                 __$$SB_GRAPH_OP_ID$$__: expect.stringMatching(/future/),
               },
             },
-            _should_output_globally: false,
+            _should_output_globally: true,
           },
         ],
         futures: [

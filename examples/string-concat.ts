@@ -12,11 +12,11 @@ const substrate = new Substrate({
   baseUrl: "https://api-staging.substrate.run",
 });
 
-const a = new GenerateText({ prompt: "name a random capital city", }).subscribe();
+const a = new GenerateText({ prompt: "name a random capital city", });
 
 const concatenated = Substrate.fn.concat("tell me about visiting ", a.future.text);
 
-const b = new GenerateText({ prompt: concatenated }).subscribe();
+const b = new GenerateText({ prompt: concatenated });
 
 const res = await substrate.run(a, b);
 

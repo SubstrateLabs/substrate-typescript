@@ -15,8 +15,8 @@ const substrate = new Substrate({
 
 const a = new GenerateText({
   prompt: "ask me a short trivia question in one sentence",
-}).subscribe();
-const b = new GenerateText({ prompt: a.future.text }).subscribe();
+});
+const b = new GenerateText({ prompt: a.future.text });
 
 const res = await substrate.run(a, b);
 

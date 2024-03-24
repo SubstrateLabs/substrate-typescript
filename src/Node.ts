@@ -8,21 +8,13 @@ export class Node<Args = Object> {
   id: string;
   node: string;
   args: Args;
-  _subscribed: boolean = false;
+  hide: boolean;
 
-  // TODO: make subscribed by default, and collect output into ivar
-  constructor(args: Args) {
+  constructor(args: Args, hide: boolean = false) {
     this.node = this.constructor.name;
     this.id = generator(this.node);
     this.args = args;
-  }
-
-  /**
-   * Subscribe to the output of this node.
-   */
-  subscribe(): this {
-    this._subscribed = true;
-    return this;
+    this.hide = hide;
   }
 
   /**
@@ -86,7 +78,7 @@ export class Node<Args = Object> {
         id: this.id,
         node: this.node,
         args,
-        _should_output_globally: this._subscribed,
+        _should_output_globally: !this.hide,
       },
       futures: Array.from(futures).map((f: any) => f.toJSON()),
     };
