@@ -1,17 +1,14 @@
 import { expect, describe, test } from "vitest";
 import { Substrate } from "substrate/Substrate";
 import { Node } from "substrate/Node";
-import { context } from "substrate/sb";
 
 describe("Substrate", () => {
   describe(".serialize", () => {
     test("when there are nodes and futures", () => {
-      const ss = new Substrate({ apiKey: "apiKey" });
-
       const a = new Node({ a: 123 });
-      const b = new Node({ b: a.future.x, c: new context.StringConcat(["x", "y"]) });
+      const b = new Node({ b: a.future.get("x"), c: Substrate.fn.concat("x", "y") });
 
-      const result = ss.serialize([a, b]);
+      const result = Substrate.serialize([a, b]);
 
       expect(result).toEqual({
         edges: [],

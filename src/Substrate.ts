@@ -3,7 +3,7 @@ import { VERSION } from "substrate/version";
 import OpenAPIjson from "substrate/openapi.json";
 import { SubstrateResponse } from "substrate/SubstrateResponse";
 import { Node } from "substrate/Node";
-import { context } from "substrate/sb";
+import { FutureString } from "substrate/Future";
 
 type Configuration = {
   /**
@@ -45,12 +45,16 @@ export class Substrate {
     this.apiVersion = apiVersion ?? OpenAPIjson["info"]["version"];
   }
 
+  static fn = {
+    concat: FutureString.concat,
+  };
+
   /**
    *  Run the given nodes.
    */
   async run(...nodes: Node[]): Promise<SubstrateResponse> {
     const url = this.baseUrl + "/compose";
-    const req = { dag: this.serialize(nodes) };
+    const req = { dag: Substrate.serialize(nodes) };
     const apiResponse = await fetch(url, this.requestOptions(req));
     if (apiResponse.ok) {
       const json = await apiResponse.json();
@@ -62,47 +66,19 @@ export class Substrate {
     }
   }
 
-  serialize(nodes: Node[]) {
-    // TODO: refactor and annotate this.
-    const traverse = (obj: any, futures: Set<any>): any => {
-      if (Array.isArray(obj)) {
-        return obj.map((item) => traverse(item, futures));
-      }
-
-      if (obj instanceof context.Future) {
-        const future = context.isProxy(obj) ? context.unproxy(obj) : obj;
-        futures.add(future.toJSON());
-        future.referencedFutures().forEach((rf) => futures.add(rf));
-        return future.toPlaceholder();
-      }
-
-      if (typeof obj === "object") {
-        return Object.keys(obj).reduce((acc: any, k: any) => {
-          acc[k] = traverse(obj[k], futures);
-          return acc;
-        }, {});
-      }
-
-      return obj;
-    };
-
-    const futures = new Set<any>();
-    const ns: Object[] = [];
-
-    for (const node of nodes) {
-      const args = traverse(node.args, futures);
-      ns.push({ ...node.toJSON(), args });
-    };
+  static serialize(nodes: Node[]): any {
+    const ns = nodes.map((n) => n.toJSON());
+    const futures = new Set(ns.flatMap((sn) => sn.futures));
 
     return {
-      nodes: ns,
-      futures: Array.from(futures),
-      edges: [],
-      initial_args: {},
+      nodes: ns.map((sn) => sn.node), 
+      futures: Array.from(futures), 
+      edges: [], // @deprecated
+      initial_args: {} // @deprecated
     };
   }
 
-  requestOptions(body: any) {
+  protected requestOptions(body: any) {
     return {
       method: "POST",
       headers: this.headers(),
@@ -110,7 +86,7 @@ export class Substrate {
     };
   }
 
-  headers() {
+  protected headers() {
     const headers = new Headers();
     headers.append("Content-Type", "application/json");
     headers.append("Authorization", `Bearer ${this.apiKey}`);

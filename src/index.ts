@@ -1,5 +1,6 @@
 /**
-* @GENERATED FILE ꩜ SUBSTRATE
+* ꩜ Substrate TypeScript SDK
+* @generated file
 * 20240315.20240316
 */
 
@@ -26,9 +27,6 @@ export {
   MultiEmbedImage,
   } from "substrate/Nodes";
 
-import { pub } from "substrate/sb";
-export const sb = pub;
-
-import { Substrate } from "substrate/Substrate";
 export { Substrate };
+import { Substrate } from "substrate/Substrate";
 export default Substrate;
