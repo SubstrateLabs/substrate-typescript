@@ -1,12 +1,13 @@
 import { expect, describe, test } from "vitest";
 import { Substrate } from "substrate/Substrate";
 import { Node } from "substrate/Node";
+import { sb } from "substrate/sb";
 
 describe("Substrate", () => {
   describe(".serialize", () => {
     test("when there are nodes and futures", () => {
       const a = new Node({ a: 123 });
-      const b = new Node({ b: a.future.get("x"), c: Substrate.fn.concat("x", "y") });
+      const b = new Node({ b: a.future.get("x"), c: sb.concat("x", "y") });
 
       const result = Substrate.serialize([a, b]);
 

@@ -27,6 +27,7 @@ export {
   MultiEmbedImage,
   } from "substrate/Nodes";
 
+export { sb } from "substrate/sb";
 export { Substrate };
 import { Substrate } from "substrate/Substrate";
 export default Substrate;

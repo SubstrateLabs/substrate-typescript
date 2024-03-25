@@ -3,7 +3,6 @@ import { VERSION } from "substrate/version";
 import OpenAPIjson from "substrate/openapi.json";
 import { SubstrateResponse } from "substrate/SubstrateResponse";
 import { Node } from "substrate/Node";
-import { FutureString } from "substrate/Future";
 
 type Configuration = {
   /**
@@ -44,10 +43,6 @@ export class Substrate {
     this.baseUrl = baseUrl ?? "https://api.substrate.run";
     this.apiVersion = apiVersion ?? OpenAPIjson["info"]["version"];
   }
-
-  static fn = {
-    concat: FutureString.concat,
-  };
 
   /**
    *  Run the given nodes.
