@@ -889,6 +889,10 @@ export interface components {
     Embedding: {
       /** @description Embedding vector. */
       vector: string;
+      /** @description Vector store document ID. */
+      document_id?: string;
+      /** @description Vector store document metadata. */
+      metadata?: Record<string, never>;
     };
     /** EmbedTextIn */
     EmbedTextIn: {
@@ -904,12 +908,10 @@ export interface components {
       store?: string;
       /** @description Metadata that can be used to query the vector store. Ignored if `store` is unset. */
       metadata?: Record<string, never>;
-      embedded_metadata?: {
-        /** @description Keys to embed with text. */
-        include_keys?: string[];
-        /** @description Keys to exclude. All other keys will be embedded with text. */
-        exclude_keys?: string[];
-      };
+      /** @description Choose keys from `metadata` to embed with text. */
+      embedded_metadata_keys?: string[];
+      /** @description Vector store document ID. Ignored if `store` is unset. */
+      document_id?: string;
     };
     /** EmbedTextOut */
     EmbedTextOut: {
@@ -917,6 +919,10 @@ export interface components {
       embedding: {
         /** @description Embedding vector. */
         vector: string;
+        /** @description Vector store document ID. */
+        document_id?: string;
+        /** @description Vector store document metadata. */
+        metadata?: Record<string, never>;
       };
     };
     EmbedTextItem: {
@@ -924,6 +930,8 @@ export interface components {
       text: string;
       /** @description Metadata that can be used to query the vector store. Ignored if `store` is unset. */
       metadata?: Record<string, never>;
+      /** @description Vector store document ID. Ignored if `store` is unset. */
+      document_id?: string;
     };
     /** MultiEmbedTextIn */
     MultiEmbedTextIn: {
@@ -933,6 +941,8 @@ export interface components {
           text: string;
           /** @description Metadata that can be used to query the vector store. Ignored if `store` is unset. */
           metadata?: Record<string, never>;
+          /** @description Vector store document ID. Ignored if `store` is unset. */
+          document_id?: string;
         }[];
       /**
        * @description Selected model.
@@ -942,12 +952,8 @@ export interface components {
       model?: "jina-v2" | "clip";
       /** @description [Vector store](/docs/vector-stores) identifier. */
       store?: string;
-      embedded_metadata?: {
-        /** @description Keys to embed with text. */
-        include_keys?: string[];
-        /** @description Keys to exclude. All other keys will be embedded with text. */
-        exclude_keys?: string[];
-      };
+      /** @description Choose keys from `metadata` to embed with text. */
+      embedded_metadata_keys?: string[];
     };
     /** MultiEmbedTextOut */
     MultiEmbedTextOut: {
@@ -955,13 +961,11 @@ export interface components {
       embeddings: {
           /** @description Embedding vector. */
           vector: string;
+          /** @description Vector store document ID. */
+          document_id?: string;
+          /** @description Vector store document metadata. */
+          metadata?: Record<string, never>;
         }[];
-    };
-    EmbeddedMetadataSelect: {
-      /** @description Keys to embed with text. */
-      include_keys?: string[];
-      /** @description Keys to exclude. All other keys will be embedded with text. */
-      exclude_keys?: string[];
     };
     /** EmbedImageIn */
     EmbedImageIn: {
@@ -975,6 +979,8 @@ export interface components {
       model?: "clip";
       /** @description [Vector store](/docs/vector-stores) identifier. */
       store?: string;
+      /** @description Vector store document ID. Ignored if `store` is unset. */
+      document_id?: string;
     };
     /** EmbedImageOut */
     EmbedImageOut: {
@@ -982,11 +988,17 @@ export interface components {
       embedding: {
         /** @description Embedding vector. */
         vector: string;
+        /** @description Vector store document ID. */
+        document_id?: string;
+        /** @description Vector store document metadata. */
+        metadata?: Record<string, never>;
       };
     };
     EmbedImageItem: {
       /** @description Image to embed. */
       image_uri: string;
+      /** @description Vector store document ID. Ignored if `store` is unset. */
+      document_id?: string;
     };
     /** MultiEmbedImageIn */
     MultiEmbedImageIn: {
@@ -994,6 +1006,8 @@ export interface components {
       items: {
           /** @description Image to embed. */
           image_uri: string;
+          /** @description Vector store document ID. Ignored if `store` is unset. */
+          document_id?: string;
         }[];
       /** @description [Vector store](/docs/vector-stores) identifier. */
       store?: string;
@@ -1010,6 +1024,10 @@ export interface components {
       embeddings: {
           /** @description Embedding vector. */
           vector: string;
+          /** @description Vector store document ID. */
+          document_id?: string;
+          /** @description Vector store document metadata. */
+          metadata?: Record<string, never>;
         }[];
     };
     /**
@@ -2057,12 +2075,10 @@ export interface operations {
           store?: string;
           /** @description Metadata that can be used to query the vector store. Ignored if `store` is unset. */
           metadata?: Record<string, never>;
-          embedded_metadata?: {
-            /** @description Keys to embed with text. */
-            include_keys?: string[];
-            /** @description Keys to exclude. All other keys will be embedded with text. */
-            exclude_keys?: string[];
-          };
+          /** @description Choose keys from `metadata` to embed with text. */
+          embedded_metadata_keys?: string[];
+          /** @description Vector store document ID. Ignored if `store` is unset. */
+          document_id?: string;
         };
       };
     };
@@ -2075,6 +2091,10 @@ export interface operations {
             embedding: {
               /** @description Embedding vector. */
               vector: string;
+              /** @description Vector store document ID. */
+              document_id?: string;
+              /** @description Vector store document metadata. */
+              metadata?: Record<string, never>;
             };
           };
         };
@@ -2095,6 +2115,8 @@ export interface operations {
               text: string;
               /** @description Metadata that can be used to query the vector store. Ignored if `store` is unset. */
               metadata?: Record<string, never>;
+              /** @description Vector store document ID. Ignored if `store` is unset. */
+              document_id?: string;
             }[];
           /**
            * @description Selected model.
@@ -2104,12 +2126,8 @@ export interface operations {
           model?: "jina-v2" | "clip";
           /** @description [Vector store](/docs/vector-stores) identifier. */
           store?: string;
-          embedded_metadata?: {
-            /** @description Keys to embed with text. */
-            include_keys?: string[];
-            /** @description Keys to exclude. All other keys will be embedded with text. */
-            exclude_keys?: string[];
-          };
+          /** @description Choose keys from `metadata` to embed with text. */
+          embedded_metadata_keys?: string[];
         };
       };
     };
@@ -2122,6 +2140,10 @@ export interface operations {
             embeddings: {
                 /** @description Embedding vector. */
                 vector: string;
+                /** @description Vector store document ID. */
+                document_id?: string;
+                /** @description Vector store document metadata. */
+                metadata?: Record<string, never>;
               }[];
           };
         };
@@ -2146,6 +2168,8 @@ export interface operations {
           model?: "clip";
           /** @description [Vector store](/docs/vector-stores) identifier. */
           store?: string;
+          /** @description Vector store document ID. Ignored if `store` is unset. */
+          document_id?: string;
         };
       };
     };
@@ -2158,6 +2182,10 @@ export interface operations {
             embedding: {
               /** @description Embedding vector. */
               vector: string;
+              /** @description Vector store document ID. */
+              document_id?: string;
+              /** @description Vector store document metadata. */
+              metadata?: Record<string, never>;
             };
           };
         };
@@ -2176,6 +2204,8 @@ export interface operations {
           items: {
               /** @description Image to embed. */
               image_uri: string;
+              /** @description Vector store document ID. Ignored if `store` is unset. */
+              document_id?: string;
             }[];
           /** @description [Vector store](/docs/vector-stores) identifier. */
           store?: string;
@@ -2197,6 +2227,10 @@ export interface operations {
             embeddings: {
                 /** @description Embedding vector. */
                 vector: string;
+                /** @description Vector store document ID. */
+                document_id?: string;
+                /** @description Vector store document metadata. */
+                metadata?: Record<string, never>;
               }[];
           };
         };

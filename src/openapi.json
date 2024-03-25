@@ -1002,6 +1002,14 @@
               "type": "number",
               "format": "float"
             }
+          },
+          "doc_id": {
+            "type": "string",
+            "description": "Vector store document ID."
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Vector store document metadata."
           }
         },
         "required": ["vector"]
@@ -1028,10 +1036,16 @@
             "type": "object",
             "description": "Metadata that can be used to query the vector store. Ignored if `store` is unset."
           },
-          "embedded_metadata": {
-            "type": "object",
-            "description": "Choose keys from `metadata` to embed with text. Select keys to include with `include_keys`, or keys to exclude with `exclude_keys`.",
-            "$ref": "#/components/schemas/EmbeddedMetadataSelect"
+          "embedded_metadata_keys": {
+            "type": "array",
+            "description": "Choose keys from `metadata` to embed with text.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "doc_id": {
+            "type": "string",
+            "description": "Vector store document ID. Ignored if `store` is unset."
           }
         },
         "required": ["text"]
@@ -1058,6 +1072,10 @@
           "metadata": {
             "type": "object",
             "description": "Metadata that can be used to query the vector store. Ignored if `store` is unset."
+          },
+          "doc_id": {
+            "type": "string",
+            "description": "Vector store document ID. Ignored if `store` is unset."
           }
         },
         "required": ["text"]
@@ -1083,10 +1101,12 @@
             "type": "string",
             "description": "[Vector store](/docs/vector-stores) identifier."
           },
-          "embedded_metadata": {
-            "type": "object",
-            "description": "Choose keys from `metadata` to embed with text. Select keys to include with `include_keys`, or keys to exclude with `exclude_keys`.",
-            "$ref": "#/components/schemas/EmbeddedMetadataSelect"
+          "embedded_metadata_keys": {
+            "type": "array",
+            "description": "Choose keys from `metadata` to embed with text.",
+            "items": {
+              "type": "string"
+            }
           }
         },
         "required": ["items"]
@@ -1105,25 +1125,6 @@
         },
         "required": ["embeddings"]
       },
-      "EmbeddedMetadataSelect": {
-        "type": "object",
-        "properties": {
-          "include_keys": {
-            "type": "array",
-            "description": "Keys to embed with text.",
-            "items": {
-              "type": "string"
-            }
-          },
-          "exclude_keys": {
-            "type": "array",
-            "description": "Keys to exclude. All other keys will be embedded with text.",
-            "items": {
-              "type": "string"
-            }
-          }
-        }
-      },
       "EmbedImageIn": {
         "title": "EmbedImageIn",
         "type": "object",
@@ -1141,6 +1142,10 @@
           "store": {
             "type": "string",
             "description": "[Vector store](/docs/vector-stores) identifier."
+          },
+          "doc_id": {
+            "type": "string",
+            "description": "Vector store document ID. Ignored if `store` is unset."
           }
         },
         "required": ["image_uri"]
@@ -1163,6 +1168,10 @@
           "image_uri": {
             "type": "string",
             "description": "Image to embed."
+          },
+          "doc_id": {
+            "type": "string",
+            "description": "Vector store document ID. Ignored if `store` is unset."
           }
         },
         "required": ["image_uri"]
@@ -1207,7 +1216,6 @@
       },
       "VectorStoreParams": {
         "title": "VectorStoreParams",
-        "description": "Fields describing a vector store and its associated index.",
         "type": "object",
         "properties": {
           "name": {

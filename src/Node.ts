@@ -9,6 +9,7 @@ export class Node<Args = Object> {
   node: string;
   args: Args;
   hide: boolean;
+  #output: Object | undefined;
 
   constructor(args: Args, hide: boolean = false) {
     this.node = this.constructor.name;
@@ -24,22 +25,17 @@ export class Node<Args = Object> {
     return new FutureAnyObject(new Trace([], this.id));
   }
 
+  set output(response: SubstrateResponse) {
+    if (!this.hide && response?.json?.data?.[this.id]) {
+      this.#output = response.json.data[this.id];
+    }
+  }
+
   /*
    * Get the response for a given node.
    */
-  output(response: SubstrateResponse): any {
-    if (!response.json) {
-      throw new Error(`Invalid response`);
-    }
-    const json = response.json;
-    if (json && json.data) {
-      const data = json.data;
-      const nodeId = this.id;
-      if (data[nodeId]) {
-        return data[nodeId];
-      }
-    }
-    throw new Error(`Node ${this.id} not found in response`);
+  get output(): any {
+    return this.#output;
   }
 
   toJSON() {

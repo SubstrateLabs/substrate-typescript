@@ -737,6 +737,11 @@ export const componentsSchema = z.object({
     }),
     Embedding: z.object({
       vector: z.string().describe("Embedding vector."),
+      document_id: z.string().optional().describe("Vector store document ID."),
+      metadata: z
+        .record(z.never().describe("Vector store document metadata."))
+        .optional()
+        .describe("Vector store document metadata."),
     }),
     EmbedTextIn: z.object({
       text: z.string().describe("Text to embed."),
@@ -761,24 +766,26 @@ export const componentsSchema = z.object({
         .describe(
           "Metadata that can be used to query the vector store. Ignored if `store` is unset.",
         ),
-      embedded_metadata: z
-        .object({
-          include_keys: z
-            .array(z.string())
-            .optional()
-            .describe("Keys to embed with text."),
-          exclude_keys: z
-            .array(z.string())
-            .optional()
-            .describe(
-              "Keys to exclude. All other keys will be embedded with text.",
-            ),
-        })
-        .optional(),
+      embedded_metadata_keys: z
+        .array(z.string())
+        .optional()
+        .describe("Choose keys from `metadata` to embed with text."),
+      document_id: z
+        .string()
+        .optional()
+        .describe("Vector store document ID. Ignored if `store` is unset."),
     }),
     EmbedTextOut: z.object({
       embedding: z.object({
         vector: z.string().describe("Embedding vector."),
+        document_id: z
+          .string()
+          .optional()
+          .describe("Vector store document ID."),
+        metadata: z
+          .record(z.never().describe("Vector store document metadata."))
+          .optional()
+          .describe("Vector store document metadata."),
       }),
     }),
     EmbedTextItem: z.object({
@@ -795,6 +802,10 @@ export const componentsSchema = z.object({
         .describe(
           "Metadata that can be used to query the vector store. Ignored if `store` is unset.",
         ),
+      document_id: z
+        .string()
+        .optional()
+        .describe("Vector store document ID. Ignored if `store` is unset."),
     }),
     MultiEmbedTextIn: z.object({
       items: z
@@ -813,6 +824,12 @@ export const componentsSchema = z.object({
               .describe(
                 "Metadata that can be used to query the vector store. Ignored if `store` is unset.",
               ),
+            document_id: z
+              .string()
+              .optional()
+              .describe(
+                "Vector store document ID. Ignored if `store` is unset.",
+              ),
           }),
         )
         .describe("Items to embed."),
@@ -825,41 +842,27 @@ export const componentsSchema = z.object({
         .string()
         .optional()
         .describe("[Vector store](/docs/vector-stores) identifier."),
-      embedded_metadata: z
-        .object({
-          include_keys: z
-            .array(z.string())
-            .optional()
-            .describe("Keys to embed with text."),
-          exclude_keys: z
-            .array(z.string())
-            .optional()
-            .describe(
-              "Keys to exclude. All other keys will be embedded with text.",
-            ),
-        })
-        .optional(),
+      embedded_metadata_keys: z
+        .array(z.string())
+        .optional()
+        .describe("Choose keys from `metadata` to embed with text."),
     }),
     MultiEmbedTextOut: z.object({
       embeddings: z
         .array(
           z.object({
             vector: z.string().describe("Embedding vector."),
+            document_id: z
+              .string()
+              .optional()
+              .describe("Vector store document ID."),
+            metadata: z
+              .record(z.never().describe("Vector store document metadata."))
+              .optional()
+              .describe("Vector store document metadata."),
           }),
         )
         .describe("Generated embeddings."),
-    }),
-    EmbeddedMetadataSelect: z.object({
-      include_keys: z
-        .array(z.string())
-        .optional()
-        .describe("Keys to embed with text."),
-      exclude_keys: z
-        .array(z.string())
-        .optional()
-        .describe(
-          "Keys to exclude. All other keys will be embedded with text.",
-        ),
     }),
     EmbedImageIn: z.object({
       image_uri: z.string().describe("Image to embed."),
@@ -872,20 +875,42 @@ export const componentsSchema = z.object({
         .string()
         .optional()
         .describe("[Vector store](/docs/vector-stores) identifier."),
+      document_id: z
+        .string()
+        .optional()
+        .describe("Vector store document ID. Ignored if `store` is unset."),
     }),
     EmbedImageOut: z.object({
       embedding: z.object({
         vector: z.string().describe("Embedding vector."),
+        document_id: z
+          .string()
+          .optional()
+          .describe("Vector store document ID."),
+        metadata: z
+          .record(z.never().describe("Vector store document metadata."))
+          .optional()
+          .describe("Vector store document metadata."),
       }),
     }),
     EmbedImageItem: z.object({
       image_uri: z.string().describe("Image to embed."),
+      document_id: z
+        .string()
+        .optional()
+        .describe("Vector store document ID. Ignored if `store` is unset."),
     }),
     MultiEmbedImageIn: z.object({
       items: z
         .array(
           z.object({
             image_uri: z.string().describe("Image to embed."),
+            document_id: z
+              .string()
+              .optional()
+              .describe(
+                "Vector store document ID. Ignored if `store` is unset.",
+              ),
           }),
         )
         .describe("Items to embed."),
@@ -904,6 +929,14 @@ export const componentsSchema = z.object({
         .array(
           z.object({
             vector: z.string().describe("Embedding vector."),
+            document_id: z
+              .string()
+              .optional()
+              .describe("Vector store document ID."),
+            metadata: z
+              .record(z.never().describe("Vector store document metadata."))
+              .optional()
+              .describe("Vector store document metadata."),
           }),
         )
         .describe("Generated embeddings."),

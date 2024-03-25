@@ -56,14 +56,17 @@ export class Substrate {
     const url = this.baseUrl + "/compose";
     const req = { dag: Substrate.serialize(nodes) };
     const apiResponse = await fetch(url, this.requestOptions(req));
+
     if (apiResponse.ok) {
       const json = await apiResponse.json();
-      return new SubstrateResponse(apiResponse, json);
-    } else {
-      const res = new SubstrateResponse(apiResponse);
-      res.debug();
+      const res = new SubstrateResponse(apiResponse, json);
+      for (let node of nodes) {
+        node.output = res;
+      }
       return res;
-    }
+    } 
+
+    throw new Error("Request failed");
   }
 
   static serialize(nodes: Node[]): any {
