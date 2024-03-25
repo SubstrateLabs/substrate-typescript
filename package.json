@@ -1,6 +1,6 @@
 {
   "name": "@substratelabs/substrate-typescript",
-  "version": "020240313.0.1",
+  "version": "120240313.0.0",
   "description": "The official SDK for the Substrate API",
   "keywords": [],
   "type": "module",
@@ -31,18 +31,11 @@
   },
   "devDependencies": {
     "@types/node": "^20.11.25",
-    "@types/uuid": "^9.0.7",
-    "json-refs": "^3.0.15",
-    "openapi-typescript": "^6.7.3",
     "prettier": "^3.1.1",
     "ts-node": "^10.9.2",
-    "ts-to-zod": "^3.7.1",
     "tsup": "^8.0.1",
     "typescript": "^5.3.3",
     "vite-tsconfig-paths": "^4.2.2",
     "vitest": "^1.0.4"
-  },
-  "dependencies": {
-    "zod": "^3.22.4"
   }
 }

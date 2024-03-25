@@ -3,6 +3,7 @@
 import {
   Substrate,
   GenerateText,
+  sb,
 } from "@substratelabs/substrate-typescript";
 
 const SUBSTRATE_API_KEY = process.env["SUBSTRATE_API_KEY"];
@@ -12,13 +13,13 @@ const substrate = new Substrate({
   baseUrl: "https://api-staging.substrate.run",
 });
 
-const a = new GenerateText({ prompt: "name a random capital city", }).subscribe();
+const a = new GenerateText({ prompt: "name a random capital city", });
 
-const concatenated = Substrate.fn.concat("tell me about visiting ", a.future.text);
+const concatenated = sb.concat("tell me about visiting ", a.future.text);
 
-const b = new GenerateText({ prompt: concatenated }).subscribe();
+const b = new GenerateText({ prompt: concatenated });
 
-const res = await substrate.run(a, b);
+await substrate.run(a, b);
 
-console.log("a.output(res) =", a.output(res));
-console.log("b.output(res) =", b.output(res));
+console.log("a.output =", a.output);
+console.log("b.output =", b.output);

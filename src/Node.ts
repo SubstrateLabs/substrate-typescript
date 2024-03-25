@@ -8,21 +8,14 @@ export class Node<Args = Object> {
   id: string;
   node: string;
   args: Args;
-  _subscribed: boolean = false;
+  hide: boolean;
+  #output: Object | undefined;
 
-  // TODO: make subscribed by default, and collect output into ivar
-  constructor(args: Args) {
+  constructor(args: Args, hide: boolean = false) {
     this.node = this.constructor.name;
     this.id = generator(this.node);
     this.args = args;
-  }
-
-  /**
-   * Subscribe to the output of this node.
-   */
-  subscribe(): this {
-    this._subscribed = true;
-    return this;
+    this.hide = hide;
   }
 
   /**
@@ -32,22 +25,17 @@ export class Node<Args = Object> {
     return new FutureAnyObject(new Trace([], this.id));
   }
 
+  set output(response: SubstrateResponse) {
+    if (!this.hide && response?.json?.data?.[this.id]) {
+      this.#output = response.json.data[this.id];
+    }
+  }
+
   /*
    * Get the response for a given node.
    */
-  output(response: SubstrateResponse): any {
-    if (!response.json) {
-      throw new Error(`Invalid response`);
-    }
-    const json = response.json;
-    if (json && json.data) {
-      const data = json.data;
-      const nodeId = this.id;
-      if (data[nodeId]) {
-        return data[nodeId];
-      }
-    }
-    throw new Error(`Node ${this.id} not found in response`);
+  get output(): any {
+    return this.#output;
   }
 
   toJSON() {
@@ -86,7 +74,7 @@ export class Node<Args = Object> {
         id: this.id,
         node: this.node,
         args,
-        _should_output_globally: this._subscribed,
+        _should_output_globally: !this.hide,
       },
       futures: Array.from(futures).map((f: any) => f.toJSON()),
     };

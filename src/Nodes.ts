@@ -1,7 +1,7 @@
 /**
 * ꩜ Substrate
 * @generated file
-* 20240315.20240316
+* 20240315.20240321
 */
 
 import * as OpenAPI from "substrate/OpenAPI";
@@ -23,45 +23,24 @@ type AlsoAcceptFutures<T> =
       : T;
 
 
-/** TODO: ControlledGenerateImageOut description */
-class ControlledGenerateImageOut extends FutureObject {
-  /** Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-  get image_uri() { return new FutureString(this.directive.next('image_uri')) }
-  /** The random noise seed used for generation. */
-  get seed() { return new Seed(this.directive.next('seed')) }
-}
-
-/** TODO: EmbedImageOut description */
-class EmbedImageOut extends FutureObject {
-  /** Generated embedding. */
-  get embedding() { return new Embedding(this.directive.next('embedding')) }
-}
-
-/** Embeddings Array Item */
-class EmbeddingsItem extends FutureAnyObject {}
-/** (Optional) Transcribed segments, if `segment` is enabled. */
-class Segments extends FutureArray {
-  override at(index: number) { return new SegmentsItem(this.directive.next(index)) }
-}
-
-/** The random noise seed used for generation. */
-class Seed extends FutureAnyObject {}
-/** Segments Array Item */
-class SegmentsItem extends FutureAnyObject {}
 /** (Optional) JSON response. */
 class JsonObject extends FutureAnyObject {}
-/** TODO: FillMaskOut description */
-class FillMaskOut extends FutureObject {
-  /** Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-  get image_uri() { return new FutureString(this.directive.next('image_uri')) }
+/** The random noise seed used for generation. */
+class Seed extends FutureAnyObject {}
+/** Chapters Array Item */
+class ChaptersItem extends FutureAnyObject {}
+/** Choices Array Item */
+class ChoicesItem extends FutureAnyObject {}
+/** TODO: MultiEmbedImageOut description */
+class MultiEmbedImageOut extends FutureObject {
+  /** Generated embeddings. */
+  get embeddings() { return new Embeddings(this.directive.next('embeddings')) }
 }
 
-/** TODO: GenerativeEditImageOut description */
-class GenerativeEditImageOut extends FutureObject {
+/** TODO: UpscaleImageOut description */
+class UpscaleImageOut extends FutureObject {
   /** Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
   get image_uri() { return new FutureString(this.directive.next('image_uri')) }
-  /** The random noise seed used for generation. */
-  get seed() { return new Seed(this.directive.next('seed')) }
 }
 
 /** TODO: GenerateImageOut description */
@@ -72,21 +51,26 @@ class GenerateImageOut extends FutureObject {
   get seed() { return new Seed(this.directive.next('seed')) }
 }
 
-/** TODO: DetectSegmentsOut description */
-class DetectSegmentsOut extends FutureObject {
-  /** Detected segments in 'mask image' format. Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-  get mask_image_uri() { return new FutureString(this.directive.next('mask_image_uri')) }
+/** TODO: RemoveBackgroundOut description */
+class RemoveBackgroundOut extends FutureObject {
+  /** Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+  get image_uri() { return new FutureString(this.directive.next('image_uri')) }
 }
 
-/** TODO: MultiControlledGenerateImageOut description */
-class MultiControlledGenerateImageOut extends FutureObject {
-  /** TODO: Outputs description */
-  get outputs() { return new Outputs(this.directive.next('outputs')) }
+/** Segments Array Item */
+class SegmentsItem extends FutureAnyObject {}
+/** TODO: MultiGenerateTextOut description */
+class MultiGenerateTextOut extends FutureObject {
+  /** TODO: Choices description */
+  get choices() { return new Choices(this.directive.next('choices')) }
 }
 
-/** Generated embeddings. */
-class Embeddings extends FutureArray {
-  override at(index: number) { return new EmbeddingsItem(this.directive.next(index)) }
+/** Embeddings Array Item */
+class EmbeddingsItem extends FutureAnyObject {}
+/** TODO: GenerateTextVisionOut description */
+class GenerateTextVisionOut extends FutureObject {
+  /** Text response. */
+  get text() { return new FutureString(this.directive.next('text')) }
 }
 
 /** TODO: Outputs description */
@@ -94,69 +78,10 @@ class Outputs extends FutureArray {
   override at(index: number) { return new OutputsItem(this.directive.next(index)) }
 }
 
-/** Choices Array Item */
-class ChoicesItem extends FutureAnyObject {}
-/** TODO: GenerateTextVisionOut description */
-class GenerateTextVisionOut extends FutureObject {
-  /** Text response. */
-  get text() { return new FutureString(this.directive.next('text')) }
-}
-
-/** TODO: UpscaleImageOut description */
-class UpscaleImageOut extends FutureObject {
-  /** Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-  get image_uri() { return new FutureString(this.directive.next('image_uri')) }
-}
-
-/** TODO: MultiEmbedTextOut description */
-class MultiEmbedTextOut extends FutureObject {
-  /** Generated embeddings. */
-  get embeddings() { return new Embeddings(this.directive.next('embeddings')) }
-}
-
-/** TODO: MultiGenerateImageOut description */
-class MultiGenerateImageOut extends FutureObject {
-  /** TODO: Outputs description */
-  get outputs() { return new Outputs(this.directive.next('outputs')) }
-}
-
-/** TODO: MultiGenerativeEditImageOut description */
-class MultiGenerativeEditImageOut extends FutureObject {
-  /** TODO: Outputs description */
-  get outputs() { return new Outputs(this.directive.next('outputs')) }
-}
-
-/** Generated embedding. */
-class Embedding extends FutureAnyObject {}
-/** TODO: RemoveBackgroundOut description */
-class RemoveBackgroundOut extends FutureObject {
-  /** Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-  get image_uri() { return new FutureString(this.directive.next('image_uri')) }
-}
-
-/** TODO: GenerateTextOut description */
-class GenerateTextOut extends FutureObject {
-  /** (Optional) Text response. */
-  get text() { return new FutureString(this.directive.next('text')) }
-  /** (Optional) JSON response. */
-  get json_object() { return new JsonObject(this.directive.next('json_object')) }
-}
-
-/** TODO: MultiGenerateTextOut description */
-class MultiGenerateTextOut extends FutureObject {
-  /** TODO: Choices description */
-  get choices() { return new Choices(this.directive.next('choices')) }
-}
-
 /** Outputs Array Item */
 class OutputsItem extends FutureAnyObject {}
-/** Chapters Array Item */
-class ChaptersItem extends FutureAnyObject {}
-/** (Optional) Chapter markers, if `suggest_chapters` is enabled. */
-class Chapters extends FutureArray {
-  override at(index: number) { return new ChaptersItem(this.directive.next(index)) }
-}
-
+/** Generated embedding. */
+class Embedding extends FutureAnyObject {}
 /** TODO: TranscribeMediaOut description */
 class TranscribeMediaOut extends FutureObject {
   /** Transcribed text. */
@@ -167,10 +92,24 @@ class TranscribeMediaOut extends FutureObject {
   get chapters() { return new Chapters(this.directive.next('chapters')) }
 }
 
-/** TODO: MultiEmbedImageOut description */
-class MultiEmbedImageOut extends FutureObject {
-  /** Generated embeddings. */
-  get embeddings() { return new Embeddings(this.directive.next('embeddings')) }
+/** TODO: GenerativeEditImageOut description */
+class GenerativeEditImageOut extends FutureObject {
+  /** Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+  get image_uri() { return new FutureString(this.directive.next('image_uri')) }
+  /** The random noise seed used for generation. */
+  get seed() { return new Seed(this.directive.next('seed')) }
+}
+
+/** TODO: MultiGenerateImageOut description */
+class MultiGenerateImageOut extends FutureObject {
+  /** TODO: Outputs description */
+  get outputs() { return new Outputs(this.directive.next('outputs')) }
+}
+
+/** TODO: DetectSegmentsOut description */
+class DetectSegmentsOut extends FutureObject {
+  /** Detected segments in 'mask image' format. Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+  get mask_image_uri() { return new FutureString(this.directive.next('mask_image_uri')) }
 }
 
 /** TODO: EmbedTextOut description */
@@ -179,15 +118,76 @@ class EmbedTextOut extends FutureObject {
   get embedding() { return new Embedding(this.directive.next('embedding')) }
 }
 
+/** TODO: MultiGenerativeEditImageOut description */
+class MultiGenerativeEditImageOut extends FutureObject {
+  /** TODO: Outputs description */
+  get outputs() { return new Outputs(this.directive.next('outputs')) }
+}
+
+/** TODO: ControlledGenerateImageOut description */
+class ControlledGenerateImageOut extends FutureObject {
+  /** Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+  get image_uri() { return new FutureString(this.directive.next('image_uri')) }
+  /** The random noise seed used for generation. */
+  get seed() { return new Seed(this.directive.next('seed')) }
+}
+
+/** TODO: MultiEmbedTextOut description */
+class MultiEmbedTextOut extends FutureObject {
+  /** Generated embeddings. */
+  get embeddings() { return new Embeddings(this.directive.next('embeddings')) }
+}
+
+/** (Optional) Chapter markers, if `suggest_chapters` is enabled. */
+class Chapters extends FutureArray {
+  override at(index: number) { return new ChaptersItem(this.directive.next(index)) }
+}
+
+/** TODO: GenerateTextOut description */
+class GenerateTextOut extends FutureObject {
+  /** (Optional) Text response. */
+  get text() { return new FutureString(this.directive.next('text')) }
+  /** (Optional) JSON response. */
+  get json_object() { return new JsonObject(this.directive.next('json_object')) }
+}
+
+/** TODO: FillMaskOut description */
+class FillMaskOut extends FutureObject {
+  /** Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+  get image_uri() { return new FutureString(this.directive.next('image_uri')) }
+}
+
+/** TODO: EmbedImageOut description */
+class EmbedImageOut extends FutureObject {
+  /** Generated embedding. */
+  get embedding() { return new Embedding(this.directive.next('embedding')) }
+}
+
+/** TODO: Choices description */
+class Choices extends FutureArray {
+  override at(index: number) { return new ChoicesItem(this.directive.next(index)) }
+}
+
+/** Generated embeddings. */
+class Embeddings extends FutureArray {
+  override at(index: number) { return new EmbeddingsItem(this.directive.next(index)) }
+}
+
+/** TODO: MultiControlledGenerateImageOut description */
+class MultiControlledGenerateImageOut extends FutureObject {
+  /** TODO: Outputs description */
+  get outputs() { return new Outputs(this.directive.next('outputs')) }
+}
+
 /** TODO: GenerateSpeechOut description */
 class GenerateSpeechOut extends FutureObject {
   /** Base 64-encoded WAV audio bytes, or a hosted audio url if `store` is provided. */
   get audio_uri() { return new FutureString(this.directive.next('audio_uri')) }
 }
 
-/** TODO: Choices description */
-class Choices extends FutureArray {
-  override at(index: number) { return new ChoicesItem(this.directive.next(index)) }
+/** (Optional) Transcribed segments, if `segment` is enabled. */
+class Segments extends FutureArray {
+  override at(index: number) { return new SegmentsItem(this.directive.next(index)) }
 }
 
 /**
@@ -214,10 +214,12 @@ export class GenerateText extends Node {
    *
    * https://substrate.run/library#GenerateText
    */
-  override output(
-    response: SubstrateResponse,
-  ): OpenAPI.components["schemas"]["GenerateTextOut"] {
-    return super.output(response);
+  override get output(): OpenAPI.components["schemas"]["GenerateTextOut"] {
+    return super.output;
+  }
+
+  override set output(response: SubstrateResponse) {
+    super.output = response;
   }
 
   /**
@@ -256,10 +258,12 @@ export class MultiGenerateText extends Node {
    *
    * https://substrate.run/library#MultiGenerateText
    */
-  override output(
-    response: SubstrateResponse,
-  ): OpenAPI.components["schemas"]["MultiGenerateTextOut"] {
-    return super.output(response);
+  override get output(): OpenAPI.components["schemas"]["MultiGenerateTextOut"] {
+    return super.output;
+  }
+
+  override set output(response: SubstrateResponse) {
+    super.output = response;
   }
 
   /**
@@ -298,10 +302,12 @@ export class GenerateTextVision extends Node {
    *
    * https://substrate.run/library#GenerateTextVision
    */
-  override output(
-    response: SubstrateResponse,
-  ): OpenAPI.components["schemas"]["GenerateTextVisionOut"] {
-    return super.output(response);
+  override get output(): OpenAPI.components["schemas"]["GenerateTextVisionOut"] {
+    return super.output;
+  }
+
+  override set output(response: SubstrateResponse) {
+    super.output = response;
   }
 
   /**
@@ -340,10 +346,12 @@ export class GenerateImage extends Node {
    *
    * https://substrate.run/library#GenerateImage
    */
-  override output(
-    response: SubstrateResponse,
-  ): OpenAPI.components["schemas"]["GenerateImageOut"] {
-    return super.output(response);
+  override get output(): OpenAPI.components["schemas"]["GenerateImageOut"] {
+    return super.output;
+  }
+
+  override set output(response: SubstrateResponse) {
+    super.output = response;
   }
 
   /**
@@ -382,10 +390,12 @@ export class MultiGenerateImage extends Node {
    *
    * https://substrate.run/library#MultiGenerateImage
    */
-  override output(
-    response: SubstrateResponse,
-  ): OpenAPI.components["schemas"]["MultiGenerateImageOut"] {
-    return super.output(response);
+  override get output(): OpenAPI.components["schemas"]["MultiGenerateImageOut"] {
+    return super.output;
+  }
+
+  override set output(response: SubstrateResponse) {
+    super.output = response;
   }
 
   /**
@@ -424,10 +434,12 @@ export class ControlledGenerateImage extends Node {
    *
    * https://substrate.run/library#ControlledGenerateImage
    */
-  override output(
-    response: SubstrateResponse,
-  ): OpenAPI.components["schemas"]["ControlledGenerateImageOut"] {
-    return super.output(response);
+  override get output(): OpenAPI.components["schemas"]["ControlledGenerateImageOut"] {
+    return super.output;
+  }
+
+  override set output(response: SubstrateResponse) {
+    super.output = response;
   }
 
   /**
@@ -466,10 +478,12 @@ export class MultiControlledGenerateImage extends Node {
    *
    * https://substrate.run/library#MultiControlledGenerateImage
    */
-  override output(
-    response: SubstrateResponse,
-  ): OpenAPI.components["schemas"]["MultiControlledGenerateImageOut"] {
-    return super.output(response);
+  override get output(): OpenAPI.components["schemas"]["MultiControlledGenerateImageOut"] {
+    return super.output;
+  }
+
+  override set output(response: SubstrateResponse) {
+    super.output = response;
   }
 
   /**
@@ -508,10 +522,12 @@ export class GenerativeEditImage extends Node {
    *
    * https://substrate.run/library#GenerativeEditImage
    */
-  override output(
-    response: SubstrateResponse,
-  ): OpenAPI.components["schemas"]["GenerativeEditImageOut"] {
-    return super.output(response);
+  override get output(): OpenAPI.components["schemas"]["GenerativeEditImageOut"] {
+    return super.output;
+  }
+
+  override set output(response: SubstrateResponse) {
+    super.output = response;
   }
 
   /**
@@ -550,10 +566,12 @@ export class MultiGenerativeEditImage extends Node {
    *
    * https://substrate.run/library#MultiGenerativeEditImage
    */
-  override output(
-    response: SubstrateResponse,
-  ): OpenAPI.components["schemas"]["MultiGenerativeEditImageOut"] {
-    return super.output(response);
+  override get output(): OpenAPI.components["schemas"]["MultiGenerativeEditImageOut"] {
+    return super.output;
+  }
+
+  override set output(response: SubstrateResponse) {
+    super.output = response;
   }
 
   /**
@@ -592,10 +610,12 @@ export class FillMask extends Node {
    *
    * https://substrate.run/library#FillMask
    */
-  override output(
-    response: SubstrateResponse,
-  ): OpenAPI.components["schemas"]["FillMaskOut"] {
-    return super.output(response);
+  override get output(): OpenAPI.components["schemas"]["FillMaskOut"] {
+    return super.output;
+  }
+
+  override set output(response: SubstrateResponse) {
+    super.output = response;
   }
 
   /**
@@ -634,10 +654,12 @@ export class UpscaleImage extends Node {
    *
    * https://substrate.run/library#UpscaleImage
    */
-  override output(
-    response: SubstrateResponse,
-  ): OpenAPI.components["schemas"]["UpscaleImageOut"] {
-    return super.output(response);
+  override get output(): OpenAPI.components["schemas"]["UpscaleImageOut"] {
+    return super.output;
+  }
+
+  override set output(response: SubstrateResponse) {
+    super.output = response;
   }
 
   /**
@@ -676,10 +698,12 @@ export class RemoveBackground extends Node {
    *
    * https://substrate.run/library#RemoveBackground
    */
-  override output(
-    response: SubstrateResponse,
-  ): OpenAPI.components["schemas"]["RemoveBackgroundOut"] {
-    return super.output(response);
+  override get output(): OpenAPI.components["schemas"]["RemoveBackgroundOut"] {
+    return super.output;
+  }
+
+  override set output(response: SubstrateResponse) {
+    super.output = response;
   }
 
   /**
@@ -718,10 +742,12 @@ export class DetectSegments extends Node {
    *
    * https://substrate.run/library#DetectSegments
    */
-  override output(
-    response: SubstrateResponse,
-  ): OpenAPI.components["schemas"]["DetectSegmentsOut"] {
-    return super.output(response);
+  override get output(): OpenAPI.components["schemas"]["DetectSegmentsOut"] {
+    return super.output;
+  }
+
+  override set output(response: SubstrateResponse) {
+    super.output = response;
   }
 
   /**
@@ -760,10 +786,12 @@ export class TranscribeMedia extends Node {
    *
    * https://substrate.run/library#TranscribeMedia
    */
-  override output(
-    response: SubstrateResponse,
-  ): OpenAPI.components["schemas"]["TranscribeMediaOut"] {
-    return super.output(response);
+  override get output(): OpenAPI.components["schemas"]["TranscribeMediaOut"] {
+    return super.output;
+  }
+
+  override set output(response: SubstrateResponse) {
+    super.output = response;
   }
 
   /**
@@ -802,10 +830,12 @@ export class GenerateSpeech extends Node {
    *
    * https://substrate.run/library#GenerateSpeech
    */
-  override output(
-    response: SubstrateResponse,
-  ): OpenAPI.components["schemas"]["GenerateSpeechOut"] {
-    return super.output(response);
+  override get output(): OpenAPI.components["schemas"]["GenerateSpeechOut"] {
+    return super.output;
+  }
+
+  override set output(response: SubstrateResponse) {
+    super.output = response;
   }
 
   /**
@@ -827,7 +857,7 @@ export class GenerateSpeech extends Node {
  */
 export class EmbedText extends Node {
   /**
-   * Input arguments: `text`, `model` (optional), `store` (optional), `metadata` (optional), `embedded_metadata` (optional)
+   * Input arguments: `text`, `model` (optional), `store` (optional), `metadata` (optional), `embedded_metadata_keys` (optional), `document_id` (optional)
    *
    * Output fields: `future.embedding`
    *
@@ -844,10 +874,12 @@ export class EmbedText extends Node {
    *
    * https://substrate.run/library#EmbedText
    */
-  override output(
-    response: SubstrateResponse,
-  ): OpenAPI.components["schemas"]["EmbedTextOut"] {
-    return super.output(response);
+  override get output(): OpenAPI.components["schemas"]["EmbedTextOut"] {
+    return super.output;
+  }
+
+  override set output(response: SubstrateResponse) {
+    super.output = response;
   }
 
   /**
@@ -869,7 +901,7 @@ export class EmbedText extends Node {
  */
 export class MultiEmbedText extends Node {
   /**
-   * Input arguments: `items`, `model` (optional), `store` (optional), `embedded_metadata` (optional)
+   * Input arguments: `items`, `model` (optional), `store` (optional), `embedded_metadata_keys` (optional)
    *
    * Output fields: `future.embeddings`
    *
@@ -886,10 +918,12 @@ export class MultiEmbedText extends Node {
    *
    * https://substrate.run/library#MultiEmbedText
    */
-  override output(
-    response: SubstrateResponse,
-  ): OpenAPI.components["schemas"]["MultiEmbedTextOut"] {
-    return super.output(response);
+  override get output(): OpenAPI.components["schemas"]["MultiEmbedTextOut"] {
+    return super.output;
+  }
+
+  override set output(response: SubstrateResponse) {
+    super.output = response;
   }
 
   /**
@@ -911,7 +945,7 @@ export class MultiEmbedText extends Node {
  */
 export class EmbedImage extends Node {
   /**
-   * Input arguments: `image_uri`, `model` (optional), `store` (optional)
+   * Input arguments: `image_uri`, `model` (optional), `store` (optional), `document_id` (optional)
    *
    * Output fields: `future.embedding`
    *
@@ -928,10 +962,12 @@ export class EmbedImage extends Node {
    *
    * https://substrate.run/library#EmbedImage
    */
-  override output(
-    response: SubstrateResponse,
-  ): OpenAPI.components["schemas"]["EmbedImageOut"] {
-    return super.output(response);
+  override get output(): OpenAPI.components["schemas"]["EmbedImageOut"] {
+    return super.output;
+  }
+
+  override set output(response: SubstrateResponse) {
+    super.output = response;
   }
 
   /**
@@ -970,10 +1006,12 @@ export class MultiEmbedImage extends Node {
    *
    * https://substrate.run/library#MultiEmbedImage
    */
-  override output(
-    response: SubstrateResponse,
-  ): OpenAPI.components["schemas"]["MultiEmbedImageOut"] {
-    return super.output(response);
+  override get output(): OpenAPI.components["schemas"]["MultiEmbedImageOut"] {
+    return super.output;
+  }
+
+  override set output(response: SubstrateResponse) {
+    super.output = response;
   }
 
   /**

@@ -3,7 +3,6 @@ import { VERSION } from "substrate/version";
 import OpenAPIjson from "substrate/openapi.json";
 import { SubstrateResponse } from "substrate/SubstrateResponse";
 import { Node } from "substrate/Node";
-import { FutureString } from "substrate/Future";
 
 type Configuration = {
   /**
@@ -45,10 +44,6 @@ export class Substrate {
     this.apiVersion = apiVersion ?? OpenAPIjson["info"]["version"];
   }
 
-  static fn = {
-    concat: FutureString.concat,
-  };
-
   /**
    *  Run the given nodes.
    */
@@ -56,16 +51,22 @@ export class Substrate {
     const url = this.baseUrl + "/compose";
     const req = { dag: Substrate.serialize(nodes) };
     const apiResponse = await fetch(url, this.requestOptions(req));
+
     if (apiResponse.ok) {
       const json = await apiResponse.json();
-      return new SubstrateResponse(apiResponse, json);
-    } else {
-      const res = new SubstrateResponse(apiResponse);
-      res.debug();
+      const res = new SubstrateResponse(apiResponse, json);
+      for (let node of nodes) {
+        node.output = res;
+      }
       return res;
-    }
+    } 
+
+    throw new SubstrateError("Request failed");
   }
 
+  /**
+   *  Transform an array of nodes into JSON for the Substrate API
+   */
   static serialize(nodes: Node[]): any {
     const ns = nodes.map((n) => n.toJSON());
     const futures = new Set(ns.flatMap((sn) => sn.futures));
