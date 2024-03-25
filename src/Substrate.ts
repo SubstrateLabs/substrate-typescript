@@ -64,6 +64,9 @@ export class Substrate {
     throw new SubstrateError("Request failed");
   }
 
+  /**
+   *  Transform an array of nodes into JSON for the Substrate API
+   */
   static serialize(nodes: Node[]): any {
     const ns = nodes.map((n) => n.toJSON());
     const futures = new Set(ns.flatMap((sn) => sn.futures));
