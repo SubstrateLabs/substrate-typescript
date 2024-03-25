@@ -23,94 +23,26 @@ type AlsoAcceptFutures<T> =
       : T;
 
 
-/** TODO: MultiEmbedTextOut description */
-class MultiEmbedTextOut extends FutureObject {
+/** (Optional) JSON response. */
+class JsonObject extends FutureAnyObject {}
+/** The random noise seed used for generation. */
+class Seed extends FutureAnyObject {}
+/** Chapters Array Item */
+class ChaptersItem extends FutureAnyObject {}
+/** Choices Array Item */
+class ChoicesItem extends FutureAnyObject {}
+/** TODO: MultiEmbedImageOut description */
+class MultiEmbedImageOut extends FutureObject {
   /** Generated embeddings. */
   get embeddings() { return new Embeddings(this.directive.next('embeddings')) }
 }
 
-/** (Optional) Transcribed segments, if `segment` is enabled. */
-class Segments extends FutureArray {
-  override at(index: number) { return new SegmentsItem(this.directive.next(index)) }
-}
-
-/** TODO: FillMaskOut description */
-class FillMaskOut extends FutureObject {
+/** TODO: UpscaleImageOut description */
+class UpscaleImageOut extends FutureObject {
   /** Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
   get image_uri() { return new FutureString(this.directive.next('image_uri')) }
 }
 
-/** Generated embeddings. */
-class Embeddings extends FutureArray {
-  override at(index: number) { return new EmbeddingsItem(this.directive.next(index)) }
-}
-
-/** TODO: MultiGenerateTextOut description */
-class MultiGenerateTextOut extends FutureObject {
-  /** TODO: Choices description */
-  get choices() { return new Choices(this.directive.next('choices')) }
-}
-
-/** TODO: MultiControlledGenerateImageOut description */
-class MultiControlledGenerateImageOut extends FutureObject {
-  /** TODO: Outputs description */
-  get outputs() { return new Outputs(this.directive.next('outputs')) }
-}
-
-/** TODO: TranscribeMediaOut description */
-class TranscribeMediaOut extends FutureObject {
-  /** Transcribed text. */
-  get text() { return new FutureString(this.directive.next('text')) }
-  /** (Optional) Transcribed segments, if `segment` is enabled. */
-  get segments() { return new Segments(this.directive.next('segments')) }
-  /** (Optional) Chapter markers, if `suggest_chapters` is enabled. */
-  get chapters() { return new Chapters(this.directive.next('chapters')) }
-}
-
-/** Chapters Array Item */
-class ChaptersItem extends FutureAnyObject {}
-/** TODO: Choices description */
-class Choices extends FutureArray {
-  override at(index: number) { return new ChoicesItem(this.directive.next(index)) }
-}
-
-/** Outputs Array Item */
-class OutputsItem extends FutureAnyObject {}
-/** TODO: DetectSegmentsOut description */
-class DetectSegmentsOut extends FutureObject {
-  /** Detected segments in 'mask image' format. Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-  get mask_image_uri() { return new FutureString(this.directive.next('mask_image_uri')) }
-}
-
-/** The random noise seed used for generation. */
-class Seed extends FutureAnyObject {}
-/** Choices Array Item */
-class ChoicesItem extends FutureAnyObject {}
-/** TODO: GenerativeEditImageOut description */
-class GenerativeEditImageOut extends FutureObject {
-  /** Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-  get image_uri() { return new FutureString(this.directive.next('image_uri')) }
-  /** The random noise seed used for generation. */
-  get seed() { return new Seed(this.directive.next('seed')) }
-}
-
-/** Segments Array Item */
-class SegmentsItem extends FutureAnyObject {}
-/** (Optional) Chapter markers, if `suggest_chapters` is enabled. */
-class Chapters extends FutureArray {
-  override at(index: number) { return new ChaptersItem(this.directive.next(index)) }
-}
-
-/** TODO: MultiGenerativeEditImageOut description */
-class MultiGenerativeEditImageOut extends FutureObject {
-  /** TODO: Outputs description */
-  get outputs() { return new Outputs(this.directive.next('outputs')) }
-}
-
-/** (Optional) JSON response. */
-class JsonObject extends FutureAnyObject {}
-/** Embeddings Array Item */
-class EmbeddingsItem extends FutureAnyObject {}
 /** TODO: GenerateImageOut description */
 class GenerateImageOut extends FutureObject {
   /** Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
@@ -125,10 +57,90 @@ class RemoveBackgroundOut extends FutureObject {
   get image_uri() { return new FutureString(this.directive.next('image_uri')) }
 }
 
-/** TODO: GenerateSpeechOut description */
-class GenerateSpeechOut extends FutureObject {
-  /** Base 64-encoded WAV audio bytes, or a hosted audio url if `store` is provided. */
-  get audio_uri() { return new FutureString(this.directive.next('audio_uri')) }
+/** Segments Array Item */
+class SegmentsItem extends FutureAnyObject {}
+/** TODO: MultiGenerateTextOut description */
+class MultiGenerateTextOut extends FutureObject {
+  /** TODO: Choices description */
+  get choices() { return new Choices(this.directive.next('choices')) }
+}
+
+/** Embeddings Array Item */
+class EmbeddingsItem extends FutureAnyObject {}
+/** TODO: GenerateTextVisionOut description */
+class GenerateTextVisionOut extends FutureObject {
+  /** Text response. */
+  get text() { return new FutureString(this.directive.next('text')) }
+}
+
+/** TODO: Outputs description */
+class Outputs extends FutureArray {
+  override at(index: number) { return new OutputsItem(this.directive.next(index)) }
+}
+
+/** Outputs Array Item */
+class OutputsItem extends FutureAnyObject {}
+/** Generated embedding. */
+class Embedding extends FutureAnyObject {}
+/** TODO: TranscribeMediaOut description */
+class TranscribeMediaOut extends FutureObject {
+  /** Transcribed text. */
+  get text() { return new FutureString(this.directive.next('text')) }
+  /** (Optional) Transcribed segments, if `segment` is enabled. */
+  get segments() { return new Segments(this.directive.next('segments')) }
+  /** (Optional) Chapter markers, if `suggest_chapters` is enabled. */
+  get chapters() { return new Chapters(this.directive.next('chapters')) }
+}
+
+/** TODO: GenerativeEditImageOut description */
+class GenerativeEditImageOut extends FutureObject {
+  /** Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+  get image_uri() { return new FutureString(this.directive.next('image_uri')) }
+  /** The random noise seed used for generation. */
+  get seed() { return new Seed(this.directive.next('seed')) }
+}
+
+/** TODO: MultiGenerateImageOut description */
+class MultiGenerateImageOut extends FutureObject {
+  /** TODO: Outputs description */
+  get outputs() { return new Outputs(this.directive.next('outputs')) }
+}
+
+/** TODO: DetectSegmentsOut description */
+class DetectSegmentsOut extends FutureObject {
+  /** Detected segments in 'mask image' format. Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+  get mask_image_uri() { return new FutureString(this.directive.next('mask_image_uri')) }
+}
+
+/** TODO: EmbedTextOut description */
+class EmbedTextOut extends FutureObject {
+  /** Generated embedding. */
+  get embedding() { return new Embedding(this.directive.next('embedding')) }
+}
+
+/** TODO: MultiGenerativeEditImageOut description */
+class MultiGenerativeEditImageOut extends FutureObject {
+  /** TODO: Outputs description */
+  get outputs() { return new Outputs(this.directive.next('outputs')) }
+}
+
+/** TODO: ControlledGenerateImageOut description */
+class ControlledGenerateImageOut extends FutureObject {
+  /** Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+  get image_uri() { return new FutureString(this.directive.next('image_uri')) }
+  /** The random noise seed used for generation. */
+  get seed() { return new Seed(this.directive.next('seed')) }
+}
+
+/** TODO: MultiEmbedTextOut description */
+class MultiEmbedTextOut extends FutureObject {
+  /** Generated embeddings. */
+  get embeddings() { return new Embeddings(this.directive.next('embeddings')) }
+}
+
+/** (Optional) Chapter markers, if `suggest_chapters` is enabled. */
+class Chapters extends FutureArray {
+  override at(index: number) { return new ChaptersItem(this.directive.next(index)) }
 }
 
 /** TODO: GenerateTextOut description */
@@ -139,55 +151,43 @@ class GenerateTextOut extends FutureObject {
   get json_object() { return new JsonObject(this.directive.next('json_object')) }
 }
 
-/** TODO: MultiEmbedImageOut description */
-class MultiEmbedImageOut extends FutureObject {
-  /** Generated embeddings. */
-  get embeddings() { return new Embeddings(this.directive.next('embeddings')) }
-}
-
-/** TODO: EmbedTextOut description */
-class EmbedTextOut extends FutureObject {
-  /** Generated embedding. */
-  get embedding() { return new Embedding(this.directive.next('embedding')) }
-}
-
-/** TODO: GenerateTextVisionOut description */
-class GenerateTextVisionOut extends FutureObject {
-  /** Text response. */
-  get text() { return new FutureString(this.directive.next('text')) }
-}
-
-/** TODO: UpscaleImageOut description */
-class UpscaleImageOut extends FutureObject {
+/** TODO: FillMaskOut description */
+class FillMaskOut extends FutureObject {
   /** Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
   get image_uri() { return new FutureString(this.directive.next('image_uri')) }
 }
 
-/** TODO: MultiGenerateImageOut description */
-class MultiGenerateImageOut extends FutureObject {
-  /** TODO: Outputs description */
-  get outputs() { return new Outputs(this.directive.next('outputs')) }
-}
-
-/** Generated embedding. */
-class Embedding extends FutureAnyObject {}
 /** TODO: EmbedImageOut description */
 class EmbedImageOut extends FutureObject {
   /** Generated embedding. */
   get embedding() { return new Embedding(this.directive.next('embedding')) }
 }
 
-/** TODO: Outputs description */
-class Outputs extends FutureArray {
-  override at(index: number) { return new OutputsItem(this.directive.next(index)) }
+/** TODO: Choices description */
+class Choices extends FutureArray {
+  override at(index: number) { return new ChoicesItem(this.directive.next(index)) }
 }
 
-/** TODO: ControlledGenerateImageOut description */
-class ControlledGenerateImageOut extends FutureObject {
-  /** Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-  get image_uri() { return new FutureString(this.directive.next('image_uri')) }
-  /** The random noise seed used for generation. */
-  get seed() { return new Seed(this.directive.next('seed')) }
+/** Generated embeddings. */
+class Embeddings extends FutureArray {
+  override at(index: number) { return new EmbeddingsItem(this.directive.next(index)) }
+}
+
+/** TODO: MultiControlledGenerateImageOut description */
+class MultiControlledGenerateImageOut extends FutureObject {
+  /** TODO: Outputs description */
+  get outputs() { return new Outputs(this.directive.next('outputs')) }
+}
+
+/** TODO: GenerateSpeechOut description */
+class GenerateSpeechOut extends FutureObject {
+  /** Base 64-encoded WAV audio bytes, or a hosted audio url if `store` is provided. */
+  get audio_uri() { return new FutureString(this.directive.next('audio_uri')) }
+}
+
+/** (Optional) Transcribed segments, if `segment` is enabled. */
+class Segments extends FutureArray {
+  override at(index: number) { return new SegmentsItem(this.directive.next(index)) }
 }
 
 /**
