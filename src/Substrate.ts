@@ -61,7 +61,7 @@ export class Substrate {
       return res;
     } 
 
-    throw new Error("Request failed");
+    throw new SubstrateError("Request failed");
   }
 
   static serialize(nodes: Node[]): any {
