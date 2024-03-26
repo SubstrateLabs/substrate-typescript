@@ -37,8 +37,16 @@ build-watch: ensure
 publish-preview: test build
 	npm publish --tag=${NPM_TAG} --dry-run
 
+.PHONY: verify-publish
+verify-publish:
+	@echo
+	@echo "🌀 Publishing to NPM"
+	@echo "Version: ${PACKAGE_VERSION}"
+	@echo "Distribution Tag: ${NPM_TAG}"
+	@echo "This will be live. Continue? [y/N] " && read ans && [ $${ans:-N} == y ]
+
 .PHONY: publish
-publish: test build
+publish: verify-publish test build
 	npm login
 	npm publish --tag=${NPM_TAG}
 	git tag "v${PACKAGE_VERSION}" && git push --tags
