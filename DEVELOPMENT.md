@@ -1,6 +1,6 @@
 # Development Guide
 
-Hello 👋! This guide is an aid meant for developers of this package.
+👋 Hello! This guide is an aid meant for developers of this package.
 
 ## Up and Running
 
@@ -17,11 +17,11 @@ npm test
 npm run build
 ```
 
-## Updating Generated Code
+## Generated Code
 
 There's a handful of files that we generate via our main repo for the SDK. (See `Nodes.ts`, `index.ts`, `OpenAPI.ts`)
 
-When you need to make a change to these files you will need to rerun the codegen scripts in [`SubstrateLabs/substrate`](https://github.com/SubstrateLabs/substrate)
+When you need to make a change to these files you will need to rerun the codegen scripts in [SubstrateLabs/substrate](https://github.com/SubstrateLabs/substrate)
 and then copy them into this project. Make sure to commit these changes.
 
 ```#sh
@@ -67,17 +67,17 @@ npm link
 npm ls --link --global
 
 # in the local project that wants to import the local package
-npm link @substratelabs/substrate-typescript
+npm link substrate
 
 # see the local project contains a link to the globally linked local package
 npm ls --link
 
 # remove the symlinks (if you don't want to use them anymore)
-npm unlink @substratelabs/substrate-typescript # in local project
-npm unlink --global @substratelabs/substrate-typescript
+npm unlink substrate # in local project
+npm unlink --global substrate
 ```
 
-## Build Highlights
+## Build Config Highlights
 
 This project uses a few tools to help with building and packaging it up: `typescript`, [`tsup`](https://github.com/egoist/tsup), and `npm`.
 Their respective configuration files work together to produce the the library and this section contains a few highlights to
@@ -90,7 +90,7 @@ help better understand how it works.
 * Our package uses conditional exports so that the consumer will automatically get the right ESM or CJS based on how they import (see `package.json` "exports")
 * When we publish the package to NPM we're only including the `dist/`, `src/` and "default files", eg. `README`, `LICENCE` (see `package.json` "files")
 
-## Versioning Scheme
+## Versioning
 
 We're using a somewhat custom versioning scheme that allows us to incorporate information about the API version
 and SDK version. We update version references via the `npm run sync-codegen` script currently.
@@ -101,10 +101,10 @@ The version string looks like the following:
   `${major}${version}.${minor}.${patch}`
 ```
 
-* **`major`** is set manually and is the MAJOR version of the SDK code
-* **`version`** is a date string (`yyyymmdd`) we use as the API Version (from our OpenAPI schema)
-* **`minor`** is set manually and is the MINOR version of the SDK code
-* **`patch`** is set manually and is the PATCH version of the SDK code
+* `major` is set manually and is the MAJOR version of the SDK code
+* `version` is a date string (`yyyymmdd`) we use as the API Version (from our OpenAPI schema)
+* `minor` is set manually and is the MINOR version of the SDK code
+* `patch` is set manually and is the PATCH version of the SDK code
 
 The version of the SDK should be updated in branches being merged into `main` according to the semantic versioning scheme:
 
@@ -114,11 +114,13 @@ The version of the SDK should be updated in branches being merged into `main` ac
 
 ## Releasing
 
-**Prerequisits**:
-* You must have an [npmjs.com](https://www.npmjs.com/) account and it must be a member of our organization
-* You must have an GitHub account and it must be a member of our organization with write permissions on the repo
+**Prerequisites**:
+* Have an [npmjs.com](https://www.npmjs.com/) account and it must be a member of our organization
+* Have an GitHub account and it must be a member of our organization with write permissions on the repo
 * The changes that are currently in the branch are the one you would like to release (typically `main`)
 * The `version` field in the `package.json` is the one you would like to use for the release already
+
+**Production Releases**:
 
 We've not automated this process just yet since there are a few more steps that would be nice to incorporate once
 we start up a more regular cadence. The following should be done manually on the publishers machine in the branch
@@ -131,7 +133,9 @@ that we'd like to publish.
 6. Publish on NPM & push tag to GitHub: `npm publish --tag latest`
 7. Create new Release on GitHub (using the web UI). Add release notes, mentions, etc.
 
-**NOTE:** The previous workflow assumes that the tag being published should be marked as `latest` for the NPM
+**Non-Production Releases** 
+
+The previous workflow assumes that the tag being published should be marked as `latest` for the NPM
 [distribution tag](https://docs.npmjs.com/adding-dist-tags-to-packages). If you would like to mark a release as
 a "release candidate", "experimental" or something else, then specify this tag when publishing:
 
