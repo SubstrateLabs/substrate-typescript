@@ -113,6 +113,12 @@ The version of the SDK should be updated in branches being merged into `main` ac
 * MINOR version when you add functionality in a backward compatible manner
 * PATCH version when you make backward compatible bug fixes
 
+### TODO: Allow VERSION Update When Not Updating Generated Files
+
+Right now the `VERSION` for the package is managed in `bin/sync-codegen.ts` and running this script will also update the
+package version in `package.json` and the `src/version.ts` file. However if you are only making changes to the SDK code
+and do not want to copy over generated files, then you will have to manually update these three locations for now.
+
 ## Releasing
 
 **Prerequisites**:
