@@ -4,7 +4,7 @@
  basic GenerateText->GenerateText example
 */
 
-import { Substrate, GenerateText } from "@substratelabs/substrate-typescript";
+import { Substrate, GenerateText } from "substrate";
 
 const SUBSTRATE_API_KEY = process.env["SUBSTRATE_API_KEY"];
 

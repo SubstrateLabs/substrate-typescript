@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const { Substrate, GenerateText } = require("@substratelabs/substrate-typescript");
+const { Substrate, GenerateText } = require("substrate");
 
 async function main() {
   const SUBSTRATE_API_KEY = process.env["SUBSTRATE_API_KEY"];
