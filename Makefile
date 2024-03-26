@@ -17,9 +17,14 @@ test: ensure
 test-watch: ensure
 	npx vitest
 
+.PHONY: update-version
+update-version: ensure
+	bin/update-version.ts
+
 .PHONY: sync-codegen
 sync-codegen: ensure
 	bin/sync-codegen.ts
+	make update-version
 
 .PHONY: typecheck
 typecheck: ensure
