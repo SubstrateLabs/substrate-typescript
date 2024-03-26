@@ -49,7 +49,7 @@ export class Substrate {
    */
   async run(...nodes: Node[]): Promise<SubstrateResponse> {
     const url = this.baseUrl + "/compose";
-    const req = { dag: Substrate.serialize(nodes) };
+    const req = { dag: Substrate.serialize(...nodes) };
     const apiResponse = await fetch(url, this.requestOptions(req));
 
     if (apiResponse.ok) {
@@ -67,7 +67,7 @@ export class Substrate {
   /**
    *  Transform an array of nodes into JSON for the Substrate API
    */
-  static serialize(nodes: Node[]): any {
+  static serialize(...nodes: Node[]): any {
     const ns = nodes.map((n) => n.toJSON());
     const futures = new Set(ns.flatMap((sn) => sn.futures));
 

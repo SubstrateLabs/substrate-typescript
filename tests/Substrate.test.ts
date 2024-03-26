@@ -9,7 +9,7 @@ describe("Substrate", () => {
       const a = new Node({ a: 123 });
       const b = new Node({ b: a.future.get("x"), c: sb.concat("x", "y") });
 
-      const result = Substrate.serialize([a, b]);
+      const result = Substrate.serialize(a, b);
 
       expect(result).toEqual({
         edges: [],
