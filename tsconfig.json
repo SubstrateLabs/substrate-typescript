@@ -53,12 +53,5 @@
   /* Internal-use: running example scripts */
   "ts-node": {
     "esm": true,
-    "compilerOptions": {
-      /* Internal-use: package paths */
-      "paths": {
-        "substrate/*": ["./src/*"],
-        "substrate": ["./src/index.ts"]
-      }
-    }
   }
 }

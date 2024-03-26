@@ -4,7 +4,7 @@ import {
   Substrate,
   GenerateText,
   sb,
-} from "@substratelabs/substrate-typescript";
+} from "substrate";
 
 const SUBSTRATE_API_KEY = process.env["SUBSTRATE_API_KEY"];
 
