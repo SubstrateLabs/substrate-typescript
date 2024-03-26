@@ -144,6 +144,5 @@ The previous workflow assumes that the tag being published should be marked as `
 a "release candidate", "experimental" or something else, then specify this tag when publishing:
 
 ```
-# NOTE: this is not in the Makefile yet
-npm publish --tag [rc|experimental]
+make publish NPM_TAG=[rc|experimental|etc]
 ```

@@ -1,11 +1,10 @@
 PACKAGE_VERSION=$(shell node -p -e "require('./package.json').version")
 
+# override this when publishing with an alternative distribution, eg. rc | experimental | demo
+NPM_TAG=latest
+
 node_modules/:
 	npm install
-
-dist/:
-	make test
-	make build
 
 .PHONY: ensure
 ensure: node_modules/
@@ -35,13 +34,11 @@ build-watch: ensure
 	npx tsup --watch
 
 .PHONY: publish-preview
-publish-preview: dist/
+publish-preview: test build
 	npm publish --dry-run
 
 .PHONY: publish
-publish: dist/
+publish: test build
 	npm login
-	npm publish --tag=latest
+	npm publish --tag=${NPM_TAG}
 	git tag "v${PACKAGE_VERSION}" && git push --tags
-
-# TODO: add task to use alternative npm distribution tag
