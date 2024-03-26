@@ -1,4 +1,4 @@
-#!/usr/bin/env -S npm run ts-node --transpileOnly
+#!/usr/bin/env -S npx ts-node --transpileOnly
 
 import {
   Substrate,

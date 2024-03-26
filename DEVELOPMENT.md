@@ -8,13 +8,13 @@
 # ensure you're using the correct node version (see .node-version)
 
 # install deps
-npm install
+make ensure
 
-# run tests (default is in watch mode)
-npm test
+# run tests
+make test
 
 # build
-npm run build
+make build
 ```
 
 ## Generated Code
@@ -25,14 +25,14 @@ When you need to make a change to these files you will need to rerun the codegen
 and then copy them into this project. Make sure to commit these changes.
 
 ```#sh
-# (in SubstrateLabs/substrate) run the codegen tasks
+# in SubstrateLabs/substrate: run the codegen tasks
 make generate
 
-# (in SubstrateLabs/substrate-typescript) copy the generated files
-npm run sync-codegen
+# in SubstrateLabs/substrate-typescript: copy the generated files
+make sync-codegen
 
-# (ensure the project builds)
-npm run build
+# ensure the package builds
+make build
 ```
 
 ## Running Examples
@@ -92,8 +92,9 @@ help better understand how it works.
 
 ## Versioning
 
-We're using a somewhat custom versioning scheme that allows us to incorporate information about the API version
-and SDK version. We update version references via the `npm run sync-codegen` script currently.
+We're using a [custom versioning scheme](https://guides.substrate.run/sdks/versioning) that allows us to
+incorporate information about the API version and SDK version. We update version references via the
+`make sync-codegen` script currently.
 
 The version string looks like the following:
 
@@ -126,12 +127,9 @@ We've not automated this process just yet since there are a few more steps that 
 we start up a more regular cadence. The following should be done manually on the publishers machine in the branch
 that we'd like to publish.
 
-1. Ensure everything is OK: `npm test -- --run`
-2. Build the package: `npm run build`
-3. Preview the "pack" (tarball we publish to npm): `npm publish --dry-run`
-5. Login to NPM: `npm login`
-6. Publish on NPM & push tag to GitHub: `npm publish --tag latest`
-7. Create new Release on GitHub (using the web UI). Add release notes, mentions, etc.
+1. Preview the "pack" (tarball we publish to npm): `make publish-preview`
+2. Publish to NPM & push tag to GitHub: `make publish`
+3. Create new Release on GitHub (using the web UI). Add release notes, mentions, etc.
 
 **Non-Production Releases** 
 
@@ -140,5 +138,6 @@ The previous workflow assumes that the tag being published should be marked as `
 a "release candidate", "experimental" or something else, then specify this tag when publishing:
 
 ```
+# NOTE: this is not in the Makefile yet
 npm publish --tag [rc|experimental]
 ```

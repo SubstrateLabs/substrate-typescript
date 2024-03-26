@@ -12,14 +12,7 @@
     "src/**/*",
     "!**/*.py"
   ],
-  "scripts": {
-    "sync-codegen": "bin/sync-codegen.ts",
-    "build": "tsup",
-    "typecheck": "tsc -noEmit",
-    "test": "vitest",
-    "prepare": "npm run build",
-    "ts-node": "ts-node"
-  },
+  "scripts": {},
   "author": {
     "name": "Substrate Team",
     "email": "support@substrate.com"
