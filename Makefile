@@ -35,7 +35,7 @@ build-watch: ensure
 
 .PHONY: publish-preview
 publish-preview: test build
-	npm publish --dry-run
+	npm publish --tag=${NPM_TAG} --dry-run
 
 .PHONY: publish
 publish: test build
