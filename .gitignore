@@ -8,6 +8,3 @@ node_modules/
 npm-debug.log
 .DS_Store
 tmp/
-
-# github package registry
-.npmrc
