@@ -7,9 +7,20 @@ import {
   StringConcat,
 } from "substrate/Future";
 import { Node } from "substrate/Node";
+import { SubstrateResponse } from "substrate/SubstrateResponse";
 
 class FooFuture extends Future {}
+
 const node = (id: string = "") => new Node({}, { id });
+
+// Helper that makes a Node and sets it's output with a fake SubstrateResponse
+const staticNode = (output: any) => {
+  const node = new Node({});
+  node.output = {
+    json: { data: { [node.id]: output } },
+  } as SubstrateResponse;
+  return node;
+};
 
 describe("Future", () => {
   test(".toJSON", () => {
@@ -40,6 +51,25 @@ describe("Future", () => {
 
       expect(d2.items).toEqual(["a", 1, s, n, "b", 2]);
       expect(d2.originNode.id).toEqual("NodeId");
+    });
+
+    test(".result", async () => {
+      // when the trace is empty, it resovles to the node's output
+      const n0 = staticNode("hello")
+      const t0 = new Trace([], n0);
+      expect(t0.result()).resolves.toEqual("hello");
+
+      // when the trace only includes primitive values
+      const n1 = staticNode({ a: ["result1"] });
+      const t1 = new Trace(["a", 0], n1);
+      expect(t1.result()).resolves.toEqual("result1");
+
+      // when the trace contains futures, they get resolved
+      const fs = new FutureString(new Trace([], staticNode("b")));
+      const fn = new FutureNumber(new Trace([], staticNode(1)));
+      const n2 = staticNode({ a: [{ b: [undefined, "result2"] }] });
+      const t2 = new Trace(["a", 0, fs, fn], n2);
+      expect(t2.result()).resolves.toEqual("result2");
     });
 
     test(".toJSON", () => {
@@ -76,6 +106,21 @@ describe("Future", () => {
       const d2 = d.next("b", s2);
 
       expect(d2.items).toEqual(["a", s, "b", s2]);
+    });
+
+    test(".result", async () => {
+      // when the items are empty
+      const s0 = new StringConcat([]);
+      expect(s0.result()).resolves.toEqual("");
+
+      // when the items only includes primitive values
+      const s1 = new StringConcat(["a", "b"]);
+      expect(s1.result()).resolves.toEqual("ab");
+
+      // when the items includes primitive values and futures
+      const fs = new FutureString(new Trace([], staticNode("b")));
+      const s2 = new StringConcat(["a", fs]);
+      expect(s2.result()).resolves.toEqual("ab");
     });
 
     test(".toJSON", () => {

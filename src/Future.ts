@@ -63,16 +63,15 @@ export class Trace extends Directive {
   }
 
   override async result(): Promise<any> {
-    return this.items.reduce(
-      async (val: any, item) => {
-        if (item instanceof Future) {
-          return val[(await item.result()) as string | number];
-        } else {
-          return val[item as string | number];
-        }
-      },
-      await this.originNode.result(),
-    );
+    let result: any = await this.originNode.result();
+
+    for (let item of this.items) {
+      if (item instanceof Future) {
+        item = await item.result();
+      }
+      result = result[item];
+    }
+    return result;
   }
 
   override toJSON() {
@@ -113,9 +112,14 @@ export class StringConcat extends Directive {
   }
 
   override async result(): Promise<string> {
-    return Promise.all(
-      this.items.map(async (i) => (i instanceof Future ? i.result() : i)),
-    ).then((strings) => strings.join(""));
+    let result = "";
+    for (let item of this.items) {
+      if (item instanceof Future) {
+        item = await item.result();
+      }
+      result = result.concat(item);
+    }
+    return result;
   }
 
   override toJSON(): any {
