@@ -4,12 +4,12 @@ import { readFileSync, writeFileSync } from "fs";
 
 // NOTE: Merged with API version to produce the full SDK version string
 // https://docs.substrate.run/versioning
-const SDK_VERSION = "1.0.2";
+const SDK_VERSION = "1.0.3";
 
 const ok = (message: string) => console.log("\x1b[32m✓\x1b[0m", message);
 
 try {
-  const version = readFileSync("GEN_VERSION", "utf-8").split(".")[0];
+  const version = readFileSync("src/GEN_VERSION", "utf-8").split(".")[0];
   const [major, minor, patch] = SDK_VERSION.split(".");
   const newVersion = `${major}${version}.${minor}.${patch}`;
   const packageJsonPath = "package.json";
