@@ -1,9 +1,5 @@
 #!/usr/bin/env -S npx ts-node --transpileOnly
 
-/**
- basic GenerateText->GenerateText example
-*/
-
 import { Substrate, GenerateText } from "substrate";
 
 const SUBSTRATE_API_KEY = process.env["SUBSTRATE_API_KEY"];
@@ -20,5 +16,4 @@ const b = new GenerateText({ prompt: a.future.text });
 
 await substrate.run(a, b);
 
-console.log("a.output =", a.output);
-console.log("b.output =", b.output);
+console.log({ a: await a.result(), b: await b.result() });

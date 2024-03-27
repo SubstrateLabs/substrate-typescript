@@ -1,10 +1,6 @@
 #!/usr/bin/env -S npx ts-node --transpileOnly
 
-import {
-  Substrate,
-  GenerateText,
-  GenerateImage,
-} from "substrate";
+import { Substrate, GenerateText, GenerateImage } from "substrate";
 
 const SUBSTRATE_API_KEY = process.env["SUBSTRATE_API_KEY"];
 
@@ -20,7 +16,7 @@ const scene = new GenerateText({
 
 const styles = [
   "whimsical post-impressionist watercolor",
-  "1970's sketched cartoon",
+  "1960's saturday cartoon",
   "woodblock printed",
   "art nouveau poster",
   "low-res 8-bit video game graphics",
@@ -28,14 +24,19 @@ const styles = [
 
 const images = styles.map((style) => {
   return new GenerateImage({
-    prompt: scene.future.text.concat(` render in a ${style} style`),
+    prompt: scene.future.text.concat(` render in a ((${style})) style`),
     store: "hosted",
   });
 });
 
 await substrate.run(scene, ...images);
 
-console.log(scene.output.text, "\n");
-console.log(
-  styles.map((style, i) => ({ style, url: images[i]?.output.image_uri })),
-);
+console.log({
+  scene: await scene.future.text.result(),
+  images: (await Promise.all(images.map((i) => i.result()))).map(
+    ({ image_uri }, i: number) => ({
+      style: styles[i],
+      image_uri,
+    }),
+  ),
+});

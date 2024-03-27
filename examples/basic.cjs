@@ -17,8 +17,7 @@ async function main() {
 
   await substrate.run(a, b);
 
-  console.log("a.output =", a.output);
-  console.log("b.output =", b.output);
+  console.log({ a: await a.result(), b: await b.result() });
 }
 
 main();

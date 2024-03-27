@@ -7,5 +7,4 @@ const DIR = "../substrate/codegen/typescript";
 
 execSync(`cp -r ${DIR}/src/* src/`);
 execSync(`cp ../substrate/site/public/openapi.json src/openapi.json`);
-execSync(`cp ${DIR}/GEN_VERSION GEN_VERSION`);
 ok(`Copied generated code from ${DIR}`);

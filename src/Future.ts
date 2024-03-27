@@ -25,6 +25,8 @@ abstract class Directive {
   abstract next(...args: any[]): Directive;
   abstract toJSON(): any;
 
+  abstract result(): Promise<any>;
+
   referencedFutures() {
     // @ts-ignore
     return this.items
@@ -35,12 +37,12 @@ abstract class Directive {
 
 export class Trace extends Directive {
   items: TraceProp[];
-  originNodeId: Node["id"];
+  originNode: Node<any>;
 
-  constructor(items: TraceProp[], originNodeId: Node["id"]) {
+  constructor(items: TraceProp[], originNode: Node<any>) {
     super();
     this.items = items;
-    this.originNodeId = originNodeId;
+    this.originNode = originNode;
   }
 
   static Operation = {
@@ -57,13 +59,25 @@ export class Trace extends Directive {
   };
 
   override next(...items: TraceProp[]) {
-    return new Trace([...this.items, ...items], this.originNodeId);
+    return new Trace([...this.items, ...items], this.originNode);
+  }
+
+  override async result(): Promise<any> {
+    let result: any = await this.originNode.result();
+
+    for (let item of this.items) {
+      if (item instanceof Future) {
+        item = await item.result();
+      }
+      result = result[item];
+    }
+    return result;
   }
 
   override toJSON() {
     return {
       type: "trace",
-      origin_node_id: this.originNodeId,
+      origin_node_id: this.originNode.id,
       op_stack: this.items.map((item) => {
         if (item instanceof FutureString) {
           // @ts-expect-error (accessing protected prop: id)
@@ -97,6 +111,17 @@ export class StringConcat extends Directive {
     return new StringConcat([...this.items, ...items]);
   }
 
+  override async result(): Promise<string> {
+    let result = "";
+    for (let item of this.items) {
+      if (item instanceof Future) {
+        item = await item.result();
+      }
+      result = result.concat(item);
+    }
+    return result;
+  }
+
   override toJSON(): any {
     return {
       type: "string-concat",
@@ -128,6 +153,10 @@ export abstract class Future {
     return { __$$SB_GRAPH_OP_ID$$__: this.id };
   }
 
+  async result(): Promise<any> {
+    return this.directive.result();
+  }
+
   toJSON() {
     return {
       id: this.id,
@@ -144,12 +173,24 @@ export class FutureString extends Future {
   concat(...items: (string | FutureString)[]) {
     return FutureString.concat(...[this, ...items]);
   }
+
+  override async result(): Promise<string> {
+    return super.result();
+  }
 }
 
-export class FutureNumber extends Future {}
+export class FutureNumber extends Future {
+  override async result(): Promise<number> {
+    return super.result();
+  }
+}
 
 export abstract class FutureArray extends Future {
   abstract at(index: number): Future;
+
+  override async result(): Promise<any[]> {
+    return super.result();
+  }
 }
 
 export abstract class FutureObject extends Future {
@@ -157,12 +198,18 @@ export abstract class FutureObject extends Future {
     const props = parsePath(path);
     return props.reduce((future, prop) => {
       if (future instanceof FutureAnyObject) {
-        return typeof prop === "string" ? future.get(prop) : future.at(prop);
+        return typeof prop === "string"
+          ? future.get(prop as string)
+          : future.at(prop as number);
       } else {
         // @ts-ignore
         return typeof prop === "string" ? future[prop] : future.at(prop);
       }
     }, this) as Future;
+  }
+
+  override async result(): Promise<Object> {
+    return super.result();
   }
 }
 
@@ -177,5 +224,9 @@ export class FutureAnyObject extends Future {
 
   at(index: number | FutureNumber) {
     return new FutureAnyObject(this.directive.next(index));
+  }
+
+  override async result(): Promise<Object> {
+    return super.result();
   }
 }
