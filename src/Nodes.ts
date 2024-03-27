@@ -11,12 +11,12 @@ import { Trace, Future, FutureString, FutureNumber, FutureArray, FutureObject, F
 
 // Type that extends some other type T (recursively) and expands it to also accept our
 // Future types too.
-// 
+//
 // For example, if a `string` is found it will be changed to `string | FutureString`.
-// 
+//
 // There may still be some edge cases here, so this will also allow for any `Future` when it makes sense.
 type AlsoAcceptFutures<T> =
-  T extends (infer U)[] 
+  T extends (infer U)[]
     ? U extends string ? FutureString[] : U extends number ? FutureNumber[] : Future[]
     : T extends object
       ? { [P in keyof T]: AlsoAcceptFutures<T[P]> | (T[P] extends string ? FutureString : T[P] extends number ? FutureNumber : Future) | T[P] }
@@ -230,7 +230,7 @@ export class GenerateText extends Node {
    * https://substrate.run/library#GenerateText
    */
   override get future(): GenerateTextOut {
-    return new GenerateTextOut(new Trace([], this.id));
+    return new GenerateTextOut(new Trace([], this));
   }
 }
 
@@ -274,7 +274,7 @@ export class MultiGenerateText extends Node {
    * https://substrate.run/library#MultiGenerateText
    */
   override get future(): MultiGenerateTextOut {
-    return new MultiGenerateTextOut(new Trace([], this.id));
+    return new MultiGenerateTextOut(new Trace([], this));
   }
 }
 
@@ -318,7 +318,7 @@ export class GenerateTextVision extends Node {
    * https://substrate.run/library#GenerateTextVision
    */
   override get future(): GenerateTextVisionOut {
-    return new GenerateTextVisionOut(new Trace([], this.id));
+    return new GenerateTextVisionOut(new Trace([], this));
   }
 }
 
@@ -362,7 +362,7 @@ export class GenerateImage extends Node {
    * https://substrate.run/library#GenerateImage
    */
   override get future(): GenerateImageOut {
-    return new GenerateImageOut(new Trace([], this.id));
+    return new GenerateImageOut(new Trace([], this));
   }
 }
 
@@ -406,7 +406,7 @@ export class MultiGenerateImage extends Node {
    * https://substrate.run/library#MultiGenerateImage
    */
   override get future(): MultiGenerateImageOut {
-    return new MultiGenerateImageOut(new Trace([], this.id));
+    return new MultiGenerateImageOut(new Trace([], this));
   }
 }
 
@@ -450,7 +450,7 @@ export class ControlledGenerateImage extends Node {
    * https://substrate.run/library#ControlledGenerateImage
    */
   override get future(): ControlledGenerateImageOut {
-    return new ControlledGenerateImageOut(new Trace([], this.id));
+    return new ControlledGenerateImageOut(new Trace([], this));
   }
 }
 
@@ -494,7 +494,7 @@ export class MultiControlledGenerateImage extends Node {
    * https://substrate.run/library#MultiControlledGenerateImage
    */
   override get future(): MultiControlledGenerateImageOut {
-    return new MultiControlledGenerateImageOut(new Trace([], this.id));
+    return new MultiControlledGenerateImageOut(new Trace([], this));
   }
 }
 
@@ -538,7 +538,7 @@ export class GenerativeEditImage extends Node {
    * https://substrate.run/library#GenerativeEditImage
    */
   override get future(): GenerativeEditImageOut {
-    return new GenerativeEditImageOut(new Trace([], this.id));
+    return new GenerativeEditImageOut(new Trace([], this));
   }
 }
 
@@ -582,7 +582,7 @@ export class MultiGenerativeEditImage extends Node {
    * https://substrate.run/library#MultiGenerativeEditImage
    */
   override get future(): MultiGenerativeEditImageOut {
-    return new MultiGenerativeEditImageOut(new Trace([], this.id));
+    return new MultiGenerativeEditImageOut(new Trace([], this));
   }
 }
 
@@ -626,7 +626,7 @@ export class FillMask extends Node {
    * https://substrate.run/library#FillMask
    */
   override get future(): FillMaskOut {
-    return new FillMaskOut(new Trace([], this.id));
+    return new FillMaskOut(new Trace([], this));
   }
 }
 
@@ -670,7 +670,7 @@ export class UpscaleImage extends Node {
    * https://substrate.run/library#UpscaleImage
    */
   override get future(): UpscaleImageOut {
-    return new UpscaleImageOut(new Trace([], this.id));
+    return new UpscaleImageOut(new Trace([], this));
   }
 }
 
@@ -714,7 +714,7 @@ export class RemoveBackground extends Node {
    * https://substrate.run/library#RemoveBackground
    */
   override get future(): RemoveBackgroundOut {
-    return new RemoveBackgroundOut(new Trace([], this.id));
+    return new RemoveBackgroundOut(new Trace([], this));
   }
 }
 
@@ -758,7 +758,7 @@ export class DetectSegments extends Node {
    * https://substrate.run/library#DetectSegments
    */
   override get future(): DetectSegmentsOut {
-    return new DetectSegmentsOut(new Trace([], this.id));
+    return new DetectSegmentsOut(new Trace([], this));
   }
 }
 
@@ -802,7 +802,7 @@ export class TranscribeMedia extends Node {
    * https://substrate.run/library#TranscribeMedia
    */
   override get future(): TranscribeMediaOut {
-    return new TranscribeMediaOut(new Trace([], this.id));
+    return new TranscribeMediaOut(new Trace([], this));
   }
 }
 
@@ -846,7 +846,7 @@ export class GenerateSpeech extends Node {
    * https://substrate.run/library#GenerateSpeech
    */
   override get future(): GenerateSpeechOut {
-    return new GenerateSpeechOut(new Trace([], this.id));
+    return new GenerateSpeechOut(new Trace([], this));
   }
 }
 
@@ -890,7 +890,7 @@ export class EmbedText extends Node {
    * https://substrate.run/library#EmbedText
    */
   override get future(): EmbedTextOut {
-    return new EmbedTextOut(new Trace([], this.id));
+    return new EmbedTextOut(new Trace([], this));
   }
 }
 
@@ -934,7 +934,7 @@ export class MultiEmbedText extends Node {
    * https://substrate.run/library#MultiEmbedText
    */
   override get future(): MultiEmbedTextOut {
-    return new MultiEmbedTextOut(new Trace([], this.id));
+    return new MultiEmbedTextOut(new Trace([], this));
   }
 }
 
@@ -978,7 +978,7 @@ export class EmbedImage extends Node {
    * https://substrate.run/library#EmbedImage
    */
   override get future(): EmbedImageOut {
-    return new EmbedImageOut(new Trace([], this.id));
+    return new EmbedImageOut(new Trace([], this));
   }
 }
 
@@ -1022,7 +1022,7 @@ export class MultiEmbedImage extends Node {
    * https://substrate.run/library#MultiEmbedImage
    */
   override get future(): MultiEmbedImageOut {
-    return new MultiEmbedImageOut(new Trace([], this.id));
+    return new MultiEmbedImageOut(new Trace([], this));
   }
 }
 

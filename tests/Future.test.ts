@@ -6,12 +6,14 @@ import {
   Trace,
   StringConcat,
 } from "substrate/Future";
+import { Node } from "substrate/Node";
 
 class FooFuture extends Future {}
+const node = (id: string = "") => new Node({}, { id });
 
 describe("Future", () => {
   test(".toJSON", () => {
-    const d = new Trace([], "a");
+    const d = new Trace([], node("a"));
     const f = new FooFuture(d, "123");
     expect(f.toJSON()).toEqual({
       id: "123",
@@ -20,8 +22,8 @@ describe("Future", () => {
   });
 
   test(".referencedFutures", () => {
-    const a = new FutureString(new Trace([], ""));
-    const b = new FutureString(new Trace([], ""));
+    const a = new FutureString(new Trace([], node()));
+    const b = new FutureString(new Trace([], node()));
     const c = new FutureString(new StringConcat([a, b]));
     const f = new FooFuture(new StringConcat([c, "d"]));
 
@@ -31,19 +33,19 @@ describe("Future", () => {
 
   describe("Trace (Directive)", () => {
     test(".next", () => {
-      const s = new FutureString(new Trace([], ""), "123");
-      const n = new FutureNumber(new Trace([], ""), "456");
-      const d = new Trace(["a", 1, s, n], "NodeId");
+      const s = new FutureString(new Trace([], node("123")));
+      const n = new FutureNumber(new Trace([], node("456")));
+      const d = new Trace(["a", 1, s, n], node("NodeId"));
       const d2 = d.next("b", 2);
 
       expect(d2.items).toEqual(["a", 1, s, n, "b", 2]);
-      expect(d2.originNodeId).toEqual("NodeId");
+      expect(d2.originNode.id).toEqual("NodeId");
     });
 
     test(".toJSON", () => {
-      const s = new FutureString(new Trace([], ""), "123");
-      const n = new FutureNumber(new Trace([], ""), "456");
-      const d = new Trace(["a", 1, s, n], "NodeId");
+      const s = new FutureString(new Trace([], node()), "123");
+      const n = new FutureNumber(new Trace([], node()), "456");
+      const d = new Trace(["a", 1, s, n], node("NodeId"));
 
       expect(d.toJSON()).toEqual({
         type: "trace",
@@ -58,9 +60,9 @@ describe("Future", () => {
     });
 
     test(".referencedFutures", () => {
-      const s = new FutureString(new Trace([], ""));
-      const n = new FutureNumber(new Trace([], ""));
-      const d = new Trace(["a", 1, s, n], "NodeId");
+      const s = new FutureString(new Trace([], node()));
+      const n = new FutureNumber(new Trace([], node()));
+      const d = new Trace(["a", 1, s, n], node("NodeId"));
 
       expect(d.referencedFutures()).toEqual([s, n]);
     });
@@ -68,8 +70,8 @@ describe("Future", () => {
 
   describe("StringConcat (Directive)", () => {
     test(".next", () => {
-      const s = new FutureString(new Trace([], ""));
-      const s2 = new FutureString(new Trace([], ""));
+      const s = new FutureString(new Trace([], node()));
+      const s2 = new FutureString(new Trace([], node()));
       const d = new StringConcat(["a", s]);
       const d2 = d.next("b", s2);
 
@@ -77,7 +79,7 @@ describe("Future", () => {
     });
 
     test(".toJSON", () => {
-      const s = new FutureString(new Trace([], ""), "123");
+      const s = new FutureString(new Trace([], node()), "123");
       const d = new StringConcat(["a", s]);
 
       expect(d.toJSON()).toEqual({
@@ -90,8 +92,8 @@ describe("Future", () => {
     });
 
     test(".referencedFutures", () => {
-      const a = new FutureString(new Trace([], ""));
-      const b = new FutureString(new Trace([], ""));
+      const a = new FutureString(new Trace([], node()));
+      const b = new FutureString(new Trace([], node()));
       const c = new FutureString(new StringConcat([a, b]));
       const d = new StringConcat([c, "d"]);
 
