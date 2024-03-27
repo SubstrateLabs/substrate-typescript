@@ -63,13 +63,16 @@ export class Trace extends Directive {
   }
 
   override async result(): Promise<any> {
-    return this.items.reduce(async (val: any, item) => {
-      if (item instanceof Future) {
-        return val[await item.result() as string | number];
-      } else {
-        return val[item as string | number];
-      }
-    }, await this.originNode.result());
+    return this.items.reduce(
+      async (val: any, item) => {
+        if (item instanceof Future) {
+          return val[(await item.result()) as string | number];
+        } else {
+          return val[item as string | number];
+        }
+      },
+      await this.originNode.result(),
+    );
   }
 
   override toJSON() {
@@ -110,10 +113,9 @@ export class StringConcat extends Directive {
   }
 
   override async result(): Promise<string> {
-      return this.items.reduce(async (str: any, item: Concatable) => {
-        if (item instanceof Future) return await item.result();
-        return str + item;
-      }, "");
+    return Promise.all(
+      this.items.map(async (i) => (i instanceof Future ? i.result() : i)),
+    ).then((strings) => strings.join(""));
   }
 
   override toJSON(): any {
@@ -192,7 +194,9 @@ export abstract class FutureObject extends Future {
     const props = parsePath(path);
     return props.reduce((future, prop) => {
       if (future instanceof FutureAnyObject) {
-        return typeof prop === "string" ? future.get(prop as string) : future.at(prop as number);
+        return typeof prop === "string"
+          ? future.get(prop as string)
+          : future.at(prop as number);
       } else {
         // @ts-ignore
         return typeof prop === "string" ? future[prop] : future.at(prop);
