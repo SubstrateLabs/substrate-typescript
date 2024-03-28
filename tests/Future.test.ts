@@ -55,7 +55,7 @@ describe("Future", () => {
 
     test(".result", async () => {
       // when the trace is empty, it resovles to the node's output
-      const n0 = staticNode("hello")
+      const n0 = staticNode("hello");
       const t0 = new Trace([], n0);
       expect(t0.result()).resolves.toEqual("hello");
 
@@ -160,6 +160,20 @@ describe("Future", () => {
       expect(s2).toBeInstanceOf(FutureString);
       // @ts-expect-error (protected access)
       expect(s2.directive).toEqual(new StringConcat([s1, "b", "c"]));
+    });
+
+    test(".interpolate", async () => {
+      const world = "world";
+      const nice = "nice";
+      const i1 = FutureString.interpolate`hello ${world}, you look ${nice} today.`;
+
+      expect(i1.result()).resolves.toEqual("hello world, you look nice today.");
+
+      const f1 = FutureString.concat("texas", " ", "sun");
+      const f2 = FutureString.concat("texas", " ", "moon");
+      const i2 = FutureString.interpolate`~~ ${f1} x ${f2} ~~`;
+
+      expect(i2.result()).resolves.toEqual("~~ texas sun x texas moon ~~");
     });
   });
 });
