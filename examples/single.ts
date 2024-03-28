@@ -11,4 +11,4 @@ const a = new GenerateText({
     "in very few words describe an incredible historcal technical achievement",
 }).run(substrate);
 
-console.log({ text: await a.future.text.result() });
+console.log(await a.future.text.result());

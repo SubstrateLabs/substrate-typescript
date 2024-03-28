@@ -1,3 +1,5 @@
+import { Node } from "substrate/Node";
+
 /**
  * Response to a run request.
  */
@@ -23,5 +25,13 @@ export class SubstrateResponse {
     }
     console.log("");
     // console.error("Body:", JSON.stringify(this.#response.body));
+  }
+
+  /**
+   * Returns a subset of the server response that contains data for
+   * a specific `Node`.
+   */
+  getNodeResponse(node: Node) {
+    return this.json?.data?.[node.id];
   }
 }

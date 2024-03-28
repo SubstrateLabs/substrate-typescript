@@ -1,4 +1,5 @@
 import { SubstrateError } from "substrate/Error";
+import { ResponseCreated } from "substrate/Mailbox";
 import { VERSION } from "substrate/version";
 import OpenAPIjson from "substrate/openapi.json";
 import { SubstrateResponse } from "substrate/SubstrateResponse";
@@ -56,10 +57,11 @@ export class Substrate {
       const json = await apiResponse.json();
       const res = new SubstrateResponse(apiResponse, json);
       for (let node of nodes) {
-        node.output = res;
+        // @ts-expect-error (accessing protected mailbox)
+        node.mailbox.send(new ResponseCreated(res));
       }
       return res;
-    } 
+    }
 
     throw new SubstrateError("Request failed");
   }
