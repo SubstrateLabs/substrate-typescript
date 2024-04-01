@@ -10,15 +10,15 @@ import { Node } from "substrate/Node";
  * here and may react to events they recieve.
  */
 
-/**
- * @private
- * Event that reprepresents a new server response.
- */
-export class ResponseCreated extends Event {
-  static type = "ResponseCreated";
+/** @private */
+class SubstrateEvent extends Event {};
+
+/** @private Event that reprepresents a new server response. */
+export class RequestCompleted extends SubstrateEvent {
+  static type = "RequestCompleted";
   value: SubstrateResponse;
   constructor(value: SubstrateResponse) {
-    super(ResponseCreated.type);
+    super(RequestCompleted.type);
     this.value = value;
   }
 }
@@ -39,15 +39,15 @@ export class Mailbox extends EventTarget {
     super();
 
     const waitForResponse = () => {
-      // New promise that is waiting for a ResponseCreated event
+      // New promise that is waiting for a RequestCompleted event
       const p = new Promise((resolve) => {
-        // This listener handles ResponseCreated events.
-        const listener = {
-          handleEvent: (e: ResponseCreated) => {
+        // This listener handles RequestCompleted events.
+        const handleRequestCompleted = {
+          handleEvent: (e: RequestCompleted) => {
             // When we receive an event, we'll resolve this Promise
             resolve(e.value.getNodeResponse(node));
-            // Then we'll remove this event listener (otherwise it will keep handling them)
-            this.removeEventListener(ResponseCreated.type, listener);
+            // Then we'll remove the event listeners to make sure there these references in the promise go away
+            this.removeEventListener(RequestCompleted.type, handleRequestCompleted);
             // We'll move this reference over to the results list
             if (this.pending.length) this.resolved.push(this.pending.pop() as Promise<any>);
             // Finally we'll start up a new listener
@@ -56,7 +56,7 @@ export class Mailbox extends EventTarget {
         };
 
         // We attach the above listener to this Mailbox
-        this.addEventListener(ResponseCreated.type, listener);
+        this.addEventListener(RequestCompleted.type, handleRequestCompleted);
       });
       this.pending.push(p);
     }
@@ -74,7 +74,7 @@ export class Mailbox extends EventTarget {
     }
   }
 
-  send(e: ResponseCreated) {
+  send(e: SubstrateEvent) {
     this.dispatchEvent(e);
   }
 }

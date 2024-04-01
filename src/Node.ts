@@ -48,6 +48,7 @@ export class Node<Args = Object> {
   }
 
   /**
+   * @experimental
    * Run this single node.
    * Alternatively, `Substrate.run(node)`
    */

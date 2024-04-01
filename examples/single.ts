@@ -9,6 +9,9 @@ const substrate = new Substrate({ apiKey: SUBSTRATE_API_KEY });
 const a = new GenerateText({
   prompt:
     "in very few words describe an incredible historcal technical achievement",
-}).run(substrate);
+});
+
+
+substrate.run(a);
 
 console.log(await a.future.text.result());
