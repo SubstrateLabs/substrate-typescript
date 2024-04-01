@@ -9,7 +9,14 @@ type TraceOperation = {
 };
 
 type TraceProp = string | FutureString | number | FutureNumber;
-type Concatable = string | FutureString;
+type StringConcatable = string | FutureString;
+type ArrayConcatable =
+  | string
+  | number
+  | string[]
+  | number[]
+  | Future
+  | Future[];
 
 const parsePath = (path: string): TraceProp[] => {
   // Split the path by dots or brackets, and filter out empty strings
@@ -95,9 +102,9 @@ export class Trace extends Directive {
 }
 
 export class StringConcat extends Directive {
-  items: Concatable[];
+  items: StringConcatable[];
 
-  constructor(items: Concatable[] = []) {
+  constructor(items: StringConcatable[] = []) {
     super();
     this.items = items;
   }
@@ -107,7 +114,7 @@ export class StringConcat extends Directive {
     future: (id: Future["id"]) => ({ future_id: id, val: null }),
   };
 
-  override next(...items: Concatable[]) {
+  override next(...items: StringConcatable[]) {
     return new StringConcat([...this.items, ...items]);
   }
 
@@ -131,6 +138,53 @@ export class StringConcat extends Directive {
           return StringConcat.Concatable.future(item.id);
         }
         return StringConcat.Concatable.string(item);
+      }),
+    };
+  }
+}
+
+export class ArrayConcat extends Directive {
+  items: ArrayConcatable[];
+
+  constructor(items: ArrayConcatable[] = []) {
+    super();
+    this.items = items;
+  }
+
+  static Concatable = {
+    static: (val: string | number | number[] | string[]) => ({
+      future_id: null,
+      val,
+    }),
+    future: (id: Future["id"]) => ({ future_id: id, val: null }),
+  };
+
+  override next(...items: ArrayConcatable[]): ArrayConcat {
+    return new ArrayConcat([...this.items, ...items]);
+  }
+
+  override async result<T = any>(): Promise<T[]> {
+    let result: T[] = [];
+    for (let item of this.items) {
+      if (item instanceof Future) {
+        item = await item.result();
+      }
+      result = result.concat(item as any);
+    }
+    return result;
+  }
+
+  override toJSON(): any {
+    return {
+      type: "array-concat",
+      items: this.items.map((item) => {
+        if (item instanceof Future) {
+          // @ts-expect-error (accessing protected prop: id)
+          return ArrayConcat.Concatable.future(item.id);
+        }
+        return ArrayConcat.Concatable.static(
+          item as string | number | string[] | number[],
+        );
       }),
     };
   }
@@ -201,11 +255,21 @@ export class FutureNumber extends Future {
   }
 }
 
-export abstract class FutureArray extends Future {
-  abstract at(index: number): Future;
+export class FutureArray extends Future {
+  at(index: number): Future {
+    return new FutureAnyObject(this.directive.next(index));
+  }
+
+  static concat(...items: ArrayConcatable[]) {
+    return new FutureArray(new ArrayConcat(items));
+  }
+
+  concat(...items: ArrayConcatable[]) {
+    return FutureArray.concat(...[this as FutureArray, ...items]);
+  }
 
   override async result(): Promise<any[]> {
-    return super.result();
+    return super.result() as Promise<any[]>;
   }
 }
 

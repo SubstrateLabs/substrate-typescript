@@ -5,8 +5,10 @@ import {
   Future,
   FutureString,
   FutureNumber,
+  FutureArray,
   Trace,
   StringConcat,
+  ArrayConcat,
 } from "substrate/Future";
 import { Node } from "substrate/Node";
 import { SubstrateResponse } from "substrate/SubstrateResponse";
@@ -28,6 +30,12 @@ const staticNode = (output: any) => {
   node.mailbox.send(new RequestCompleted(res));
   return node;
 };
+
+class TestFutureArray extends FutureArray {
+  override at(index: number) {
+    return new FutureString(new Trace([index], node()));
+  }
+}
 
 describe("Future", () => {
   test(".toJSON", () => {
@@ -153,6 +161,60 @@ describe("Future", () => {
     });
   });
 
+  describe("ArrayConcat (Directive)", () => {
+    test(".next", () => {
+      const fa = new TestFutureArray(new Trace([], node()));
+      const fs = new FutureString(new Trace([], node()));
+      const d = new ArrayConcat([["a", "b"]]);
+      const d2 = d.next(fa).next(fs);
+
+      expect(d2.items).toEqual([["a", "b"], fa, fs]);
+    });
+
+    test(".result", async () => {
+      // when the items are empty
+      const a0 = new ArrayConcat([]);
+      expect(a0.result<string>()).resolves.toEqual([]);
+
+      // when the items only includes primitive values
+      const a1 = new ArrayConcat([["a"], ["b"]]);
+      expect(a1.result<string>()).resolves.toEqual(["a", "b"]);
+
+      // when the items includes primitive values and futures, scalars and arrays
+      const fs = new FutureString(new Trace([], staticNode("c")));
+      const fa = new TestFutureArray(new Trace([], staticNode(["d", "e"])));
+      const a2 = new ArrayConcat([["a"], "b", fs, fa]);
+      expect(a2.result<string>()).resolves.toEqual(["a", "b", "c", "d", "e"]);
+    });
+
+    test(".toJSON", () => {
+      const fs = new FutureString(new Trace([], node()), "FutureStringId");
+      const fa = new TestFutureArray(new Trace([], node()), "FutureArrayId");
+      const a = new ArrayConcat([["a"], "b", fs, fa]);
+
+      expect(a.toJSON()).toEqual({
+        type: "array-concat",
+        items: [
+          ArrayConcat.Concatable.static(["a"]),
+          ArrayConcat.Concatable.static("b"),
+          ArrayConcat.Concatable.future("FutureStringId"),
+          ArrayConcat.Concatable.future("FutureArrayId"),
+        ],
+      });
+    });
+
+    test(".referencedFutures", () => {
+      const a = new FutureString(new Trace([], node()));
+      const b = new FutureString(new Trace([], node()));
+      const c = new FutureString(new StringConcat([a, b]));
+      const d = new FutureString(new Trace([], node()));
+      const e = new TestFutureArray(new Trace([d], node()));
+
+      const f = new ArrayConcat([["a"], "b", e, c]);
+      expect(f.referencedFutures()).toEqual([e, d, c, a, b]);
+    });
+  });
+
   describe("FutureString", () => {
     test(".concat (static)", () => {
       const s = FutureString.concat("a");
@@ -161,7 +223,7 @@ describe("Future", () => {
       expect(s.directive).toEqual(new StringConcat(["a"]));
     });
 
-    test(".concat", () => {
+    test(".concat (instance)", () => {
       const s1 = FutureString.concat("a");
       const s2 = s1.concat("b", "c");
       expect(s2).toBeInstanceOf(FutureString);
@@ -181,6 +243,24 @@ describe("Future", () => {
       const i2 = FutureString.interpolate`~~ ${f1} x ${f2} ~~`;
 
       expect(i2.result()).resolves.toEqual("~~ texas sun x texas moon ~~");
+    });
+  });
+
+  describe("FutureArray", () => {
+    test(".concat (static)", () => {
+      const a = FutureArray.concat("a", ["b"]);
+      expect(a).toBeInstanceOf(FutureArray);
+      // @ts-expect-error (protected access)
+      expect(a.directive).toEqual(new ArrayConcat(["a", ["b"]]));
+    });
+
+    test(".concat (instance)", () => {
+      const a1 = FutureArray.concat("a");
+      const a2 = a1.concat("b", ["c"]);
+      expect(a2).toBeInstanceOf(FutureArray);
+
+      // @ts-expect-error (protected access)
+      expect(a2.directive).toEqual(new ArrayConcat([a1, "b", ["c"]]));
     });
   });
 });
