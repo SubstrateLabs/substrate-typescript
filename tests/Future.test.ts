@@ -8,7 +8,7 @@ import {
 } from "substrate/Future";
 import { Node } from "substrate/Node";
 import { SubstrateResponse } from "substrate/SubstrateResponse";
-import { ResponseCreated } from "substrate/Mailbox";
+import { RequestCompleted } from "substrate/Mailbox";
 
 class FooFuture extends Future {}
 
@@ -23,7 +23,7 @@ const staticNode = (output: any) => {
   });
 
   // @ts-expect-error (protected prop mailbox)
-  node.mailbox.send(new ResponseCreated(res));
+  node.mailbox.send(new RequestCompleted(res));
   return node;
 };
 
