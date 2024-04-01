@@ -3,4 +3,4 @@
  */
 export class SubstrateError extends Error {}
 
-export class RequestTimeout extends SubstrateError {}
+export class RequestTimeoutError extends SubstrateError {}

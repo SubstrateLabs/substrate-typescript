@@ -8,6 +8,7 @@ import {
 } from "substrate/Future";
 import { Node } from "substrate/Node";
 import { SubstrateResponse } from "substrate/SubstrateResponse";
+import { ResponseCreated } from "substrate/Mailbox";
 
 class FooFuture extends Future {}
 
@@ -16,9 +17,13 @@ const node = (id: string = "") => new Node({}, { id });
 // Helper that makes a Node and sets it's output with a fake SubstrateResponse
 const staticNode = (output: any) => {
   const node = new Node({});
-  node.output = {
-    json: { data: { [node.id]: output } },
-  } as SubstrateResponse;
+
+  const res = new SubstrateResponse(new Response(), {
+    data: { [node.id]: output },
+  });
+
+  // @ts-expect-error (protected prop mailbox)
+  node.mailbox.send(new ResponseCreated(res));
   return node;
 };
 
