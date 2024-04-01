@@ -1,6 +1,6 @@
 {
   "name": "substrate",
-  "version": "120240315.0.3",
+  "version": "120240315.0.5",
   "description": "The official SDK for the Substrate API",
   "keywords": [],
   "type": "module",

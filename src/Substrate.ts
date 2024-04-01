@@ -4,6 +4,7 @@ import { VERSION } from "substrate/version";
 import OpenAPIjson from "substrate/openapi.json";
 import { SubstrateResponse } from "substrate/SubstrateResponse";
 import { Node } from "substrate/Node";
+import { getPlatformProperties } from "substrate/Platform";
 
 type Configuration = {
   /**
@@ -29,7 +30,6 @@ type Configuration = {
  */
 export class Substrate {
   apiKey: string;
-  userAgent: string = `substrate-typescript/${VERSION}`;
   baseUrl: string;
   apiVersion: string;
   timeout: number;
@@ -62,10 +62,7 @@ export class Substrate {
     const timeout = setTimeout(() => abortController.abort(), this.timeout);
 
     try {
-      const apiResponse = await fetch(
-        url,
-        this.requestOptions(req, signal),
-      );
+      const apiResponse = await fetch(url, this.requestOptions(req, signal));
 
       if (apiResponse.ok) {
         const json = await apiResponse.json();
@@ -118,10 +115,27 @@ export class Substrate {
 
   protected headers() {
     const headers = new Headers();
+
+    // API
+    headers.append("Accept", "application/json");
     headers.append("Content-Type", "application/json");
-    headers.append("Authorization", `Bearer ${this.apiKey}`);
-    headers.append("User-Agent", this.userAgent);
+    headers.append("User-Agent", `APIClient/JS ${VERSION}`);
     headers.append("X-Substrate-Version", this.apiVersion);
+
+    // Auth
+    headers.append("Authorization", `Bearer ${this.apiKey}`);
+
+    // SDK
+    headers.append("X-Substrate-Lang", "js");
+    headers.append("X-Substrate-Package-Version", VERSION);
+
+    // Platform, Runtime
+    const props = getPlatformProperties();
+    headers.append("X-Substrate-OS", props.os);
+    headers.append("X-Substrate-Arch", props.arch);
+    headers.append("X-Substrate-Runtime", props.runtime);
+    headers.append("X-Substrate-Runtime-Version", props.runtimeVersion);
+
     return headers;
   }
 }
