@@ -25,7 +25,13 @@ type Browser = "ie" | "edge" | "chrome" | "firefox" | "safari";
 type PlatformProperties = {
   os: PlatformName;
   arch: Arch;
-  runtime: "node" | "deno" | "edge" | "workerd" | `browser:${Browser}` | "unknown";
+  runtime:
+    | "node"
+    | "deno"
+    | "edge"
+    | "workerd"
+    | `browser:${Browser}`
+    | "unknown";
   runtimeVersion: string;
 };
 
@@ -64,7 +70,10 @@ export const getPlatformProperties = (): PlatformProperties => {
   }
 
   // https://developers.cloudflare.com/workers/runtime-apis/web-standards/#navigatoruseragent
-  if (typeof navigator !== undefined && navigator.userAgent === "Cloudflare-Workers") {
+  if (
+    typeof navigator !== undefined &&
+    navigator.userAgent === "Cloudflare-Workers"
+  ) {
     return {
       os: "Unknown",
       arch: "unknown",

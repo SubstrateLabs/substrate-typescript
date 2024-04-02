@@ -1,8 +1,8 @@
 /**
-* ꩜ Substrate TypeScript SDK
-* @generated file
-* 20240315.20240321
-*/
+ * ꩜ Substrate TypeScript SDK
+ * @generated file
+ * 20240315.20240321
+ */
 
 export { SubstrateError } from "substrate/Error";
 export {
@@ -25,7 +25,7 @@ export {
   MultiEmbedText,
   EmbedImage,
   MultiEmbedImage,
-  } from "substrate/Nodes";
+} from "substrate/Nodes";
 
 export { sb } from "substrate/sb";
 export { Substrate };
