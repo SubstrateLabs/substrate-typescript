@@ -11,7 +11,6 @@ const a = new GenerateText({
     "in very few words describe an incredible historcal technical achievement",
 });
 
-
 substrate.run(a);
 
 console.log(await a.future.text.result());

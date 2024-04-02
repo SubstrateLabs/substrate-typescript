@@ -15,7 +15,8 @@ const SUBSTRATE_API_KEY = process.env["SUBSTRATE_API_KEY"];
 const substrate = new Substrate({ apiKey: SUBSTRATE_API_KEY });
 
 const a = new GenerateText({
-  prompt: "in very few words describe an incredible moment in sports history, be extremely concise",
+  prompt:
+    "in very few words describe an incredible moment in sports history, be extremely concise",
 });
 
 a.result().then((result) => {
@@ -40,7 +41,7 @@ console.log("[3]", await f1);
 // when we access it's result again, we will get the same
 // value we had in `f1`
 let f2 = a.future.text.result();
-console.log("[4]", "await f1 === await f2 =", await f1 === await f2); // true
+console.log("[4]", "await f1 === await f2 =", (await f1) === (await f2)); // true
 
 // now let's run the node again
 await substrate.run(a);
@@ -51,7 +52,7 @@ console.log("[5]", "Running node a second time!");
 // and it should be different than the first
 let f3 = a.future.text.result();
 console.log("[6]", await f3);
-console.log("[7]", "await f1 !== await f3 =", await f1 !== await f3); // true
+console.log("[7]", "await f1 !== await f3 =", (await f1) !== (await f3)); // true
 
 // if we look back at the previous results we should see
 // that the first two are still the same, but the third

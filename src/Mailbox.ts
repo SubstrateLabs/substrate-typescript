@@ -11,7 +11,7 @@ import { Node } from "substrate/Node";
  */
 
 /** @private */
-class SubstrateEvent extends Event {};
+class SubstrateEvent extends Event {}
 
 /** @private Event that reprepresents a new server response. */
 export class RequestCompleted extends SubstrateEvent {
@@ -47,19 +47,23 @@ export class Mailbox extends EventTarget {
             // When we receive an event, we'll resolve this Promise
             resolve(e.value.getNodeResponse(node));
             // Then we'll remove the event listeners to make sure there these references in the promise go away
-            this.removeEventListener(RequestCompleted.type, handleRequestCompleted);
+            this.removeEventListener(
+              RequestCompleted.type,
+              handleRequestCompleted,
+            );
             // We'll move this reference over to the results list
-            if (this.pending.length) this.resolved.push(this.pending.pop() as Promise<any>);
+            if (this.pending.length)
+              this.resolved.push(this.pending.pop() as Promise<any>);
             // Finally we'll start up a new listener
             waitForResponse();
-          }
+          },
         };
 
         // We attach the above listener to this Mailbox
         this.addEventListener(RequestCompleted.type, handleRequestCompleted);
       });
       this.pending.push(p);
-    }
+    };
     waitForResponse();
   }
 

@@ -9,7 +9,9 @@ const substrate = new Substrate({
   baseUrl: "https://api-staging.substrate.run",
 });
 
-const a = new GenerateText({ prompt: "name a random capital city: <city name>, <country>" });
+const a = new GenerateText({
+  prompt: "name a random capital city: <city name>, <country>",
+});
 
 const concatenated = sb.concat("tell me about visiting ", a.future.text);
 
