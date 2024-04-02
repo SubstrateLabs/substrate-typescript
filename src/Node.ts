@@ -10,7 +10,7 @@ type Options = {
   id?: Node["id"];
   /** When true the server will omit this node's output. Default: false */
   hide?: boolean;
-   };
+     };
 
 
 
