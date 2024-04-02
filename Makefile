@@ -9,6 +9,10 @@ node_modules/:
 .PHONY: ensure
 ensure: node_modules/
 
+.PHONY: setup-git-hooks
+setup-git-hooks: 
+	cp bin/pre-push-git-hook .git/hooks/pre-push
+
 .PHONY: test
 test: ensure
 	npx vitest --run
