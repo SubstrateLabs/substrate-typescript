@@ -1,3 +1,5 @@
+import "substrate/nodejs/polyfill";
+
 import { expect, describe, test } from "vitest";
 import {
   Future,
