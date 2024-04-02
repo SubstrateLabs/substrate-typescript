@@ -26,16 +26,12 @@ sync-codegen: ensure
 	bin/sync-codegen.ts
 	make update-version
 
-.PHONY: typecheck
-typecheck: ensure
-	npx tsc -noEmit
-
 .PHONY: format-check
-typecheck: ensure
+format-check: ensure
 	npx prettier . --check
 
-.PHONY: format-write
-typecheck: ensure
+.PHONY: format-fix
+format-fix: ensure
 	npx prettier . --write
 
 .PHONY: build

@@ -28,5 +28,5 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - run: make format-check
-    - run: make build
+    - run: make build # also ensures typechecking passes
     - run: make test
