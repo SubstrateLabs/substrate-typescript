@@ -2,13 +2,13 @@ import { idGenerator } from "substrate/idGenerator";
 import { Node } from "substrate/Node";
 
 type Accessor = "item" | "attr";
-type TraceOperation = {
+type Operation = {
   future_id: string | null;
   key: string | number | null;
   accessor: Accessor;
 };
 
-type TraceProp = string | FutureString | number | FutureNumber;
+type PathProp = string | FutureString | number | FutureNumber;
 type StringConcatable = string | FutureString;
 type ArrayConcatable =
   | string
@@ -18,7 +18,7 @@ type ArrayConcatable =
   | Future
   | Future[];
 
-const parsePath = (path: string): TraceProp[] => {
+const parsePath = (path: string): PathProp[] => {
   // Split the path by dots or brackets, and filter out empty strings
   const parts = path.split(/\.|\[|\]\[?/).filter(Boolean);
   // Convert numeric parts to numbers and keep others as strings
@@ -27,13 +27,22 @@ const parsePath = (path: string): TraceProp[] => {
 
 const newFutureId = idGenerator("future");
 
+/** @private */
 abstract class Directive {
+  /** A directive contains a set of values or instructions */
   abstract items: any[];
+
+  /** Produces a new `Directive` with provided args from an existing `Directive` */
+  // NOTE: also open to changing the name of this function, just not sure what to name it yet (eg. `extend`, `with`)
   abstract next(...args: any[]): Directive;
+
+  /** Transforms the `Directive` into JSON */
   abstract toJSON(): any;
 
+  /** Returns the eventual resulting value from the `Directive` */
   abstract result(): Promise<any>;
 
+  /** Returns all referenced `Future` instances (recursive) present in instance's `items` */
   referencedFutures() {
     // @ts-ignore
     return this.items
@@ -42,11 +51,12 @@ abstract class Directive {
   }
 }
 
+/** @private */
 export class Trace extends Directive {
-  items: TraceProp[];
+  items: PathProp[];
   originNode: Node<any>;
 
-  constructor(items: TraceProp[], originNode: Node<any>) {
+  constructor(items: PathProp[], originNode: Node<any>) {
     super();
     this.items = items;
     this.originNode = originNode;
@@ -65,7 +75,7 @@ export class Trace extends Directive {
     }),
   };
 
-  override next(...items: TraceProp[]) {
+  override next(...items: PathProp[]) {
     return new Trace([...this.items, ...items], this.originNode);
   }
 
@@ -96,11 +106,12 @@ export class Trace extends Directive {
           return Trace.Operation.key("attr", item);
         }
         return Trace.Operation.key("item", item);
-      }) as TraceOperation[],
+      }) as Operation[],
     };
   }
 }
 
+/** @private */
 export class StringConcat extends Directive {
   items: StringConcatable[];
 
@@ -109,7 +120,7 @@ export class StringConcat extends Directive {
     this.items = items;
   }
 
-  static Concatable = {
+  static Item = {
     string: (val: string) => ({ future_id: null, val }),
     future: (id: Future["id"]) => ({ future_id: id, val: null }),
   };
@@ -135,14 +146,15 @@ export class StringConcat extends Directive {
       items: this.items.map((item) => {
         if (item instanceof Future) {
           // @ts-expect-error (accessing protected prop: id)
-          return StringConcat.Concatable.future(item.id);
+          return StringConcat.Item.future(item.id);
         }
-        return StringConcat.Concatable.string(item);
+        return StringConcat.Item.string(item);
       }),
     };
   }
 }
 
+/** @private */
 export class ArrayConcat extends Directive {
   items: ArrayConcatable[];
 
@@ -151,7 +163,7 @@ export class ArrayConcat extends Directive {
     this.items = items;
   }
 
-  static Concatable = {
+  static Item = {
     static: (val: string | number | number[] | string[]) => ({
       future_id: null,
       val,
@@ -180,12 +192,82 @@ export class ArrayConcat extends Directive {
       items: this.items.map((item) => {
         if (item instanceof Future) {
           // @ts-expect-error (accessing protected prop: id)
-          return ArrayConcat.Concatable.future(item.id);
+          return ArrayConcat.Item.future(item.id);
         }
-        return ArrayConcat.Concatable.static(
+        return ArrayConcat.Item.static(
           item as string | number | string[] | number[],
         );
       }),
+    };
+  }
+}
+
+/** @private */
+export class ArrayPluck extends Directive {
+  items: PathProp[];
+  target: FutureArray;
+
+  constructor(items: PathProp[] = [], target: FutureArray) {
+    super();
+    this.items = items;
+    this.target = target;
+  }
+
+  static Operation = {
+    future: (accessor: Accessor, id: Future["id"]) => ({
+      future_id: id,
+      key: null,
+      accessor,
+    }),
+    key: (accessor: Accessor, key: string | number) => ({
+      future_id: null,
+      key,
+      accessor,
+    }),
+  };
+
+  override next(...items: PathProp[]): ArrayConcat {
+    return new ArrayPluck([...this.items, ...items], this.target);
+  }
+
+  override async result(): Promise<any[]> {
+    // resolve the value of the target future
+    let result: any[] = await this.target.result();
+
+    // resolve all the path properties
+    const path = await Promise.all(
+      this.items.map((item) => (item instanceof Future ? item.result() : item)),
+    );
+
+    // then for each item in the results, select the value at the given path
+    return result.map((item) => {
+      let obj = item;
+      for (let p of path) obj = obj[p];
+      return obj;
+    });
+  }
+
+  override referencedFutures() {
+    return [this.target, ...super.referencedFutures()];
+  }
+
+  override toJSON() {
+    return {
+      type: "array-pluck",
+      // @ts-expect-error (accessing protected prop: id)
+      target_future_id: this.target.id,
+      op_stack: this.items.map((item) => {
+        if (item instanceof FutureString) {
+          // @ts-expect-error (accessing protected prop: id)
+          return ArrayPluck.Operation.future("attr", item.id);
+        } else if (item instanceof FutureNumber) {
+          // @ts-expect-error (accessing protected prop: id)
+          return ArrayPluck.Operation.future("item", item.id);
+        } else if (typeof item === "string") {
+          return ArrayPluck.Operation.key("attr", item);
+        }
+        return ArrayPluck.Operation.key("item", item);
+      }) as Operation[],
     };
   }
 }
@@ -266,6 +348,18 @@ export class FutureArray extends Future {
 
   concat(...items: ArrayConcatable[]) {
     return FutureArray.concat(...[this as FutureArray, ...items]);
+  }
+
+  static pluck(props: PathProp[], target: FutureArray) {
+    const items =
+      props.length === 1 && typeof props.at(0) === "string"
+        ? parsePath(props.at(0) as string)
+        : props;
+    return new FutureArray(new ArrayPluck(items, target));
+  }
+
+  pluck(...props: PathProp[]) {
+    return FutureArray.pluck(props, this);
   }
 
   override async result(): Promise<any[]> {

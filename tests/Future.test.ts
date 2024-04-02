@@ -9,12 +9,13 @@ import {
   Trace,
   StringConcat,
   ArrayConcat,
+  ArrayPluck,
 } from "substrate/Future";
 import { Node } from "substrate/Node";
 import { SubstrateResponse } from "substrate/SubstrateResponse";
 import { RequestCompleted } from "substrate/Mailbox";
 
-class FooFuture extends Future {}
+class FooFuture extends Future { }
 
 const node = (id: string = "") => new Node({}, { id });
 
@@ -144,10 +145,7 @@ describe("Future", () => {
 
       expect(d.toJSON()).toEqual({
         type: "string-concat",
-        items: [
-          StringConcat.Concatable.string("a"),
-          StringConcat.Concatable.future("123"),
-        ],
+        items: [StringConcat.Item.string("a"), StringConcat.Item.future("123")],
       });
     });
 
@@ -195,10 +193,10 @@ describe("Future", () => {
       expect(a.toJSON()).toEqual({
         type: "array-concat",
         items: [
-          ArrayConcat.Concatable.static(["a"]),
-          ArrayConcat.Concatable.static("b"),
-          ArrayConcat.Concatable.future("FutureStringId"),
-          ArrayConcat.Concatable.future("FutureArrayId"),
+          ArrayConcat.Item.static(["a"]),
+          ArrayConcat.Item.static("b"),
+          ArrayConcat.Item.future("FutureStringId"),
+          ArrayConcat.Item.future("FutureArrayId"),
         ],
       });
     });
@@ -212,6 +210,65 @@ describe("Future", () => {
 
       const f = new ArrayConcat([["a"], "b", e, c]);
       expect(f.referencedFutures()).toEqual([e, d, c, a, b]);
+    });
+  });
+
+  describe("ArrayPluck (Directive)", () => {
+    test(".next", () => {
+      const fa = new TestFutureArray(new Trace([], node()));
+      const fs = new FutureString(new Trace([], node()));
+      const d = new ArrayPluck(["a", "b"], fa);
+      const d2 = d.next(fs);
+
+      expect(d2.items).toEqual(["a", "b", fs]);
+    });
+
+    test(".result", async () => {
+      const arr = new TestFutureArray(
+        new Trace([], staticNode([{ a: [1] }, { a: [2] }])),
+      );
+
+      // when the items are empty (it selects value at root path for each)
+      const a0 = new ArrayPluck([], arr);
+      expect(a0.result()).resolves.toEqual([{ a: [1] }, { a: [2] }]);
+
+      // when the items only includes primitive values
+      const a1 = new ArrayPluck(["a", 0], arr);
+      expect(a1.result()).resolves.toEqual([1, 2]);
+
+      // when the items includes futures
+      const fs = new FutureString(new Trace([], staticNode("a")));
+      const a2 = new ArrayPluck([fs, 0], arr);
+      expect(a2.result()).resolves.toEqual([1, 2]);
+    });
+
+    test(".toJSON", () => {
+      const arr = new TestFutureArray(
+        new Trace([], staticNode([{ a: { b: [1] } }])), "FutureArrayId"
+      );
+
+      const fs = new FutureString(new Trace([], staticNode("a")), "FutureStringId");
+      const a = new ArrayPluck([fs, "b", 0], arr);
+
+      expect(a.toJSON()).toEqual({
+        type: "array-pluck",
+        op_stack: [
+          ArrayPluck.Operation.future("attr", "FutureStringId"),
+          ArrayPluck.Operation.key("attr", "b"),
+          ArrayPluck.Operation.key("item", 0),
+        ],
+        target_future_id: "FutureArrayId",
+      });
+    });
+
+    test(".referencedFutures", () => {
+      const arr = new TestFutureArray(
+        new Trace([], staticNode([{ a: { b: [1] } }])), "FutureArrayId"
+      );
+      const fs = new FutureString(new Trace([], staticNode("a")), "FutureStringId");
+
+      const f = new ArrayPluck([fs, "b", 0], arr);
+      expect(f.referencedFutures()).toEqual([arr, fs]);
     });
   });
 
@@ -261,6 +318,30 @@ describe("Future", () => {
 
       // @ts-expect-error (protected access)
       expect(a2.directive).toEqual(new ArrayConcat([a1, "b", ["c"]]));
+    });
+
+    test(".pluck (static)", () => {
+      const arr = FutureArray.concat({ a: 1 } as any);
+      const p = FutureArray.pluck(["a"], arr);
+      expect(p).toBeInstanceOf(FutureArray);
+      // @ts-expect-error (protected access)
+      expect(p.directive).toEqual(new ArrayPluck(["a"], arr));
+    });
+
+    test(".pluck (instance)", () => {
+      const arr = FutureArray.concat({ a: 1 } as any);
+      const p = arr.pluck("a");
+      expect(p).toBeInstanceOf(FutureArray);
+      // @ts-expect-error (protected access)
+      expect(p.directive).toEqual(new ArrayPluck(["a"], arr));
+
+      // when using "json path" synxtax
+      const arr2 = FutureArray.concat({ a: { b: [1] } } as any);
+      const p2 = arr2.pluck("a.b[0]");
+      expect(p2).toBeInstanceOf(FutureArray);
+      // @ts-expect-error (protected access)
+      expect(p2.directive).toEqual(new ArrayPluck(["a", "b", 0], arr2));
+      expect(p2.result()).resolves.toEqual([1]);
     });
   });
 });
