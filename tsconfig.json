@@ -51,9 +51,9 @@
   },
 
   /**
-   * Internal-use: running example scripts
+   * Internal-use: running example scripts 
    * We're mostly developing on es2022/Node 18+, but to extend that support a bit futher
-   * back our main compiler options are overridden when running with ts-node to use newer
+   * back our main compiler options are overridden when running with ts-node to use newer 
    * syntax, eg. top-level await.
    */
   "ts-node": {
