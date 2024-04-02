@@ -32,7 +32,11 @@ typecheck: ensure
 
 .PHONY: format-check
 typecheck: ensure
-	npx tsc -noEmit
+	npx prettier . --check
+
+.PHONY: format-write
+typecheck: ensure
+	npx prettier . --write
 
 .PHONY: build
 build: ensure
