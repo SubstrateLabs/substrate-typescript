@@ -73,7 +73,7 @@ export class Substrate {
       }
     } catch (err: unknown) {
       if (err instanceof Error) {
-        if (err.name === "TimeoutError") {
+        if (err.name === "AbortError") {
           throw new RequestTimeoutError(
             `Request timed out after ${this.timeout}ms`,
           );
