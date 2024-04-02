@@ -30,6 +30,10 @@ sync-codegen: ensure
 typecheck: ensure
 	npx tsc -noEmit
 
+.PHONY: format-check
+typecheck: ensure
+	npx tsc -noEmit
+
 .PHONY: build
 build: ensure
 	npx tsup

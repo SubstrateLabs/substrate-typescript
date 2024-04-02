@@ -24,4 +24,3 @@ try {
 } catch (error) {
   console.error("Error reading or parsing openapi.json:", error);
 }
-

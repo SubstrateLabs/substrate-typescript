@@ -83,12 +83,12 @@ This project uses a few tools to help with building and packaging it up: `typesc
 Their respective configuration files work together to produce the the library and this section contains a few highlights to
 help better understand how it works.
 
-* Compiled and bundled up code lives in `dist/` (set in `tsconfig.json` "outDir")
-* We're targeting ES2022 as our output language, which is supprted by Node 18+ (see `tsconfig.json` "target")
-* We're building both ESM (.js) and CJS (.cjs) compatible artifacts (see `tsup.config.ts` "formats")
-* During build we're generating TypeScript declaration files and making them available to package consumers (see `tsup.config.ts` "dts")
-* Our package uses conditional exports so that the consumer will automatically get the right ESM or CJS based on how they import (see `package.json` "exports")
-* When we publish the package to NPM we're only including the `dist/`, `src/` and "default files", eg. `README`, `LICENCE` (see `package.json` "files")
+- Compiled and bundled up code lives in `dist/` (set in `tsconfig.json` "outDir")
+- We're targeting ES2022 as our output language, which is supprted by Node 18+ (see `tsconfig.json` "target")
+- We're building both ESM (.js) and CJS (.cjs) compatible artifacts (see `tsup.config.ts` "formats")
+- During build we're generating TypeScript declaration files and making them available to package consumers (see `tsup.config.ts` "dts")
+- Our package uses conditional exports so that the consumer will automatically get the right ESM or CJS based on how they import (see `package.json` "exports")
+- When we publish the package to NPM we're only including the `dist/`, `src/` and "default files", eg. `README`, `LICENCE` (see `package.json` "files")
 
 ## Versioning
 
@@ -99,35 +99,37 @@ incorporate information about the API version and SDK version. We update version
 The version string looks like the following:
 
 ```js
-  `${major}${version}.${minor}.${patch}`
+`${major}${version}.${minor}.${patch}`;
 ```
 
-* `major` is set manually and is the MAJOR version of the SDK code
-* `version` is a date string (`yyyymmdd`) we use as the API Version (from our OpenAPI schema)
-* `minor` is set manually and is the MINOR version of the SDK code
-* `patch` is set manually and is the PATCH version of the SDK code
+- `major` is set manually and is the MAJOR version of the SDK code
+- `version` is a date string (`yyyymmdd`) we use as the API Version (from our OpenAPI schema)
+- `minor` is set manually and is the MINOR version of the SDK code
+- `patch` is set manually and is the PATCH version of the SDK code
 
 The version of the SDK should be updated in branches being merged into `main` according to the semantic versioning scheme:
 
-* MAJOR version when you make incompatible API changes
-* MINOR version when you add functionality in a backward compatible manner
-* PATCH version when you make backward compatible bug fixes
+- MAJOR version when you make incompatible API changes
+- MINOR version when you add functionality in a backward compatible manner
+- PATCH version when you make backward compatible bug fixes
 
 ### Updating The Package Version
 
 After making changes, you should:
-* Make sure to bump the `SDK_VERSION` in the `bin/update-version.ts` script
-* Then run `make update-version` to ensure the `package.json` and `src/version.ts` are set correctly.
+
+- Make sure to bump the `SDK_VERSION` in the `bin/update-version.ts` script
+- Then run `make update-version` to ensure the `package.json` and `src/version.ts` are set correctly.
 
 **NOTE:** The `make update-version` task will run after every `make sync-codegen` too!
 
 ## Releasing
 
 **Prerequisites**:
-* Have an [npmjs.com](https://www.npmjs.com/) account and it must be a member of our organization
-* Have an GitHub account and it must be a member of our organization with write permissions on the repo
-* The changes that are currently in the branch are the one you would like to release (typically `main`)
-* The `version` field in the `package.json` is the one you would like to use for the release already
+
+- Have an [npmjs.com](https://www.npmjs.com/) account and it must be a member of our organization
+- Have an GitHub account and it must be a member of our organization with write permissions on the repo
+- The changes that are currently in the branch are the one you would like to release (typically `main`)
+- The `version` field in the `package.json` is the one you would like to use for the release already
 
 **Production Releases**:
 
@@ -139,7 +141,7 @@ that we'd like to publish.
 2. Publish to NPM & push tag to GitHub: `make publish`
 3. Create new Release on GitHub (using the web UI). Add release notes, mentions, etc.
 
-**Non-Production Releases** 
+**Non-Production Releases**
 
 The previous workflow assumes that the tag being published should be marked as `latest` for the NPM
 [distribution tag](https://docs.npmjs.com/adding-dist-tags-to-packages). If you would like to mark a release as
