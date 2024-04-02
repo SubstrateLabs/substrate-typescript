@@ -10,7 +10,13 @@ type Options = {
   id?: Node["id"];
   /** When true the server will omit this node's output. Default: false */
   hide?: boolean;
-};
+   };
+
+
+
+
+
+
 
 export class Node<Args = Object> {
   /** The id of the node. Default: random id */
