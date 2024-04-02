@@ -13,8 +13,8 @@ describe("Node", () => {
   });
 
   test(".toJSON", () => {
-    const a = new FutureString(new Trace([], ""));
-    const b = new FutureString(new Trace([], ""));
+    const a = new FutureString(new Trace([], new FooNode({})));
+    const b = new FutureString(new Trace([], new FooNode({})));
     const c = new FutureString(new StringConcat([a, b]));
     const d = new FutureString(new StringConcat([c, "d"]));
     const n = new FooNode({ prompt: d });
