@@ -1,4 +1,5 @@
 import { Node } from "substrate/Node";
+import { NodeError } from "substrate/Error";
 
 /**
  * Response to a run request.
@@ -31,7 +32,16 @@ export class SubstrateResponse {
    * Returns a subset of the server response that contains data for
    * a specific `Node`.
    */
-  getNodeResponse(node: Node) {
-    return this.json?.data?.[node.id];
+  getNodeResult(node: Node) {
+    const result = this.json?.data?.[node.id];
+
+    // Errors from the server have these two fields
+    if (result?.type && result?.message) {
+      // NOTE: we only return these errors on client errors.
+      // Server errors are typically 5xx replies.
+      return new NodeError(result.type, result.message);
+    }
+
+    return result || new NodeError("no_data", `Missing data for "${node.id}"`);
   }
 }
