@@ -43,7 +43,13 @@ export class Substrate {
   /**
    * Initialize the Substrate SDK.
    */
-  constructor({ apiKey, baseUrl, apiVersion, timeout, backend }: Configuration) {
+  constructor({
+    apiKey,
+    baseUrl,
+    apiVersion,
+    timeout,
+    backend,
+  }: Configuration) {
     if (!apiKey) {
       throw new SubstrateError(
         "An API Key is required. Specify it when constructing the Substrate client: `new Substrate({ apiKey: 'API_KEY' })`",
