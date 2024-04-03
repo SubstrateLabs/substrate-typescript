@@ -45,7 +45,7 @@ export class Mailbox extends EventTarget {
         const handleRequestCompleted = {
           handleEvent: (e: RequestCompleted) => {
             // When we receive an event, we'll resolve this Promise
-            resolve(e.value.getNodeResponse(node));
+            resolve(e.value.getNodeResult(node));
             // Then we'll remove the event listeners to make sure there these references in the promise go away
             this.removeEventListener(
               RequestCompleted.type,
