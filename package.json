@@ -1,6 +1,6 @@
 {
   "name": "substrate",
-  "version": "120240315.0.5",
+  "version": "120240315.0.6",
   "description": "The official SDK for the Substrate API",
   "keywords": [],
   "type": "module",
@@ -38,6 +38,7 @@
     "vitest": "^1.0.4"
   },
   "dependencies": {
-    "node-fetch": "^3.3.2"
+    "@types/node-fetch": "^2.6.11",
+    "node-fetch": "2.7.0"
   }
 }
