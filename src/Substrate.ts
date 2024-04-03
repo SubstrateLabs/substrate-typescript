@@ -23,6 +23,11 @@ type Configuration = {
    * Request timeout in milliseconds. Default: 5m
    */
   timeout?: number;
+
+  /**
+   * Switches between existing backend and newer backend
+   */
+  backend?: "v0" | "v1";
 };
 
 /**
@@ -33,11 +38,18 @@ export class Substrate {
   baseUrl: string;
   apiVersion: string;
   timeout: number;
+  backend: string;
 
   /**
    * Initialize the Substrate SDK.
    */
-  constructor({ apiKey, baseUrl, apiVersion, timeout }: Configuration) {
+  constructor({
+    apiKey,
+    baseUrl,
+    apiVersion,
+    timeout,
+    backend,
+  }: Configuration) {
     if (!apiKey) {
       throw new SubstrateError(
         "An API Key is required. Specify it when constructing the Substrate client: `new Substrate({ apiKey: 'API_KEY' })`",
@@ -47,6 +59,7 @@ export class Substrate {
     this.baseUrl = baseUrl ?? "https://api.substrate.run";
     this.apiVersion = apiVersion ?? OpenAPIjson["info"]["version"];
     this.timeout = timeout ?? 300000;
+    this.backend = backend ?? "v0";
   }
 
   /**
@@ -135,6 +148,9 @@ export class Substrate {
     headers.append("X-Substrate-Arch", props.arch);
     headers.append("X-Substrate-Runtime", props.runtime);
     headers.append("X-Substrate-Runtime-Version", props.runtimeVersion);
+
+    // Switch between old and new backends
+    headers.append("X-Substrate-Backend", this.backend);
 
     return headers;
   }
