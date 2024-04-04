@@ -1,4 +1,3 @@
-import { Substrate } from "substrate/Substrate";
 import { idGenerator } from "substrate/idGenerator";
 import { Future, FutureAnyObject, Trace } from "substrate/Future";
 import { Mailbox } from "substrate/Mailbox";
@@ -45,16 +44,6 @@ export class Node<Args = Object> {
    */
   async result() {
     return this.mailbox.lastResult();
-  }
-
-  /**
-   * @experimental
-   * Run this single node.
-   * Alternatively, `Substrate.run(node)`
-   */
-  run(s: Substrate) {
-    s.run(this as Node<Object>);
-    return this;
   }
 
   toJSON() {
