@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Substrate API",
-    "version": "2024-03-15",
+    "version": "2024-04-03",
     "contact": {
       "email": "support@substrate.run"
     },
@@ -32,23 +32,6 @@
         },
         "required": ["type", "message"]
       },
-      "ResponseFormat": {
-        "title": "ResponseFormat",
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": ["json_object", "text"],
-            "description": "Type of response.",
-            "default": "text"
-          },
-          "json_schema": {
-            "type": "object",
-            "description": "JSON schema to guide `json_object` response."
-          }
-        },
-        "required": ["type"]
-      },
       "GenerateTextIn": {
         "title": "GenerateTextIn",
         "type": "object",
@@ -56,16 +39,6 @@
           "prompt": {
             "type": "string",
             "description": "Input prompt."
-          },
-          "model": {
-            "type": "string",
-            "enum": ["mistral-7b-instruct"],
-            "description": "Selected model.",
-            "default": "mistral-7b-instruct"
-          },
-          "response_format": {
-            "description": "Format of the response.",
-            "$ref": "#/components/schemas/ResponseFormat"
           },
           "temperature": {
             "type": "integer",
@@ -76,11 +49,68 @@
           },
           "max_tokens": {
             "type": "integer",
-            "description": "Maximum number of tokens to generate.",
-            "default": 800
+            "description": "Maximum number of tokens to generate."
+          },
+          "node": {
+            "type": "string",
+            "enum": ["Mistral7BInstruct"],
+            "description": "Selected node.",
+            "default": "Mistral7BInstruct"
           }
         },
         "required": ["prompt"]
+      },
+      "GenerateTextOut": {
+        "title": "GenerateTextOut",
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "Text response."
+          }
+        }
+      },
+      "GenerateJSONIn": {
+        "title": "GenerateJSONIn",
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "Input prompt."
+          },
+          "json_schema": {
+            "type": "object",
+            "description": "JSON schema to guide `json_object` response."
+          },
+          "temperature": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10,
+            "default": 4,
+            "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic."
+          },
+          "max_tokens": {
+            "type": "integer",
+            "description": "Maximum number of tokens to generate."
+          },
+          "node": {
+            "type": "string",
+            "enum": ["Mistral7BInstruct"],
+            "description": "Selected node.",
+            "default": "Mistral7BInstruct"
+          }
+        },
+        "required": ["prompt", "json_schema"]
+      },
+      "GenerateJSONOut": {
+        "title": "GenerateJSONOut",
+        "type": "object",
+        "properties": {
+          "json_object": {
+            "type": "object",
+            "description": "JSON response."
+          }
+        }
       },
       "MultiGenerateTextIn": {
         "title": "MultiGenerateTextIn",
@@ -94,15 +124,54 @@
             "type": "integer",
             "description": "Number of choices to generate."
           },
-          "model": {
-            "type": "string",
-            "enum": ["mistral-7b-instruct"],
-            "description": "Selected model.",
-            "default": "mistral-7b-instruct"
+          "temperature": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10,
+            "default": 4,
+            "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic."
           },
-          "response_format": {
-            "description": "Format of the response.",
-            "$ref": "#/components/schemas/ResponseFormat"
+          "max_tokens": {
+            "type": "integer",
+            "description": "Maximum number of tokens to generate."
+          },
+          "node": {
+            "type": "string",
+            "enum": ["Mistral7BInstruct"],
+            "description": "Selected node.",
+            "default": "Mistral7BInstruct"
+          }
+        },
+        "required": ["prompt", "num_choices"]
+      },
+      "MultiGenerateTextOut": {
+        "title": "MultiGenerateTextOut",
+        "type": "object",
+        "properties": {
+          "choices": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GenerateTextOut"
+            }
+          }
+        },
+        "required": ["choices"]
+      },
+      "MultiGenerateJSONIn": {
+        "title": "MultiGenerateJSONIn",
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "Input prompt."
+          },
+          "json_schema": {
+            "type": "object",
+            "description": "JSON schema to guide `json_object` response."
+          },
+          "num_choices": {
+            "type": "integer",
+            "description": "Number of choices to generate."
           },
           "temperature": {
             "type": "integer",
@@ -113,34 +182,82 @@
           },
           "max_tokens": {
             "type": "integer",
-            "description": "Maximum number of tokens to generate.",
-            "default": 800
+            "description": "Maximum number of tokens to generate."
+          },
+          "node": {
+            "type": "string",
+            "enum": ["Mistral7BInstruct"],
+            "description": "Selected node.",
+            "default": "Mistral7BInstruct"
           }
         },
-        "required": ["prompt", "num_choices"]
+        "required": ["prompt", "json_schema", "num_choices"]
       },
-      "GenerateTextOut": {
-        "title": "GenerateTextOut",
-        "type": "object",
-        "properties": {
-          "text": {
-            "type": "string",
-            "description": "Text response."
-          },
-          "json_object": {
-            "type": "object",
-            "description": "JSON response."
-          }
-        }
-      },
-      "MultiGenerateTextOut": {
-        "title": "MultiGenerateTextOut",
+      "MultiGenerateJSONOut": {
+        "title": "MultiGenerateJSONOut",
         "type": "object",
         "properties": {
           "choices": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/GenerateTextOut"
+              "$ref": "#/components/schemas/GenerateJSONOut"
+            }
+          }
+        },
+        "required": ["choices"]
+      },
+      "Mistral7BInstructIn": {
+        "title": "Mistral7BInstructIn",
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "Input prompt."
+          },
+          "num_choices": {
+            "type": "integer",
+            "description": "Number of choices to generate."
+          },
+          "json_schema": {
+            "type": "object",
+            "description": "JSON schema to guide response."
+          },
+          "temperature": {
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "maximum": 2,
+            "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic."
+          },
+          "max_tokens": {
+            "type": "integer",
+            "description": "Maximum number of tokens to generate."
+          }
+        },
+        "required": ["prompt", "num_choices"]
+      },
+      "Mistral7BInstructChoice": {
+        "title": "Mistral7BInstructChoice",
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "Text response, if `json_schema` was not provided."
+          },
+          "json_object": {
+            "type": "object",
+            "description": "JSON response, if `json_schema` was provided."
+          }
+        }
+      },
+      "Mistral7BInstructOut": {
+        "title": "Mistral7BInstructOut",
+        "type": "object",
+        "properties": {
+          "choices": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Mistral7BInstructChoice"
             }
           }
         },
@@ -161,12 +278,6 @@
               "type": "string"
             }
           },
-          "model": {
-            "type": "string",
-            "enum": ["firellava-13b"],
-            "description": "Selected model.",
-            "default": "firellava-13b"
-          },
           "temperature": {
             "type": "integer",
             "minimum": 1,
@@ -178,12 +289,58 @@
             "type": "integer",
             "description": "Maximum number of tokens to generate.",
             "default": 800
+          },
+          "node": {
+            "type": "string",
+            "enum": ["Firellava13B"],
+            "description": "Selected node.",
+            "default": "Firellava13B"
           }
         },
-        "required": ["prompt", "image_uri"]
+        "required": ["prompt", "image_uris"]
       },
       "GenerateTextVisionOut": {
         "title": "GenerateTextVisionOut",
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "Text response."
+          }
+        },
+        "required": ["text"]
+      },
+      "Firellava13BIn": {
+        "title": "Firellava13BIn",
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "Text prompt."
+          },
+          "image_uris": {
+            "description": "Image prompts.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "temperature": {
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic."
+          },
+          "max_tokens": {
+            "type": "integer",
+            "description": "Maximum number of tokens to generate.",
+            "default": 800
+          }
+        },
+        "required": ["prompt", "image_uris"]
+      },
+      "Firellava13BOut": {
+        "title": "Firellava13BOut",
         "type": "object",
         "properties": {
           "text": {
@@ -201,49 +358,116 @@
             "type": "string",
             "description": "Text prompt."
           },
-          "image_prompt_uri": {
-            "type": "string",
-            "description": "Image prompt."
-          },
-          "model": {
-            "type": "string",
-            "enum": ["stablediffusion-xl"],
-            "description": "Selected model.",
-            "default": "stablediffusion-xl"
-          },
-          "image_influence": {
-            "type": "number",
-            "format": "float",
-            "description": "Controls the influence of the image prompt on the generated output.",
-            "minimum": 0,
-            "maximum": 10,
-            "default": 5
-          },
-          "negative_prompt": {
-            "type": "string",
-            "description": "Negative input prompt."
-          },
           "store": {
             "type": "string",
             "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
           },
-          "width": {
-            "type": "integer",
-            "description": "Width of output image, in pixels."
-          },
-          "height": {
-            "type": "integer",
-            "description": "Height of output image, in pixels."
-          },
-          "seed": {
-            "type": "integer",
-            "description": "Seed for deterministic generation. Default is a random seed."
+          "node": {
+            "type": "string",
+            "enum": ["StableDiffusionXL"],
+            "description": "Selected node.",
+            "default": "StableDiffusionXL"
           }
         },
         "required": ["prompt"]
       },
       "GenerateImageOut": {
         "title": "GenerateImageOut",
+        "type": "object",
+        "properties": {
+          "image_uri": {
+            "type": "string",
+            "description": "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided."
+          }
+        },
+        "required": ["image_uri"]
+      },
+      "MultiGenerateImageIn": {
+        "title": "MultiGenerateImageIn",
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "Text prompt."
+          },
+          "num_images": {
+            "type": "integer",
+            "description": "Number of images to generate."
+          },
+          "store": {
+            "type": "string",
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+          },
+          "node": {
+            "type": "string",
+            "enum": ["StableDiffusionXL"],
+            "description": "Selected node.",
+            "default": "StableDiffusionXL"
+          }
+        },
+        "required": ["prompt", "num_images"]
+      },
+      "MultiGenerateImageOut": {
+        "title": "MultiGenerateImageOut",
+        "type": "object",
+        "properties": {
+          "outputs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GenerateImageOut"
+            }
+          }
+        },
+        "required": ["outputs"]
+      },
+      "StableDiffusionXLIn": {
+        "title": "StableDiffusionXLIn",
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "Text prompt."
+          },
+          "negative_prompt": {
+            "type": "string",
+            "description": "Negative input prompt."
+          },
+          "steps": {
+            "type": "integer",
+            "description": "Number of diffusion steps."
+          },
+          "num_images": {
+            "type": "integer",
+            "description": "Number of images to generate."
+          },
+          "store": {
+            "type": "string",
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+          },
+          "height": {
+            "type": "integer",
+            "description": "Height of output image, in pixels."
+          },
+          "width": {
+            "type": "integer",
+            "description": "Width of output image, in pixels."
+          },
+          "seeds": {
+            "type": "integer",
+            "description": "Seeds for deterministic generation. Default is a random seed."
+          },
+          "guidance_scale": {
+            "type": "number",
+            "format": "float",
+            "description": "Higher values adhere to the text prompt more strongly, typically at the expense of image quality.",
+            "minimum": 0,
+            "default": 5
+          }
+        },
+        "required": ["prompt"]
+      },
+      "StableDiffusionImage": {
+        "title": "StableDiffusionImage",
         "type": "object",
         "properties": {
           "image_uri": {
@@ -257,8 +481,21 @@
         },
         "required": ["image_uri", "seed"]
       },
-      "MultiGenerateImageIn": {
-        "title": "MultiGenerateImageIn",
+      "StableDiffusionXLOut": {
+        "title": "StableDiffusionXLOut",
+        "type": "object",
+        "properties": {
+          "outputs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StableDiffusionImage"
+            }
+          }
+        },
+        "required": ["outputs"]
+      },
+      "StableDiffusionXLIPAdapterIn": {
+        "title": "StableDiffusionXLIPAdapterIn",
         "type": "object",
         "properties": {
           "prompt": {
@@ -273,19 +510,11 @@
             "type": "integer",
             "description": "Number of images to generate."
           },
-          "model": {
-            "type": "string",
-            "enum": ["stablediffusion-xl"],
-            "description": "Selected model.",
-            "default": "stablediffusion-xl"
-          },
-          "image_influence": {
+          "ip_adapter_scale": {
             "type": "number",
             "format": "float",
             "description": "Controls the influence of the image prompt on the generated output.",
-            "minimum": 0,
-            "maximum": 10,
-            "default": 5
+            "minimum": 0
           },
           "negative_prompt": {
             "type": "string",
@@ -313,87 +542,21 @@
         },
         "required": ["prompt", "num_images"]
       },
-      "MultiGenerateImageOut": {
-        "title": "MultiGenerateImageOut",
+      "StableDiffusionXLIPAdapterOut": {
+        "title": "StableDiffusionXLIPAdapterOut",
         "type": "object",
         "properties": {
           "outputs": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/GenerateImageOut"
+              "$ref": "#/components/schemas/StableDiffusionImage"
             }
           }
         },
         "required": ["outputs"]
       },
-      "ControlledGenerateImageIn": {
-        "title": "ControlledGenerateImageIn",
-        "type": "object",
-        "properties": {
-          "image_uri": {
-            "type": "string",
-            "description": "Input image."
-          },
-          "control_method": {
-            "type": "string",
-            "enum": ["edge", "depth", "illusion"],
-            "description": "Strategy to control generation using the input image."
-          },
-          "prompt": {
-            "type": "string",
-            "description": "Text prompt."
-          },
-          "output_resolution": {
-            "type": "integer",
-            "description": "Resolution of the output image, in pixels.",
-            "default": 1024
-          },
-          "model": {
-            "type": "string",
-            "enum": ["stablediffusion-xl"],
-            "description": "Selected model.",
-            "default": "stablediffusion-xl"
-          },
-          "negative_prompt": {
-            "type": "string",
-            "description": "Negative input prompt."
-          },
-          "store": {
-            "type": "string",
-            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
-          },
-          "image_influence": {
-            "type": "number",
-            "format": "float",
-            "description": "Controls the influence of the input image on the generated output.",
-            "minimum": 0,
-            "maximum": 10,
-            "default": 9
-          },
-          "seed": {
-            "type": "integer",
-            "description": "Seed for deterministic generation. Default is a random seed."
-          }
-        },
-        "required": ["image_uri", "control_method", "prompt"]
-      },
-      "ControlledGenerateImageOut": {
-        "title": "ControlledGenerateImageOut",
-        "type": "object",
-        "properties": {
-          "image_uri": {
-            "type": "string",
-            "description": "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided."
-          },
-          "seed": {
-            "type": "integer",
-            "description": "The random noise seed used for generation."
-          }
-        },
-        "required": ["image_uri", "seed"]
-      },
-      "MultiControlledGenerateImageIn": {
-        "title": "MultiControlledGenerateImageIn",
+      "StableDiffusionXLControlNetIn": {
+        "title": "StableDiffusionXLControlNetIn",
         "type": "object",
         "properties": {
           "image_uri": {
@@ -418,12 +581,6 @@
             "description": "Resolution of the output image, in pixels.",
             "default": 1024
           },
-          "model": {
-            "type": "string",
-            "enum": ["stablediffusion-xl"],
-            "description": "Selected model.",
-            "default": "stablediffusion-xl"
-          },
           "negative_prompt": {
             "type": "string",
             "description": "Negative input prompt."
@@ -432,13 +589,11 @@
             "type": "string",
             "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
           },
-          "image_influence": {
+          "conditioning_scale": {
             "type": "number",
             "format": "float",
             "description": "Controls the influence of the input image on the generated output.",
-            "minimum": 0,
-            "maximum": 10,
-            "default": 9
+            "minimum": 0
           },
           "seeds": {
             "description": "Random noise seeds. Default is random seeds for each generation.",
@@ -450,14 +605,14 @@
         },
         "required": ["image_uri", "control_method", "prompt", "num_images"]
       },
-      "MultiControlledGenerateImageOut": {
-        "title": "MultiControlledGenerateImageOut",
+      "StableDiffusionXLControlNetOut": {
+        "title": "StableDiffusionXLControlNetOut",
         "type": "object",
         "properties": {
           "outputs": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/ControlledGenerateImageOut"
+              "$ref": "#/components/schemas/StableDiffusionImage"
             }
           }
         },
@@ -479,48 +634,15 @@
             "type": "string",
             "description": "Mask image that controls which pixels are inpainted. If unset, the entire image is edited (image-to-image)."
           },
-          "image_prompt_uri": {
-            "type": "string",
-            "description": "Image prompt."
-          },
-          "output_resolution": {
-            "type": "integer",
-            "description": "Resolution of the output image, in pixels.",
-            "default": 1024
-          },
-          "model": {
-            "type": "string",
-            "enum": ["stablediffusion-xl"],
-            "description": "Selected model.",
-            "default": "stablediffusion-xl"
-          },
-          "strength": {
-            "type": "number",
-            "format": "float",
-            "description": "Controls the strength of the generation process.",
-            "minimum": 0,
-            "maximum": 10,
-            "default": 8
-          },
-          "image_prompt_influence": {
-            "type": "number",
-            "format": "float",
-            "description": "Controls the influence of the image prompt on the generated output.",
-            "minimum": 0,
-            "maximum": 10,
-            "default": 5
-          },
-          "negative_prompt": {
-            "type": "string",
-            "description": "Negative input prompt."
-          },
           "store": {
             "type": "string",
             "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
           },
-          "seed": {
-            "type": "integer",
-            "description": "Seed for deterministic generation. Default is a random seed."
+          "node": {
+            "type": "string",
+            "enum": ["StableDiffusionXLInpaint"],
+            "description": "Selected node.",
+            "default": "StableDiffusionXLInpaint"
           }
         },
         "required": ["image_uri", "prompt"]
@@ -532,13 +654,9 @@
           "image_uri": {
             "type": "string",
             "description": "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided."
-          },
-          "seed": {
-            "type": "integer",
-            "description": "The random noise seed used for generation."
           }
         },
-        "required": ["image_uri", "seed"]
+        "required": ["image_uri"]
       },
       "MultiGenerativeEditImageIn": {
         "title": "MultiGenerativeEditImageIn",
@@ -556,9 +674,51 @@
             "type": "string",
             "description": "Mask image that controls which pixels are edited (inpainting). If unset, the entire image is edited (image-to-image)."
           },
-          "image_prompt_uri": {
+          "num_images": {
+            "type": "integer",
+            "description": "Number of images to generate."
+          },
+          "store": {
             "type": "string",
-            "description": "Image prompt."
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+          },
+          "node": {
+            "type": "string",
+            "enum": ["StableDiffusionXLInpaint"],
+            "description": "Selected node.",
+            "default": "StableDiffusionXLInpaint"
+          }
+        },
+        "required": ["image_uri", "prompt", "num_images"]
+      },
+      "MultiGenerativeEditImageOut": {
+        "title": "MultiGenerativeEditImageOut",
+        "type": "object",
+        "properties": {
+          "outputs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GenerativeEditImageOut"
+            }
+          }
+        },
+        "required": ["outputs"]
+      },
+      "StableDiffusionXLInpaintIn": {
+        "title": "StableDiffusionXLInpaintIn",
+        "type": "object",
+        "properties": {
+          "image_uri": {
+            "type": "string",
+            "description": "Original image."
+          },
+          "prompt": {
+            "type": "string",
+            "description": "Text prompt."
+          },
+          "mask_image_uri": {
+            "type": "string",
+            "description": "Mask image that controls which pixels are edited (inpainting). If unset, the entire image is edited (image-to-image)."
           },
           "num_images": {
             "type": "integer",
@@ -568,12 +728,6 @@
             "type": "integer",
             "description": "Resolution of the output image, in pixels.",
             "default": 1024
-          },
-          "model": {
-            "type": "string",
-            "enum": ["stablediffusion-xl"],
-            "description": "Selected model.",
-            "default": "stablediffusion-xl"
           },
           "negative_prompt": {
             "type": "string",
@@ -588,16 +742,7 @@
             "format": "float",
             "description": "Controls the strength of the generation process.",
             "minimum": 0,
-            "maximum": 10,
-            "default": 8
-          },
-          "image_prompt_influence": {
-            "type": "number",
-            "format": "float",
-            "description": "Controls the influence of the image prompt on the generated output.",
-            "minimum": 0,
-            "maximum": 10,
-            "default": 5
+            "default": 0.5
           },
           "seeds": {
             "description": "Random noise seeds. Default is random seeds for each generation.",
@@ -609,14 +754,14 @@
         },
         "required": ["image_uri", "prompt", "num_images"]
       },
-      "MultiGenerativeEditImageOut": {
-        "title": "MultiGenerativeEditImageOut",
+      "StableDiffusionXLInpaintOut": {
+        "title": "StableDiffusionXLInpaintOut",
         "type": "object",
         "properties": {
           "outputs": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/GenerativeEditImageOut"
+              "$ref": "#/components/schemas/StableDiffusionImage"
             }
           }
         },
@@ -781,14 +926,14 @@
             "description": "Input image."
           },
           "point_prompts": {
-            "description": "Point prompts, to detect a segment under the point. One of `point_prompt` or `box_prompt` must be set.",
+            "description": "Point prompts, to detect a segment under the point. One of `point_prompts` or `box_prompts` must be set.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Point"
             }
           },
           "box_prompts": {
-            "description": "Box prompts, to detect a segment within the bounding box. One of `point_prompt` or `box_prompt` must be set.",
+            "description": "Box prompts, to detect a segment within the bounding box. One of `point_prompts` or `box_prompts` must be set.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/BoundingBox"
@@ -1022,12 +1167,6 @@
             "type": "string",
             "description": "Text to embed."
           },
-          "model": {
-            "type": "string",
-            "enum": ["jina-v2", "clip"],
-            "description": "Selected model.",
-            "default": "jina-v2"
-          },
           "store": {
             "type": "string",
             "description": "[Vector store](/docs/vector-stores) identifier."
@@ -1046,6 +1185,12 @@
           "doc_id": {
             "type": "string",
             "description": "Vector store document ID. Ignored if `store` is unset."
+          },
+          "node": {
+            "type": "string",
+            "enum": ["JinaV2", "CLIP"],
+            "description": "Selected node.",
+            "default": "JinaV2"
           }
         },
         "required": ["text"]
@@ -1091,11 +1236,50 @@
               "$ref": "#/components/schemas/EmbedTextItem"
             }
           },
-          "model": {
+          "store": {
             "type": "string",
-            "enum": ["jina-v2", "clip"],
-            "description": "Selected model.",
-            "default": "jina-v2"
+            "description": "[Vector store](/docs/vector-stores) identifier."
+          },
+          "embedded_metadata_keys": {
+            "type": "array",
+            "description": "Choose keys from `metadata` to embed with text.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "node": {
+            "type": "string",
+            "enum": ["JinaV2", "CLIP"],
+            "description": "Selected node.",
+            "default": "JinaV2"
+          }
+        },
+        "required": ["items"]
+      },
+      "MultiEmbedTextOut": {
+        "title": "MultiEmbedTextOut",
+        "type": "object",
+        "properties": {
+          "embeddings": {
+            "type": "array",
+            "description": "Generated embeddings.",
+            "items": {
+              "$ref": "#/components/schemas/Embedding"
+            }
+          }
+        },
+        "required": ["embeddings"]
+      },
+      "JinaV2In": {
+        "title": "JinaV2In",
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "description": "Items to embed.",
+            "items": {
+              "$ref": "#/components/schemas/EmbedTextItem"
+            }
           },
           "store": {
             "type": "string",
@@ -1111,8 +1295,8 @@
         },
         "required": ["items"]
       },
-      "MultiEmbedTextOut": {
-        "title": "MultiEmbedTextOut",
+      "JinaV2Out": {
+        "title": "JinaV2Out",
         "type": "object",
         "properties": {
           "embeddings": {
@@ -1133,12 +1317,6 @@
             "type": "string",
             "description": "Image to embed."
           },
-          "model": {
-            "type": "string",
-            "enum": ["clip"],
-            "description": "Selected model.",
-            "default": "clip"
-          },
           "store": {
             "type": "string",
             "description": "[Vector store](/docs/vector-stores) identifier."
@@ -1146,6 +1324,12 @@
           "doc_id": {
             "type": "string",
             "description": "Vector store document ID. Ignored if `store` is unset."
+          },
+          "node": {
+            "type": "string",
+            "enum": ["CLIP"],
+            "description": "Selected node.",
+            "default": "CLIP"
           }
         },
         "required": ["image_uri"]
@@ -1176,6 +1360,28 @@
         },
         "required": ["image_uri"]
       },
+      "EmbedTextOrImageItem": {
+        "type": "object",
+        "properties": {
+          "image_uri": {
+            "type": "string",
+            "description": "Image to embed."
+          },
+          "text": {
+            "type": "string",
+            "description": "Text to embed."
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Metadata that can be used to query the vector store. Ignored if `store` is unset."
+          },
+          "doc_id": {
+            "type": "string",
+            "description": "Vector store document ID. Ignored if `store` is unset."
+          }
+        },
+        "required": []
+      },
       "MultiEmbedImageIn": {
         "title": "MultiEmbedImageIn",
         "type": "object",
@@ -1191,17 +1397,56 @@
             "type": "string",
             "description": "[Vector store](/docs/vector-stores) identifier."
           },
-          "model": {
+          "node": {
             "type": "string",
-            "enum": ["clip"],
-            "description": "Selected model.",
-            "default": "clip"
+            "enum": ["CLIP"],
+            "description": "Selected node.",
+            "default": "CLIP"
           }
         },
         "required": ["items"]
       },
       "MultiEmbedImageOut": {
         "title": "MultiEmbedImageOut",
+        "type": "object",
+        "properties": {
+          "embeddings": {
+            "type": "array",
+            "description": "Generated embeddings.",
+            "items": {
+              "$ref": "#/components/schemas/Embedding"
+            }
+          }
+        },
+        "required": ["embeddings"]
+      },
+      "CLIPIn": {
+        "title": "CLIPIn",
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "description": "Items to embed.",
+            "items": {
+              "$ref": "#/components/schemas/EmbedTextOrImageItem"
+            }
+          },
+          "embedded_metadata_keys": {
+            "type": "array",
+            "description": "Choose keys from `metadata` to embed with text, when embedding and storing text documents.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "store": {
+            "type": "string",
+            "description": "[Vector store](/docs/vector-stores) identifier."
+          }
+        },
+        "required": ["items"]
+      },
+      "CLIPOut": {
+        "title": "CLIPOut",
         "type": "object",
         "properties": {
           "embeddings": {
@@ -1607,12 +1852,68 @@
         }
       }
     },
+    "/GenerateJSON": {
+      "post": {
+        "summary": "GenerateJSON",
+        "operationId": "GenerateJSON",
+        "tags": ["language-generation"],
+        "description": "Generate JSON using a language model.",
+        "parameters": [
+          {
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/GenerateJSONIn"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenerateJSONOut"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/MultiGenerateJSON": {
+      "post": {
+        "summary": "MultiGenerateJSON",
+        "operationId": "MultiGenerateJSON",
+        "tags": ["language-generation"],
+        "description": "Generate multiple JSON choices using a language model.",
+        "parameters": [
+          {
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/MultiGenerateJSONIn"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MultiGenerateJSONOut"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/GenerateTextVision": {
       "post": {
         "summary": "GenerateTextVision",
         "operationId": "GenerateTextVision",
-        "tags": ["vision-language-generation"],
-        "description": "Generate text by prompting with text and images using a vision-language model.",
+        "tags": ["language-generation"],
+        "description": "Generate text with image input.",
         "parameters": [
           {
             "in": "query",
@@ -1628,6 +1929,62 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/GenerateTextVisionOut"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Mistral7BInstruct": {
+      "post": {
+        "summary": "Mistral7BInstruct",
+        "operationId": "Mistral7BInstruct",
+        "tags": ["language-generation"],
+        "description": "Generate text using Mistral 7B Instruct.",
+        "parameters": [
+          {
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Mistral7BInstructIn"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Mistral7BInstructOut"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Firellava13B": {
+      "post": {
+        "summary": "Firellava13B",
+        "operationId": "Firellava13B",
+        "tags": ["language-generation"],
+        "description": "Generate text with image input using FireLLaVA 13B.",
+        "parameters": [
+          {
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/Firellava13BIn"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Firellava13BOut"
                 }
               }
             }
@@ -1691,68 +2048,12 @@
         }
       }
     },
-    "/ControlledGenerateImage": {
-      "post": {
-        "summary": "ControlledGenerateImage",
-        "operationId": "ControlledGenerateImage",
-        "tags": ["image-generation"],
-        "description": "Generate an image with generation controlled by an input image.",
-        "parameters": [
-          {
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/ControlledGenerateImageIn"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ControlledGenerateImageOut"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/MultiControlledGenerateImage": {
-      "post": {
-        "summary": "MultiControlledGenerateImage",
-        "operationId": "MultiControlledGenerateImage",
-        "tags": ["image-generation"],
-        "description": "Generate multiple image outputs with generation controlled by an input image.",
-        "parameters": [
-          {
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/MultiControlledGenerateImageIn"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MultiControlledGenerateImageOut"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/GenerativeEditImage": {
       "post": {
         "summary": "GenerativeEditImage",
         "operationId": "GenerativeEditImage",
         "tags": ["image-generation"],
-        "description": "Edit an image with a generative model.",
+        "description": "Edit an image using image generation.",
         "parameters": [
           {
             "in": "query",
@@ -1780,7 +2081,7 @@
         "summary": "MultiGenerativeEditImage",
         "operationId": "MultiGenerativeEditImage",
         "tags": ["image-generation"],
-        "description": "Generate multiple image outputs modifying part of an image using a mask.",
+        "description": "Edit multiple images using image generation.",
         "parameters": [
           {
             "in": "query",
@@ -1803,11 +2104,123 @@
         }
       }
     },
+    "/StableDiffusionXL": {
+      "post": {
+        "summary": "StableDiffusionXL",
+        "operationId": "StableDiffusionXL",
+        "tags": ["image-generation", "raw"],
+        "description": "Generate an image using Stable Diffusion XL.",
+        "parameters": [
+          {
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/StableDiffusionXLIn"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StableDiffusionXLOut"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/StableDiffusionXLInpaint": {
+      "post": {
+        "summary": "StableDiffusionXLInpaint",
+        "operationId": "StableDiffusionXLInpaint",
+        "tags": ["image-generation", "raw"],
+        "description": "Inpaint an image using Stable Diffusion XL.",
+        "parameters": [
+          {
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/StableDiffusionXLInpaintIn"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StableDiffusionXLInpaintOut"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/StableDiffusionXLIPAdapter": {
+      "post": {
+        "summary": "StableDiffusionXLIPAdapter",
+        "operationId": "StableDiffusionXLIPAdapter",
+        "tags": ["image-generation"],
+        "description": "Generate an image using Stable Diffusion XL with an image prompt.",
+        "parameters": [
+          {
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/StableDiffusionXLIPAdapterIn"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StableDiffusionXLIPAdapterOut"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/StableDiffusionXLControlNet": {
+      "post": {
+        "summary": "StableDiffusionXLControlNet",
+        "operationId": "StableDiffusionXLControlNet",
+        "tags": ["image-generation"],
+        "description": "Generate an image using Stable Diffusion XL structuring generation with an input image.",
+        "parameters": [
+          {
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/StableDiffusionXLControlNetIn"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StableDiffusionXLControlNetOut"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/FillMask": {
       "post": {
         "summary": "FillMask",
         "operationId": "FillMask",
-        "tags": ["image-generation"],
+        "tags": ["image-utility"],
         "description": "Edit an image with a generative model.",
         "parameters": [
           {
@@ -1835,7 +2248,7 @@
       "post": {
         "summary": "UpscaleImage",
         "operationId": "UpscaleImage",
-        "tags": ["image-utilities"],
+        "tags": ["image-utility"],
         "description": "Upscale an image.",
         "parameters": [
           {
@@ -1863,7 +2276,7 @@
       "post": {
         "summary": "RemoveBackground",
         "operationId": "RemoveBackground",
-        "tags": ["image-utilities"],
+        "tags": ["image-utility"],
         "description": "Remove the background from an image, with the option to return the foreground as a mask.",
         "parameters": [
           {
@@ -1891,7 +2304,7 @@
       "post": {
         "summary": "DetectSegments",
         "operationId": "DetectSegments",
-        "tags": ["object-detection"],
+        "tags": ["image-utility"],
         "description": "Detect segments in an image given point(s) or bounding box(es).",
         "parameters": [
           {
@@ -1919,7 +2332,7 @@
       "post": {
         "summary": "TranscribeMedia",
         "operationId": "TranscribeMedia",
-        "tags": ["audio-recognition"],
+        "tags": ["audio"],
         "description": "Transcribe speech in an audio or video file.",
         "parameters": [
           {
@@ -1947,7 +2360,7 @@
       "post": {
         "summary": "GenerateSpeech",
         "operationId": "GenerateSpeech",
-        "tags": ["audio-generation"],
+        "tags": ["audio"],
         "description": "Generate speech from text.",
         "parameters": [
           {
@@ -1975,8 +2388,8 @@
       "post": {
         "summary": "EmbedText",
         "operationId": "EmbedText",
-        "tags": ["semantic-space"],
-        "description": "Generate vector embedding for a text document.",
+        "tags": ["embedding"],
+        "description": "Generate embedding for a text document.",
         "parameters": [
           {
             "in": "query",
@@ -2003,8 +2416,8 @@
       "post": {
         "summary": "MultiEmbedText",
         "operationId": "MultiEmbedText",
-        "tags": ["semantic-space"],
-        "description": "Generate vector embeddings for multiple text documents.",
+        "tags": ["embedding"],
+        "description": "Generate embeddings for multiple text documents.",
         "parameters": [
           {
             "in": "query",
@@ -2031,8 +2444,8 @@
       "post": {
         "summary": "EmbedImage",
         "operationId": "EmbedImage",
-        "tags": ["semantic-space"],
-        "description": "Generate vector embedding for an image, and optionally store the embedding.",
+        "tags": ["embedding"],
+        "description": "Generate embedding for an image.",
         "parameters": [
           {
             "in": "query",
@@ -2059,8 +2472,8 @@
       "post": {
         "summary": "MultiEmbedImage",
         "operationId": "MultiEmbedImage",
-        "tags": ["semantic-space"],
-        "description": "Generate vector embeddings for multiple images, and optionally store the embeddings.",
+        "tags": ["embedding"],
+        "description": "Generate embeddings for multiple images.",
         "parameters": [
           {
             "in": "query",
@@ -2076,6 +2489,62 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/MultiEmbedImageOut"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/JinaV2": {
+      "post": {
+        "summary": "JinaV2",
+        "operationId": "JinaV2",
+        "tags": ["embedding"],
+        "description": "Generate embeddings for multiple text documents using Jina V2.",
+        "parameters": [
+          {
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/JinaV2In"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JinaV2Out"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/CLIP": {
+      "post": {
+        "summary": "CLIP",
+        "operationId": "CLIP",
+        "tags": ["embedding"],
+        "description": "Generate embeddings for text or images using CLIP.",
+        "parameters": [
+          {
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/CLIPIn"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CLIPOut"
                 }
               }
             }

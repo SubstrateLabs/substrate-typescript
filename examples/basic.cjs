@@ -15,9 +15,9 @@ async function main() {
   });
   const b = new GenerateText({ prompt: a.future.text });
 
-  await substrate.run(a, b);
+  const res = await substrate.run(a, b);
 
-  console.log({ a: await a.result(), b: await b.result() });
+  console.log({ a: res.get(a), b: res.get(b) });
 }
 
 main();

@@ -1,5 +1,5 @@
 import { SubstrateError, RequestTimeoutError } from "substrate/Error";
-import { RequestCompleted } from "substrate/Mailbox";
+// import { RequestCompleted } from "substrate/Mailbox";
 import { VERSION } from "substrate/version";
 import OpenAPIjson from "substrate/openapi.json";
 import { SubstrateResponse } from "substrate/SubstrateResponse";
@@ -80,8 +80,10 @@ export class Substrate {
       if (apiResponse.ok) {
         const json = await apiResponse.json();
         const res = new SubstrateResponse(apiResponse, json);
-        // @ts-expect-error (accessing protected mailbox)
-        for (let node of nodes) node.mailbox.send(new RequestCompleted(res));
+        // @ts-expect-error (accessing protected)
+        for (let node of nodes) node.response = res;
+        // for (let node of nodes) node.mailbox.send(new RequestCompleted(res));
+
         return res;
       }
     } catch (err: unknown) {

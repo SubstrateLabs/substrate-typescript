@@ -10,7 +10,7 @@ import {
 } from "substrate/Future";
 import { Node } from "substrate/Node";
 import { SubstrateResponse } from "substrate/SubstrateResponse";
-import { RequestCompleted } from "substrate/Mailbox";
+// import { RequestCompleted } from "substrate/Mailbox";
 
 class FooFuture extends Future {}
 
@@ -25,7 +25,8 @@ const staticNode = (output: any) => {
   });
 
   // @ts-expect-error (protected prop mailbox)
-  node.mailbox.send(new RequestCompleted(res));
+  node.response = res;
+  // node.mailbox.send(new RequestCompleted(res));
   return node;
 };
 
@@ -174,12 +175,14 @@ describe("Future", () => {
       const nice = "nice";
       const i1 = FutureString.interpolate`hello ${world}, you look ${nice} today.`;
 
+      // @ts-expect-error
       expect(i1.result()).resolves.toEqual("hello world, you look nice today.");
 
       const f1 = FutureString.concat("texas", " ", "sun");
       const f2 = FutureString.concat("texas", " ", "moon");
       const i2 = FutureString.interpolate`~~ ${f1} x ${f2} ~~`;
 
+      // @ts-expect-error
       expect(i2.result()).resolves.toEqual("~~ texas sun x texas moon ~~");
     });
   });

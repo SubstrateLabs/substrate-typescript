@@ -1,6 +1,8 @@
 import { idGenerator } from "substrate/idGenerator";
 import { Future, FutureAnyObject, Trace } from "substrate/Future";
-import { Mailbox } from "substrate/Mailbox";
+// import { Mailbox } from "substrate/Mailbox";
+import { SubstrateResponse } from "substrate/SubstrateResponse";
+import { NodeError } from "substrate/Error";
 
 const generator = idGenerator("node");
 
@@ -11,40 +13,65 @@ type Options = {
   hide?: boolean;
 };
 
-export class Node<Args = Object> {
+export abstract class Node {
   /** The id of the node. Default: random id */
   id: string;
   /** The type of the node. */
   node: string;
   /** Node inputs */
-  args: Args;
+  args: Object;
   /** When true the server will omit this node's output. Default: false */
   hide: boolean;
 
   /** When events happen (eg. data recieved) we send messages to the node's mailbox */
-  protected mailbox: Mailbox;
+  // protected mailbox: Mailbox;
+  /** TODO this field stores the last response, but it's just temporary until the internals are refactored */
+  protected _response: SubstrateResponse | undefined;
 
-  constructor(args: Args = {} as Args, opts?: Options) {
+  constructor(args: Object = {}, opts?: Options) {
     this.node = this.constructor.name;
     this.args = args;
     this.id = opts?.id || generator(this.node);
     this.hide = opts?.hide || false;
-    this.mailbox = new Mailbox(this as Node);
+    // this.mailbox = new Mailbox(this as Node);
   }
 
   /**
    * Reference the future output of this node.
    */
   get future(): any {
-    return new FutureAnyObject(new Trace([], this as Node<Object>));
+    return new FutureAnyObject(new Trace([], this as Node));
+  }
+
+  protected set response(res: SubstrateResponse) {
+    if (!this._response) this._response = res;
+  }
+
+  protected output() {
+    const data = this._response?.json?.data?.[this.id];
+
+    // Errors from the server have these two fields
+    if (data?.type && data?.message) {
+      // NOTE: we only return these errors on client errors.
+      // Server errors are typically 5xx replies.
+      return new NodeError(data.type, data.message);
+    } else if (data) {
+      return data;
+    }
+
+    return new NodeError("no_data", `Missing data for "${this.id}"`);
   }
 
   /**
    * Return the resolved result for this node.
    */
-  async result() {
-    return this.mailbox.lastResult();
-  }
+  protected abstract result(): Promise<any>;
+  // protected async result(): Promise<any> {
+  //   // return this.mailbox.lastResult();
+  //   return Promise.resolve(
+  //     this._response ? this._response.get(this) : undefined,
+  //   );
+  // }
 
   toJSON() {
     // When we serialize a node we're also going to be extracting
