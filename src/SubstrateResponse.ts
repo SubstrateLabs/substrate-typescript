@@ -29,10 +29,9 @@ export class SubstrateResponse {
   }
 
   /**
-   * Returns a subset of the server response that contains data for
-   * a specific `Node`.
+   * Returns the result for given `Node`
    */
-  getNodeResult(node: Node) {
+  get(node: Node) {
     const result = this.json?.data?.[node.id];
 
     // Errors from the server have these two fields
