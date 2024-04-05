@@ -10,22 +10,22 @@ import {
 } from "substrate/Future";
 import { Node } from "substrate/Node";
 import { SubstrateResponse } from "substrate/SubstrateResponse";
-import { RequestCompleted } from "substrate/Mailbox";
 
 class FooFuture extends Future {}
+class FooNode extends Node {}
 
-const node = (id: string = "") => new Node({}, { id });
+const node = (id: string = "") => new FooNode({}, { id });
 
 // Helper that makes a Node and sets it's output with a fake SubstrateResponse
 const staticNode = (output: any) => {
-  const node = new Node({});
+  const node = new FooNode({});
 
   const res = new SubstrateResponse(new Response(), {
     data: { [node.id]: output },
   });
 
-  // @ts-expect-error (protected prop mailbox)
-  node.mailbox.send(new RequestCompleted(res));
+  // @ts-expect-error (protected prop response)
+  node.response = res;
   return node;
 };
 
@@ -174,12 +174,14 @@ describe("Future", () => {
       const nice = "nice";
       const i1 = FutureString.interpolate`hello ${world}, you look ${nice} today.`;
 
+      // @ts-expect-error
       expect(i1.result()).resolves.toEqual("hello world, you look nice today.");
 
       const f1 = FutureString.concat("texas", " ", "sun");
       const f2 = FutureString.concat("texas", " ", "moon");
       const i2 = FutureString.interpolate`~~ ${f1} x ${f2} ~~`;
 
+      // @ts-expect-error
       expect(i2.result()).resolves.toEqual("~~ texas sun x texas moon ~~");
     });
   });

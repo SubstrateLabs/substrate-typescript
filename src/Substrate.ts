@@ -1,5 +1,4 @@
 import { SubstrateError, RequestTimeoutError } from "substrate/Error";
-import { RequestCompleted } from "substrate/Mailbox";
 import { VERSION } from "substrate/version";
 import OpenAPIjson from "substrate/openapi.json";
 import { SubstrateResponse } from "substrate/SubstrateResponse";
@@ -80,8 +79,9 @@ export class Substrate {
       if (apiResponse.ok) {
         const json = await apiResponse.json();
         const res = new SubstrateResponse(apiResponse, json);
-        // @ts-expect-error (accessing protected mailbox)
-        for (let node of nodes) node.mailbox.send(new RequestCompleted(res));
+        // @ts-expect-error (accessing protected)
+        for (let node of nodes) node.response = res;
+
         return res;
       }
     } catch (err: unknown) {
@@ -134,6 +134,7 @@ export class Substrate {
     headers.append("Content-Type", "application/json");
     headers.append("User-Agent", `APIClient/JS ${VERSION}`);
     headers.append("X-Substrate-Version", this.apiVersion);
+    headers.append("X-Substrate-Backend", this.backend); // Switch between old and new backends
 
     // Auth
     headers.append("Authorization", `Bearer ${this.apiKey}`);
@@ -148,9 +149,6 @@ export class Substrate {
     headers.append("X-Substrate-Arch", props.arch);
     headers.append("X-Substrate-Runtime", props.runtime);
     headers.append("X-Substrate-Runtime-Version", props.runtimeVersion);
-
-    // Switch between old and new backends
-    headers.append("X-Substrate-Backend", this.backend);
 
     return headers;
   }
