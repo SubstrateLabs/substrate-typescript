@@ -7,18 +7,23 @@ async function main() {
 
   const substrate = new Substrate({
     apiKey: SUBSTRATE_API_KEY,
-    baseUrl: "https://api-staging.substrate.run",
+    baseUrl: "https://api.substrate.run",
+    backend: "v1",
   });
 
-  const input: GenerateText.Input = { prompt: "asdf" };
+  const input: GenerateText.Input = {
+    prompt: "just finish the sentence. a very hard trivia question: ",
+    max_tokens: 50,
+  };
 
   const a = new GenerateText(input);
-  const b = new GenerateText({ prompt: a.future.text });
+  // const b = new GenerateText({ prompt: a.future.text });
 
-  const res = await substrate.run(a, b);
+  const res = await substrate.run(a);
 
-  const output: GenerateText.Output = res.get(b);
+  console.log(res.get(a));
+  // const output: GenerateText.Output = res.get(b);
 
-  console.log({ a: res.get(a), b: output });
+  // console.log({ a: res.get(a), b: output });
 }
 main();
