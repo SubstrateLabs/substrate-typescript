@@ -1977,5 +1977,3 @@ export type NodeOutput<T> = T extends GenerateText
                                                     : T extends CLIP
                                                       ? CLIPOut
                                                       : never;
-
-export type NodeOutput2<T> = T extends { output: () => infer R } ? R : never;

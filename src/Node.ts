@@ -1,8 +1,8 @@
 import { idGenerator } from "substrate/idGenerator";
 import { Future, FutureAnyObject, Trace } from "substrate/Future";
-// import { Mailbox } from "substrate/Mailbox";
 import { SubstrateResponse } from "substrate/SubstrateResponse";
-import { NodeError } from "substrate/Error";
+import { NodeError, SubstrateError } from "substrate/Error";
+import { AnyNode } from "substrate/Nodes";
 
 const generator = idGenerator("node");
 
@@ -23,8 +23,6 @@ export abstract class Node {
   /** When true the server will omit this node's output. Default: false */
   hide: boolean;
 
-  /** When events happen (eg. data recieved) we send messages to the node's mailbox */
-  // protected mailbox: Mailbox;
   /** TODO this field stores the last response, but it's just temporary until the internals are refactored */
   protected _response: SubstrateResponse | undefined;
 
@@ -33,7 +31,6 @@ export abstract class Node {
     this.args = args;
     this.id = opts?.id || generator(this.node);
     this.hide = opts?.hide || false;
-    // this.mailbox = new Mailbox(this as Node);
   }
 
   /**
@@ -44,7 +41,7 @@ export abstract class Node {
   }
 
   protected set response(res: SubstrateResponse) {
-    if (!this._response) this._response = res;
+    this._response = res;
   }
 
   protected output() {
@@ -65,13 +62,20 @@ export abstract class Node {
   /**
    * Return the resolved result for this node.
    */
-  protected abstract result(): Promise<any>;
-  // protected async result(): Promise<any> {
-  //   // return this.mailbox.lastResult();
-  //   return Promise.resolve(
-  //     this._response ? this._response.get(this) : undefined,
-  //   );
-  // }
+  protected async result(): Promise<any> {
+    if (!this._response) {
+      return Promise.reject(
+        new SubstrateError(
+          `${this.node} (id=${this.id}) has not been run yet!`,
+        ),
+      );
+    }
+    return Promise.resolve(
+      this._response
+        ? this._response.get(this as unknown as AnyNode)
+        : undefined,
+    );
+  }
 
   toJSON() {
     // When we serialize a node we're also going to be extracting
