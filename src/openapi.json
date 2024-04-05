@@ -1459,8 +1459,8 @@
         },
         "required": ["embeddings"]
       },
-      "VectorStoreParams": {
-        "title": "VectorStoreParams",
+      "CreateVectorStoreIn": {
+        "title": "CreateVectorStoreIn",
         "type": "object",
         "properties": {
           "name": {
@@ -1497,8 +1497,80 @@
         },
         "required": ["name", "model"]
       },
-      "DeleteVectorStoreParams": {
-        "title": "DeleteVectorStoreParams",
+      "CreateVectorStoreOut": {
+        "title": "CreateVectorStoreOut",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Vector store name.",
+            "minLength": 1,
+            "maxLength": 63
+          },
+          "model": {
+            "type": "string",
+            "description": "Selected embedding model",
+            "enum": ["jina-v2", "clip"]
+          },
+          "m": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 64,
+            "default": 16,
+            "description": "The max number of connections per layer for the index."
+          },
+          "ef_construction": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 128,
+            "description": "The size of the dynamic candidate list for constructing the index graph.",
+            "default": 64
+          },
+          "metric": {
+            "type": "string",
+            "enum": ["cosine", "l2", "inner"],
+            "default": "inner",
+            "description": "The distance metric to construct the index with."
+          }
+        },
+        "required": ["name", "model", "m", "ef_construction", "metric"]
+      },
+      "ListVectorStoresIn": {
+        "title": "ListVectorStoresIn",
+        "type": "object",
+        "properties": {}
+      },
+      "ListVectorStoresOut": {
+        "title": "ListVectorStoresOut",
+        "type": "object",
+        "properties": {
+          "stores": {
+            "type": "array",
+            "description": "List of vector stores.",
+            "items": {
+              "$ref": "#/components/schemas/CreateVectorStoreOut"
+            }
+          }
+        }
+      },
+      "DeleteVectorStoreIn": {
+        "title": "DeleteVectorStoreIn",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Vector store name."
+          },
+          "model": {
+            "type": "string",
+            "description": "Selected embedding model",
+            "enum": ["jina-v2", "clip"]
+          }
+        },
+        "required": ["name", "model"]
+      },
+      "DeleteVectorStoreOut": {
+        "title": "DeleteVectorStoreOut",
         "type": "object",
         "properties": {
           "name": {
@@ -1537,8 +1609,8 @@
         },
         "required": ["id", "vector", "metadata"]
       },
-      "GetVectorsParams": {
-        "title": "GetVectorsParams",
+      "FetchVectorsIn": {
+        "title": "FetchVectorsIn",
         "type": "object",
         "properties": {
           "name": {
@@ -1561,8 +1633,8 @@
         },
         "required": ["name", "model", "ids"]
       },
-      "GetVectorsResponse": {
-        "title": "GetVectorsResponse",
+      "FetchVectorsOut": {
+        "title": "FetchVectorsOut",
         "type": "object",
         "properties": {
           "vectors": {
@@ -1575,8 +1647,19 @@
         },
         "required": ["vectors"]
       },
-      "VectorUpdateCountResponse": {
-        "title": "VectorUpdateCountResponse",
+      "UpdateVectorsOut": {
+        "title": "UpdateVectorsOut",
+        "type": "object",
+        "properties": {
+          "count": {
+            "type": "integer",
+            "description": "Number of vectors modified."
+          }
+        },
+        "required": ["count"]
+      },
+      "DeleteVectorsOut": {
+        "title": "DeleteVectorsOut",
         "type": "object",
         "properties": {
           "count": {
@@ -1610,7 +1693,7 @@
         },
         "required": ["id"]
       },
-      "UpdateVectorsParams": {
+      "UpdateVectorsIn": {
         "title": "UpdateVectorsParams",
         "type": "object",
         "properties": {
@@ -1634,8 +1717,8 @@
         },
         "required": ["name", "model", "vectors"]
       },
-      "DeleteVectorsParams": {
-        "title": "DeleteVectorsParams",
+      "DeleteVectorsIn": {
+        "title": "DeleteVectorsIn",
         "type": "object",
         "properties": {
           "name": {
@@ -1658,8 +1741,8 @@
         },
         "required": ["name", "model", "ids"]
       },
-      "QueryVectorStoreParams": {
-        "title": "QueryVectorStoreParams",
+      "QueryVectorStoreIn": {
+        "title": "QueryVectorStoreIn",
         "type": "object",
         "properties": {
           "name": {
@@ -1762,8 +1845,8 @@
         },
         "required": ["id", "distance"]
       },
-      "QueryVectorStoreResponse": {
-        "title": "QueryVectorStoreResponse",
+      "QueryVectorStoreOut": {
+        "title": "QueryVectorStoreOut",
         "type": "object",
         "properties": {
           "results": {
@@ -2552,17 +2635,17 @@
         }
       }
     },
-    "/vector-stores/create": {
+    "/CreateVectorStore": {
       "post": {
-        "tags": ["rest-api"],
-        "summary": "/vector-stores/create",
-        "operationId": "/vector-stores/create",
+        "tags": ["semantic-space"],
+        "summary": "CreateVectorStore",
+        "operationId": "CreateVectorStore",
         "description": "Create a vector store for storing and querying embeddings.",
         "parameters": [
           {
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/VectorStoreParams"
+              "$ref": "#/components/schemas/CreateVectorStoreIn"
             }
           }
         ],
@@ -2572,7 +2655,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/VectorStoreParams"
+                  "$ref": "#/components/schemas/CreateVectorStoreOut"
                 }
               }
             }
@@ -2580,22 +2663,27 @@
         }
       }
     },
-    "/vector-stores/list": {
-      "get": {
-        "tags": ["rest-api"],
-        "summary": "/vector-stores/list",
-        "operationId": "/vector-stores/list",
+    "/ListVectorStores": {
+      "post": {
+        "tags": ["semantic-space"],
+        "summary": "ListVectorStores",
+        "operationId": "ListVectorStores",
         "description": "List all vector stores.",
+        "parameters": [
+          {
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/ListVectorStoresIn"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "List of vector stores.",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/VectorStoreParams"
-                  }
+                  "$ref": "#/components/schemas/ListVectorStoresOut"
                 }
               }
             }
@@ -2603,38 +2691,45 @@
         }
       }
     },
-    "/vector-stores/delete": {
+    "/DeleteVectorStore": {
       "post": {
-        "tags": ["rest-api"],
-        "summary": "/vector-stores/delete",
-        "operationId": "/vector-stores/delete",
+        "tags": ["semantic-space"],
+        "summary": "DeleteVectorStore",
+        "operationId": "DeleteVectorStore",
         "description": "Delete a vector store.",
         "parameters": [
           {
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/DeleteVectorStoreParams"
+              "$ref": "#/components/schemas/DeleteVectorStoreIn"
             }
           }
         ],
         "responses": {
-          "204": {
-            "description": "Vector store deleted."
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteVectorStoreOut"
+                }
+              }
+            }
           }
         }
       }
     },
-    "/vector-stores/query": {
+    "/QueryVectorStore": {
       "post": {
-        "tags": ["rest-api"],
-        "summary": "/vector-stores/query",
-        "operationId": "/vector-stores/query",
+        "tags": ["semantic-space"],
+        "summary": "QueryVectorStore",
+        "operationId": "QueryVectorStore",
         "description": "Query a vector store for similar vectors.",
         "parameters": [
           {
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/QueryVectorStoreParams"
+              "$ref": "#/components/schemas/QueryVectorStoreIn"
             }
           }
         ],
@@ -2644,7 +2739,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/QueryVectorStoreResponse"
+                  "$ref": "#/components/schemas/QueryVectorStoreOut"
                 }
               }
             }
@@ -2652,17 +2747,17 @@
         }
       }
     },
-    "/vectors/fetch": {
+    "/FetchVectors": {
       "post": {
-        "tags": ["rest-api"],
-        "summary": "/vectors/fetch",
-        "operationId": "/vectors/fetch",
+        "tags": ["semantic-space"],
+        "summary": "FetchVectors",
+        "operationId": "FetchVectors",
         "description": "Fetch vectors from a vector store.",
         "parameters": [
           {
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/GetVectorsParams"
+              "$ref": "#/components/schemas/FetchVectorsIn"
             }
           }
         ],
@@ -2672,7 +2767,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetVectorsResponse"
+                  "$ref": "#/components/schemas/FetchVectorsOut"
                 }
               }
             }
@@ -2680,17 +2775,17 @@
         }
       }
     },
-    "/vectors/update": {
+    "/UpdateVectors": {
       "post": {
-        "tags": ["rest-api"],
-        "summary": "/vectors/update",
-        "operationId": "/vectors/update",
+        "tags": ["semantic-space"],
+        "summary": "UpdateVectors",
+        "operationId": "UpdateVectors",
         "description": "Update vectors in a vector store.",
         "parameters": [
           {
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/UpdateVectorsParams"
+              "$ref": "#/components/schemas/UpdateVectorsIn"
             }
           }
         ],
@@ -2700,7 +2795,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/VectorUpdateCountResponse"
+                  "$ref": "#/components/schemas/UpdateVectorsOut"
                 }
               }
             }
@@ -2708,17 +2803,17 @@
         }
       }
     },
-    "/vectors/delete": {
+    "/DeleteVectors": {
       "post": {
-        "tags": ["rest-api"],
-        "summary": "/vectors/delete",
-        "operationId": "/vectors/delete",
+        "tags": ["semantic-space"],
+        "summary": "DeleteVectors",
+        "operationId": "DeleteVectors",
         "description": "Delete vectors in a vector store.",
         "parameters": [
           {
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/DeleteVectorsParams"
+              "$ref": "#/components/schemas/DeleteVectorsIn"
             }
           }
         ],
@@ -2728,7 +2823,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/VectorUpdateCountResponse"
+                  "$ref": "#/components/schemas/DeleteVectorsOut"
                 }
               }
             }
@@ -2769,10 +2864,6 @@
     {
       "name": "semantic-space",
       "description": "Semantic Space"
-    },
-    {
-      "name": "rest-api",
-      "description": "Standalone REST APIs"
     }
   ]
 }

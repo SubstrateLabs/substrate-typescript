@@ -1,7 +1,7 @@
 /**
  * ꩜ Substrate TypeScript SDK
  * @generated file
- * 20240403.20240403
+ * 20240403.20240404
  */
 
 export { SubstrateError } from "substrate/Error";
@@ -33,6 +33,13 @@ export {
   MultiEmbedImage,
   JinaV2,
   CLIP,
+  CreateVectorStore,
+  ListVectorStores,
+  DeleteVectorStore,
+  QueryVectorStore,
+  FetchVectors,
+  UpdateVectors,
+  DeleteVectors,
 } from "substrate/Nodes";
 
 export { sb } from "substrate/sb";

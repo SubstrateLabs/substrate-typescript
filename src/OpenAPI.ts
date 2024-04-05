@@ -193,54 +193,54 @@ export interface paths {
      */
     post: operations["CLIP"];
   };
-  "/vector-stores/create": {
+  "/CreateVectorStore": {
     /**
-     * /vector-stores/create
+     * CreateVectorStore
      * @description Create a vector store for storing and querying embeddings.
      */
-    post: operations["/vector-stores/create"];
+    post: operations["CreateVectorStore"];
   };
-  "/vector-stores/list": {
+  "/ListVectorStores": {
     /**
-     * /vector-stores/list
+     * ListVectorStores
      * @description List all vector stores.
      */
-    get: operations["/vector-stores/list"];
+    post: operations["ListVectorStores"];
   };
-  "/vector-stores/delete": {
+  "/DeleteVectorStore": {
     /**
-     * /vector-stores/delete
+     * DeleteVectorStore
      * @description Delete a vector store.
      */
-    post: operations["/vector-stores/delete"];
+    post: operations["DeleteVectorStore"];
   };
-  "/vector-stores/query": {
+  "/QueryVectorStore": {
     /**
-     * /vector-stores/query
+     * QueryVectorStore
      * @description Query a vector store for similar vectors.
      */
-    post: operations["/vector-stores/query"];
+    post: operations["QueryVectorStore"];
   };
-  "/vectors/fetch": {
+  "/FetchVectors": {
     /**
-     * /vectors/fetch
+     * FetchVectors
      * @description Fetch vectors from a vector store.
      */
-    post: operations["/vectors/fetch"];
+    post: operations["FetchVectors"];
   };
-  "/vectors/update": {
+  "/UpdateVectors": {
     /**
-     * /vectors/update
+     * UpdateVectors
      * @description Update vectors in a vector store.
      */
-    post: operations["/vectors/update"];
+    post: operations["UpdateVectors"];
   };
-  "/vectors/delete": {
+  "/DeleteVectors": {
     /**
-     * /vectors/delete
+     * DeleteVectors
      * @description Delete vectors in a vector store.
      */
-    post: operations["/vectors/delete"];
+    post: operations["DeleteVectors"];
   };
 }
 
@@ -1194,8 +1194,8 @@ export interface components {
         metadata?: Record<string, never>;
       }[];
     };
-    /** VectorStoreParams */
-    VectorStoreParams: {
+    /** CreateVectorStoreIn */
+    CreateVectorStoreIn: {
       /** @description Vector store name. */
       name: string;
       /**
@@ -1220,8 +1220,75 @@ export interface components {
        */
       metric?: "cosine" | "l2" | "inner";
     };
-    /** DeleteVectorStoreParams */
-    DeleteVectorStoreParams: {
+    /** CreateVectorStoreOut */
+    CreateVectorStoreOut: {
+      /** @description Vector store name. */
+      name: string;
+      /**
+       * @description Selected embedding model
+       * @enum {string}
+       */
+      model: "jina-v2" | "clip";
+      /**
+       * @description The max number of connections per layer for the index.
+       * @default 16
+       */
+      m: number;
+      /**
+       * @description The size of the dynamic candidate list for constructing the index graph.
+       * @default 64
+       */
+      ef_construction: number;
+      /**
+       * @description The distance metric to construct the index with.
+       * @default inner
+       * @enum {string}
+       */
+      metric: "cosine" | "l2" | "inner";
+    };
+    /** ListVectorStoresIn */
+    ListVectorStoresIn: Record<string, never>;
+    /** ListVectorStoresOut */
+    ListVectorStoresOut: {
+      /** @description List of vector stores. */
+      stores?: {
+        /** @description Vector store name. */
+        name: string;
+        /**
+         * @description Selected embedding model
+         * @enum {string}
+         */
+        model: "jina-v2" | "clip";
+        /**
+         * @description The max number of connections per layer for the index.
+         * @default 16
+         */
+        m: number;
+        /**
+         * @description The size of the dynamic candidate list for constructing the index graph.
+         * @default 64
+         */
+        ef_construction: number;
+        /**
+         * @description The distance metric to construct the index with.
+         * @default inner
+         * @enum {string}
+         */
+        metric: "cosine" | "l2" | "inner";
+      }[];
+    };
+    /** DeleteVectorStoreIn */
+    DeleteVectorStoreIn: {
+      /** @description Vector store name. */
+      name: string;
+      /**
+       * @description Selected embedding model
+       * @enum {string}
+       */
+      model: "jina-v2" | "clip";
+    };
+    /** DeleteVectorStoreOut */
+    DeleteVectorStoreOut: {
       /** @description Vector store name. */
       name: string;
       /**
@@ -1242,8 +1309,8 @@ export interface components {
       /** @description Document metadata. */
       metadata: Record<string, never>;
     };
-    /** GetVectorsParams */
-    GetVectorsParams: {
+    /** FetchVectorsIn */
+    FetchVectorsIn: {
       /** @description Vector store name. */
       name: string;
       /**
@@ -1254,8 +1321,8 @@ export interface components {
       /** @description Document IDs to retrieve. */
       ids: string[];
     };
-    /** GetVectorsResponse */
-    GetVectorsResponse: {
+    /** FetchVectorsOut */
+    FetchVectorsOut: {
       /** @description Retrieved vectors. */
       vectors: {
         /** @description Document ID. */
@@ -1266,8 +1333,13 @@ export interface components {
         metadata: Record<string, never>;
       }[];
     };
-    /** VectorUpdateCountResponse */
-    VectorUpdateCountResponse: {
+    /** UpdateVectorsOut */
+    UpdateVectorsOut: {
+      /** @description Number of vectors modified. */
+      count: number;
+    };
+    /** DeleteVectorsOut */
+    DeleteVectorsOut: {
       /** @description Number of vectors modified. */
       count: number;
     };
@@ -1284,7 +1356,7 @@ export interface components {
       metadata?: Record<string, never>;
     };
     /** UpdateVectorsParams */
-    UpdateVectorsParams: {
+    UpdateVectorsIn: {
       /** @description Vector store name. */
       name: string;
       /**
@@ -1302,8 +1374,8 @@ export interface components {
         metadata?: Record<string, never>;
       }[];
     };
-    /** DeleteVectorsParams */
-    DeleteVectorsParams: {
+    /** DeleteVectorsIn */
+    DeleteVectorsIn: {
       /** @description Vector store name. */
       name: string;
       /**
@@ -1314,8 +1386,8 @@ export interface components {
       /** @description Document IDs to delete. */
       ids: string[];
     };
-    /** QueryVectorStoreParams */
-    QueryVectorStoreParams: {
+    /** QueryVectorStoreIn */
+    QueryVectorStoreIn: {
       /** @description Vector store to query against. */
       name: string;
       /**
@@ -1368,8 +1440,8 @@ export interface components {
       /** @description Document metadata. */
       metadata?: Record<string, never>;
     };
-    /** QueryVectorStoreResponse */
-    QueryVectorStoreResponse: {
+    /** QueryVectorStoreOut */
+    QueryVectorStoreOut: {
       /** @description Query results. */
       results: {
         /** @description Document ID. */
@@ -2614,10 +2686,10 @@ export interface operations {
     };
   };
   /**
-   * /vector-stores/create
+   * CreateVectorStore
    * @description Create a vector store for storing and querying embeddings.
    */
-  "/vector-stores/create": {
+  CreateVectorStore: {
     parameters: {
       query?: {
         undefined?: {
@@ -2663,66 +2735,74 @@ export interface operations {
              * @description The max number of connections per layer for the index.
              * @default 16
              */
-            m?: number;
+            m: number;
             /**
              * @description The size of the dynamic candidate list for constructing the index graph.
              * @default 64
              */
-            ef_construction?: number;
+            ef_construction: number;
             /**
              * @description The distance metric to construct the index with.
              * @default inner
              * @enum {string}
              */
-            metric?: "cosine" | "l2" | "inner";
+            metric: "cosine" | "l2" | "inner";
           };
         };
       };
     };
   };
   /**
-   * /vector-stores/list
+   * ListVectorStores
    * @description List all vector stores.
    */
-  "/vector-stores/list": {
+  ListVectorStores: {
+    parameters: {
+      query?: {
+        undefined?: Record<string, never>;
+      };
+    };
     responses: {
       /** @description List of vector stores. */
       200: {
         content: {
           "application/json": {
-            /** @description Vector store name. */
-            name: string;
-            /**
-             * @description Selected embedding model
-             * @enum {string}
-             */
-            model: "jina-v2" | "clip";
-            /**
-             * @description The max number of connections per layer for the index.
-             * @default 16
-             */
-            m?: number;
-            /**
-             * @description The size of the dynamic candidate list for constructing the index graph.
-             * @default 64
-             */
-            ef_construction?: number;
-            /**
-             * @description The distance metric to construct the index with.
-             * @default inner
-             * @enum {string}
-             */
-            metric?: "cosine" | "l2" | "inner";
-          }[];
+            /** @description List of vector stores. */
+            stores?: {
+              /** @description Vector store name. */
+              name: string;
+              /**
+               * @description Selected embedding model
+               * @enum {string}
+               */
+              model: "jina-v2" | "clip";
+              /**
+               * @description The max number of connections per layer for the index.
+               * @default 16
+               */
+              m: number;
+              /**
+               * @description The size of the dynamic candidate list for constructing the index graph.
+               * @default 64
+               */
+              ef_construction: number;
+              /**
+               * @description The distance metric to construct the index with.
+               * @default inner
+               * @enum {string}
+               */
+              metric: "cosine" | "l2" | "inner";
+            }[];
+          };
         };
       };
     };
   };
   /**
-   * /vector-stores/delete
+   * DeleteVectorStore
    * @description Delete a vector store.
    */
-  "/vector-stores/delete": {
+  DeleteVectorStore: {
     parameters: {
       query?: {
         undefined?: {
@@ -2737,17 +2817,27 @@ export interface operations {
       };
     };
     responses: {
-      /** @description Vector store deleted. */
-      204: {
-        content: never;
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": {
+            /** @description Vector store name. */
+            name: string;
+            /**
+             * @description Selected embedding model
+             * @enum {string}
+             */
+            model: "jina-v2" | "clip";
+          };
+        };
       };
     };
   };
   /**
-   * /vector-stores/query
+   * QueryVectorStore
    * @description Query a vector store for similar vectors.
    */
-  "/vector-stores/query": {
+  QueryVectorStore: {
     parameters: {
       query?: {
         undefined?: {
@@ -2828,10 +2918,10 @@ export interface operations {
     };
   };
   /**
-   * /vectors/fetch
+   * FetchVectors
    * @description Fetch vectors from a vector store.
    */
-  "/vectors/fetch": {
+  FetchVectors: {
     parameters: {
       query?: {
         undefined?: {
@@ -2867,10 +2957,10 @@ export interface operations {
     };
   };
   /**
-   * /vectors/update
+   * UpdateVectors
    * @description Update vectors in a vector store.
    */
-  "/vectors/update": {
+  UpdateVectors: {
     parameters: {
       query?: {
         undefined?: {
@@ -2906,10 +2996,10 @@ export interface operations {
     };
   };
   /**
-   * /vectors/delete
+   * DeleteVectors
    * @description Delete vectors in a vector store.
    */
-  "/vectors/delete": {
+  DeleteVectors: {
     parameters: {
       query?: {
         undefined?: {

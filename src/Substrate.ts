@@ -136,7 +136,6 @@ export class Substrate {
     headers.append("X-Substrate-Version", this.apiVersion);
     headers.append("X-Substrate-Backend", this.backend); // Switch between old and new backends
 
-
     // Auth
     headers.append("Authorization", `Bearer ${this.apiKey}`);
 
