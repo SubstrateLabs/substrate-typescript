@@ -1,6 +1,7 @@
 #!/usr/bin/env -S npx ts-node --transpileOnly
 
 import { readFileSync, writeFileSync } from "fs";
+import { execSync } from "node:child_process";
 
 // NOTE: Merged with API version to produce the full SDK version string
 // https://docs.substrate.run/versioning
@@ -17,6 +18,8 @@ try {
   packageJson.version = newVersion;
   writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2) + "\n");
   ok(`Updated package.json to version ${newVersion}`);
+  execSync(`npm install`); // updates package-lock.json
+  ok(`Updated package-lock.json`);
   const versionTsPath = "src/version.ts";
   const versionExport = `export const VERSION = "${newVersion}";\n`;
   writeFileSync(versionTsPath, versionExport);
