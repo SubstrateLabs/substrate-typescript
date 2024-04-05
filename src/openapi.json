@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Substrate API",
-    "version": "2024-04-03",
+    "version": "2024-04-05",
     "contact": {
       "email": "support@substrate.run"
     },
@@ -821,11 +821,41 @@
             "type": "string",
             "description": "Mask image that controls which pixels are inpainted."
           },
-          "model": {
+          "store": {
             "type": "string",
-            "enum": ["big-lama"],
-            "description": "Selected model.",
-            "default": "big-lama"
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+          },
+          "node": {
+            "type": "string",
+            "enum": ["BigLaMa"],
+            "description": "Selected node.",
+            "default": "BigLaMa"
+          }
+        },
+        "required": ["image_uri", "mask_image_uri"]
+      },
+      "FillMaskOut": {
+        "title": "FillMaskOut",
+        "type": "object",
+        "properties": {
+          "image_uri": {
+            "type": "string",
+            "description": "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided."
+          }
+        },
+        "required": ["image_uri"]
+      },
+      "BigLaMaIn": {
+        "title": "BigLaMaIn",
+        "type": "object",
+        "properties": {
+          "image_uri": {
+            "type": "string",
+            "description": "Input image."
+          },
+          "mask_image_uri": {
+            "type": "string",
+            "description": "Mask image that controls which pixels are inpainted."
           },
           "store": {
             "type": "string",
@@ -834,8 +864,8 @@
         },
         "required": ["image_uri", "mask_image_uri"]
       },
-      "FillMaskOut": {
-        "title": "FillMaskOut",
+      "BigLaMaOut": {
+        "title": "BigLaMaOut",
         "type": "object",
         "properties": {
           "image_uri": {
@@ -861,15 +891,15 @@
             "type": "string",
             "description": "Hex value background color. Transparent if unset."
           },
-          "model": {
-            "type": "string",
-            "enum": ["isnet"],
-            "description": "Selected model.",
-            "default": "isnet"
-          },
           "store": {
             "type": "string",
             "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+          },
+          "node": {
+            "type": "string",
+            "enum": ["DISISNet"],
+            "description": "Selected node.",
+            "default": "DISISNet"
           }
         },
         "required": ["image_uri"]
@@ -885,8 +915,66 @@
         },
         "required": ["image_uri"]
       },
+      "DISISNetIn": {
+        "title": "DISISNetIn",
+        "type": "object",
+        "properties": {
+          "image_uri": {
+            "type": "string",
+            "description": "Input image."
+          },
+          "store": {
+            "type": "string",
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+          }
+        },
+        "required": ["image_uri"]
+      },
+      "DISISNetOut": {
+        "title": "DISISNetOut",
+        "type": "object",
+        "properties": {
+          "image_uri": {
+            "type": "string",
+            "description": "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided."
+          }
+        },
+        "required": ["image_uri"]
+      },
       "UpscaleImageIn": {
         "title": "UpscaleImageIn",
+        "type": "object",
+        "properties": {
+          "image_uri": {
+            "type": "string",
+            "description": "Input image."
+          },
+          "store": {
+            "type": "string",
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+          },
+          "node": {
+            "type": "string",
+            "enum": ["RealESRGAN"],
+            "description": "Selected node.",
+            "default": "RealESRGAN"
+          }
+        },
+        "required": ["image_uri"]
+      },
+      "UpscaleImageOut": {
+        "title": "UpscaleImageOut",
+        "type": "object",
+        "properties": {
+          "image_uri": {
+            "type": "string",
+            "description": "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided."
+          }
+        },
+        "required": ["image_uri"]
+      },
+      "RealESRGANIn": {
+        "title": "RealESRGANIn",
         "type": "object",
         "properties": {
           "image_uri": {
@@ -906,8 +994,8 @@
         },
         "required": ["image_uri"]
       },
-      "UpscaleImageOut": {
-        "title": "UpscaleImageOut",
+      "RealESRGANOut": {
+        "title": "RealESRGANOut",
         "type": "object",
         "properties": {
           "image_uri": {
@@ -917,8 +1005,44 @@
         },
         "required": ["image_uri"]
       },
-      "DetectSegmentsIn": {
-        "title": "DetectSegmentsIn",
+      "SegmentUnderPointIn": {
+        "title": "SegmentUnderPointIn",
+        "type": "object",
+        "properties": {
+          "image_uri": {
+            "type": "string",
+            "description": "Input image."
+          },
+          "point": {
+            "description": "Point prompt.",
+            "$ref": "#/components/schemas/Point"
+          },
+          "store": {
+            "type": "string",
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+          },
+          "node": {
+            "type": "string",
+            "enum": ["SegmentAnything"],
+            "description": "Selected node.",
+            "default": "SegmentAnything"
+          }
+        },
+        "required": ["image_uri", "point"]
+      },
+      "SegmentUnderPointOut": {
+        "title": "SegmentUnderPointOut",
+        "type": "object",
+        "properties": {
+          "mask_image_uri": {
+            "type": "string",
+            "description": "Detected segments in 'mask image' format. Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided."
+          }
+        },
+        "required": ["mask_image_uri"]
+      },
+      "SegmentAnythingIn": {
+        "title": "SegmentAnythingIn",
         "type": "object",
         "properties": {
           "image_uri": {
@@ -939,12 +1063,6 @@
               "$ref": "#/components/schemas/BoundingBox"
             }
           },
-          "model": {
-            "type": "string",
-            "enum": ["segment-anything"],
-            "description": "Selected model.",
-            "default": "segment-anything"
-          },
           "store": {
             "type": "string",
             "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
@@ -952,8 +1070,8 @@
         },
         "required": ["image_uri"]
       },
-      "DetectSegmentsOut": {
-        "title": "DetectSegmentsOut",
+      "SegmentAnythingOut": {
+        "title": "SegmentAnythingOut",
         "type": "object",
         "properties": {
           "mask_image_uri": {
@@ -1109,6 +1227,38 @@
             "type": "string",
             "description": "Input text."
           },
+          "store": {
+            "type": "string",
+            "description": "Use \"hosted\" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the audio data will be returned as a base64-encoded string."
+          },
+          "node": {
+            "type": "string",
+            "enum": ["XTTSV2"],
+            "description": "Selected node.",
+            "default": "XTTSV2"
+          }
+        },
+        "required": ["text"]
+      },
+      "GenerateSpeechOut": {
+        "title": "GenerateSpeechOut",
+        "type": "object",
+        "properties": {
+          "audio_uri": {
+            "type": "string",
+            "description": "Base 64-encoded WAV audio bytes, or a hosted audio url if `store` is provided."
+          }
+        },
+        "required": ["audio_uri"]
+      },
+      "XTTSV2In": {
+        "title": "XTTSV2In",
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "Input text."
+          },
           "audio_uri": {
             "type": "string",
             "description": "Reference audio used to synthesize the speaker. If unset, a default speaker voice will be used."
@@ -1125,8 +1275,8 @@
         },
         "required": ["text"]
       },
-      "GenerateSpeechOut": {
-        "title": "GenerateSpeechOut",
+      "XTTSV2Out": {
+        "title": "XTTSV2Out",
         "type": "object",
         "properties": {
           "audio_uri": {
@@ -1671,7 +1821,6 @@
       },
       "UpdateVectorParams": {
         "title": "UpdateVectorParams",
-        "description": "Document to update.",
         "type": "object",
         "properties": {
           "id": {
@@ -2023,8 +2172,8 @@
       "post": {
         "summary": "Mistral7BInstruct",
         "operationId": "Mistral7BInstruct",
-        "tags": ["language-generation"],
-        "description": "Generate text using Mistral 7B Instruct.",
+        "tags": ["language-generation", "raw"],
+        "description": "Generate text using [Mistral 7B Instruct](https://mistral.ai/news/announcing-mistral-7b).",
         "parameters": [
           {
             "in": "query",
@@ -2051,8 +2200,8 @@
       "post": {
         "summary": "Firellava13B",
         "operationId": "Firellava13B",
-        "tags": ["language-generation"],
-        "description": "Generate text with image input using FireLLaVA 13B.",
+        "tags": ["language-generation", "raw"],
+        "description": "Generate text with image input using [FireLLaVA 13B](https://fireworks.ai/blog/firellava-the-first-commercially-permissive-oss-llava-model).",
         "parameters": [
           {
             "in": "query",
@@ -2192,7 +2341,7 @@
         "summary": "StableDiffusionXL",
         "operationId": "StableDiffusionXL",
         "tags": ["image-generation", "raw"],
-        "description": "Generate an image using Stable Diffusion XL.",
+        "description": "Generate an image using [Stable Diffusion XL](https://arxiv.org/abs/2307.01952).",
         "parameters": [
           {
             "in": "query",
@@ -2220,7 +2369,7 @@
         "summary": "StableDiffusionXLInpaint",
         "operationId": "StableDiffusionXLInpaint",
         "tags": ["image-generation", "raw"],
-        "description": "Inpaint an image using Stable Diffusion XL.",
+        "description": "Edit an image using [Stable Diffusion XL](https://arxiv.org/abs/2307.01952). Supports inpainting (edit part of the image with a mask) and image-to-image (edit the full image).",
         "parameters": [
           {
             "in": "query",
@@ -2247,8 +2396,8 @@
       "post": {
         "summary": "StableDiffusionXLIPAdapter",
         "operationId": "StableDiffusionXLIPAdapter",
-        "tags": ["image-generation"],
-        "description": "Generate an image using Stable Diffusion XL with an image prompt.",
+        "tags": ["image-generation", "raw"],
+        "description": "Generate an image with an image prompt, using Stable Diffusion XL with [IP-Adapter](https://arxiv.org/abs/2308.06721).",
         "parameters": [
           {
             "in": "query",
@@ -2275,8 +2424,8 @@
       "post": {
         "summary": "StableDiffusionXLControlNet",
         "operationId": "StableDiffusionXLControlNet",
-        "tags": ["image-generation"],
-        "description": "Generate an image using Stable Diffusion XL structuring generation with an input image.",
+        "tags": ["image-generation", "raw"],
+        "description": "Generate an image with generation structured by an input image, using Stable Diffusion XL with [ControlNet](https://arxiv.org/abs/2302.05543).",
         "parameters": [
           {
             "in": "query",
@@ -2304,7 +2453,7 @@
         "summary": "FillMask",
         "operationId": "FillMask",
         "tags": ["image-utility"],
-        "description": "Edit an image with a generative model.",
+        "description": "Fill (inpaint) part of an image, e.g. to 'remove' an object.",
         "parameters": [
           {
             "in": "query",
@@ -2320,6 +2469,34 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/FillMaskOut"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/BigLaMa": {
+      "post": {
+        "summary": "BigLaMa",
+        "operationId": "BigLaMa",
+        "tags": ["image-utility", "raw"],
+        "description": "Inpaint a mask using [LaMa](https://github.com/advimman/lama).",
+        "parameters": [
+          {
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/BigLaMaIn"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BigLaMaOut"
                 }
               }
             }
@@ -2355,6 +2532,34 @@
         }
       }
     },
+    "/RealESRGAN": {
+      "post": {
+        "summary": "RealESRGAN",
+        "operationId": "RealESRGAN",
+        "tags": ["image-utility", "raw"],
+        "description": "Upscale an image using [RealESRGAN](https://github.com/xinntao/Real-ESRGAN).",
+        "parameters": [
+          {
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/RealESRGANIn"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RealESRGANOut"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/RemoveBackground": {
       "post": {
         "summary": "RemoveBackground",
@@ -2383,17 +2588,17 @@
         }
       }
     },
-    "/DetectSegments": {
+    "/DISISNet": {
       "post": {
-        "summary": "DetectSegments",
-        "operationId": "DetectSegments",
-        "tags": ["image-utility"],
-        "description": "Detect segments in an image given point(s) or bounding box(es).",
+        "summary": "DISISNet",
+        "operationId": "DISISNet",
+        "tags": ["image-utility", "raw"],
+        "description": "Segment image foreground using [DIS IS-Net](https://github.com/xuebinqin/DIS).",
         "parameters": [
           {
             "in": "query",
             "schema": {
-              "$ref": "#/components/schemas/DetectSegmentsIn"
+              "$ref": "#/components/schemas/DISISNetIn"
             }
           }
         ],
@@ -2403,7 +2608,63 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DetectSegmentsOut"
+                  "$ref": "#/components/schemas/DISISNetOut"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/SegmentUnderPoint": {
+      "post": {
+        "summary": "SegmentUnderPoint",
+        "operationId": "SegmentUnderPoint",
+        "tags": ["image-utility"],
+        "description": "Segment an image under a point and return the segment.",
+        "parameters": [
+          {
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/SegmentUnderPointIn"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SegmentUnderPointOut"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/SegmentAnything": {
+      "post": {
+        "summary": "SegmentAnything",
+        "operationId": "SegmentAnything",
+        "tags": ["image-utility", "raw"],
+        "description": "Segment an image using [SegmentAnything](https://github.com/facebookresearch/segment-anything).",
+        "parameters": [
+          {
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/SegmentAnythingIn"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SegmentAnythingOut"
                 }
               }
             }
@@ -2460,6 +2721,34 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/GenerateSpeechOut"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/XTTSV2": {
+      "post": {
+        "summary": "XTTSV2",
+        "operationId": "XTTSV2",
+        "tags": ["audio", "raw"],
+        "description": "Generate speech from text using [XTTS v2](https://docs.coqui.ai/en/latest/models/xtts.html).",
+        "parameters": [
+          {
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/XTTSV2In"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/XTTSV2Out"
                 }
               }
             }
@@ -2583,8 +2872,8 @@
       "post": {
         "summary": "JinaV2",
         "operationId": "JinaV2",
-        "tags": ["embedding"],
-        "description": "Generate embeddings for multiple text documents using Jina V2.",
+        "tags": ["embedding", "raw"],
+        "description": "Generate embeddings for multiple text documents using [Jina Embeddings 2](https://arxiv.org/abs/2310.19923).",
         "parameters": [
           {
             "in": "query",
@@ -2611,8 +2900,8 @@
       "post": {
         "summary": "CLIP",
         "operationId": "CLIP",
-        "tags": ["embedding"],
-        "description": "Generate embeddings for text or images using CLIP.",
+        "tags": ["embedding", "raw"],
+        "description": "Generate embeddings for text or images using [CLIP](https://openai.com/research/clip).",
         "parameters": [
           {
             "in": "query",
@@ -2637,7 +2926,7 @@
     },
     "/CreateVectorStore": {
       "post": {
-        "tags": ["semantic-space"],
+        "tags": ["vector-store"],
         "summary": "CreateVectorStore",
         "operationId": "CreateVectorStore",
         "description": "Create a vector store for storing and querying embeddings.",
@@ -2665,7 +2954,7 @@
     },
     "/ListVectorStores": {
       "post": {
-        "tags": ["semantic-space"],
+        "tags": ["vector-store"],
         "summary": "ListVectorStores",
         "operationId": "ListVectorStores",
         "description": "List all vector stores.",
@@ -2693,7 +2982,7 @@
     },
     "/DeleteVectorStore": {
       "post": {
-        "tags": ["semantic-space"],
+        "tags": ["vector-store"],
         "summary": "DeleteVectorStore",
         "operationId": "DeleteVectorStore",
         "description": "Delete a vector store.",
@@ -2721,7 +3010,7 @@
     },
     "/QueryVectorStore": {
       "post": {
-        "tags": ["semantic-space"],
+        "tags": ["vector-store"],
         "summary": "QueryVectorStore",
         "operationId": "QueryVectorStore",
         "description": "Query a vector store for similar vectors.",
@@ -2749,7 +3038,7 @@
     },
     "/FetchVectors": {
       "post": {
-        "tags": ["semantic-space"],
+        "tags": ["vector-store"],
         "summary": "FetchVectors",
         "operationId": "FetchVectors",
         "description": "Fetch vectors from a vector store.",
@@ -2777,7 +3066,7 @@
     },
     "/UpdateVectors": {
       "post": {
-        "tags": ["semantic-space"],
+        "tags": ["vector-store"],
         "summary": "UpdateVectors",
         "operationId": "UpdateVectors",
         "description": "Update vectors in a vector store.",
@@ -2805,7 +3094,7 @@
     },
     "/DeleteVectors": {
       "post": {
-        "tags": ["semantic-space"],
+        "tags": ["vector-store"],
         "summary": "DeleteVectors",
         "operationId": "DeleteVectors",
         "description": "Delete vectors in a vector store.",
@@ -2835,35 +3124,27 @@
   "tags": [
     {
       "name": "language-generation",
-      "description": "Language Generation"
-    },
-    {
-      "name": "vision-language-generation",
-      "description": "Vision Language Generation"
+      "description": "Language Generation Nodes"
     },
     {
       "name": "image-generation",
-      "description": "Image Generation"
+      "description": "Image Generation Nodes"
     },
     {
-      "name": "object-detection",
-      "description": "Object Detection"
+      "name": "image-utility",
+      "description": "Image Utility Nodes"
     },
     {
-      "name": "image-utilities",
-      "description": "Image Utilities"
+      "name": "audio",
+      "description": "Audio Nodes"
     },
     {
-      "name": "audio-recognition",
-      "description": "Audio Recognition"
+      "name": "embedding",
+      "description": "Embedding Nodes"
     },
     {
-      "name": "audio-generation",
-      "description": "Audio Generation"
-    },
-    {
-      "name": "semantic-space",
-      "description": "Semantic Space"
+      "name": "vector-store",
+      "description": "Vector Store Nodes"
     }
   ]
 }
