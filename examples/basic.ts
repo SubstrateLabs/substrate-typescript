@@ -11,19 +11,15 @@ async function main() {
     backend: "v1",
   });
 
-  const input: GenerateText.Input = {
-    prompt: "just finish the sentence. a very hard trivia question: ",
-    max_tokens: 50,
-  };
+  const prompt = "ask me a very hard trivia question, don't give the answer: ";
+  const input: GenerateText.Input = { prompt };
 
   const a = new GenerateText(input);
-  // const b = new GenerateText({ prompt: a.future.text });
+  const b = new GenerateText({ prompt: a.future.text });
 
-  const res = await substrate.run(a);
+  const res = await substrate.run(a, b);
 
-  console.log(res.get(a));
-  // const output: GenerateText.Output = res.get(b);
-
-  // console.log({ a: res.get(a), b: output });
+  const output: GenerateText.Output = res.get(b);
+  console.log({ prompt, a: res.get(a), b: output });
 }
 main();
