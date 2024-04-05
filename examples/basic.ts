@@ -10,13 +10,15 @@ async function main() {
     baseUrl: "https://api-staging.substrate.run",
   });
 
-  const a = new GenerateText({
-    prompt: "ask me a short trivia question in one sentence",
-  });
+  const input: GenerateText.Input = { prompt: "asdf" };
+
+  const a = new GenerateText(input);
   const b = new GenerateText({ prompt: a.future.text });
 
   const res = await substrate.run(a, b);
 
-  console.log({ a: res.get(a), b: res.get(b) });
+  const output: GenerateText.Output = res.get(b);
+
+  console.log({ a: res.get(a), b: output });
 }
 main();

@@ -42,14 +42,14 @@ export interface paths {
   "/Mistral7BInstruct": {
     /**
      * Mistral7BInstruct
-     * @description Generate text using Mistral 7B Instruct.
+     * @description Generate text using [Mistral 7B Instruct](https://mistral.ai/news/announcing-mistral-7b).
      */
     post: operations["Mistral7BInstruct"];
   };
   "/Firellava13B": {
     /**
      * Firellava13B
-     * @description Generate text with image input using FireLLaVA 13B.
+     * @description Generate text with image input using [FireLLaVA 13B](https://fireworks.ai/blog/firellava-the-first-commercially-permissive-oss-llava-model).
      */
     post: operations["Firellava13B"];
   };
@@ -84,37 +84,44 @@ export interface paths {
   "/StableDiffusionXL": {
     /**
      * StableDiffusionXL
-     * @description Generate an image using Stable Diffusion XL.
+     * @description Generate an image using [Stable Diffusion XL](https://arxiv.org/abs/2307.01952).
      */
     post: operations["StableDiffusionXL"];
   };
   "/StableDiffusionXLInpaint": {
     /**
      * StableDiffusionXLInpaint
-     * @description Inpaint an image using Stable Diffusion XL.
+     * @description Edit an image using [Stable Diffusion XL](https://arxiv.org/abs/2307.01952). Supports inpainting (edit part of the image with a mask) and image-to-image (edit the full image).
      */
     post: operations["StableDiffusionXLInpaint"];
   };
   "/StableDiffusionXLIPAdapter": {
     /**
      * StableDiffusionXLIPAdapter
-     * @description Generate an image using Stable Diffusion XL with an image prompt.
+     * @description Generate an image with an image prompt, using Stable Diffusion XL with [IP-Adapter](https://arxiv.org/abs/2308.06721).
      */
     post: operations["StableDiffusionXLIPAdapter"];
   };
   "/StableDiffusionXLControlNet": {
     /**
      * StableDiffusionXLControlNet
-     * @description Generate an image using Stable Diffusion XL structuring generation with an input image.
+     * @description Generate an image with generation structured by an input image, using Stable Diffusion XL with [ControlNet](https://arxiv.org/abs/2302.05543).
      */
     post: operations["StableDiffusionXLControlNet"];
   };
   "/FillMask": {
     /**
      * FillMask
-     * @description Edit an image with a generative model.
+     * @description Fill (inpaint) part of an image, e.g. to 'remove' an object.
      */
     post: operations["FillMask"];
+  };
+  "/BigLaMa": {
+    /**
+     * BigLaMa
+     * @description Inpaint a mask using [LaMa](https://github.com/advimman/lama).
+     */
+    post: operations["BigLaMa"];
   };
   "/UpscaleImage": {
     /**
@@ -123,6 +130,13 @@ export interface paths {
      */
     post: operations["UpscaleImage"];
   };
+  "/RealESRGAN": {
+    /**
+     * RealESRGAN
+     * @description Upscale an image using [RealESRGAN](https://github.com/xinntao/Real-ESRGAN).
+     */
+    post: operations["RealESRGAN"];
+  };
   "/RemoveBackground": {
     /**
      * RemoveBackground
@@ -130,12 +144,26 @@ export interface paths {
      */
     post: operations["RemoveBackground"];
   };
-  "/DetectSegments": {
+  "/DISISNet": {
     /**
-     * DetectSegments
-     * @description Detect segments in an image given point(s) or bounding box(es).
+     * DISISNet
+     * @description Segment an image using [DIS IS-Net](https://github.com/xuebinqin/DIS).
      */
-    post: operations["DetectSegments"];
+    post: operations["DISISNet"];
+  };
+  "/SegmentUnderPoint": {
+    /**
+     * SegmentUnderPoint
+     * @description Segment an image under a point and return the segment.
+     */
+    post: operations["SegmentUnderPoint"];
+  };
+  "/SegmentAnything": {
+    /**
+     * SegmentAnything
+     * @description Segment an image using [SegmentAnything](https://github.com/facebookresearch/segment-anything).
+     */
+    post: operations["SegmentAnything"];
   };
   "/TranscribeMedia": {
     /**
@@ -150,6 +178,13 @@ export interface paths {
      * @description Generate speech from text.
      */
     post: operations["GenerateSpeech"];
+  };
+  "/XTTSV2": {
+    /**
+     * XTTSV2
+     * @description Generate speech from text using [XTTS v2](https://docs.coqui.ai/en/latest/models/xtts.html).
+     */
+    post: operations["XTTSV2"];
   };
   "/EmbedText": {
     /**
@@ -182,14 +217,14 @@ export interface paths {
   "/JinaV2": {
     /**
      * JinaV2
-     * @description Generate embeddings for multiple text documents using Jina V2.
+     * @description Generate embeddings for multiple text documents using [Jina Embeddings 2](https://arxiv.org/abs/2310.19923).
      */
     post: operations["JinaV2"];
   };
   "/CLIP": {
     /**
      * CLIP
-     * @description Generate embeddings for text or images using CLIP.
+     * @description Generate embeddings for text or images using [CLIP](https://openai.com/research/clip).
      */
     post: operations["CLIP"];
   };
@@ -718,17 +753,31 @@ export interface components {
       image_uri: string;
       /** @description Mask image that controls which pixels are inpainted. */
       mask_image_uri: string;
-      /**
-       * @description Selected model.
-       * @default big-lama
-       * @enum {string}
-       */
-      model?: "big-lama";
       /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
+      /**
+       * @description Selected node.
+       * @default BigLaMa
+       * @enum {string}
+       */
+      node?: "BigLaMa";
     };
     /** FillMaskOut */
     FillMaskOut: {
+      /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+      image_uri: string;
+    };
+    /** BigLaMaIn */
+    BigLaMaIn: {
+      /** @description Input image. */
+      image_uri: string;
+      /** @description Mask image that controls which pixels are inpainted. */
+      mask_image_uri: string;
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      store?: string;
+    };
+    /** BigLaMaOut */
+    BigLaMaOut: {
       /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
       image_uri: string;
     };
@@ -740,22 +789,56 @@ export interface components {
       return_mask?: boolean;
       /** @description Hex value background color. Transparent if unset. */
       background_color?: string;
-      /**
-       * @description Selected model.
-       * @default isnet
-       * @enum {string}
-       */
-      model?: "isnet";
       /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
+      /**
+       * @description Selected node.
+       * @default DISISNet
+       * @enum {string}
+       */
+      node?: "DISISNet";
     };
     /** RemoveBackgroundOut */
     RemoveBackgroundOut: {
       /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
       image_uri: string;
     };
+    /** DISISNetIn */
+    DISISNetIn: {
+      /** @description Input image. */
+      image_uri: string;
+      /** @description Return a mask image instead of the original content. */
+      return_mask?: boolean;
+      /** @description Hex value background color. Transparent if unset. */
+      background_color?: string;
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      store?: string;
+    };
+    /** DISISNetOut */
+    DISISNetOut: {
+      /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+      image_uri: string;
+    };
     /** UpscaleImageIn */
     UpscaleImageIn: {
+      /** @description Input image. */
+      image_uri: string;
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      store?: string;
+      /**
+       * @description Selected node.
+       * @default RealESRGAN
+       * @enum {string}
+       */
+      node?: "RealESRGAN";
+    };
+    /** UpscaleImageOut */
+    UpscaleImageOut: {
+      /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+      image_uri: string;
+    };
+    /** RealESRGANIn */
+    RealESRGANIn: {
       /** @description Input image. */
       image_uri: string;
       /**
@@ -767,13 +850,38 @@ export interface components {
       /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
     };
-    /** UpscaleImageOut */
-    UpscaleImageOut: {
+    /** RealESRGANOut */
+    RealESRGANOut: {
       /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
       image_uri: string;
     };
-    /** DetectSegmentsIn */
-    DetectSegmentsIn: {
+    /** SegmentUnderPointIn */
+    SegmentUnderPointIn: {
+      /** @description Input image. */
+      image_uri: string;
+      /** Point */
+      point: {
+        /** @description X position. */
+        x: number;
+        /** @description Y position. */
+        y: number;
+      };
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      store?: string;
+      /**
+       * @description Selected node.
+       * @default SegmentAnything
+       * @enum {string}
+       */
+      node?: "SegmentAnything";
+    };
+    /** SegmentUnderPointOut */
+    SegmentUnderPointOut: {
+      /** @description Detected segments in 'mask image' format. Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+      mask_image_uri: string;
+    };
+    /** SegmentAnythingIn */
+    SegmentAnythingIn: {
       /** @description Input image. */
       image_uri: string;
       /** @description Point prompts, to detect a segment under the point. One of `point_prompts` or `box_prompts` must be set. */
@@ -806,17 +914,11 @@ export interface components {
          */
         y2: number;
       }[];
-      /**
-       * @description Selected model.
-       * @default segment-anything
-       * @enum {string}
-       */
-      model?: "segment-anything";
       /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
     };
-    /** DetectSegmentsOut */
-    DetectSegmentsOut: {
+    /** SegmentAnythingOut */
+    SegmentAnythingOut: {
       /** @description Detected segments in 'mask image' format. Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
       mask_image_uri: string;
     };
@@ -966,6 +1068,24 @@ export interface components {
     GenerateSpeechIn: {
       /** @description Input text. */
       text: string;
+      /** @description Use "hosted" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the audio data will be returned as a base64-encoded string. */
+      store?: string;
+      /**
+       * @description Selected node.
+       * @default XTTSV2
+       * @enum {string}
+       */
+      node?: "XTTSV2";
+    };
+    /** GenerateSpeechOut */
+    GenerateSpeechOut: {
+      /** @description Base 64-encoded WAV audio bytes, or a hosted audio url if `store` is provided. */
+      audio_uri: string;
+    };
+    /** XTTSV2In */
+    XTTSV2In: {
+      /** @description Input text. */
+      text: string;
       /** @description Reference audio used to synthesize the speaker. If unset, a default speaker voice will be used. */
       audio_uri?: string;
       /**
@@ -976,8 +1096,8 @@ export interface components {
       /** @description Use "hosted" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the audio data will be returned as a base64-encoded string. */
       store?: string;
     };
-    /** GenerateSpeechOut */
-    GenerateSpeechOut: {
+    /** XTTSV2Out */
+    XTTSV2Out: {
       /** @description Base 64-encoded WAV audio bytes, or a hosted audio url if `store` is provided. */
       audio_uri: string;
     };
@@ -1343,10 +1463,7 @@ export interface components {
       /** @description Number of vectors modified. */
       count: number;
     };
-    /**
-     * UpdateVectorParams
-     * @description Document to update.
-     */
+    /** UpdateVectorParams */
     UpdateVectorParams: {
       /** @description Document ID. */
       id: string;
@@ -1691,7 +1808,7 @@ export interface operations {
   };
   /**
    * Mistral7BInstruct
-   * @description Generate text using Mistral 7B Instruct.
+   * @description Generate text using [Mistral 7B Instruct](https://mistral.ai/news/announcing-mistral-7b).
    */
   Mistral7BInstruct: {
     parameters: {
@@ -1731,7 +1848,7 @@ export interface operations {
   };
   /**
    * Firellava13B
-   * @description Generate text with image input using FireLLaVA 13B.
+   * @description Generate text with image input using [FireLLaVA 13B](https://fireworks.ai/blog/firellava-the-first-commercially-permissive-oss-llava-model).
    */
   Firellava13B: {
     parameters: {
@@ -1916,7 +2033,7 @@ export interface operations {
   };
   /**
    * StableDiffusionXL
-   * @description Generate an image using Stable Diffusion XL.
+   * @description Generate an image using [Stable Diffusion XL](https://arxiv.org/abs/2307.01952).
    */
   StableDiffusionXL: {
     parameters: {
@@ -1965,7 +2082,7 @@ export interface operations {
   };
   /**
    * StableDiffusionXLInpaint
-   * @description Inpaint an image using Stable Diffusion XL.
+   * @description Edit an image using [Stable Diffusion XL](https://arxiv.org/abs/2307.01952). Supports inpainting (edit part of the image with a mask) and image-to-image (edit the full image).
    */
   StableDiffusionXLInpaint: {
     parameters: {
@@ -2017,7 +2134,7 @@ export interface operations {
   };
   /**
    * StableDiffusionXLIPAdapter
-   * @description Generate an image using Stable Diffusion XL with an image prompt.
+   * @description Generate an image with an image prompt, using Stable Diffusion XL with [IP-Adapter](https://arxiv.org/abs/2308.06721).
    */
   StableDiffusionXLIPAdapter: {
     parameters: {
@@ -2065,7 +2182,7 @@ export interface operations {
   };
   /**
    * StableDiffusionXLControlNet
-   * @description Generate an image using Stable Diffusion XL structuring generation with an input image.
+   * @description Generate an image with generation structured by an input image, using Stable Diffusion XL with [ControlNet](https://arxiv.org/abs/2302.05543).
    */
   StableDiffusionXLControlNet: {
     parameters: {
@@ -2119,7 +2236,7 @@ export interface operations {
   };
   /**
    * FillMask
-   * @description Edit an image with a generative model.
+   * @description Fill (inpaint) part of an image, e.g. to 'remove' an object.
    */
   FillMask: {
     parameters: {
@@ -2129,12 +2246,41 @@ export interface operations {
           image_uri: string;
           /** @description Mask image that controls which pixels are inpainted. */
           mask_image_uri: string;
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+          store?: string;
           /**
-           * @description Selected model.
-           * @default big-lama
+           * @description Selected node.
+           * @default BigLaMa
            * @enum {string}
            */
-          model?: "big-lama";
+          node?: "BigLaMa";
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": {
+            /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+            image_uri: string;
+          };
+        };
+      };
+    };
+  };
+  /**
+   * BigLaMa
+   * @description Inpaint a mask using [LaMa](https://github.com/advimman/lama).
+   */
+  BigLaMa: {
+    parameters: {
+      query?: {
+        undefined?: {
+          /** @description Input image. */
+          image_uri: string;
+          /** @description Mask image that controls which pixels are inpainted. */
+          mask_image_uri: string;
           /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
         };
@@ -2157,6 +2303,39 @@ export interface operations {
    * @description Upscale an image.
    */
   UpscaleImage: {
+    parameters: {
+      query?: {
+        undefined?: {
+          /** @description Input image. */
+          image_uri: string;
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+          store?: string;
+          /**
+           * @description Selected node.
+           * @default RealESRGAN
+           * @enum {string}
+           */
+          node?: "RealESRGAN";
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": {
+            /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+            image_uri: string;
+          };
+        };
+      };
+    };
+  };
+  /**
+   * RealESRGAN
+   * @description Upscale an image using [RealESRGAN](https://github.com/xinntao/Real-ESRGAN).
+   */
+  RealESRGAN: {
     parameters: {
       query?: {
         undefined?: {
@@ -2199,12 +2378,43 @@ export interface operations {
           return_mask?: boolean;
           /** @description Hex value background color. Transparent if unset. */
           background_color?: string;
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+          store?: string;
           /**
-           * @description Selected model.
-           * @default isnet
+           * @description Selected node.
+           * @default DISISNet
            * @enum {string}
            */
-          model?: "isnet";
+          node?: "DISISNet";
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": {
+            /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+            image_uri: string;
+          };
+        };
+      };
+    };
+  };
+  /**
+   * DISISNet
+   * @description Segment an image using [DIS IS-Net](https://github.com/xuebinqin/DIS).
+   */
+  DISISNet: {
+    parameters: {
+      query?: {
+        undefined?: {
+          /** @description Input image. */
+          image_uri: string;
+          /** @description Return a mask image instead of the original content. */
+          return_mask?: boolean;
+          /** @description Hex value background color. Transparent if unset. */
+          background_color?: string;
           /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
         };
@@ -2223,10 +2433,50 @@ export interface operations {
     };
   };
   /**
-   * DetectSegments
-   * @description Detect segments in an image given point(s) or bounding box(es).
+   * SegmentUnderPoint
+   * @description Segment an image under a point and return the segment.
    */
-  DetectSegments: {
+  SegmentUnderPoint: {
+    parameters: {
+      query?: {
+        undefined?: {
+          /** @description Input image. */
+          image_uri: string;
+          /** Point */
+          point: {
+            /** @description X position. */
+            x: number;
+            /** @description Y position. */
+            y: number;
+          };
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+          store?: string;
+          /**
+           * @description Selected node.
+           * @default SegmentAnything
+           * @enum {string}
+           */
+          node?: "SegmentAnything";
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": {
+            /** @description Detected segments in 'mask image' format. Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+            mask_image_uri: string;
+          };
+        };
+      };
+    };
+  };
+  /**
+   * SegmentAnything
+   * @description Segment an image using [SegmentAnything](https://github.com/facebookresearch/segment-anything).
+   */
+  SegmentAnything: {
     parameters: {
       query?: {
         undefined?: {
@@ -2262,12 +2512,6 @@ export interface operations {
              */
             y2: number;
           }[];
-          /**
-           * @description Selected model.
-           * @default segment-anything
-           * @enum {string}
-           */
-          model?: "segment-anything";
           /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
         };
@@ -2386,6 +2630,39 @@ export interface operations {
    * @description Generate speech from text.
    */
   GenerateSpeech: {
+    parameters: {
+      query?: {
+        undefined?: {
+          /** @description Input text. */
+          text: string;
+          /** @description Use "hosted" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the audio data will be returned as a base64-encoded string. */
+          store?: string;
+          /**
+           * @description Selected node.
+           * @default XTTSV2
+           * @enum {string}
+           */
+          node?: "XTTSV2";
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": {
+            /** @description Base 64-encoded WAV audio bytes, or a hosted audio url if `store` is provided. */
+            audio_uri: string;
+          };
+        };
+      };
+    };
+  };
+  /**
+   * XTTSV2
+   * @description Generate speech from text using [XTTS v2](https://docs.coqui.ai/en/latest/models/xtts.html).
+   */
+  XTTSV2: {
     parameters: {
       query?: {
         undefined?: {
@@ -2599,7 +2876,7 @@ export interface operations {
   };
   /**
    * JinaV2
-   * @description Generate embeddings for multiple text documents using Jina V2.
+   * @description Generate embeddings for multiple text documents using [Jina Embeddings 2](https://arxiv.org/abs/2310.19923).
    */
   JinaV2: {
     parameters: {
@@ -2642,7 +2919,7 @@ export interface operations {
   };
   /**
    * CLIP
-   * @description Generate embeddings for text or images using CLIP.
+   * @description Generate embeddings for text or images using [CLIP](https://openai.com/research/clip).
    */
   CLIP: {
     parameters: {
