@@ -31,6 +31,9 @@ make generate
 # in SubstrateLabs/substrate-typescript: copy the generated files
 make sync-codegen
 
+# format the code
+make format-fix
+
 # ensure the package builds
 make build
 ```
@@ -84,10 +87,11 @@ Their respective configuration files work together to produce the the library an
 help better understand how it works.
 
 - Compiled and bundled up code lives in `dist/` (set in `tsconfig.json` "outDir")
-- We're targeting ES2022 as our output language, which is supprted by Node 18+ (see `tsconfig.json` "target")
+- We're targeting ES2020 as our output language, which is supprted by Node 16+ (see `tsconfig.json` "target")
 - We're building both ESM (.js) and CJS (.cjs) compatible artifacts (see `tsup.config.ts` "formats")
 - During build we're generating TypeScript declaration files and making them available to package consumers (see `tsup.config.ts` "dts")
 - Our package uses conditional exports so that the consumer will automatically get the right ESM or CJS based on how they import (see `package.json` "exports")
+- Additionally we're using conditional exports to insert polyfills for `node` environments because we're targeting Node 16 (see `src/nodejs/index.ts`)
 - When we publish the package to NPM we're only including the `dist/`, `src/` and "default files", eg. `README`, `LICENCE` (see `package.json` "files")
 
 ## Versioning
@@ -121,6 +125,12 @@ After making changes, you should:
 - Then run `make update-version` to ensure the `package.json` and `src/version.ts` are set correctly.
 
 **NOTE:** The `make update-version` task will run after every `make sync-codegen` too!
+
+## CI
+
+We're using GitHub Actions for running tests, verifying successful builds, typechecking, and formatting (see `.github/workflows/node.js.yml`)
+
+Right now we're running these steps using Node 16 and Node 18, but may add more variants soon. Additionally we may automate the release process through this mechanism as well.
 
 ## Releasing
 
