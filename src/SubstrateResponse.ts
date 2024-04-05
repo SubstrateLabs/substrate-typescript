@@ -15,7 +15,7 @@ export class SubstrateResponse {
 
   /**
    * Returns an error from the `Node` if there was one.
-  */
+   */
   getError<T extends AnyNode>(node: T): NodeError | undefined {
     // @ts-expect-error
     return node.output() instanceof NodeError ? node.output() : undefined;
@@ -23,7 +23,7 @@ export class SubstrateResponse {
 
   /**
    * Returns the result for given `Node`
-  */
+   */
   get<T extends AnyNode>(node: T): NodeOutput<T> {
     const err = this.getError(node);
     if (err) throw err;

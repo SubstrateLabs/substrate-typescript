@@ -1,8 +1,8 @@
 /**
-* ꩜ Substrate TypeScript SDK
-* @generated file
-* 20240403.20240403
-*/
+ * ꩜ Substrate TypeScript SDK
+ * @generated file
+ * 20240403.20240403
+ */
 
 export { SubstrateError } from "substrate/Error";
 export {
@@ -33,7 +33,7 @@ export {
   MultiEmbedImage,
   JinaV2,
   CLIP,
-  } from "substrate/Nodes";
+} from "substrate/Nodes";
 
 export { sb } from "substrate/sb";
 export { Substrate };

@@ -1,322 +1,487 @@
 /**
-* ꩜ Substrate
-* @generated file
-* 20240403.20240403
-*/
+ * ꩜ Substrate
+ * @generated file
+ * 20240403.20240403
+ */
 
 import * as OpenAPI from "substrate/OpenAPI";
-import { Node } from "substrate/Node"
-import { Trace, Future, FutureString, FutureNumber, FutureArray, FutureObject, FutureAnyObject } from "substrate/Future";
+import { Node } from "substrate/Node";
+import {
+  Trace,
+  Future,
+  FutureString,
+  FutureNumber,
+  FutureArray,
+  FutureObject,
+  FutureAnyObject,
+} from "substrate/Future";
 
 // Type that extends some other type T (recursively) and expands it to also accept our
 // Future types too.
-// 
+//
 // For example, if a `string` is found it will be changed to `string | FutureString`.
-// 
+//
 // There may still be some edge cases here, so this will also allow for any `Future` when it makes sense.
-type AlsoAcceptFutures<T> =
-  T extends (infer U)[] 
-    ? U extends string ? FutureString[] : U extends number ? FutureNumber[] : Future[]
-    : T extends object
-      ? { [P in keyof T]: AlsoAcceptFutures<T[P]> | (T[P] extends string ? FutureString : T[P] extends number ? FutureNumber : Future) | T[P] }
-      : T;
-
+type AlsoAcceptFutures<T> = T extends (infer U)[]
+  ? U extends string
+    ? FutureString[]
+    : U extends number
+      ? FutureNumber[]
+      : Future[]
+  : T extends object
+    ? {
+        [P in keyof T]:
+          | AlsoAcceptFutures<T[P]>
+          | (T[P] extends string
+              ? FutureString
+              : T[P] extends number
+                ? FutureNumber
+                : Future)
+          | T[P];
+      }
+    : T;
 
 /** TODO: StableDiffusionXLControlNetOut description */
 class StableDiffusionXLControlNetOut extends FutureObject {
   /** TODO: Outputs description */
-  get outputs() { return new Outputs(this.directive.next('outputs')) }
+  get outputs() {
+    return new Outputs(this.directive.next("outputs"));
+  }
   /** Returns the result for `StableDiffusionXLControlNetOut` once it's node has been run. */
-  protected override async result(): Promise<StableDiffusionXLControlNetOut> { return super.result() as Promise<StableDiffusionXLControlNetOut>; }
+  protected override async result(): Promise<StableDiffusionXLControlNetOut> {
+    return super.result() as Promise<StableDiffusionXLControlNetOut>;
+  }
 }
 
 /** TODO: StableDiffusionXLInpaintOut description */
 class StableDiffusionXLInpaintOut extends FutureObject {
   /** TODO: Outputs description */
-  get outputs() { return new Outputs(this.directive.next('outputs')) }
+  get outputs() {
+    return new Outputs(this.directive.next("outputs"));
+  }
   /** Returns the result for `StableDiffusionXLInpaintOut` once it's node has been run. */
-  protected override async result(): Promise<StableDiffusionXLInpaintOut> { return super.result() as Promise<StableDiffusionXLInpaintOut>; }
+  protected override async result(): Promise<StableDiffusionXLInpaintOut> {
+    return super.result() as Promise<StableDiffusionXLInpaintOut>;
+  }
 }
 
 /** TODO: GenerativeEditImageOut description */
 class GenerativeEditImageOut extends FutureObject {
   /** Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-  get image_uri() { return new FutureString(this.directive.next('image_uri')) }
+  get image_uri() {
+    return new FutureString(this.directive.next("image_uri"));
+  }
   /** Returns the result for `GenerativeEditImageOut` once it's node has been run. */
-  protected override async result(): Promise<GenerativeEditImageOut> { return super.result() as Promise<GenerativeEditImageOut>; }
+  protected override async result(): Promise<GenerativeEditImageOut> {
+    return super.result() as Promise<GenerativeEditImageOut>;
+  }
 }
 
 /** Generated embedding. */
 class Embedding extends FutureAnyObject {
   /** Returns the result for `Embedding` once it's node has been run. */
-  protected override async result(): Promise<Embedding> { return super.result() as Promise<Embedding>; }
+  protected override async result(): Promise<Embedding> {
+    return super.result() as Promise<Embedding>;
+  }
 }
 
 /** Choices Array Item */
 class ChoicesItem extends FutureAnyObject {
   /** Returns the result for `ChoicesItem` once it's node has been run. */
-  protected override async result(): Promise<ChoicesItem> { return super.result() as Promise<ChoicesItem>; }
+  protected override async result(): Promise<ChoicesItem> {
+    return super.result() as Promise<ChoicesItem>;
+  }
 }
 
 /** TODO: UpscaleImageOut description */
 class UpscaleImageOut extends FutureObject {
   /** Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-  get image_uri() { return new FutureString(this.directive.next('image_uri')) }
+  get image_uri() {
+    return new FutureString(this.directive.next("image_uri"));
+  }
   /** Returns the result for `UpscaleImageOut` once it's node has been run. */
-  protected override async result(): Promise<UpscaleImageOut> { return super.result() as Promise<UpscaleImageOut>; }
+  protected override async result(): Promise<UpscaleImageOut> {
+    return super.result() as Promise<UpscaleImageOut>;
+  }
 }
 
 /** TODO: GenerateTextOut description */
 class GenerateTextOut extends FutureObject {
   /** (Optional) Text response. */
-  get text() { return new FutureString(this.directive.next('text')) }
+  get text() {
+    return new FutureString(this.directive.next("text"));
+  }
   /** Returns the result for `GenerateTextOut` once it's node has been run. */
-  protected override async result(): Promise<GenerateTextOut> { return super.result() as Promise<GenerateTextOut>; }
+  protected override async result(): Promise<GenerateTextOut> {
+    return super.result() as Promise<GenerateTextOut>;
+  }
 }
 
 /** TODO: MultiGenerateJSONOut description */
 class MultiGenerateJSONOut extends FutureObject {
   /** TODO: Choices description */
-  get choices() { return new Choices(this.directive.next('choices')) }
+  get choices() {
+    return new Choices(this.directive.next("choices"));
+  }
   /** Returns the result for `MultiGenerateJSONOut` once it's node has been run. */
-  protected override async result(): Promise<MultiGenerateJSONOut> { return super.result() as Promise<MultiGenerateJSONOut>; }
+  protected override async result(): Promise<MultiGenerateJSONOut> {
+    return super.result() as Promise<MultiGenerateJSONOut>;
+  }
 }
 
 /** TODO: Mistral7BInstructOut description */
 class Mistral7BInstructOut extends FutureObject {
   /** TODO: Choices description */
-  get choices() { return new Choices(this.directive.next('choices')) }
+  get choices() {
+    return new Choices(this.directive.next("choices"));
+  }
   /** Returns the result for `Mistral7BInstructOut` once it's node has been run. */
-  protected override async result(): Promise<Mistral7BInstructOut> { return super.result() as Promise<Mistral7BInstructOut>; }
+  protected override async result(): Promise<Mistral7BInstructOut> {
+    return super.result() as Promise<Mistral7BInstructOut>;
+  }
 }
 
 /** TODO: GenerateSpeechOut description */
 class GenerateSpeechOut extends FutureObject {
   /** Base 64-encoded WAV audio bytes, or a hosted audio url if `store` is provided. */
-  get audio_uri() { return new FutureString(this.directive.next('audio_uri')) }
+  get audio_uri() {
+    return new FutureString(this.directive.next("audio_uri"));
+  }
   /** Returns the result for `GenerateSpeechOut` once it's node has been run. */
-  protected override async result(): Promise<GenerateSpeechOut> { return super.result() as Promise<GenerateSpeechOut>; }
+  protected override async result(): Promise<GenerateSpeechOut> {
+    return super.result() as Promise<GenerateSpeechOut>;
+  }
 }
 
 /** TODO: EmbedTextOut description */
 class EmbedTextOut extends FutureObject {
   /** Generated embedding. */
-  get embedding() { return new Embedding(this.directive.next('embedding')) }
+  get embedding() {
+    return new Embedding(this.directive.next("embedding"));
+  }
   /** Returns the result for `EmbedTextOut` once it's node has been run. */
-  protected override async result(): Promise<EmbedTextOut> { return super.result() as Promise<EmbedTextOut>; }
+  protected override async result(): Promise<EmbedTextOut> {
+    return super.result() as Promise<EmbedTextOut>;
+  }
 }
 
 /** TODO: MultiEmbedTextOut description */
 class MultiEmbedTextOut extends FutureObject {
   /** Generated embeddings. */
-  get embeddings() { return new Embeddings(this.directive.next('embeddings')) }
+  get embeddings() {
+    return new Embeddings(this.directive.next("embeddings"));
+  }
   /** Returns the result for `MultiEmbedTextOut` once it's node has been run. */
-  protected override async result(): Promise<MultiEmbedTextOut> { return super.result() as Promise<MultiEmbedTextOut>; }
+  protected override async result(): Promise<MultiEmbedTextOut> {
+    return super.result() as Promise<MultiEmbedTextOut>;
+  }
 }
 
 /** TODO: StableDiffusionXLIPAdapterOut description */
 class StableDiffusionXLIPAdapterOut extends FutureObject {
   /** TODO: Outputs description */
-  get outputs() { return new Outputs(this.directive.next('outputs')) }
+  get outputs() {
+    return new Outputs(this.directive.next("outputs"));
+  }
   /** Returns the result for `StableDiffusionXLIPAdapterOut` once it's node has been run. */
-  protected override async result(): Promise<StableDiffusionXLIPAdapterOut> { return super.result() as Promise<StableDiffusionXLIPAdapterOut>; }
+  protected override async result(): Promise<StableDiffusionXLIPAdapterOut> {
+    return super.result() as Promise<StableDiffusionXLIPAdapterOut>;
+  }
 }
 
 /** TODO: Choices description */
 class Choices extends FutureArray {
-  override at(index: number) { return new ChoicesItem(this.directive.next(index)) }
+  override at(index: number) {
+    return new ChoicesItem(this.directive.next(index));
+  }
   /** Returns the result for `Choices` once it's node has been run. */
-  protected override async result(): Promise<ChoicesItem[]> { return super.result() as Promise<ChoicesItem[]>; }
+  protected override async result(): Promise<ChoicesItem[]> {
+    return super.result() as Promise<ChoicesItem[]>;
+  }
 }
 
 /** TODO: Firellava13BOut description */
 class Firellava13BOut extends FutureObject {
   /** Text response. */
-  get text() { return new FutureString(this.directive.next('text')) }
+  get text() {
+    return new FutureString(this.directive.next("text"));
+  }
   /** Returns the result for `Firellava13BOut` once it's node has been run. */
-  protected override async result(): Promise<Firellava13BOut> { return super.result() as Promise<Firellava13BOut>; }
+  protected override async result(): Promise<Firellava13BOut> {
+    return super.result() as Promise<Firellava13BOut>;
+  }
 }
 
 /** TODO: DetectSegmentsOut description */
 class DetectSegmentsOut extends FutureObject {
   /** Detected segments in 'mask image' format. Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-  get mask_image_uri() { return new FutureString(this.directive.next('mask_image_uri')) }
+  get mask_image_uri() {
+    return new FutureString(this.directive.next("mask_image_uri"));
+  }
   /** Returns the result for `DetectSegmentsOut` once it's node has been run. */
-  protected override async result(): Promise<DetectSegmentsOut> { return super.result() as Promise<DetectSegmentsOut>; }
+  protected override async result(): Promise<DetectSegmentsOut> {
+    return super.result() as Promise<DetectSegmentsOut>;
+  }
 }
 
 /** TODO: MultiGenerateTextOut description */
 class MultiGenerateTextOut extends FutureObject {
   /** TODO: Choices description */
-  get choices() { return new Choices(this.directive.next('choices')) }
+  get choices() {
+    return new Choices(this.directive.next("choices"));
+  }
   /** Returns the result for `MultiGenerateTextOut` once it's node has been run. */
-  protected override async result(): Promise<MultiGenerateTextOut> { return super.result() as Promise<MultiGenerateTextOut>; }
+  protected override async result(): Promise<MultiGenerateTextOut> {
+    return super.result() as Promise<MultiGenerateTextOut>;
+  }
 }
 
 /** Segments Array Item */
 class SegmentsItem extends FutureAnyObject {
   /** Returns the result for `SegmentsItem` once it's node has been run. */
-  protected override async result(): Promise<SegmentsItem> { return super.result() as Promise<SegmentsItem>; }
+  protected override async result(): Promise<SegmentsItem> {
+    return super.result() as Promise<SegmentsItem>;
+  }
 }
 
 /** TODO: RemoveBackgroundOut description */
 class RemoveBackgroundOut extends FutureObject {
   /** Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-  get image_uri() { return new FutureString(this.directive.next('image_uri')) }
+  get image_uri() {
+    return new FutureString(this.directive.next("image_uri"));
+  }
   /** Returns the result for `RemoveBackgroundOut` once it's node has been run. */
-  protected override async result(): Promise<RemoveBackgroundOut> { return super.result() as Promise<RemoveBackgroundOut>; }
+  protected override async result(): Promise<RemoveBackgroundOut> {
+    return super.result() as Promise<RemoveBackgroundOut>;
+  }
 }
 
 /** (Optional) Transcribed segments, if `segment` is enabled. */
 class Segments extends FutureArray {
-  override at(index: number) { return new SegmentsItem(this.directive.next(index)) }
+  override at(index: number) {
+    return new SegmentsItem(this.directive.next(index));
+  }
   /** Returns the result for `Segments` once it's node has been run. */
-  protected override async result(): Promise<SegmentsItem[]> { return super.result() as Promise<SegmentsItem[]>; }
+  protected override async result(): Promise<SegmentsItem[]> {
+    return super.result() as Promise<SegmentsItem[]>;
+  }
 }
 
 /** TODO: TranscribeMediaOut description */
 class TranscribeMediaOut extends FutureObject {
   /** Transcribed text. */
-  get text() { return new FutureString(this.directive.next('text')) }
+  get text() {
+    return new FutureString(this.directive.next("text"));
+  }
   /** (Optional) Transcribed segments, if `segment` is enabled. */
-  get segments() { return new Segments(this.directive.next('segments')) }
+  get segments() {
+    return new Segments(this.directive.next("segments"));
+  }
   /** (Optional) Chapter markers, if `suggest_chapters` is enabled. */
-  get chapters() { return new Chapters(this.directive.next('chapters')) }
+  get chapters() {
+    return new Chapters(this.directive.next("chapters"));
+  }
   /** Returns the result for `TranscribeMediaOut` once it's node has been run. */
-  protected override async result(): Promise<TranscribeMediaOut> { return super.result() as Promise<TranscribeMediaOut>; }
+  protected override async result(): Promise<TranscribeMediaOut> {
+    return super.result() as Promise<TranscribeMediaOut>;
+  }
 }
 
 /** TODO: GenerateJSONOut description */
 class GenerateJSONOut extends FutureObject {
   /** (Optional) JSON response. */
-  get json_object() { return new JsonObject(this.directive.next('json_object')) }
+  get json_object() {
+    return new JsonObject(this.directive.next("json_object"));
+  }
   /** Returns the result for `GenerateJSONOut` once it's node has been run. */
-  protected override async result(): Promise<GenerateJSONOut> { return super.result() as Promise<GenerateJSONOut>; }
+  protected override async result(): Promise<GenerateJSONOut> {
+    return super.result() as Promise<GenerateJSONOut>;
+  }
 }
 
 /** Outputs Array Item */
 class OutputsItem extends FutureAnyObject {
   /** Returns the result for `OutputsItem` once it's node has been run. */
-  protected override async result(): Promise<OutputsItem> { return super.result() as Promise<OutputsItem>; }
+  protected override async result(): Promise<OutputsItem> {
+    return super.result() as Promise<OutputsItem>;
+  }
 }
 
 /** TODO: EmbedImageOut description */
 class EmbedImageOut extends FutureObject {
   /** Generated embedding. */
-  get embedding() { return new Embedding(this.directive.next('embedding')) }
+  get embedding() {
+    return new Embedding(this.directive.next("embedding"));
+  }
   /** Returns the result for `EmbedImageOut` once it's node has been run. */
-  protected override async result(): Promise<EmbedImageOut> { return super.result() as Promise<EmbedImageOut>; }
+  protected override async result(): Promise<EmbedImageOut> {
+    return super.result() as Promise<EmbedImageOut>;
+  }
 }
 
 /** Generated embeddings. */
 class Embeddings extends FutureArray {
-  override at(index: number) { return new EmbeddingsItem(this.directive.next(index)) }
+  override at(index: number) {
+    return new EmbeddingsItem(this.directive.next(index));
+  }
   /** Returns the result for `Embeddings` once it's node has been run. */
-  protected override async result(): Promise<EmbeddingsItem[]> { return super.result() as Promise<EmbeddingsItem[]>; }
+  protected override async result(): Promise<EmbeddingsItem[]> {
+    return super.result() as Promise<EmbeddingsItem[]>;
+  }
 }
 
 /** Chapters Array Item */
 class ChaptersItem extends FutureAnyObject {
   /** Returns the result for `ChaptersItem` once it's node has been run. */
-  protected override async result(): Promise<ChaptersItem> { return super.result() as Promise<ChaptersItem>; }
+  protected override async result(): Promise<ChaptersItem> {
+    return super.result() as Promise<ChaptersItem>;
+  }
 }
 
 /** TODO: StableDiffusionXLOut description */
 class StableDiffusionXLOut extends FutureObject {
   /** TODO: Outputs description */
-  get outputs() { return new Outputs(this.directive.next('outputs')) }
+  get outputs() {
+    return new Outputs(this.directive.next("outputs"));
+  }
   /** Returns the result for `StableDiffusionXLOut` once it's node has been run. */
-  protected override async result(): Promise<StableDiffusionXLOut> { return super.result() as Promise<StableDiffusionXLOut>; }
+  protected override async result(): Promise<StableDiffusionXLOut> {
+    return super.result() as Promise<StableDiffusionXLOut>;
+  }
 }
 
 /** TODO: FillMaskOut description */
 class FillMaskOut extends FutureObject {
   /** Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-  get image_uri() { return new FutureString(this.directive.next('image_uri')) }
+  get image_uri() {
+    return new FutureString(this.directive.next("image_uri"));
+  }
   /** Returns the result for `FillMaskOut` once it's node has been run. */
-  protected override async result(): Promise<FillMaskOut> { return super.result() as Promise<FillMaskOut>; }
+  protected override async result(): Promise<FillMaskOut> {
+    return super.result() as Promise<FillMaskOut>;
+  }
 }
 
 /** TODO: CLIPOut description */
 class CLIPOut extends FutureObject {
   /** Generated embeddings. */
-  get embeddings() { return new Embeddings(this.directive.next('embeddings')) }
+  get embeddings() {
+    return new Embeddings(this.directive.next("embeddings"));
+  }
   /** Returns the result for `CLIPOut` once it's node has been run. */
-  protected override async result(): Promise<CLIPOut> { return super.result() as Promise<CLIPOut>; }
+  protected override async result(): Promise<CLIPOut> {
+    return super.result() as Promise<CLIPOut>;
+  }
 }
 
 /** TODO: MultiGenerateImageOut description */
 class MultiGenerateImageOut extends FutureObject {
   /** TODO: Outputs description */
-  get outputs() { return new Outputs(this.directive.next('outputs')) }
+  get outputs() {
+    return new Outputs(this.directive.next("outputs"));
+  }
   /** Returns the result for `MultiGenerateImageOut` once it's node has been run. */
-  protected override async result(): Promise<MultiGenerateImageOut> { return super.result() as Promise<MultiGenerateImageOut>; }
+  protected override async result(): Promise<MultiGenerateImageOut> {
+    return super.result() as Promise<MultiGenerateImageOut>;
+  }
 }
 
 /** (Optional) JSON response. */
 class JsonObject extends FutureAnyObject {
   /** Returns the result for `JsonObject` once it's node has been run. */
-  protected override async result(): Promise<JsonObject> { return super.result() as Promise<JsonObject>; }
+  protected override async result(): Promise<JsonObject> {
+    return super.result() as Promise<JsonObject>;
+  }
 }
 
 /** (Optional) Chapter markers, if `suggest_chapters` is enabled. */
 class Chapters extends FutureArray {
-  override at(index: number) { return new ChaptersItem(this.directive.next(index)) }
+  override at(index: number) {
+    return new ChaptersItem(this.directive.next(index));
+  }
   /** Returns the result for `Chapters` once it's node has been run. */
-  protected override async result(): Promise<ChaptersItem[]> { return super.result() as Promise<ChaptersItem[]>; }
+  protected override async result(): Promise<ChaptersItem[]> {
+    return super.result() as Promise<ChaptersItem[]>;
+  }
 }
 
 /** TODO: GenerateTextVisionOut description */
 class GenerateTextVisionOut extends FutureObject {
   /** Text response. */
-  get text() { return new FutureString(this.directive.next('text')) }
+  get text() {
+    return new FutureString(this.directive.next("text"));
+  }
   /** Returns the result for `GenerateTextVisionOut` once it's node has been run. */
-  protected override async result(): Promise<GenerateTextVisionOut> { return super.result() as Promise<GenerateTextVisionOut>; }
+  protected override async result(): Promise<GenerateTextVisionOut> {
+    return super.result() as Promise<GenerateTextVisionOut>;
+  }
 }
 
 /** TODO: MultiGenerativeEditImageOut description */
 class MultiGenerativeEditImageOut extends FutureObject {
   /** TODO: Outputs description */
-  get outputs() { return new Outputs(this.directive.next('outputs')) }
+  get outputs() {
+    return new Outputs(this.directive.next("outputs"));
+  }
   /** Returns the result for `MultiGenerativeEditImageOut` once it's node has been run. */
-  protected override async result(): Promise<MultiGenerativeEditImageOut> { return super.result() as Promise<MultiGenerativeEditImageOut>; }
+  protected override async result(): Promise<MultiGenerativeEditImageOut> {
+    return super.result() as Promise<MultiGenerativeEditImageOut>;
+  }
 }
 
 /** TODO: Outputs description */
 class Outputs extends FutureArray {
-  override at(index: number) { return new OutputsItem(this.directive.next(index)) }
+  override at(index: number) {
+    return new OutputsItem(this.directive.next(index));
+  }
   /** Returns the result for `Outputs` once it's node has been run. */
-  protected override async result(): Promise<OutputsItem[]> { return super.result() as Promise<OutputsItem[]>; }
+  protected override async result(): Promise<OutputsItem[]> {
+    return super.result() as Promise<OutputsItem[]>;
+  }
 }
 
 /** Embeddings Array Item */
 class EmbeddingsItem extends FutureAnyObject {
   /** Returns the result for `EmbeddingsItem` once it's node has been run. */
-  protected override async result(): Promise<EmbeddingsItem> { return super.result() as Promise<EmbeddingsItem>; }
+  protected override async result(): Promise<EmbeddingsItem> {
+    return super.result() as Promise<EmbeddingsItem>;
+  }
 }
 
 /** TODO: GenerateImageOut description */
 class GenerateImageOut extends FutureObject {
   /** Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-  get image_uri() { return new FutureString(this.directive.next('image_uri')) }
+  get image_uri() {
+    return new FutureString(this.directive.next("image_uri"));
+  }
   /** Returns the result for `GenerateImageOut` once it's node has been run. */
-  protected override async result(): Promise<GenerateImageOut> { return super.result() as Promise<GenerateImageOut>; }
+  protected override async result(): Promise<GenerateImageOut> {
+    return super.result() as Promise<GenerateImageOut>;
+  }
 }
 
 /** TODO: MultiEmbedImageOut description */
 class MultiEmbedImageOut extends FutureObject {
   /** Generated embeddings. */
-  get embeddings() { return new Embeddings(this.directive.next('embeddings')) }
+  get embeddings() {
+    return new Embeddings(this.directive.next("embeddings"));
+  }
   /** Returns the result for `MultiEmbedImageOut` once it's node has been run. */
-  protected override async result(): Promise<MultiEmbedImageOut> { return super.result() as Promise<MultiEmbedImageOut>; }
+  protected override async result(): Promise<MultiEmbedImageOut> {
+    return super.result() as Promise<MultiEmbedImageOut>;
+  }
 }
 
 /** TODO: JinaV2Out description */
 class JinaV2Out extends FutureObject {
   /** Generated embeddings. */
-  get embeddings() { return new Embeddings(this.directive.next('embeddings')) }
+  get embeddings() {
+    return new Embeddings(this.directive.next("embeddings"));
+  }
   /** Returns the result for `JinaV2Out` once it's node has been run. */
-  protected override async result(): Promise<JinaV2Out> { return super.result() as Promise<JinaV2Out>; }
+  protected override async result(): Promise<JinaV2Out> {
+    return super.result() as Promise<JinaV2Out>;
+  }
 }
 
 /**
@@ -332,7 +497,9 @@ export class GenerateText extends Node {
    *
    * https://substrate.run/library#GenerateText
    */
-  constructor(args: AlsoAcceptFutures<OpenAPI.components["schemas"]["GenerateTextIn"]>) {
+  constructor(
+    args: AlsoAcceptFutures<OpenAPI.components["schemas"]["GenerateTextIn"]>,
+  ) {
     super(args);
   }
 
@@ -343,9 +510,13 @@ export class GenerateText extends Node {
    *
    * https://substrate.run/library#GenerateText
    */
-  protected override async result(): Promise<OpenAPI.components["schemas"]["GenerateTextOut"] | undefined> {
+  protected override async result(): Promise<
+    OpenAPI.components["schemas"]["GenerateTextOut"] | undefined
+  > {
     //return super.result() as Promise<OpenAPI.components["schemas"]["GenerateTextOut"]>;
-    return Promise.resolve(this._response ? this._response.get(this) : undefined) as Promise<OpenAPI.components["schemas"]["GenerateTextOut"] | undefined>
+    return Promise.resolve(
+      this._response ? this._response.get(this) : undefined,
+    ) as Promise<OpenAPI.components["schemas"]["GenerateTextOut"] | undefined>;
   }
 
   /**
@@ -359,9 +530,8 @@ export class GenerateText extends Node {
     return new GenerateTextOut(new Trace([], this));
   }
 
-
   protected override output(): OpenAPI.components["schemas"]["GenerateTextOut"] {
-    return super.output() as OpenAPI.components["schemas"]["GenerateTextOut"]
+    return super.output() as OpenAPI.components["schemas"]["GenerateTextOut"];
   }
 }
 /**
@@ -377,7 +547,11 @@ export class MultiGenerateText extends Node {
    *
    * https://substrate.run/library#MultiGenerateText
    */
-  constructor(args: AlsoAcceptFutures<OpenAPI.components["schemas"]["MultiGenerateTextIn"]>) {
+  constructor(
+    args: AlsoAcceptFutures<
+      OpenAPI.components["schemas"]["MultiGenerateTextIn"]
+    >,
+  ) {
     super(args);
   }
 
@@ -388,9 +562,15 @@ export class MultiGenerateText extends Node {
    *
    * https://substrate.run/library#MultiGenerateText
    */
-  protected override async result(): Promise<OpenAPI.components["schemas"]["MultiGenerateTextOut"] | undefined> {
+  protected override async result(): Promise<
+    OpenAPI.components["schemas"]["MultiGenerateTextOut"] | undefined
+  > {
     //return super.result() as Promise<OpenAPI.components["schemas"]["MultiGenerateTextOut"]>;
-    return Promise.resolve(this._response ? this._response.get(this) : undefined) as Promise<OpenAPI.components["schemas"]["MultiGenerateTextOut"] | undefined>
+    return Promise.resolve(
+      this._response ? this._response.get(this) : undefined,
+    ) as Promise<
+      OpenAPI.components["schemas"]["MultiGenerateTextOut"] | undefined
+    >;
   }
 
   /**
@@ -404,9 +584,8 @@ export class MultiGenerateText extends Node {
     return new MultiGenerateTextOut(new Trace([], this));
   }
 
-
   protected override output(): OpenAPI.components["schemas"]["MultiGenerateTextOut"] {
-    return super.output() as OpenAPI.components["schemas"]["MultiGenerateTextOut"]
+    return super.output() as OpenAPI.components["schemas"]["MultiGenerateTextOut"];
   }
 }
 /**
@@ -422,7 +601,9 @@ export class GenerateJSON extends Node {
    *
    * https://substrate.run/library#GenerateJSON
    */
-  constructor(args: AlsoAcceptFutures<OpenAPI.components["schemas"]["GenerateJSONIn"]>) {
+  constructor(
+    args: AlsoAcceptFutures<OpenAPI.components["schemas"]["GenerateJSONIn"]>,
+  ) {
     super(args);
   }
 
@@ -433,9 +614,13 @@ export class GenerateJSON extends Node {
    *
    * https://substrate.run/library#GenerateJSON
    */
-  protected override async result(): Promise<OpenAPI.components["schemas"]["GenerateJSONOut"] | undefined> {
+  protected override async result(): Promise<
+    OpenAPI.components["schemas"]["GenerateJSONOut"] | undefined
+  > {
     //return super.result() as Promise<OpenAPI.components["schemas"]["GenerateJSONOut"]>;
-    return Promise.resolve(this._response ? this._response.get(this) : undefined) as Promise<OpenAPI.components["schemas"]["GenerateJSONOut"] | undefined>
+    return Promise.resolve(
+      this._response ? this._response.get(this) : undefined,
+    ) as Promise<OpenAPI.components["schemas"]["GenerateJSONOut"] | undefined>;
   }
 
   /**
@@ -449,9 +634,8 @@ export class GenerateJSON extends Node {
     return new GenerateJSONOut(new Trace([], this));
   }
 
-
   protected override output(): OpenAPI.components["schemas"]["GenerateJSONOut"] {
-    return super.output() as OpenAPI.components["schemas"]["GenerateJSONOut"]
+    return super.output() as OpenAPI.components["schemas"]["GenerateJSONOut"];
   }
 }
 /**
@@ -467,7 +651,11 @@ export class MultiGenerateJSON extends Node {
    *
    * https://substrate.run/library#MultiGenerateJSON
    */
-  constructor(args: AlsoAcceptFutures<OpenAPI.components["schemas"]["MultiGenerateJSONIn"]>) {
+  constructor(
+    args: AlsoAcceptFutures<
+      OpenAPI.components["schemas"]["MultiGenerateJSONIn"]
+    >,
+  ) {
     super(args);
   }
 
@@ -478,9 +666,15 @@ export class MultiGenerateJSON extends Node {
    *
    * https://substrate.run/library#MultiGenerateJSON
    */
-  protected override async result(): Promise<OpenAPI.components["schemas"]["MultiGenerateJSONOut"] | undefined> {
+  protected override async result(): Promise<
+    OpenAPI.components["schemas"]["MultiGenerateJSONOut"] | undefined
+  > {
     //return super.result() as Promise<OpenAPI.components["schemas"]["MultiGenerateJSONOut"]>;
-    return Promise.resolve(this._response ? this._response.get(this) : undefined) as Promise<OpenAPI.components["schemas"]["MultiGenerateJSONOut"] | undefined>
+    return Promise.resolve(
+      this._response ? this._response.get(this) : undefined,
+    ) as Promise<
+      OpenAPI.components["schemas"]["MultiGenerateJSONOut"] | undefined
+    >;
   }
 
   /**
@@ -494,9 +688,8 @@ export class MultiGenerateJSON extends Node {
     return new MultiGenerateJSONOut(new Trace([], this));
   }
 
-
   protected override output(): OpenAPI.components["schemas"]["MultiGenerateJSONOut"] {
-    return super.output() as OpenAPI.components["schemas"]["MultiGenerateJSONOut"]
+    return super.output() as OpenAPI.components["schemas"]["MultiGenerateJSONOut"];
   }
 }
 /**
@@ -512,7 +705,11 @@ export class GenerateTextVision extends Node {
    *
    * https://substrate.run/library#GenerateTextVision
    */
-  constructor(args: AlsoAcceptFutures<OpenAPI.components["schemas"]["GenerateTextVisionIn"]>) {
+  constructor(
+    args: AlsoAcceptFutures<
+      OpenAPI.components["schemas"]["GenerateTextVisionIn"]
+    >,
+  ) {
     super(args);
   }
 
@@ -523,9 +720,15 @@ export class GenerateTextVision extends Node {
    *
    * https://substrate.run/library#GenerateTextVision
    */
-  protected override async result(): Promise<OpenAPI.components["schemas"]["GenerateTextVisionOut"] | undefined> {
+  protected override async result(): Promise<
+    OpenAPI.components["schemas"]["GenerateTextVisionOut"] | undefined
+  > {
     //return super.result() as Promise<OpenAPI.components["schemas"]["GenerateTextVisionOut"]>;
-    return Promise.resolve(this._response ? this._response.get(this) : undefined) as Promise<OpenAPI.components["schemas"]["GenerateTextVisionOut"] | undefined>
+    return Promise.resolve(
+      this._response ? this._response.get(this) : undefined,
+    ) as Promise<
+      OpenAPI.components["schemas"]["GenerateTextVisionOut"] | undefined
+    >;
   }
 
   /**
@@ -539,9 +742,8 @@ export class GenerateTextVision extends Node {
     return new GenerateTextVisionOut(new Trace([], this));
   }
 
-
   protected override output(): OpenAPI.components["schemas"]["GenerateTextVisionOut"] {
-    return super.output() as OpenAPI.components["schemas"]["GenerateTextVisionOut"]
+    return super.output() as OpenAPI.components["schemas"]["GenerateTextVisionOut"];
   }
 }
 /**
@@ -557,7 +759,11 @@ export class Mistral7BInstruct extends Node {
    *
    * https://substrate.run/library#Mistral7BInstruct
    */
-  constructor(args: AlsoAcceptFutures<OpenAPI.components["schemas"]["Mistral7BInstructIn"]>) {
+  constructor(
+    args: AlsoAcceptFutures<
+      OpenAPI.components["schemas"]["Mistral7BInstructIn"]
+    >,
+  ) {
     super(args);
   }
 
@@ -568,9 +774,15 @@ export class Mistral7BInstruct extends Node {
    *
    * https://substrate.run/library#Mistral7BInstruct
    */
-  protected override async result(): Promise<OpenAPI.components["schemas"]["Mistral7BInstructOut"] | undefined> {
+  protected override async result(): Promise<
+    OpenAPI.components["schemas"]["Mistral7BInstructOut"] | undefined
+  > {
     //return super.result() as Promise<OpenAPI.components["schemas"]["Mistral7BInstructOut"]>;
-    return Promise.resolve(this._response ? this._response.get(this) : undefined) as Promise<OpenAPI.components["schemas"]["Mistral7BInstructOut"] | undefined>
+    return Promise.resolve(
+      this._response ? this._response.get(this) : undefined,
+    ) as Promise<
+      OpenAPI.components["schemas"]["Mistral7BInstructOut"] | undefined
+    >;
   }
 
   /**
@@ -584,9 +796,8 @@ export class Mistral7BInstruct extends Node {
     return new Mistral7BInstructOut(new Trace([], this));
   }
 
-
   protected override output(): OpenAPI.components["schemas"]["Mistral7BInstructOut"] {
-    return super.output() as OpenAPI.components["schemas"]["Mistral7BInstructOut"]
+    return super.output() as OpenAPI.components["schemas"]["Mistral7BInstructOut"];
   }
 }
 /**
@@ -602,7 +813,9 @@ export class Firellava13B extends Node {
    *
    * https://substrate.run/library#Firellava13B
    */
-  constructor(args: AlsoAcceptFutures<OpenAPI.components["schemas"]["Firellava13BIn"]>) {
+  constructor(
+    args: AlsoAcceptFutures<OpenAPI.components["schemas"]["Firellava13BIn"]>,
+  ) {
     super(args);
   }
 
@@ -613,9 +826,13 @@ export class Firellava13B extends Node {
    *
    * https://substrate.run/library#Firellava13B
    */
-  protected override async result(): Promise<OpenAPI.components["schemas"]["Firellava13BOut"] | undefined> {
+  protected override async result(): Promise<
+    OpenAPI.components["schemas"]["Firellava13BOut"] | undefined
+  > {
     //return super.result() as Promise<OpenAPI.components["schemas"]["Firellava13BOut"]>;
-    return Promise.resolve(this._response ? this._response.get(this) : undefined) as Promise<OpenAPI.components["schemas"]["Firellava13BOut"] | undefined>
+    return Promise.resolve(
+      this._response ? this._response.get(this) : undefined,
+    ) as Promise<OpenAPI.components["schemas"]["Firellava13BOut"] | undefined>;
   }
 
   /**
@@ -629,9 +846,8 @@ export class Firellava13B extends Node {
     return new Firellava13BOut(new Trace([], this));
   }
 
-
   protected override output(): OpenAPI.components["schemas"]["Firellava13BOut"] {
-    return super.output() as OpenAPI.components["schemas"]["Firellava13BOut"]
+    return super.output() as OpenAPI.components["schemas"]["Firellava13BOut"];
   }
 }
 /**
@@ -647,7 +863,9 @@ export class GenerateImage extends Node {
    *
    * https://substrate.run/library#GenerateImage
    */
-  constructor(args: AlsoAcceptFutures<OpenAPI.components["schemas"]["GenerateImageIn"]>) {
+  constructor(
+    args: AlsoAcceptFutures<OpenAPI.components["schemas"]["GenerateImageIn"]>,
+  ) {
     super(args);
   }
 
@@ -658,9 +876,13 @@ export class GenerateImage extends Node {
    *
    * https://substrate.run/library#GenerateImage
    */
-  protected override async result(): Promise<OpenAPI.components["schemas"]["GenerateImageOut"] | undefined> {
+  protected override async result(): Promise<
+    OpenAPI.components["schemas"]["GenerateImageOut"] | undefined
+  > {
     //return super.result() as Promise<OpenAPI.components["schemas"]["GenerateImageOut"]>;
-    return Promise.resolve(this._response ? this._response.get(this) : undefined) as Promise<OpenAPI.components["schemas"]["GenerateImageOut"] | undefined>
+    return Promise.resolve(
+      this._response ? this._response.get(this) : undefined,
+    ) as Promise<OpenAPI.components["schemas"]["GenerateImageOut"] | undefined>;
   }
 
   /**
@@ -674,9 +896,8 @@ export class GenerateImage extends Node {
     return new GenerateImageOut(new Trace([], this));
   }
 
-
   protected override output(): OpenAPI.components["schemas"]["GenerateImageOut"] {
-    return super.output() as OpenAPI.components["schemas"]["GenerateImageOut"]
+    return super.output() as OpenAPI.components["schemas"]["GenerateImageOut"];
   }
 }
 /**
@@ -692,7 +913,11 @@ export class MultiGenerateImage extends Node {
    *
    * https://substrate.run/library#MultiGenerateImage
    */
-  constructor(args: AlsoAcceptFutures<OpenAPI.components["schemas"]["MultiGenerateImageIn"]>) {
+  constructor(
+    args: AlsoAcceptFutures<
+      OpenAPI.components["schemas"]["MultiGenerateImageIn"]
+    >,
+  ) {
     super(args);
   }
 
@@ -703,9 +928,15 @@ export class MultiGenerateImage extends Node {
    *
    * https://substrate.run/library#MultiGenerateImage
    */
-  protected override async result(): Promise<OpenAPI.components["schemas"]["MultiGenerateImageOut"] | undefined> {
+  protected override async result(): Promise<
+    OpenAPI.components["schemas"]["MultiGenerateImageOut"] | undefined
+  > {
     //return super.result() as Promise<OpenAPI.components["schemas"]["MultiGenerateImageOut"]>;
-    return Promise.resolve(this._response ? this._response.get(this) : undefined) as Promise<OpenAPI.components["schemas"]["MultiGenerateImageOut"] | undefined>
+    return Promise.resolve(
+      this._response ? this._response.get(this) : undefined,
+    ) as Promise<
+      OpenAPI.components["schemas"]["MultiGenerateImageOut"] | undefined
+    >;
   }
 
   /**
@@ -719,9 +950,8 @@ export class MultiGenerateImage extends Node {
     return new MultiGenerateImageOut(new Trace([], this));
   }
 
-
   protected override output(): OpenAPI.components["schemas"]["MultiGenerateImageOut"] {
-    return super.output() as OpenAPI.components["schemas"]["MultiGenerateImageOut"]
+    return super.output() as OpenAPI.components["schemas"]["MultiGenerateImageOut"];
   }
 }
 /**
@@ -737,7 +967,11 @@ export class GenerativeEditImage extends Node {
    *
    * https://substrate.run/library#GenerativeEditImage
    */
-  constructor(args: AlsoAcceptFutures<OpenAPI.components["schemas"]["GenerativeEditImageIn"]>) {
+  constructor(
+    args: AlsoAcceptFutures<
+      OpenAPI.components["schemas"]["GenerativeEditImageIn"]
+    >,
+  ) {
     super(args);
   }
 
@@ -748,9 +982,15 @@ export class GenerativeEditImage extends Node {
    *
    * https://substrate.run/library#GenerativeEditImage
    */
-  protected override async result(): Promise<OpenAPI.components["schemas"]["GenerativeEditImageOut"] | undefined> {
+  protected override async result(): Promise<
+    OpenAPI.components["schemas"]["GenerativeEditImageOut"] | undefined
+  > {
     //return super.result() as Promise<OpenAPI.components["schemas"]["GenerativeEditImageOut"]>;
-    return Promise.resolve(this._response ? this._response.get(this) : undefined) as Promise<OpenAPI.components["schemas"]["GenerativeEditImageOut"] | undefined>
+    return Promise.resolve(
+      this._response ? this._response.get(this) : undefined,
+    ) as Promise<
+      OpenAPI.components["schemas"]["GenerativeEditImageOut"] | undefined
+    >;
   }
 
   /**
@@ -764,9 +1004,8 @@ export class GenerativeEditImage extends Node {
     return new GenerativeEditImageOut(new Trace([], this));
   }
 
-
   protected override output(): OpenAPI.components["schemas"]["GenerativeEditImageOut"] {
-    return super.output() as OpenAPI.components["schemas"]["GenerativeEditImageOut"]
+    return super.output() as OpenAPI.components["schemas"]["GenerativeEditImageOut"];
   }
 }
 /**
@@ -782,7 +1021,11 @@ export class MultiGenerativeEditImage extends Node {
    *
    * https://substrate.run/library#MultiGenerativeEditImage
    */
-  constructor(args: AlsoAcceptFutures<OpenAPI.components["schemas"]["MultiGenerativeEditImageIn"]>) {
+  constructor(
+    args: AlsoAcceptFutures<
+      OpenAPI.components["schemas"]["MultiGenerativeEditImageIn"]
+    >,
+  ) {
     super(args);
   }
 
@@ -793,9 +1036,15 @@ export class MultiGenerativeEditImage extends Node {
    *
    * https://substrate.run/library#MultiGenerativeEditImage
    */
-  protected override async result(): Promise<OpenAPI.components["schemas"]["MultiGenerativeEditImageOut"] | undefined> {
+  protected override async result(): Promise<
+    OpenAPI.components["schemas"]["MultiGenerativeEditImageOut"] | undefined
+  > {
     //return super.result() as Promise<OpenAPI.components["schemas"]["MultiGenerativeEditImageOut"]>;
-    return Promise.resolve(this._response ? this._response.get(this) : undefined) as Promise<OpenAPI.components["schemas"]["MultiGenerativeEditImageOut"] | undefined>
+    return Promise.resolve(
+      this._response ? this._response.get(this) : undefined,
+    ) as Promise<
+      OpenAPI.components["schemas"]["MultiGenerativeEditImageOut"] | undefined
+    >;
   }
 
   /**
@@ -809,9 +1058,8 @@ export class MultiGenerativeEditImage extends Node {
     return new MultiGenerativeEditImageOut(new Trace([], this));
   }
 
-
   protected override output(): OpenAPI.components["schemas"]["MultiGenerativeEditImageOut"] {
-    return super.output() as OpenAPI.components["schemas"]["MultiGenerativeEditImageOut"]
+    return super.output() as OpenAPI.components["schemas"]["MultiGenerativeEditImageOut"];
   }
 }
 /**
@@ -827,7 +1075,11 @@ export class StableDiffusionXL extends Node {
    *
    * https://substrate.run/library#StableDiffusionXL
    */
-  constructor(args: AlsoAcceptFutures<OpenAPI.components["schemas"]["StableDiffusionXLIn"]>) {
+  constructor(
+    args: AlsoAcceptFutures<
+      OpenAPI.components["schemas"]["StableDiffusionXLIn"]
+    >,
+  ) {
     super(args);
   }
 
@@ -838,9 +1090,15 @@ export class StableDiffusionXL extends Node {
    *
    * https://substrate.run/library#StableDiffusionXL
    */
-  protected override async result(): Promise<OpenAPI.components["schemas"]["StableDiffusionXLOut"] | undefined> {
+  protected override async result(): Promise<
+    OpenAPI.components["schemas"]["StableDiffusionXLOut"] | undefined
+  > {
     //return super.result() as Promise<OpenAPI.components["schemas"]["StableDiffusionXLOut"]>;
-    return Promise.resolve(this._response ? this._response.get(this) : undefined) as Promise<OpenAPI.components["schemas"]["StableDiffusionXLOut"] | undefined>
+    return Promise.resolve(
+      this._response ? this._response.get(this) : undefined,
+    ) as Promise<
+      OpenAPI.components["schemas"]["StableDiffusionXLOut"] | undefined
+    >;
   }
 
   /**
@@ -854,9 +1112,8 @@ export class StableDiffusionXL extends Node {
     return new StableDiffusionXLOut(new Trace([], this));
   }
 
-
   protected override output(): OpenAPI.components["schemas"]["StableDiffusionXLOut"] {
-    return super.output() as OpenAPI.components["schemas"]["StableDiffusionXLOut"]
+    return super.output() as OpenAPI.components["schemas"]["StableDiffusionXLOut"];
   }
 }
 /**
@@ -872,7 +1129,11 @@ export class StableDiffusionXLInpaint extends Node {
    *
    * https://substrate.run/library#StableDiffusionXLInpaint
    */
-  constructor(args: AlsoAcceptFutures<OpenAPI.components["schemas"]["StableDiffusionXLInpaintIn"]>) {
+  constructor(
+    args: AlsoAcceptFutures<
+      OpenAPI.components["schemas"]["StableDiffusionXLInpaintIn"]
+    >,
+  ) {
     super(args);
   }
 
@@ -883,9 +1144,15 @@ export class StableDiffusionXLInpaint extends Node {
    *
    * https://substrate.run/library#StableDiffusionXLInpaint
    */
-  protected override async result(): Promise<OpenAPI.components["schemas"]["StableDiffusionXLInpaintOut"] | undefined> {
+  protected override async result(): Promise<
+    OpenAPI.components["schemas"]["StableDiffusionXLInpaintOut"] | undefined
+  > {
     //return super.result() as Promise<OpenAPI.components["schemas"]["StableDiffusionXLInpaintOut"]>;
-    return Promise.resolve(this._response ? this._response.get(this) : undefined) as Promise<OpenAPI.components["schemas"]["StableDiffusionXLInpaintOut"] | undefined>
+    return Promise.resolve(
+      this._response ? this._response.get(this) : undefined,
+    ) as Promise<
+      OpenAPI.components["schemas"]["StableDiffusionXLInpaintOut"] | undefined
+    >;
   }
 
   /**
@@ -899,9 +1166,8 @@ export class StableDiffusionXLInpaint extends Node {
     return new StableDiffusionXLInpaintOut(new Trace([], this));
   }
 
-
   protected override output(): OpenAPI.components["schemas"]["StableDiffusionXLInpaintOut"] {
-    return super.output() as OpenAPI.components["schemas"]["StableDiffusionXLInpaintOut"]
+    return super.output() as OpenAPI.components["schemas"]["StableDiffusionXLInpaintOut"];
   }
 }
 /**
@@ -917,7 +1183,11 @@ export class StableDiffusionXLIPAdapter extends Node {
    *
    * https://substrate.run/library#StableDiffusionXLIPAdapter
    */
-  constructor(args: AlsoAcceptFutures<OpenAPI.components["schemas"]["StableDiffusionXLIPAdapterIn"]>) {
+  constructor(
+    args: AlsoAcceptFutures<
+      OpenAPI.components["schemas"]["StableDiffusionXLIPAdapterIn"]
+    >,
+  ) {
     super(args);
   }
 
@@ -928,9 +1198,15 @@ export class StableDiffusionXLIPAdapter extends Node {
    *
    * https://substrate.run/library#StableDiffusionXLIPAdapter
    */
-  protected override async result(): Promise<OpenAPI.components["schemas"]["StableDiffusionXLIPAdapterOut"] | undefined> {
+  protected override async result(): Promise<
+    OpenAPI.components["schemas"]["StableDiffusionXLIPAdapterOut"] | undefined
+  > {
     //return super.result() as Promise<OpenAPI.components["schemas"]["StableDiffusionXLIPAdapterOut"]>;
-    return Promise.resolve(this._response ? this._response.get(this) : undefined) as Promise<OpenAPI.components["schemas"]["StableDiffusionXLIPAdapterOut"] | undefined>
+    return Promise.resolve(
+      this._response ? this._response.get(this) : undefined,
+    ) as Promise<
+      OpenAPI.components["schemas"]["StableDiffusionXLIPAdapterOut"] | undefined
+    >;
   }
 
   /**
@@ -944,9 +1220,8 @@ export class StableDiffusionXLIPAdapter extends Node {
     return new StableDiffusionXLIPAdapterOut(new Trace([], this));
   }
 
-
   protected override output(): OpenAPI.components["schemas"]["StableDiffusionXLIPAdapterOut"] {
-    return super.output() as OpenAPI.components["schemas"]["StableDiffusionXLIPAdapterOut"]
+    return super.output() as OpenAPI.components["schemas"]["StableDiffusionXLIPAdapterOut"];
   }
 }
 /**
@@ -962,7 +1237,11 @@ export class StableDiffusionXLControlNet extends Node {
    *
    * https://substrate.run/library#StableDiffusionXLControlNet
    */
-  constructor(args: AlsoAcceptFutures<OpenAPI.components["schemas"]["StableDiffusionXLControlNetIn"]>) {
+  constructor(
+    args: AlsoAcceptFutures<
+      OpenAPI.components["schemas"]["StableDiffusionXLControlNetIn"]
+    >,
+  ) {
     super(args);
   }
 
@@ -973,9 +1252,16 @@ export class StableDiffusionXLControlNet extends Node {
    *
    * https://substrate.run/library#StableDiffusionXLControlNet
    */
-  protected override async result(): Promise<OpenAPI.components["schemas"]["StableDiffusionXLControlNetOut"] | undefined> {
+  protected override async result(): Promise<
+    OpenAPI.components["schemas"]["StableDiffusionXLControlNetOut"] | undefined
+  > {
     //return super.result() as Promise<OpenAPI.components["schemas"]["StableDiffusionXLControlNetOut"]>;
-    return Promise.resolve(this._response ? this._response.get(this) : undefined) as Promise<OpenAPI.components["schemas"]["StableDiffusionXLControlNetOut"] | undefined>
+    return Promise.resolve(
+      this._response ? this._response.get(this) : undefined,
+    ) as Promise<
+      | OpenAPI.components["schemas"]["StableDiffusionXLControlNetOut"]
+      | undefined
+    >;
   }
 
   /**
@@ -989,9 +1275,8 @@ export class StableDiffusionXLControlNet extends Node {
     return new StableDiffusionXLControlNetOut(new Trace([], this));
   }
 
-
   protected override output(): OpenAPI.components["schemas"]["StableDiffusionXLControlNetOut"] {
-    return super.output() as OpenAPI.components["schemas"]["StableDiffusionXLControlNetOut"]
+    return super.output() as OpenAPI.components["schemas"]["StableDiffusionXLControlNetOut"];
   }
 }
 /**
@@ -1007,7 +1292,9 @@ export class FillMask extends Node {
    *
    * https://substrate.run/library#FillMask
    */
-  constructor(args: AlsoAcceptFutures<OpenAPI.components["schemas"]["FillMaskIn"]>) {
+  constructor(
+    args: AlsoAcceptFutures<OpenAPI.components["schemas"]["FillMaskIn"]>,
+  ) {
     super(args);
   }
 
@@ -1018,9 +1305,13 @@ export class FillMask extends Node {
    *
    * https://substrate.run/library#FillMask
    */
-  protected override async result(): Promise<OpenAPI.components["schemas"]["FillMaskOut"] | undefined> {
+  protected override async result(): Promise<
+    OpenAPI.components["schemas"]["FillMaskOut"] | undefined
+  > {
     //return super.result() as Promise<OpenAPI.components["schemas"]["FillMaskOut"]>;
-    return Promise.resolve(this._response ? this._response.get(this) : undefined) as Promise<OpenAPI.components["schemas"]["FillMaskOut"] | undefined>
+    return Promise.resolve(
+      this._response ? this._response.get(this) : undefined,
+    ) as Promise<OpenAPI.components["schemas"]["FillMaskOut"] | undefined>;
   }
 
   /**
@@ -1034,9 +1325,8 @@ export class FillMask extends Node {
     return new FillMaskOut(new Trace([], this));
   }
 
-
   protected override output(): OpenAPI.components["schemas"]["FillMaskOut"] {
-    return super.output() as OpenAPI.components["schemas"]["FillMaskOut"]
+    return super.output() as OpenAPI.components["schemas"]["FillMaskOut"];
   }
 }
 /**
@@ -1052,7 +1342,9 @@ export class UpscaleImage extends Node {
    *
    * https://substrate.run/library#UpscaleImage
    */
-  constructor(args: AlsoAcceptFutures<OpenAPI.components["schemas"]["UpscaleImageIn"]>) {
+  constructor(
+    args: AlsoAcceptFutures<OpenAPI.components["schemas"]["UpscaleImageIn"]>,
+  ) {
     super(args);
   }
 
@@ -1063,9 +1355,13 @@ export class UpscaleImage extends Node {
    *
    * https://substrate.run/library#UpscaleImage
    */
-  protected override async result(): Promise<OpenAPI.components["schemas"]["UpscaleImageOut"] | undefined> {
+  protected override async result(): Promise<
+    OpenAPI.components["schemas"]["UpscaleImageOut"] | undefined
+  > {
     //return super.result() as Promise<OpenAPI.components["schemas"]["UpscaleImageOut"]>;
-    return Promise.resolve(this._response ? this._response.get(this) : undefined) as Promise<OpenAPI.components["schemas"]["UpscaleImageOut"] | undefined>
+    return Promise.resolve(
+      this._response ? this._response.get(this) : undefined,
+    ) as Promise<OpenAPI.components["schemas"]["UpscaleImageOut"] | undefined>;
   }
 
   /**
@@ -1079,9 +1375,8 @@ export class UpscaleImage extends Node {
     return new UpscaleImageOut(new Trace([], this));
   }
 
-
   protected override output(): OpenAPI.components["schemas"]["UpscaleImageOut"] {
-    return super.output() as OpenAPI.components["schemas"]["UpscaleImageOut"]
+    return super.output() as OpenAPI.components["schemas"]["UpscaleImageOut"];
   }
 }
 /**
@@ -1097,7 +1392,11 @@ export class RemoveBackground extends Node {
    *
    * https://substrate.run/library#RemoveBackground
    */
-  constructor(args: AlsoAcceptFutures<OpenAPI.components["schemas"]["RemoveBackgroundIn"]>) {
+  constructor(
+    args: AlsoAcceptFutures<
+      OpenAPI.components["schemas"]["RemoveBackgroundIn"]
+    >,
+  ) {
     super(args);
   }
 
@@ -1108,9 +1407,15 @@ export class RemoveBackground extends Node {
    *
    * https://substrate.run/library#RemoveBackground
    */
-  protected override async result(): Promise<OpenAPI.components["schemas"]["RemoveBackgroundOut"] | undefined> {
+  protected override async result(): Promise<
+    OpenAPI.components["schemas"]["RemoveBackgroundOut"] | undefined
+  > {
     //return super.result() as Promise<OpenAPI.components["schemas"]["RemoveBackgroundOut"]>;
-    return Promise.resolve(this._response ? this._response.get(this) : undefined) as Promise<OpenAPI.components["schemas"]["RemoveBackgroundOut"] | undefined>
+    return Promise.resolve(
+      this._response ? this._response.get(this) : undefined,
+    ) as Promise<
+      OpenAPI.components["schemas"]["RemoveBackgroundOut"] | undefined
+    >;
   }
 
   /**
@@ -1124,9 +1429,8 @@ export class RemoveBackground extends Node {
     return new RemoveBackgroundOut(new Trace([], this));
   }
 
-
   protected override output(): OpenAPI.components["schemas"]["RemoveBackgroundOut"] {
-    return super.output() as OpenAPI.components["schemas"]["RemoveBackgroundOut"]
+    return super.output() as OpenAPI.components["schemas"]["RemoveBackgroundOut"];
   }
 }
 /**
@@ -1142,7 +1446,9 @@ export class DetectSegments extends Node {
    *
    * https://substrate.run/library#DetectSegments
    */
-  constructor(args: AlsoAcceptFutures<OpenAPI.components["schemas"]["DetectSegmentsIn"]>) {
+  constructor(
+    args: AlsoAcceptFutures<OpenAPI.components["schemas"]["DetectSegmentsIn"]>,
+  ) {
     super(args);
   }
 
@@ -1153,9 +1459,15 @@ export class DetectSegments extends Node {
    *
    * https://substrate.run/library#DetectSegments
    */
-  protected override async result(): Promise<OpenAPI.components["schemas"]["DetectSegmentsOut"] | undefined> {
+  protected override async result(): Promise<
+    OpenAPI.components["schemas"]["DetectSegmentsOut"] | undefined
+  > {
     //return super.result() as Promise<OpenAPI.components["schemas"]["DetectSegmentsOut"]>;
-    return Promise.resolve(this._response ? this._response.get(this) : undefined) as Promise<OpenAPI.components["schemas"]["DetectSegmentsOut"] | undefined>
+    return Promise.resolve(
+      this._response ? this._response.get(this) : undefined,
+    ) as Promise<
+      OpenAPI.components["schemas"]["DetectSegmentsOut"] | undefined
+    >;
   }
 
   /**
@@ -1169,9 +1481,8 @@ export class DetectSegments extends Node {
     return new DetectSegmentsOut(new Trace([], this));
   }
 
-
   protected override output(): OpenAPI.components["schemas"]["DetectSegmentsOut"] {
-    return super.output() as OpenAPI.components["schemas"]["DetectSegmentsOut"]
+    return super.output() as OpenAPI.components["schemas"]["DetectSegmentsOut"];
   }
 }
 /**
@@ -1187,7 +1498,9 @@ export class TranscribeMedia extends Node {
    *
    * https://substrate.run/library#TranscribeMedia
    */
-  constructor(args: AlsoAcceptFutures<OpenAPI.components["schemas"]["TranscribeMediaIn"]>) {
+  constructor(
+    args: AlsoAcceptFutures<OpenAPI.components["schemas"]["TranscribeMediaIn"]>,
+  ) {
     super(args);
   }
 
@@ -1198,9 +1511,15 @@ export class TranscribeMedia extends Node {
    *
    * https://substrate.run/library#TranscribeMedia
    */
-  protected override async result(): Promise<OpenAPI.components["schemas"]["TranscribeMediaOut"] | undefined> {
+  protected override async result(): Promise<
+    OpenAPI.components["schemas"]["TranscribeMediaOut"] | undefined
+  > {
     //return super.result() as Promise<OpenAPI.components["schemas"]["TranscribeMediaOut"]>;
-    return Promise.resolve(this._response ? this._response.get(this) : undefined) as Promise<OpenAPI.components["schemas"]["TranscribeMediaOut"] | undefined>
+    return Promise.resolve(
+      this._response ? this._response.get(this) : undefined,
+    ) as Promise<
+      OpenAPI.components["schemas"]["TranscribeMediaOut"] | undefined
+    >;
   }
 
   /**
@@ -1214,9 +1533,8 @@ export class TranscribeMedia extends Node {
     return new TranscribeMediaOut(new Trace([], this));
   }
 
-
   protected override output(): OpenAPI.components["schemas"]["TranscribeMediaOut"] {
-    return super.output() as OpenAPI.components["schemas"]["TranscribeMediaOut"]
+    return super.output() as OpenAPI.components["schemas"]["TranscribeMediaOut"];
   }
 }
 /**
@@ -1232,7 +1550,9 @@ export class GenerateSpeech extends Node {
    *
    * https://substrate.run/library#GenerateSpeech
    */
-  constructor(args: AlsoAcceptFutures<OpenAPI.components["schemas"]["GenerateSpeechIn"]>) {
+  constructor(
+    args: AlsoAcceptFutures<OpenAPI.components["schemas"]["GenerateSpeechIn"]>,
+  ) {
     super(args);
   }
 
@@ -1243,9 +1563,15 @@ export class GenerateSpeech extends Node {
    *
    * https://substrate.run/library#GenerateSpeech
    */
-  protected override async result(): Promise<OpenAPI.components["schemas"]["GenerateSpeechOut"] | undefined> {
+  protected override async result(): Promise<
+    OpenAPI.components["schemas"]["GenerateSpeechOut"] | undefined
+  > {
     //return super.result() as Promise<OpenAPI.components["schemas"]["GenerateSpeechOut"]>;
-    return Promise.resolve(this._response ? this._response.get(this) : undefined) as Promise<OpenAPI.components["schemas"]["GenerateSpeechOut"] | undefined>
+    return Promise.resolve(
+      this._response ? this._response.get(this) : undefined,
+    ) as Promise<
+      OpenAPI.components["schemas"]["GenerateSpeechOut"] | undefined
+    >;
   }
 
   /**
@@ -1259,9 +1585,8 @@ export class GenerateSpeech extends Node {
     return new GenerateSpeechOut(new Trace([], this));
   }
 
-
   protected override output(): OpenAPI.components["schemas"]["GenerateSpeechOut"] {
-    return super.output() as OpenAPI.components["schemas"]["GenerateSpeechOut"]
+    return super.output() as OpenAPI.components["schemas"]["GenerateSpeechOut"];
   }
 }
 /**
@@ -1277,7 +1602,9 @@ export class EmbedText extends Node {
    *
    * https://substrate.run/library#EmbedText
    */
-  constructor(args: AlsoAcceptFutures<OpenAPI.components["schemas"]["EmbedTextIn"]>) {
+  constructor(
+    args: AlsoAcceptFutures<OpenAPI.components["schemas"]["EmbedTextIn"]>,
+  ) {
     super(args);
   }
 
@@ -1288,9 +1615,13 @@ export class EmbedText extends Node {
    *
    * https://substrate.run/library#EmbedText
    */
-  protected override async result(): Promise<OpenAPI.components["schemas"]["EmbedTextOut"] | undefined> {
+  protected override async result(): Promise<
+    OpenAPI.components["schemas"]["EmbedTextOut"] | undefined
+  > {
     //return super.result() as Promise<OpenAPI.components["schemas"]["EmbedTextOut"]>;
-    return Promise.resolve(this._response ? this._response.get(this) : undefined) as Promise<OpenAPI.components["schemas"]["EmbedTextOut"] | undefined>
+    return Promise.resolve(
+      this._response ? this._response.get(this) : undefined,
+    ) as Promise<OpenAPI.components["schemas"]["EmbedTextOut"] | undefined>;
   }
 
   /**
@@ -1304,9 +1635,8 @@ export class EmbedText extends Node {
     return new EmbedTextOut(new Trace([], this));
   }
 
-
   protected override output(): OpenAPI.components["schemas"]["EmbedTextOut"] {
-    return super.output() as OpenAPI.components["schemas"]["EmbedTextOut"]
+    return super.output() as OpenAPI.components["schemas"]["EmbedTextOut"];
   }
 }
 /**
@@ -1322,7 +1652,9 @@ export class MultiEmbedText extends Node {
    *
    * https://substrate.run/library#MultiEmbedText
    */
-  constructor(args: AlsoAcceptFutures<OpenAPI.components["schemas"]["MultiEmbedTextIn"]>) {
+  constructor(
+    args: AlsoAcceptFutures<OpenAPI.components["schemas"]["MultiEmbedTextIn"]>,
+  ) {
     super(args);
   }
 
@@ -1333,9 +1665,15 @@ export class MultiEmbedText extends Node {
    *
    * https://substrate.run/library#MultiEmbedText
    */
-  protected override async result(): Promise<OpenAPI.components["schemas"]["MultiEmbedTextOut"] | undefined> {
+  protected override async result(): Promise<
+    OpenAPI.components["schemas"]["MultiEmbedTextOut"] | undefined
+  > {
     //return super.result() as Promise<OpenAPI.components["schemas"]["MultiEmbedTextOut"]>;
-    return Promise.resolve(this._response ? this._response.get(this) : undefined) as Promise<OpenAPI.components["schemas"]["MultiEmbedTextOut"] | undefined>
+    return Promise.resolve(
+      this._response ? this._response.get(this) : undefined,
+    ) as Promise<
+      OpenAPI.components["schemas"]["MultiEmbedTextOut"] | undefined
+    >;
   }
 
   /**
@@ -1349,9 +1687,8 @@ export class MultiEmbedText extends Node {
     return new MultiEmbedTextOut(new Trace([], this));
   }
 
-
   protected override output(): OpenAPI.components["schemas"]["MultiEmbedTextOut"] {
-    return super.output() as OpenAPI.components["schemas"]["MultiEmbedTextOut"]
+    return super.output() as OpenAPI.components["schemas"]["MultiEmbedTextOut"];
   }
 }
 /**
@@ -1367,7 +1704,9 @@ export class EmbedImage extends Node {
    *
    * https://substrate.run/library#EmbedImage
    */
-  constructor(args: AlsoAcceptFutures<OpenAPI.components["schemas"]["EmbedImageIn"]>) {
+  constructor(
+    args: AlsoAcceptFutures<OpenAPI.components["schemas"]["EmbedImageIn"]>,
+  ) {
     super(args);
   }
 
@@ -1378,9 +1717,13 @@ export class EmbedImage extends Node {
    *
    * https://substrate.run/library#EmbedImage
    */
-  protected override async result(): Promise<OpenAPI.components["schemas"]["EmbedImageOut"] | undefined> {
+  protected override async result(): Promise<
+    OpenAPI.components["schemas"]["EmbedImageOut"] | undefined
+  > {
     //return super.result() as Promise<OpenAPI.components["schemas"]["EmbedImageOut"]>;
-    return Promise.resolve(this._response ? this._response.get(this) : undefined) as Promise<OpenAPI.components["schemas"]["EmbedImageOut"] | undefined>
+    return Promise.resolve(
+      this._response ? this._response.get(this) : undefined,
+    ) as Promise<OpenAPI.components["schemas"]["EmbedImageOut"] | undefined>;
   }
 
   /**
@@ -1394,9 +1737,8 @@ export class EmbedImage extends Node {
     return new EmbedImageOut(new Trace([], this));
   }
 
-
   protected override output(): OpenAPI.components["schemas"]["EmbedImageOut"] {
-    return super.output() as OpenAPI.components["schemas"]["EmbedImageOut"]
+    return super.output() as OpenAPI.components["schemas"]["EmbedImageOut"];
   }
 }
 /**
@@ -1412,7 +1754,9 @@ export class MultiEmbedImage extends Node {
    *
    * https://substrate.run/library#MultiEmbedImage
    */
-  constructor(args: AlsoAcceptFutures<OpenAPI.components["schemas"]["MultiEmbedImageIn"]>) {
+  constructor(
+    args: AlsoAcceptFutures<OpenAPI.components["schemas"]["MultiEmbedImageIn"]>,
+  ) {
     super(args);
   }
 
@@ -1423,9 +1767,15 @@ export class MultiEmbedImage extends Node {
    *
    * https://substrate.run/library#MultiEmbedImage
    */
-  protected override async result(): Promise<OpenAPI.components["schemas"]["MultiEmbedImageOut"] | undefined> {
+  protected override async result(): Promise<
+    OpenAPI.components["schemas"]["MultiEmbedImageOut"] | undefined
+  > {
     //return super.result() as Promise<OpenAPI.components["schemas"]["MultiEmbedImageOut"]>;
-    return Promise.resolve(this._response ? this._response.get(this) : undefined) as Promise<OpenAPI.components["schemas"]["MultiEmbedImageOut"] | undefined>
+    return Promise.resolve(
+      this._response ? this._response.get(this) : undefined,
+    ) as Promise<
+      OpenAPI.components["schemas"]["MultiEmbedImageOut"] | undefined
+    >;
   }
 
   /**
@@ -1439,9 +1789,8 @@ export class MultiEmbedImage extends Node {
     return new MultiEmbedImageOut(new Trace([], this));
   }
 
-
   protected override output(): OpenAPI.components["schemas"]["MultiEmbedImageOut"] {
-    return super.output() as OpenAPI.components["schemas"]["MultiEmbedImageOut"]
+    return super.output() as OpenAPI.components["schemas"]["MultiEmbedImageOut"];
   }
 }
 /**
@@ -1457,7 +1806,9 @@ export class JinaV2 extends Node {
    *
    * https://substrate.run/library#JinaV2
    */
-  constructor(args: AlsoAcceptFutures<OpenAPI.components["schemas"]["JinaV2In"]>) {
+  constructor(
+    args: AlsoAcceptFutures<OpenAPI.components["schemas"]["JinaV2In"]>,
+  ) {
     super(args);
   }
 
@@ -1468,9 +1819,13 @@ export class JinaV2 extends Node {
    *
    * https://substrate.run/library#JinaV2
    */
-  protected override async result(): Promise<OpenAPI.components["schemas"]["JinaV2Out"] | undefined> {
+  protected override async result(): Promise<
+    OpenAPI.components["schemas"]["JinaV2Out"] | undefined
+  > {
     //return super.result() as Promise<OpenAPI.components["schemas"]["JinaV2Out"]>;
-    return Promise.resolve(this._response ? this._response.get(this) : undefined) as Promise<OpenAPI.components["schemas"]["JinaV2Out"] | undefined>
+    return Promise.resolve(
+      this._response ? this._response.get(this) : undefined,
+    ) as Promise<OpenAPI.components["schemas"]["JinaV2Out"] | undefined>;
   }
 
   /**
@@ -1484,9 +1839,8 @@ export class JinaV2 extends Node {
     return new JinaV2Out(new Trace([], this));
   }
 
-
   protected override output(): OpenAPI.components["schemas"]["JinaV2Out"] {
-    return super.output() as OpenAPI.components["schemas"]["JinaV2Out"]
+    return super.output() as OpenAPI.components["schemas"]["JinaV2Out"];
   }
 }
 /**
@@ -1502,7 +1856,9 @@ export class CLIP extends Node {
    *
    * https://substrate.run/library#CLIP
    */
-  constructor(args: AlsoAcceptFutures<OpenAPI.components["schemas"]["CLIPIn"]>) {
+  constructor(
+    args: AlsoAcceptFutures<OpenAPI.components["schemas"]["CLIPIn"]>,
+  ) {
     super(args);
   }
 
@@ -1513,9 +1869,13 @@ export class CLIP extends Node {
    *
    * https://substrate.run/library#CLIP
    */
-  protected override async result(): Promise<OpenAPI.components["schemas"]["CLIPOut"] | undefined> {
+  protected override async result(): Promise<
+    OpenAPI.components["schemas"]["CLIPOut"] | undefined
+  > {
     //return super.result() as Promise<OpenAPI.components["schemas"]["CLIPOut"]>;
-    return Promise.resolve(this._response ? this._response.get(this) : undefined) as Promise<OpenAPI.components["schemas"]["CLIPOut"] | undefined>
+    return Promise.resolve(
+      this._response ? this._response.get(this) : undefined,
+    ) as Promise<OpenAPI.components["schemas"]["CLIPOut"] | undefined>;
   }
 
   /**
@@ -1529,14 +1889,93 @@ export class CLIP extends Node {
     return new CLIPOut(new Trace([], this));
   }
 
-
   protected override output(): OpenAPI.components["schemas"]["CLIPOut"] {
-    return super.output() as OpenAPI.components["schemas"]["CLIPOut"]
+    return super.output() as OpenAPI.components["schemas"]["CLIPOut"];
   }
 }
 export type AnyNode =
-  | GenerateText| MultiGenerateText| GenerateJSON| MultiGenerateJSON| GenerateTextVision| Mistral7BInstruct| Firellava13B| GenerateImage| MultiGenerateImage| GenerativeEditImage| MultiGenerativeEditImage| StableDiffusionXL| StableDiffusionXLInpaint| StableDiffusionXLIPAdapter| StableDiffusionXLControlNet| FillMask| UpscaleImage| RemoveBackground| DetectSegments| TranscribeMedia| GenerateSpeech| EmbedText| MultiEmbedText| EmbedImage| MultiEmbedImage| JinaV2| CLIP;
+  | GenerateText
+  | MultiGenerateText
+  | GenerateJSON
+  | MultiGenerateJSON
+  | GenerateTextVision
+  | Mistral7BInstruct
+  | Firellava13B
+  | GenerateImage
+  | MultiGenerateImage
+  | GenerativeEditImage
+  | MultiGenerativeEditImage
+  | StableDiffusionXL
+  | StableDiffusionXLInpaint
+  | StableDiffusionXLIPAdapter
+  | StableDiffusionXLControlNet
+  | FillMask
+  | UpscaleImage
+  | RemoveBackground
+  | DetectSegments
+  | TranscribeMedia
+  | GenerateSpeech
+  | EmbedText
+  | MultiEmbedText
+  | EmbedImage
+  | MultiEmbedImage
+  | JinaV2
+  | CLIP;
 
-export type NodeOutput<T> = T extends GenerateText ? GenerateTextOut : T extends MultiGenerateText ? MultiGenerateTextOut : T extends GenerateJSON ? GenerateJSONOut : T extends MultiGenerateJSON ? MultiGenerateJSONOut : T extends GenerateTextVision ? GenerateTextVisionOut : T extends Mistral7BInstruct ? Mistral7BInstructOut : T extends Firellava13B ? Firellava13BOut : T extends GenerateImage ? GenerateImageOut : T extends MultiGenerateImage ? MultiGenerateImageOut : T extends GenerativeEditImage ? GenerativeEditImageOut : T extends MultiGenerativeEditImage ? MultiGenerativeEditImageOut : T extends StableDiffusionXL ? StableDiffusionXLOut : T extends StableDiffusionXLInpaint ? StableDiffusionXLInpaintOut : T extends StableDiffusionXLIPAdapter ? StableDiffusionXLIPAdapterOut : T extends StableDiffusionXLControlNet ? StableDiffusionXLControlNetOut : T extends FillMask ? FillMaskOut : T extends UpscaleImage ? UpscaleImageOut : T extends RemoveBackground ? RemoveBackgroundOut : T extends DetectSegments ? DetectSegmentsOut : T extends TranscribeMedia ? TranscribeMediaOut : T extends GenerateSpeech ? GenerateSpeechOut : T extends EmbedText ? EmbedTextOut : T extends MultiEmbedText ? MultiEmbedTextOut : T extends EmbedImage ? EmbedImageOut : T extends MultiEmbedImage ? MultiEmbedImageOut : T extends JinaV2 ? JinaV2Out : T extends CLIP ? CLIPOut : never;
+export type NodeOutput<T> = T extends GenerateText
+  ? GenerateTextOut
+  : T extends MultiGenerateText
+    ? MultiGenerateTextOut
+    : T extends GenerateJSON
+      ? GenerateJSONOut
+      : T extends MultiGenerateJSON
+        ? MultiGenerateJSONOut
+        : T extends GenerateTextVision
+          ? GenerateTextVisionOut
+          : T extends Mistral7BInstruct
+            ? Mistral7BInstructOut
+            : T extends Firellava13B
+              ? Firellava13BOut
+              : T extends GenerateImage
+                ? GenerateImageOut
+                : T extends MultiGenerateImage
+                  ? MultiGenerateImageOut
+                  : T extends GenerativeEditImage
+                    ? GenerativeEditImageOut
+                    : T extends MultiGenerativeEditImage
+                      ? MultiGenerativeEditImageOut
+                      : T extends StableDiffusionXL
+                        ? StableDiffusionXLOut
+                        : T extends StableDiffusionXLInpaint
+                          ? StableDiffusionXLInpaintOut
+                          : T extends StableDiffusionXLIPAdapter
+                            ? StableDiffusionXLIPAdapterOut
+                            : T extends StableDiffusionXLControlNet
+                              ? StableDiffusionXLControlNetOut
+                              : T extends FillMask
+                                ? FillMaskOut
+                                : T extends UpscaleImage
+                                  ? UpscaleImageOut
+                                  : T extends RemoveBackground
+                                    ? RemoveBackgroundOut
+                                    : T extends DetectSegments
+                                      ? DetectSegmentsOut
+                                      : T extends TranscribeMedia
+                                        ? TranscribeMediaOut
+                                        : T extends GenerateSpeech
+                                          ? GenerateSpeechOut
+                                          : T extends EmbedText
+                                            ? EmbedTextOut
+                                            : T extends MultiEmbedText
+                                              ? MultiEmbedTextOut
+                                              : T extends EmbedImage
+                                                ? EmbedImageOut
+                                                : T extends MultiEmbedImage
+                                                  ? MultiEmbedImageOut
+                                                  : T extends JinaV2
+                                                    ? JinaV2Out
+                                                    : T extends CLIP
+                                                      ? CLIPOut
+                                                      : never;
 
 export type NodeOutput2<T> = T extends { output: () => infer R } ? R : never;
