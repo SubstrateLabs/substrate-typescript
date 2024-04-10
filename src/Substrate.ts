@@ -57,7 +57,7 @@ export class Substrate {
     this.apiKey = apiKey;
     this.baseUrl = baseUrl ?? "https://api.substrate.run";
     this.apiVersion = apiVersion ?? OpenAPIjson["info"]["version"];
-    this.timeout = timeout ?? 300000;
+    this.timeout = timeout ?? 300_000;
     this.backend = backend ?? "v0";
   }
 

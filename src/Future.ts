@@ -10,6 +10,8 @@ type TraceOperation = {
 
 type TraceProp = string | FutureString | number | FutureNumber;
 type Concatable = string | FutureString;
+type JQCompatible = Record<string, never> | any[] | string | number;
+type JQDirectiveTarget = Future | JQCompatible;
 
 const parsePath = (path: string): TraceProp[] => {
   // Split the path by dots or brackets, and filter out empty strings
@@ -96,6 +98,47 @@ export class Trace extends Directive {
   }
 }
 
+export class JQ extends Directive {
+  items: any[];
+  target: JQDirectiveTarget;
+  query: string;
+
+  constructor(items: any[], query: string, target: JQDirectiveTarget) {
+    super();
+    this.items = items;
+    this.target = target;
+    this.query = query;
+  }
+
+  static JQDirectiveTarget = {
+    future: (id: Future["id"]) => ({ future_id: id, val: null }),
+    rawValue: (val: JQCompatible) => ({ future_id: null, val }),
+  };
+
+  override next(...items: TraceProp[]) {
+    return new JQ([...this.items, ...items], this.query, this.target);
+  }
+
+  override async result(): Promise<JQCompatible> {
+    return this.target instanceof Future
+      ? // @ts-expect-error (accessing protected prop: id)
+        await this.target.result()
+      : this.target;
+  }
+
+  override toJSON(): any {
+    return {
+      type: "jq",
+      query: this.query,
+      target:
+        this.target instanceof Future
+          ? // @ts-expect-error (accessing protected prop: id)
+            JQ.JQDirectiveTarget.future(this.target.id)
+          : JQ.JQDirectiveTarget.rawValue(this.target),
+    };
+  }
+}
+
 export class StringConcat extends Directive {
   items: Concatable[];
 
@@ -158,6 +201,15 @@ export abstract class Future {
 
   protected async result(): Promise<any> {
     return this.directive.result();
+  }
+
+  static jq<T extends Future>(
+    query: string,
+    future: JQDirectiveTarget,
+    klazz: new (directive: Directive) => T,
+  ): T {
+    const directive = new JQ([], query, future);
+    return new klazz(directive);
   }
 
   toJSON() {
