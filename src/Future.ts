@@ -116,6 +116,7 @@ export class JQ extends Directive {
   };
 
   override next(...items: TraceProp[]) {
+    // TODO(rob) - not really sure what to do here??
     return new JQ([...this.items, ...items], this.query, this.target);
   }
 
