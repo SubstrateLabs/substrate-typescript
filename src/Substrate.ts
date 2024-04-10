@@ -9,7 +9,7 @@ type Configuration = {
   /**
    * [docs/authentication](https://docs.substrate.run/#authentication)
    */
-  apiKey?: string | undefined;
+  apiKey: string | undefined;
 
   /**
    * [docs/versioning](https://docs.substrate.run/versioning)
@@ -33,7 +33,7 @@ type Configuration = {
  * [docs/introduction](https://docs.substrate.run)
  */
 export class Substrate {
-  apiKey: string;
+  apiKey: string | undefined;
   baseUrl: string;
   apiVersion: string;
   timeout: number;
@@ -50,8 +50,8 @@ export class Substrate {
     backend,
   }: Configuration) {
     if (!apiKey) {
-      throw new SubstrateError(
-        "An API Key is required. Specify it when constructing the Substrate client: `new Substrate({ apiKey: 'API_KEY' })`",
+      console.warn(
+        "[Substrate] An API Key is required. Specify it when constructing the client: `new Substrate({ apiKey: 'API_KEY' })`",
       );
     }
     this.apiKey = apiKey;
@@ -83,6 +83,10 @@ export class Substrate {
         for (let node of nodes) node.response = res;
 
         return res;
+      } else {
+        throw new SubstrateError(
+          `Request failed: ${apiResponse.status} ${apiResponse.statusText}`,
+        );
       }
     } catch (err: unknown) {
       if (err instanceof Error) {
@@ -98,8 +102,6 @@ export class Substrate {
     } finally {
       clearTimeout(timeout);
     }
-
-    throw new SubstrateError("Request failed");
   }
 
   /**
