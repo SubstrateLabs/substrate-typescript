@@ -46,7 +46,7 @@ export class Trace extends Directive {
   }
 
   static Operation = {
-    future: (accessor: Accessor, id: Future["id"]) => ({
+    future: (accessor: Accessor, id: Future["_id"]) => ({
       future_id: id,
       key: null,
       accessor,
@@ -106,7 +106,7 @@ export class StringConcat extends Directive {
 
   static Concatable = {
     string: (val: string) => ({ future_id: null, val }),
-    future: (id: Future["id"]) => ({ future_id: id, val: null }),
+    future: (id: Future["_id"]) => ({ future_id: id, val: null }),
   };
 
   override next(...items: Concatable[]) {
@@ -141,11 +141,11 @@ export class StringConcat extends Directive {
 
 export abstract class Future {
   protected directive: Directive;
-  protected id: string = "";
+  protected _id: string = "";
 
   constructor(directive: Directive, id: string = newFutureId()) {
     this.directive = directive;
-    this.id = id;
+    this._id = id;
   }
 
   protected referencedFutures(): Future[] {
@@ -153,7 +153,7 @@ export abstract class Future {
   }
 
   protected toPlaceholder() {
-    return { __$$SB_GRAPH_OP_ID$$__: this.id };
+    return { __$$SB_GRAPH_OP_ID$$__: this._id };
   }
 
   protected async result(): Promise<any> {
@@ -162,9 +162,15 @@ export abstract class Future {
 
   toJSON() {
     return {
-      id: this.id,
+      id: this._id,
       directive: this.directive.toJSON(),
     };
+  }
+}
+
+export class FutureBoolean extends Future {
+  override async result(): Promise<boolean> {
+    return super.result();
   }
 }
 
