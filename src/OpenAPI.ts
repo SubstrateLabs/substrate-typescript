@@ -88,6 +88,20 @@ export interface paths {
      */
     post: operations["StableDiffusionXL"];
   };
+  "/StableDiffusionXLLightning": {
+    /**
+     * StableDiffusionXLLightning
+     * @description Generate an image using [Stable Diffusion XL](https://arxiv.org/abs/2307.01952) Lightning.
+     */
+    post: operations["StableDiffusionXLLightning"];
+  };
+  "/StableDiffusionXLTurbo": {
+    /**
+     * StableDiffusionXLTurbo
+     * @description Generate an image using [Stable Diffusion XL](https://arxiv.org/abs/2307.01952) Turbo.
+     */
+    post: operations["StableDiffusionXLTurbo"];
+  };
   "/StableDiffusionXLInpaint": {
     /**
      * StableDiffusionXLInpaint
@@ -147,7 +161,7 @@ export interface paths {
   "/DISISNet": {
     /**
      * DISISNet
-     * @description Segment an image using [DIS IS-Net](https://github.com/xuebinqin/DIS).
+     * @description Segment image foreground using [DIS IS-Net](https://github.com/xuebinqin/DIS).
      */
     post: operations["DISISNet"];
   };
@@ -345,7 +359,10 @@ export interface components {
     MultiGenerateTextIn: {
       /** @description Input prompt. */
       prompt: string;
-      /** @description Number of choices to generate. */
+      /**
+       * @description Number of choices to generate.
+       * @default 1
+       */
       num_choices: number;
       /**
        * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
@@ -374,7 +391,10 @@ export interface components {
       prompt: string;
       /** @description JSON schema to guide `json_object` response. */
       json_schema: Record<string, never>;
-      /** @description Number of choices to generate. */
+      /**
+       * @description Number of choices to generate.
+       * @default 1
+       */
       num_choices: number;
       /**
        * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
@@ -527,7 +547,10 @@ export interface components {
       negative_prompt?: string;
       /** @description Number of diffusion steps. */
       steps?: number;
-      /** @description Number of images to generate. */
+      /**
+       * @description Number of images to generate.
+       * @default 1
+       */
       num_images?: number;
       /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
@@ -536,7 +559,7 @@ export interface components {
       /** @description Width of output image, in pixels. */
       width?: number;
       /** @description Seeds for deterministic generation. Default is a random seed. */
-      seeds?: number;
+      seeds?: number[];
       /**
        * Format: float
        * @description Higher values adhere to the text prompt more strongly, typically at the expense of image quality.
@@ -560,13 +583,74 @@ export interface components {
         seed: number;
       }[];
     };
+    /** StableDiffusionXLTurboIn */
+    StableDiffusionXLTurboIn: {
+      /** @description Text prompt. */
+      prompt: string;
+      /** @description Negative input prompt. */
+      negative_prompt?: string;
+      /**
+       * @description Number of images to generate.
+       * @default 1
+       */
+      num_images?: number;
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      store?: string;
+      /** @description Height of output image, in pixels. */
+      height?: number;
+      /** @description Width of output image, in pixels. */
+      width?: number;
+      /** @description Seeds for deterministic generation. Default is a random seed. */
+      seeds?: number[];
+    };
+    /** StableDiffusionXLTurboOut */
+    StableDiffusionXLTurboOut: {
+      outputs: {
+        /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+        image_uri: string;
+        /** @description The random noise seed used for generation. */
+        seed: number;
+      }[];
+    };
+    /** StableDiffusionXLLightningIn */
+    StableDiffusionXLLightningIn: {
+      /** @description Text prompt. */
+      prompt: string;
+      /** @description Negative input prompt. */
+      negative_prompt?: string;
+      /**
+       * @description Number of images to generate.
+       * @default 1
+       */
+      num_images?: number;
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      store?: string;
+      /** @description Height of output image, in pixels. */
+      height?: number;
+      /** @description Width of output image, in pixels. */
+      width?: number;
+      /** @description Seeds for deterministic generation. Default is a random seed. */
+      seeds?: number[];
+    };
+    /** StableDiffusionXLLightningOut */
+    StableDiffusionXLLightningOut: {
+      outputs: {
+        /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+        image_uri: string;
+        /** @description The random noise seed used for generation. */
+        seed: number;
+      }[];
+    };
     /** StableDiffusionXLIPAdapterIn */
     StableDiffusionXLIPAdapterIn: {
       /** @description Text prompt. */
       prompt: string;
       /** @description Image prompt. */
       image_prompt_uri?: string;
-      /** @description Number of images to generate. */
+      /**
+       * @description Number of images to generate.
+       * @default 1
+       */
       num_images: number;
       /**
        * Format: float
@@ -604,7 +688,10 @@ export interface components {
       control_method: "edge" | "depth" | "illusion";
       /** @description Text prompt. */
       prompt: string;
-      /** @description Number of images to generate. */
+      /**
+       * @description Number of images to generate.
+       * @default 1
+       */
       num_images: number;
       /**
        * @description Resolution of the output image, in pixels.
@@ -688,7 +775,10 @@ export interface components {
       prompt: string;
       /** @description Mask image that controls which pixels are edited (inpainting). If unset, the entire image is edited (image-to-image). */
       mask_image_uri?: string;
-      /** @description Number of images to generate. */
+      /**
+       * @description Number of images to generate.
+       * @default 1
+       */
       num_images: number;
       /**
        * @description Resolution of the output image, in pixels.
@@ -702,7 +792,7 @@ export interface components {
       /**
        * Format: float
        * @description Controls the strength of the generation process.
-       * @default 0.5
+       * @default 1
        */
       strength?: number;
       /** @description Random noise seeds. Default is random seeds for each generation. */
@@ -807,10 +897,6 @@ export interface components {
     DISISNetIn: {
       /** @description Input image. */
       image_uri: string;
-      /** @description Return a mask image instead of the original content. */
-      return_mask?: boolean;
-      /** @description Hex value background color. Transparent if unset. */
-      background_color?: string;
       /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
     };
@@ -841,12 +927,6 @@ export interface components {
     RealESRGANIn: {
       /** @description Input image. */
       image_uri: string;
-      /**
-       * @description Selected model.
-       * @default real-esrgan-x4
-       * @enum {string}
-       */
-      model?: "real-esrgan-x4";
       /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
     };
@@ -1104,7 +1184,7 @@ export interface components {
     /** Embedding */
     Embedding: {
       /** @description Embedding vector. */
-      vector: string;
+      vector: number[];
       /** @description Vector store document ID. */
       doc_id?: string;
       /** @description Vector store document metadata. */
@@ -1134,7 +1214,7 @@ export interface components {
       /** Embedding */
       embedding: {
         /** @description Embedding vector. */
-        vector: string;
+        vector: number[];
         /** @description Vector store document ID. */
         doc_id?: string;
         /** @description Vector store document metadata. */
@@ -1176,7 +1256,7 @@ export interface components {
       /** @description Generated embeddings. */
       embeddings: {
         /** @description Embedding vector. */
-        vector: string;
+        vector: number[];
         /** @description Vector store document ID. */
         doc_id?: string;
         /** @description Vector store document metadata. */
@@ -1204,7 +1284,7 @@ export interface components {
       /** @description Generated embeddings. */
       embeddings: {
         /** @description Embedding vector. */
-        vector: string;
+        vector: number[];
         /** @description Vector store document ID. */
         doc_id?: string;
         /** @description Vector store document metadata. */
@@ -1231,7 +1311,7 @@ export interface components {
       /** Embedding */
       embedding: {
         /** @description Embedding vector. */
-        vector: string;
+        vector: number[];
         /** @description Vector store document ID. */
         doc_id?: string;
         /** @description Vector store document metadata. */
@@ -1277,7 +1357,7 @@ export interface components {
       /** @description Generated embeddings. */
       embeddings: {
         /** @description Embedding vector. */
-        vector: string;
+        vector: number[];
         /** @description Vector store document ID. */
         doc_id?: string;
         /** @description Vector store document metadata. */
@@ -1307,7 +1387,7 @@ export interface components {
       /** @description Generated embeddings. */
       embeddings: {
         /** @description Embedding vector. */
-        vector: string;
+        vector: number[];
         /** @description Vector store document ID. */
         doc_id?: string;
         /** @description Vector store document metadata. */
@@ -1647,7 +1727,10 @@ export interface operations {
         undefined?: {
           /** @description Input prompt. */
           prompt: string;
-          /** @description Number of choices to generate. */
+          /**
+           * @description Number of choices to generate.
+           * @default 1
+           */
           num_choices: number;
           /**
            * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
@@ -1731,7 +1814,10 @@ export interface operations {
           prompt: string;
           /** @description JSON schema to guide `json_object` response. */
           json_schema: Record<string, never>;
-          /** @description Number of choices to generate. */
+          /**
+           * @description Number of choices to generate.
+           * @default 1
+           */
           num_choices: number;
           /**
            * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
@@ -2045,7 +2131,10 @@ export interface operations {
           negative_prompt?: string;
           /** @description Number of diffusion steps. */
           steps?: number;
-          /** @description Number of images to generate. */
+          /**
+           * @description Number of images to generate.
+           * @default 1
+           */
           num_images?: number;
           /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
@@ -2054,13 +2143,101 @@ export interface operations {
           /** @description Width of output image, in pixels. */
           width?: number;
           /** @description Seeds for deterministic generation. Default is a random seed. */
-          seeds?: number;
+          seeds?: number[];
           /**
            * Format: float
            * @description Higher values adhere to the text prompt more strongly, typically at the expense of image quality.
            * @default 5
            */
           guidance_scale?: number;
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": {
+            outputs: {
+              /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+              image_uri: string;
+              /** @description The random noise seed used for generation. */
+              seed: number;
+            }[];
+          };
+        };
+      };
+    };
+  };
+  /**
+   * StableDiffusionXLLightning
+   * @description Generate an image using [Stable Diffusion XL](https://arxiv.org/abs/2307.01952) Lightning.
+   */
+  StableDiffusionXLLightning: {
+    parameters: {
+      query?: {
+        undefined?: {
+          /** @description Text prompt. */
+          prompt: string;
+          /** @description Negative input prompt. */
+          negative_prompt?: string;
+          /**
+           * @description Number of images to generate.
+           * @default 1
+           */
+          num_images?: number;
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+          store?: string;
+          /** @description Height of output image, in pixels. */
+          height?: number;
+          /** @description Width of output image, in pixels. */
+          width?: number;
+          /** @description Seeds for deterministic generation. Default is a random seed. */
+          seeds?: number[];
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": {
+            outputs: {
+              /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+              image_uri: string;
+              /** @description The random noise seed used for generation. */
+              seed: number;
+            }[];
+          };
+        };
+      };
+    };
+  };
+  /**
+   * StableDiffusionXLTurbo
+   * @description Generate an image using [Stable Diffusion XL](https://arxiv.org/abs/2307.01952) Turbo.
+   */
+  StableDiffusionXLTurbo: {
+    parameters: {
+      query?: {
+        undefined?: {
+          /** @description Text prompt. */
+          prompt: string;
+          /** @description Negative input prompt. */
+          negative_prompt?: string;
+          /**
+           * @description Number of images to generate.
+           * @default 1
+           */
+          num_images?: number;
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+          store?: string;
+          /** @description Height of output image, in pixels. */
+          height?: number;
+          /** @description Width of output image, in pixels. */
+          width?: number;
+          /** @description Seeds for deterministic generation. Default is a random seed. */
+          seeds?: number[];
         };
       };
     };
@@ -2094,7 +2271,10 @@ export interface operations {
           prompt: string;
           /** @description Mask image that controls which pixels are edited (inpainting). If unset, the entire image is edited (image-to-image). */
           mask_image_uri?: string;
-          /** @description Number of images to generate. */
+          /**
+           * @description Number of images to generate.
+           * @default 1
+           */
           num_images: number;
           /**
            * @description Resolution of the output image, in pixels.
@@ -2108,7 +2288,7 @@ export interface operations {
           /**
            * Format: float
            * @description Controls the strength of the generation process.
-           * @default 0.5
+           * @default 1
            */
           strength?: number;
           /** @description Random noise seeds. Default is random seeds for each generation. */
@@ -2144,7 +2324,10 @@ export interface operations {
           prompt: string;
           /** @description Image prompt. */
           image_prompt_uri?: string;
-          /** @description Number of images to generate. */
+          /**
+           * @description Number of images to generate.
+           * @default 1
+           */
           num_images: number;
           /**
            * Format: float
@@ -2197,7 +2380,10 @@ export interface operations {
           control_method: "edge" | "depth" | "illusion";
           /** @description Text prompt. */
           prompt: string;
-          /** @description Number of images to generate. */
+          /**
+           * @description Number of images to generate.
+           * @default 1
+           */
           num_images: number;
           /**
            * @description Resolution of the output image, in pixels.
@@ -2341,12 +2527,6 @@ export interface operations {
         undefined?: {
           /** @description Input image. */
           image_uri: string;
-          /**
-           * @description Selected model.
-           * @default real-esrgan-x4
-           * @enum {string}
-           */
-          model?: "real-esrgan-x4";
           /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
         };
@@ -2403,7 +2583,7 @@ export interface operations {
   };
   /**
    * DISISNet
-   * @description Segment an image using [DIS IS-Net](https://github.com/xuebinqin/DIS).
+   * @description Segment image foreground using [DIS IS-Net](https://github.com/xuebinqin/DIS).
    */
   DISISNet: {
     parameters: {
@@ -2411,10 +2591,6 @@ export interface operations {
         undefined?: {
           /** @description Input image. */
           image_uri: string;
-          /** @description Return a mask image instead of the original content. */
-          return_mask?: boolean;
-          /** @description Hex value background color. Transparent if unset. */
-          background_color?: string;
           /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
         };
@@ -2727,7 +2903,7 @@ export interface operations {
             /** Embedding */
             embedding: {
               /** @description Embedding vector. */
-              vector: string;
+              vector: number[];
               /** @description Vector store document ID. */
               doc_id?: string;
               /** @description Vector store document metadata. */
@@ -2776,7 +2952,7 @@ export interface operations {
             /** @description Generated embeddings. */
             embeddings: {
               /** @description Embedding vector. */
-              vector: string;
+              vector: number[];
               /** @description Vector store document ID. */
               doc_id?: string;
               /** @description Vector store document metadata. */
@@ -2818,7 +2994,7 @@ export interface operations {
             /** Embedding */
             embedding: {
               /** @description Embedding vector. */
-              vector: string;
+              vector: number[];
               /** @description Vector store document ID. */
               doc_id?: string;
               /** @description Vector store document metadata. */
@@ -2863,7 +3039,7 @@ export interface operations {
             /** @description Generated embeddings. */
             embeddings: {
               /** @description Embedding vector. */
-              vector: string;
+              vector: number[];
               /** @description Vector store document ID. */
               doc_id?: string;
               /** @description Vector store document metadata. */
@@ -2906,7 +3082,7 @@ export interface operations {
             /** @description Generated embeddings. */
             embeddings: {
               /** @description Embedding vector. */
-              vector: string;
+              vector: number[];
               /** @description Vector store document ID. */
               doc_id?: string;
               /** @description Vector store document metadata. */
@@ -2951,7 +3127,7 @@ export interface operations {
             /** @description Generated embeddings. */
             embeddings: {
               /** @description Embedding vector. */
-              vector: string;
+              vector: number[];
               /** @description Vector store document ID. */
               doc_id?: string;
               /** @description Vector store document metadata. */

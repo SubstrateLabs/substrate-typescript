@@ -1,7 +1,7 @@
 /**
  * ꩜ Substrate TypeScript SDK
  * @generated file
- * 20240405.20240405
+ * 20240405.20240410
  */
 
 export { SubstrateError } from "substrate/Error";
@@ -18,6 +18,8 @@ export {
   GenerativeEditImage,
   MultiGenerativeEditImage,
   StableDiffusionXL,
+  StableDiffusionXLLightning,
+  StableDiffusionXLTurbo,
   StableDiffusionXLInpaint,
   StableDiffusionXLIPAdapter,
   StableDiffusionXLControlNet,
