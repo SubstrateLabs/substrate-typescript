@@ -7,7 +7,7 @@ async function main() {
 
   const substrate = new Substrate({
     apiKey: SUBSTRATE_API_KEY,
-    baseUrl: "https://api-staging.substrate.run",
+    baseUrl: "https://api.substrate.run",
   });
 
   const scene = new GenerateText({

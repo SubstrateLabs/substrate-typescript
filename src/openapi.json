@@ -1910,7 +1910,7 @@
         "required": ["id"]
       },
       "UpdateVectorsIn": {
-        "title": "UpdateVectorsParams",
+        "title": "UpdateVectorsIn",
         "type": "object",
         "properties": {
           "name": {
