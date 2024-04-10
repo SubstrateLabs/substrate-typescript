@@ -1,6 +1,10 @@
 #!/usr/bin/env -S npx ts-node --transpileOnly
 
-import { Substrate, StableDiffusionXLLightning, StableDiffusionXLTurbo } from "substrate";
+import {
+  Substrate,
+  StableDiffusionXLLightning,
+  StableDiffusionXLTurbo,
+} from "substrate";
 
 async function main() {
   const SUBSTRATE_API_KEY = process.env["SUBSTRATE_API_KEY"];
