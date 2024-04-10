@@ -46,7 +46,7 @@ export class Trace extends Directive {
   }
 
   static Operation = {
-    future: (accessor: Accessor, id: Future["id"]) => ({
+    future: (accessor: Accessor, id: Future["_id"]) => ({
       future_id: id,
       key: null,
       accessor,
@@ -82,11 +82,11 @@ export class Trace extends Directive {
       origin_node_id: this.originNode.id,
       op_stack: this.items.map((item) => {
         if (item instanceof FutureString) {
-          // @ts-expect-error (accessing protected prop: id)
-          return Trace.Operation.future("attr", item.id);
+          // @ts-expect-error (accessing protected prop: _id)
+          return Trace.Operation.future("attr", item._id);
         } else if (item instanceof FutureNumber) {
-          // @ts-expect-error (accessing protected prop: id)
-          return Trace.Operation.future("item", item.id);
+          // @ts-expect-error (accessing protected prop: _id)
+          return Trace.Operation.future("item", item._id);
         } else if (typeof item === "string") {
           return Trace.Operation.key("attr", item);
         }
@@ -106,7 +106,7 @@ export class StringConcat extends Directive {
 
   static Concatable = {
     string: (val: string) => ({ future_id: null, val }),
-    future: (id: Future["id"]) => ({ future_id: id, val: null }),
+    future: (id: Future["_id"]) => ({ future_id: id, val: null }),
   };
 
   override next(...items: Concatable[]) {
@@ -130,8 +130,8 @@ export class StringConcat extends Directive {
       type: "string-concat",
       items: this.items.map((item) => {
         if (item instanceof Future) {
-          // @ts-expect-error (accessing protected prop: id)
-          return StringConcat.Concatable.future(item.id);
+          // @ts-expect-error (accessing protected prop: _id)
+          return StringConcat.Concatable.future(item._id);
         }
         return StringConcat.Concatable.string(item);
       }),
@@ -140,31 +140,37 @@ export class StringConcat extends Directive {
 }
 
 export abstract class Future {
-  protected directive: Directive;
-  protected id: string = "";
+  protected _directive: Directive;
+  protected _id: string = "";
 
   constructor(directive: Directive, id: string = newFutureId()) {
-    this.directive = directive;
-    this.id = id;
+    this._directive = directive;
+    this._id = id;
   }
 
   protected referencedFutures(): Future[] {
-    return this.directive.referencedFutures();
+    return this._directive.referencedFutures();
   }
 
   protected toPlaceholder() {
-    return { __$$SB_GRAPH_OP_ID$$__: this.id };
+    return { __$$SB_GRAPH_OP_ID$$__: this._id };
   }
 
   protected async result(): Promise<any> {
-    return this.directive.result();
+    return this._directive.result();
   }
 
   toJSON() {
     return {
-      id: this.id,
-      directive: this.directive.toJSON(),
+      id: this._id,
+      directive: this._directive.toJSON(),
     };
+  }
+}
+
+export class FutureBoolean extends Future {
+  override async result(): Promise<boolean> {
+    return super.result();
   }
 }
 
@@ -207,7 +213,7 @@ export class FutureNumber extends Future {
 export abstract class FutureArray extends Future {
   abstract at(index: number): Future;
 
-  protected override async result(): Promise<any[]> {
+  protected override async result(): Promise<any[] | FutureArray> {
     return super.result();
   }
 }
@@ -236,13 +242,13 @@ export class FutureAnyObject extends Future {
   get(path: string | FutureString) {
     const d =
       typeof path === "string"
-        ? this.directive.next(...parsePath(path))
-        : this.directive.next(path);
+        ? this._directive.next(...parsePath(path))
+        : this._directive.next(path);
     return new FutureAnyObject(d);
   }
 
   at(index: number | FutureNumber) {
-    return new FutureAnyObject(this.directive.next(index));
+    return new FutureAnyObject(this._directive.next(index));
   }
 
   protected override async result(): Promise<Object> {

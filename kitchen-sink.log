@@ -1,0 +1,1077 @@
+[31mx BigLaMa[0m NodeError: Unexpected error
+    at _BigLaMa.output (file:///Users/liam/work/substrate-typescript/src/Node.ts:54:14)
+    at _BigLaMa.output (file:///Users/liam/work/substrate-typescript/src/Nodes.ts:3867:18)
+    at _SubstrateResponse.getError (file:///Users/liam/work/substrate-typescript/src/SubstrateResponse.ts:21:54)
+    at _SubstrateResponse.get (file:///Users/liam/work/substrate-typescript/src/SubstrateResponse.ts:28:22)
+    at run (file:///Users/liam/work/substrate-typescript/examples/kitchen-sink.ts:333:26)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5) {
+  type: 'api_error'
+}
+[32m✓ GenerateSpeech[0m {
+  audio_uri: 'https://assets.substrate.run/xtts/608b286ef456c829662c17076c1298ca3e4976f0b4690c37_1712853962.wav'
+}
+[31mx CreateVectorStore[0m NodeError: API only available on v1
+    at _CreateVectorStore.output (file:///Users/liam/work/substrate-typescript/src/Node.ts:54:14)
+    at _CreateVectorStore.output (file:///Users/liam/work/substrate-typescript/src/Nodes.ts:4945:18)
+    at _SubstrateResponse.getError (file:///Users/liam/work/substrate-typescript/src/SubstrateResponse.ts:21:54)
+    at _SubstrateResponse.get (file:///Users/liam/work/substrate-typescript/src/SubstrateResponse.ts:28:22)
+    at run (file:///Users/liam/work/substrate-typescript/examples/kitchen-sink.ts:333:26)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5) {
+  type: 'invalid_request_error'
+}
+[31mx DeleteVectors[0m NodeError: API only available on v1
+    at _DeleteVectors.output (file:///Users/liam/work/substrate-typescript/src/Node.ts:54:14)
+    at _DeleteVectors.output (file:///Users/liam/work/substrate-typescript/src/Nodes.ts:5353:18)
+    at _SubstrateResponse.getError (file:///Users/liam/work/substrate-typescript/src/SubstrateResponse.ts:21:54)
+    at _SubstrateResponse.get (file:///Users/liam/work/substrate-typescript/src/SubstrateResponse.ts:28:22)
+    at run (file:///Users/liam/work/substrate-typescript/examples/kitchen-sink.ts:333:26)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5) {
+  type: 'invalid_request_error'
+}
+[31mx DeleteVectorStore[0m NodeError: API only available on v1
+    at _DeleteVectorStore.output (file:///Users/liam/work/substrate-typescript/src/Node.ts:54:14)
+    at _DeleteVectorStore.output (file:///Users/liam/work/substrate-typescript/src/Nodes.ts:5085:18)
+    at _SubstrateResponse.getError (file:///Users/liam/work/substrate-typescript/src/SubstrateResponse.ts:21:54)
+    at _SubstrateResponse.get (file:///Users/liam/work/substrate-typescript/src/SubstrateResponse.ts:28:22)
+    at run (file:///Users/liam/work/substrate-typescript/examples/kitchen-sink.ts:333:26)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5) {
+  type: 'invalid_request_error'
+}
+[31mx QueryVectorStore[0m NodeError: API only available on v1
+    at _QueryVectorStore.output (file:///Users/liam/work/substrate-typescript/src/Node.ts:54:14)
+    at _QueryVectorStore.output (file:///Users/liam/work/substrate-typescript/src/Nodes.ts:5155:18)
+    at _SubstrateResponse.getError (file:///Users/liam/work/substrate-typescript/src/SubstrateResponse.ts:21:54)
+    at _SubstrateResponse.get (file:///Users/liam/work/substrate-typescript/src/SubstrateResponse.ts:28:22)
+    at run (file:///Users/liam/work/substrate-typescript/examples/kitchen-sink.ts:333:26)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5) {
+  type: 'invalid_request_error'
+}
+[31mx FillMask[0m NodeError: Unexpected error
+    at _FillMask.output (file:///Users/liam/work/substrate-typescript/src/Node.ts:54:14)
+    at _FillMask.output (file:///Users/liam/work/substrate-typescript/src/Nodes.ts:3801:18)
+    at _SubstrateResponse.getError (file:///Users/liam/work/substrate-typescript/src/SubstrateResponse.ts:21:54)
+    at _SubstrateResponse.get (file:///Users/liam/work/substrate-typescript/src/SubstrateResponse.ts:28:22)
+    at run (file:///Users/liam/work/substrate-typescript/examples/kitchen-sink.ts:333:26)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5) {
+  type: 'api_error'
+}
+[32m✓ XTTSV2[0m {
+  audio_uri: 'https://assets.substrate.run/xtts/544d04f688ae9e01c62435f264911203fca5673fd29f5da0_1712853964.wav'
+}
+[32m✓ JinaV2[0m {
+  embeddings: [
+    {
+      vector: [Array],
+      doc_id: '57210caac6894799a90a70b4398d83e6',
+      metadata: [Object]
+    },
+    {
+      vector: [Array],
+      doc_id: '06764dff77d84fadab48aaf3a2f7ae38',
+      metadata: [Object]
+    }
+  ]
+}
+[31mx FetchVectors[0m NodeError: API only available on v1
+    at _FetchVectors.output (file:///Users/liam/work/substrate-typescript/src/Node.ts:54:14)
+    at _FetchVectors.output (file:///Users/liam/work/substrate-typescript/src/Nodes.ts:5221:18)
+    at _SubstrateResponse.getError (file:///Users/liam/work/substrate-typescript/src/SubstrateResponse.ts:21:54)
+    at _SubstrateResponse.get (file:///Users/liam/work/substrate-typescript/src/SubstrateResponse.ts:28:22)
+    at run (file:///Users/liam/work/substrate-typescript/examples/kitchen-sink.ts:333:26)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5) {
+  type: 'invalid_request_error'
+}
+[32m✓ MultiGenerateText[0m {
+  choices: [
+    {
+      text: ' Don Quixote is a character in a novel by Miguel de Cervantes, published in two parts in 1605 and 1615. He is a noble named Alonso Quixano who has lost his sanity and decides to become a knight-errant, roaming the world to right wrongs and bring justice. Don Quixote is known for his chivalric idealism, his love of adventure, and his eccentric behavior, which often leads to misunderstandings and humorous situations.'
+    }
+  ]
+}
+[31mx GenerateTextVision[0m NodeError: Unexpected error
+    at _GenerateTextVision.output (file:///Users/liam/work/substrate-typescript/src/Node.ts:54:14)
+    at _GenerateTextVision.output (file:///Users/liam/work/substrate-typescript/src/Nodes.ts:2896:18)
+    at _SubstrateResponse.getError (file:///Users/liam/work/substrate-typescript/src/SubstrateResponse.ts:21:54)
+    at _SubstrateResponse.get (file:///Users/liam/work/substrate-typescript/src/SubstrateResponse.ts:28:22)
+    at run (file:///Users/liam/work/substrate-typescript/examples/kitchen-sink.ts:333:26)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5) {
+  type: 'api_error'
+}
+[32m✓ SegmentAnything[0m {
+  mask_image_uri: 'https://assets.substrate.run/sam/f90f2b04f56de72d41d34557d2d9f506c5d1a070926f7c43_1712853965.jpeg'
+}
+[31mx ListVectorStores[0m NodeError: API only available on v1
+    at _ListVectorStores.output (file:///Users/liam/work/substrate-typescript/src/Node.ts:54:14)
+    at _ListVectorStores.output (file:///Users/liam/work/substrate-typescript/src/Nodes.ts:5015:18)
+    at _SubstrateResponse.getError (file:///Users/liam/work/substrate-typescript/src/SubstrateResponse.ts:21:54)
+    at _SubstrateResponse.get (file:///Users/liam/work/substrate-typescript/src/SubstrateResponse.ts:28:22)
+    at run (file:///Users/liam/work/substrate-typescript/examples/kitchen-sink.ts:333:26)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5) {
+  type: 'invalid_request_error'
+}
+[31mx UpdateVectors[0m NodeError: API only available on v1
+    at _UpdateVectors.output (file:///Users/liam/work/substrate-typescript/src/Node.ts:54:14)
+    at _UpdateVectors.output (file:///Users/liam/work/substrate-typescript/src/Nodes.ts:5287:18)
+    at _SubstrateResponse.getError (file:///Users/liam/work/substrate-typescript/src/SubstrateResponse.ts:21:54)
+    at _SubstrateResponse.get (file:///Users/liam/work/substrate-typescript/src/SubstrateResponse.ts:28:22)
+    at run (file:///Users/liam/work/substrate-typescript/examples/kitchen-sink.ts:333:26)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5) {
+  type: 'invalid_request_error'
+}
+[31mx Firellava13B[0m NodeError: Unexpected error
+    at _Firellava13B.output (file:///Users/liam/work/substrate-typescript/src/Node.ts:54:14)
+    at _Firellava13B.output (file:///Users/liam/work/substrate-typescript/src/Nodes.ts:3032:18)
+    at _SubstrateResponse.getError (file:///Users/liam/work/substrate-typescript/src/SubstrateResponse.ts:21:54)
+    at _SubstrateResponse.get (file:///Users/liam/work/substrate-typescript/src/SubstrateResponse.ts:28:22)
+    at run (file:///Users/liam/work/substrate-typescript/examples/kitchen-sink.ts:333:26)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5) {
+  type: 'api_error'
+}
+[31mx RemoveBackground[0m NodeError: Unexpected error
+    at _RemoveBackground.output (file:///Users/liam/work/substrate-typescript/src/Node.ts:54:14)
+    at _RemoveBackground.output (file:///Users/liam/work/substrate-typescript/src/Nodes.ts:4069:18)
+    at _SubstrateResponse.getError (file:///Users/liam/work/substrate-typescript/src/SubstrateResponse.ts:21:54)
+    at _SubstrateResponse.get (file:///Users/liam/work/substrate-typescript/src/SubstrateResponse.ts:28:22)
+    at run (file:///Users/liam/work/substrate-typescript/examples/kitchen-sink.ts:333:26)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5) {
+  type: 'api_error'
+}
+[31mx MultiEmbedImage[0m NodeError: Unexpected error
+    at _MultiEmbedImage.output (file:///Users/liam/work/substrate-typescript/src/Node.ts:54:14)
+    at _MultiEmbedImage.output (file:///Users/liam/work/substrate-typescript/src/Nodes.ts:4743:18)
+    at _SubstrateResponse.getError (file:///Users/liam/work/substrate-typescript/src/SubstrateResponse.ts:21:54)
+    at _SubstrateResponse.get (file:///Users/liam/work/substrate-typescript/src/SubstrateResponse.ts:28:22)
+    at run (file:///Users/liam/work/substrate-typescript/examples/kitchen-sink.ts:333:26)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5) {
+  type: 'api_error'
+}
+[31mx UpscaleImage[0m NodeError: Unexpected error
+    at _UpscaleImage.output (file:///Users/liam/work/substrate-typescript/src/Node.ts:54:14)
+    at _UpscaleImage.output (file:///Users/liam/work/substrate-typescript/src/Nodes.ts:3933:18)
+    at _SubstrateResponse.getError (file:///Users/liam/work/substrate-typescript/src/SubstrateResponse.ts:21:54)
+    at _SubstrateResponse.get (file:///Users/liam/work/substrate-typescript/src/SubstrateResponse.ts:28:22)
+    at run (file:///Users/liam/work/substrate-typescript/examples/kitchen-sink.ts:333:26)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5) {
+  type: 'api_error'
+}
+[31mx StableDiffusionXLControlNet[0m NodeError: Unexpected error
+    at _StableDiffusionXLControlNet.output (file:///Users/liam/work/substrate-typescript/src/Node.ts:54:14)
+    at _StableDiffusionXLControlNet.output (file:///Users/liam/work/substrate-typescript/src/Nodes.ts:3735:18)
+    at _SubstrateResponse.getError (file:///Users/liam/work/substrate-typescript/src/SubstrateResponse.ts:21:54)
+    at _SubstrateResponse.get (file:///Users/liam/work/substrate-typescript/src/SubstrateResponse.ts:28:22)
+    at run (file:///Users/liam/work/substrate-typescript/examples/kitchen-sink.ts:333:26)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5) {
+  type: 'api_error'
+}
+[32m✓ EmbedImage[0m {
+  embedding: {
+    vector: [
+      -0.011884361505508423,  -0.13260746002197266, -0.026238523423671722,
+         0.5227726697921753,   -0.4778180718421936,   -0.4788176417350769,
+        -1.0705833435058594,   -0.7955223917961121,    -0.948833703994751,
+        -0.9048088192939758,     0.980134904384613,  -0.10715414583683014,
+       -0.28920042514801025,   0.31745874881744385,    0.6384642720222473,
+        -3.4278736114501953,    0.9645882844924927,    0.7277727127075195,
+         0.5055632591247559,   -0.9618672132492065,  -0.30230313539505005,
+         0.4835326075553894,  -0.39384227991104126,    -0.322130024433136,
+       -0.03560132533311844,   -0.6202059984207153,    0.3448249399662018,
+        -0.5071086287498474,   -0.4992748200893402,   -1.2162202596664429,
+       -0.20780178904533386,   -0.6843220591545105,    -0.517902135848999,
+        0.38195303082466125,   0.23363131284713745,  -0.17565400898456573,
+       -0.18442489206790924,  -0.18357285857200623,   -0.3419029116630554,
+         1.2720983028411865,    0.7500765919685364,    0.8650888800621033,
+        -0.6930558085441589,  -0.48690640926361084,   -1.0814001560211182,
+        -0.8085047006607056,   -0.3778570890426636,   -1.1420540809631348,
+       -0.37941786646842957,   0.24201317131519318,  -0.05410352349281311,
+        -1.1641592979431152,   -0.3412144184112549,    0.2607744336128235,
+       -0.41329360008239746,   -0.5174835920333862,   0.48315149545669556,
+        0.14464211463928223,  -0.10190427303314209,    0.7826454639434814,
+        0.25652259588241577,    0.5210362672805786,   -0.3778473138809204,
+         -0.824813961982727,   -0.6274731755256653,  -0.04679769277572632,
+       -0.14313474297523499,   0.17267616093158722,   -1.0127376317977905,
+       -0.08866336941719055,   0.22448894381523132,  -0.48827940225601196,
+       -0.25640785694122314,  -0.07574240863323212,    0.0542982816696167,
+        0.20301958918571472,    0.9023632407188416,   0.17691607773303986,
+         -0.556220293045044,    0.7838000059127808,  -0.34805482625961304,
+        0.19435781240463257,   -0.3854290544986725,     0.547082781791687,
+          0.482944518327713, -0.032669320702552795,  -0.11441344022750854,
+         -0.647328794002533,   -1.1767160892486572,     0.990700364112854,
+         0.7460986375808716,  0.023545444011688232,   -0.7952746152877808,
+         -1.852419137954712,     1.233507752418518,    1.0012497901916504,
+         2.3371222019195557,     0.615636944770813,  -0.19878974556922913,
+        -1.3218739032745361,
+      ... 668 more items
+    ]
+  }
+}
+[31mx CLIP[0m NodeError: Unexpected error
+    at _CLIP.output (file:///Users/liam/work/substrate-typescript/src/Node.ts:54:14)
+    at _CLIP.output (file:///Users/liam/work/substrate-typescript/src/Nodes.ts:4875:18)
+    at _SubstrateResponse.getError (file:///Users/liam/work/substrate-typescript/src/SubstrateResponse.ts:21:54)
+    at _SubstrateResponse.get (file:///Users/liam/work/substrate-typescript/src/SubstrateResponse.ts:28:22)
+    at run (file:///Users/liam/work/substrate-typescript/examples/kitchen-sink.ts:333:26)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5) {
+  type: 'api_error'
+}
+[32m✓ MultiEmbedText[0m {
+  embeddings: [
+    {
+      vector: [Array],
+      doc_id: '545c7fdc8a2c43af9b6764ca446a2115',
+      metadata: [Object]
+    },
+    {
+      vector: [Array],
+      doc_id: 'c99be018858946318dbd12ee869ef81d',
+      metadata: [Object]
+    }
+  ]
+}
+[32m✓ EmbedText[0m {
+  embedding: {
+    vector: [
+        -0.035040900111198425,    -0.04132746905088425,    0.057824183255434036,
+          0.04966719076037407,    -0.03254624828696251,   0.0044028121046721935,
+          0.01631852239370346,   -0.005771366413682699,    0.057288479059934616,
+           0.0443657711148262,   -0.007940691895782948,   -0.012547602877020836,
+        -0.062364041805267334,  0.00030530549702234566,   -0.025193946436047554,
+           0.0738680437207222,   -0.004380112513899803,   0.0033033147919923067,
+         -0.03905867785215378,   -0.000854060985147953,   -0.028023909777402878,
+         -0.02332466095685959,   -0.024910205975174904,    -0.01000811904668808,
+         0.022946717217564583,     0.05253411456942558,     0.06071153283119202,
+          0.06524855643510818,    0.009707069955766201,     0.02197178266942501,
+        0.0026336857117712498,   0.0016303767915815115,   -0.020943503826856613,
+          0.03490583971142769,    -0.02565843239426613,    -0.02176067978143692,
+         0.015916746109724045, -0.00041539708035998046,     0.05645087733864784,
+        0.0075028263963758945,    0.009069787338376045,  -0.0008928980096243322,
+      -0.00011037532385671511,    0.008882233873009682,   -0.019991837441921234,
+         0.010319666936993599,    -0.02081184834241867, 0.000028374117391649634,
+         0.013566233217716217,   -0.020411984995007515,   -0.007133962586522102,
+         -0.08100470155477524,    0.020649760961532593,   -0.042738232761621475,
+         -0.02219082973897457,    0.027180276811122894,     0.04459957405924797,
+         0.007354287896305323,    -0.06165122985839844,   -0.025534436106681824,
+         -0.02736627124249935,     0.04298565164208412,   -0.030011873692274094,
+          0.03840266913175583,     0.06177613139152527,    0.020341405645012856,
+        0.0015429845079779625,    -0.07037235051393509,   -0.032172419130802155,
+          -0.0054164775647223,  -0.0002678516902960837,    0.015721531584858894,
+         -0.01887347176671028,   -0.015929514542222023,   -0.006101854145526886,
+         0.024872751906514168,   -0.010381806641817093,   -0.043638259172439575,
+        -0.024335701018571854,    0.013683135621249676,     0.04186885058879852,
+         0.015046369284391403,     0.05284849926829338,   0.0015895181568339467,
+        -0.023239538073539734,   -0.010646536946296692,     -0.0163759496062994,
+         -0.02910049632191658,     0.02604176662862301,     0.02464916557073593,
+          -0.0313568077981472,    0.059712763875722885,    0.019032225012779236,
+         0.004036359954625368,    0.013650220818817616,    0.009445548988878727,
+         0.018480630591511726,    -0.02194794826209545,     -0.0237877257168293,
+           0.0334496796131134,
+      ... 668 more items
+    ],
+    doc_id: '7b79dde42c9f427d9bc516604ab8dba2',
+    metadata: {
+      doc_id: '7b79dde42c9f427d9bc516604ab8dba2',
+      doc: 'Your text to embed'
+    }
+  }
+}
+[31mx MultiGenerateJSON[0m NodeError: Unexpected error
+    at _MultiGenerateJSON.output (file:///Users/liam/work/substrate-typescript/src/Node.ts:54:14)
+    at _MultiGenerateJSON.output (file:///Users/liam/work/substrate-typescript/src/Nodes.ts:2826:18)
+    at _SubstrateResponse.getError (file:///Users/liam/work/substrate-typescript/src/SubstrateResponse.ts:21:54)
+    at _SubstrateResponse.get (file:///Users/liam/work/substrate-typescript/src/SubstrateResponse.ts:28:22)
+    at run (file:///Users/liam/work/substrate-typescript/examples/kitchen-sink.ts:333:26)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5) {
+  type: 'api_error'
+}
+[32m✓ StableDiffusionXLInpaint[0m {
+  outputs: [
+    {
+      image_uri: 'data:image/jpeg;base64,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'... 315291 more characters,
+      seed: 136746067280288960
+    },
+    {
+      image_uri: 'data:image/jpeg;base64,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'... 317415 more characters,
+      seed: 17518161124959558000
+    }
+  ]
+}
+[31mx GenerateJSON[0m NodeError: Unexpected error
+    at _GenerateJSON.output (file:///Users/liam/work/substrate-typescript/src/Node.ts:54:14)
+    at _GenerateJSON.output (file:///Users/liam/work/substrate-typescript/src/Nodes.ts:2756:18)
+    at _SubstrateResponse.getError (file:///Users/liam/work/substrate-typescript/src/SubstrateResponse.ts:21:54)
+    at _SubstrateResponse.get (file:///Users/liam/work/substrate-typescript/src/SubstrateResponse.ts:28:22)
+    at run (file:///Users/liam/work/substrate-typescript/examples/kitchen-sink.ts:333:26)
+    at processTicksAndRejections (node:internal/process/task_queues:95:5) {
+  type: 'api_error'
+}
+[32m✓ GenerateText[0m {
+  text: ' Don Quixote is a fictional character created by the Spanish writer Miguel de Cervantes. He is the protagonist of the novel "Don Quixote de la Mancha," which was published in two parts in 1605 and 1615. Don Quixote is a noble named Alonso Quixano who has lost his sanity and decided to become a knight-errant, roaming the world to right wrongs and bring justice. He is known for his chivalric code of honor, his loyalty to his ideals, and his determination to do what is right, even if it means going against the norms of society.'
+}
+[32m✓ SegmentUnderPoint[0m {
+  mask_image_uri: 'https://assets.substrate.run/sam/ed23917bc51ac9918334f072564bd6334a64f9271ad9bb89_1712853966.jpeg'
+}
+[32m✓ MultiGenerativeEditImage[0m {
+  outputs: [
+    {
+      image_uri: 'https://assets.substrate.run/sdxl/f14e1815417a7c59313a3464caa319e78b1c63e4d362c204_1712853968.jpeg'
+    },
+    {
+      image_uri: 'https://assets.substrate.run/sdxl/1c5af38d2b4849269a5530f97a1186a583ad99cd9e6ad059_1712853968.jpeg'
+    }
+  ]
+}
+[32m✓ DISISNet[0m {
+  image_uri: 'https://assets.substrate.run/isnet/1721294388cb02dd00857a58f0b5ed0a76dd8542e029e1ad_1712853969.png'
+}
+[32m✓ GenerativeEditImage[0m {
+  image_uri: 'https://assets.substrate.run/sdxl/096057ff918a39692ff49e0373f393af94934c072d69274d_1712853967.jpeg'
+}
+[32m✓ StableDiffusionXLTurbo[0m {
+  outputs: [
+    {
+      image_uri: 'https://assets.substrate.run/sdxl/f76e84ce0c3d8f7ec0746d76587c6c63184078ddad78c8a4_1712853968.jpeg',
+      seed: 7947464464416280000
+    },
+    {
+      image_uri: 'https://assets.substrate.run/sdxl/142d43c28566bfc2b4446be881367ee089917f60072660a5_1712853969.jpeg',
+      seed: 8876790868001525000
+    }
+  ]
+}
+[32m✓ Mistral7BInstruct[0m {
+  choices: [
+    {
+      text: ' Don Quixote is a character in the famous novel "Don Quixote" by Miguel de Cervantes. He is a Spanish knight-errant who is renowned for his chivalry, bravery, and sense of justice.\n' +
+        '\n' +
+        'Don Quixote was born as the nobleman Alonso Quixano, but he has lost his sanity and has decided to become a knight-errant. He sets out to right wrongs and bring justice to the'
+    }
+  ]
+}
+[32m✓ RealESRGAN[0m {
+  image_uri: 'https://assets.substrate.run/esrgan/5b4038ca5e1002d718200c5febc05b34a0bbb834f07ce1b9_1712853970.png'
+}
+[32m✓ StableDiffusionXLIPAdapter[0m {
+  outputs: [
+    {
+      image_uri: 'https://assets.substrate.run/sdxl/c15c986b2c9ac111bcac699a0d6190daa984178c57184928_1712853967.jpeg',
+      seed: 4409460972851671600
+    },
+    {
+      image_uri: 'https://assets.substrate.run/sdxl/f4fff94f06426b39d282155bdb823a2d348c30ed11717cad_1712853970.jpeg',
+      seed: 4992789049587866000
+    }
+  ]
+}
+[32m✓ StableDiffusionXLLightning[0m {
+  outputs: [
+    {
+      image_uri: 'https://assets.substrate.run/sdxl/cf404eb994c7a338007e34c7f4000cd7f23218efd8766dd7_1712853968.jpeg',
+      seed: 5040205983747932000
+    },
+    {
+      image_uri: 'https://assets.substrate.run/sdxl/e20a5456ff09a8d7812864a2a42ac31f3d7a9c37fc529552_1712853972.jpeg',
+      seed: 13905235545422854000
+    }
+  ]
+}
+[32m✓ StableDiffusionXL[0m {
+  outputs: [
+    {
+      image_uri: 'https://assets.substrate.run/sdxl/09e542e95e22e9372f0223e2cfc391cab674060dfdba11fc_1712853970.jpeg',
+      seed: 2248090258697485000
+    },
+    {
+      image_uri: 'https://assets.substrate.run/sdxl/70872e9fe89408a77376d382abc5a9ba20b461adf27c36a0_1712853974.jpeg',
+      seed: 1172541536696023600
+    }
+  ]
+}
+[32m✓ GenerateImage[0m {
+  image_uri: 'https://assets.substrate.run/sdxl/b74ee292c75beb2ab4252c025c51b830ae9166c317cc63fe_1712853976.jpeg'
+}
+[32m✓ MultiGenerateImage[0m {
+  outputs: [
+    {
+      image_uri: 'https://assets.substrate.run/sdxl/f1622f5d5fe51990d74aef367baef95449c046092946814d_1712853980.jpeg'
+    },
+    {
+      image_uri: 'https://assets.substrate.run/sdxl/31eee6f241ef0ca7d846d3d03a66f336fde9e67844281f7a_1712853984.jpeg'
+    }
+  ]
+}
+[32m✓ TranscribeMedia[0m {
+  text: " something that's true that you can only come out of something sad? Or do you think that is cliche? I know that the British believe that the most serious and bound  problems and questions and issues could be discussed only in the form of a joke. I know in US lit, there's a tradition from about the 50s and 60s called black humor, which is a very kind of sardonic, sad type of humor. I'm grasping for something interesting to say, and I think probably sometimes it can be, and sometimes it isn't. There are forms of humor that are escapes from pain, and there are forms of humor that transfigure pain.  because you're in your books. Does this make any sense? Yeah. Okay. Now the perspiration starts. Okay. You know what, tell me what you think. Like, if we do this as a conversation, it will be easier. Yeah, sure. You know, I wrote a lot of things about Perinat, and to Perinat there's a theory that he was very, he had this large sickness, so he couldn't breathe, so he was like,  was very proud of him, and although he hated his cis, he still really lived in the day of all nazis and was all catholic-fessional, and he was just painting everything. But then after that he developed this really kind of strange sense of humor. So his songs are very dark, and his songs are very, for me, very litty, and also this humor comes from this sort of music and all that. And I just wanted to know if you think that it's true that, you know, the kind of sense you may hold back, you know, comes from this business sense, or is this a cliche, something she knows, like, it's very comic and...  I don't know. I know that there's a response to things that are difficult. In the US, in the East, there's a strange situation where, in some respects, humor and irony are political responses, and they're reductive. And in another sense, particularly in popular entertainment, irony and kind of dark humor can become a way of, it's pretending a protest when it really isn't. Someone once called irony the song of a bird that has come to love its cage. And even though it's saying something about not liking the cage, it really likes it in there. There's a... So it can...  can be both a wake-up call and an aesthetic. And the difference in the US now is very tricky and very complicated, it seems to me. Hi.  I'm not often all that aware of stuff that's really funny in the book. In the American version of Infinite Jest, I set out to write a side book, and when people liked it and told me that the thing they liked about it was that it was so funny, it was just very surprising. It's the other strange thing about humor. I teach school, and I teach literature, and some of it I teach Kafka, and there's a story about Kafka that in some of Kafka's most horrific stories, his neighbors would complain because he would be laughing so hard late at night, so he found them very, very funny. Americans are funny, but I don't know that many people would understand laughing so hard that your neighbors would complain.  so there's something, it's probably difficult to talk to a writer about the humor or status or something in her own work because her sense of it has to be very different from yours. It was a while ago.  The easiest way to talk about it would be that for the upper middle class in the US, particularly younger people, things are often materially very comfortable, and there's also a number of sadness in that sense. And it's difficult to think about, and difficult to come up with answers in the abstract. And I think I started that book after a couple of people, not close friends, but people I knew who I should have committed suicide. It just became obvious that something was going on.  and I know that that impulse was part of starting the book. The book is so long gone, it took so long to write, that it's almost hard to remember the impulses at the beginning because everything sort of changed. I mean, it's something you live with for years and years rather than something you just have an idea or a feeling that needs to. I think one of the ideas of the book is that there's a particular ethos in US culture, especially in entertainment marketing culture, that very much appeals to people as individuals, that you don't have to be devoted or subservient to anything else. There is no larger good than your own good and your own happiness. And in the book, it's best I can recall  in the book, in which various people are  are living out something that I think is true, which is that we all worship, and we all have religious symbols. We can choose to understand what we worship, but the myth that we worship nothing and give ourselves away to nothing simply sets us up to give ourselves away to something different. For instance, pleasure, or drugs, or the idea of having a lot of money and being able to buy nice stuff. Or in the tennis academy, it's somewhat different. It's devotion to an athlete that requires a certain amount of sacrifice and discipline, but it's nevertheless an individual sport, and one's trying to get at it as an individual. I doubt this makes very much sense,  Whatever the conditions of hopelessness you're talking about, at least in Infinite Jest, have to do, I think, with an American idea, and not a universal one, but one that I think kids get exposed to very early, that you are the most important, and what you want is the most important, and that your job in life is to gratify your own desires. That's a little crude to say it that way, but in fact, it's something of the ideology here, and it's certainly the ideology that's perpetrated by television, advertising, and entertainment. The economy thrives on it.  and what happens when this ALG becomes... Oh, I'm sorry. I'm sorry. Okay, thank you. Very nice work. Okay.  Well, nobody tells you. I mean, mom and dad don't sit you down and say, this is something, this is something.  is something very subtle and is delivered by a great many messages. Just conversationally, do you get what I'm talking about? I rather doubt that Julian's idea of America is very different from this. This is one enormous engine and temple of self-provocation and self-advancement, and in some ways it works very, very well. In other ways, it doesn't work all that well because  for me, it seems as if there are whole other parts of me that need to worry about things larger than me, that don't get nourished in that system. And do you think the Europeans know that? From the Europeans I talk to, yeah. I mean, when I get in arguments with Europeans, their view of it is sort of exaggerated and simplistic. It's a very complicated thing, and full of paradoxes and ironies and all kinds of stuff. And the idea that America is one great, big shopping mall, and that all anyone wants to do is spit their credit card and run out and buy stuff,  is stereotyped and it's a generalization, but as a way to summarize certain ethos in the US, it's pretty accurate, particularly after the elections, which is that on Tuesdays, the US is not getting better, and there it seems like it's getting worse.  I mean, there are certain paradoxes that go along with being  a wealthy Western industrial country, and it just seems as though they're probably somewhat common, you know? We have our own problems, you have the problems of absorbing Eastern and dealing with all that stuff. I'll stay out of politics, it's too exciting. Well, my memory is one of the reasons for studying the book in the future was that  was that I'm now 40, so I was born in the early 60s, and to an extent, I think my generation tends to think of itself as children still, and as people with parents, and I remember wanting to do something about what would be the situation of our children, kind of the next generation. And on this child life thing, has this also something, there's one story in interviews that they use, where the depressed person is always talking about that they're living with a child. Is that something that belongs together, or is it...  language like that, the wounded inner child, the inner pain, is part of a kind of pop psychological movement in the United States that is a sort of popular organism that has its own paradox, which is that the more we're taught to list and resent the things of which we were deprived as children, the more we live in that anger and frustration, and the more we remain children. I mean, that's a very simple way of putting it, but I think the character in that story is sort of a compendium of kind of all the worst and most painful features of the popular psychology movement in the US, and I don't know whether there's any analog to that in Western Europe or not.  No, I think that is, actually. When you said that, I mean, I find that you know that there's this lack of opportunity to really grow up and to live life on those terms. So, I mean, what should this generation, which is not able to grow up, do about it?  Let me insert one thing, which I'll bet you've noticed from talking to writers, is that most of the stuff that we think we're writing about in books is very difficult to talk about straight up, you know, question and answer. And in some sense, it probably can't be talked about directly, and that's why people make up stories about it. This is all a big offense, because I feel like what I'm saying is so simple and so reductive.  to the extent that I understand it, being what you call grown up isn't a lot of fun a lot of the time. There are things you have to do, there are things you want to do that you can't do for a variety of reasons, and I think for young people in America, there are very mixed messages from the culture. There's a streak of more",
+  segments: [
+    {
+      text: " something that's true that you can only come out of something sad?",
+      start: 0.009,
+      end: 2.855,
+      speaker: 'SPEAKER_01',
+      words: [Array]
+    },
+    {
+      text: 'Or do you think that is cliche?',
+      start: 2.875,
+      end: 3.837,
+      speaker: 'SPEAKER_01',
+      words: [Array]
+    },
+    {
+      text: 'I know that the British believe that the most serious and bound',
+      start: 7.044,
+      end: 10.312,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: ' problems and questions and issues could be discussed only in the form of a joke.',
+      start: 11.909,
+      end: 15.591,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: "I know in US lit, there's a tradition from about the 50s and 60s called black humor, which is a very kind of sardonic, sad type of humor.",
+      start: 15.852,
+      end: 23.057,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: "I'm grasping for something interesting to say, and I think probably sometimes it can be, and sometimes it isn't.",
+      start: 23.877,
+      end: 28.34,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: 'There are forms of humor that are escapes from pain, and there are forms of humor that transfigure pain.',
+      start: 28.36,
+      end: 33.504,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: " because you're in your books.",
+      start: 34.384,
+      end: 35.285,
+      speaker: 'SPEAKER_01',
+      words: [Array]
+    },
+    {
+      text: 'Does this make any sense?',
+      start: 35.305,
+      end: 36.186,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: 'Yeah.',
+      start: 36.267,
+      end: 36.547,
+      speaker: 'SPEAKER_01',
+      words: [Array]
+    },
+    {
+      text: 'Okay.',
+      start: 36.747,
+      end: 36.967,
+      speaker: 'SPEAKER_01',
+      words: [Array]
+    },
+    {
+      text: 'Now the perspiration starts.',
+      start: 37.208,
+      end: 37.909,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: 'Okay.',
+      start: 37.929,
+      end: 40.131,
+      speaker: 'SPEAKER_01',
+      words: [Array]
+    },
+    {
+      text: 'You know what, tell me what you think.',
+      start: 40.212,
+      end: 41.113,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: 'Like, if we do this as a conversation, it will be easier.',
+      start: 41.353,
+      end: 42.795,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: 'Yeah, sure.',
+      start: 42.815,
+      end: 43.516,
+      speaker: 'SPEAKER_01',
+      words: [Array]
+    },
+    {
+      text: "You know, I wrote a lot of things about Perinat, and to Perinat there's a theory that he was very, he had this large sickness, so he couldn't breathe, so he was like,",
+      start: 43.556,
+      end: 50.444,
+      speaker: 'SPEAKER_01',
+      words: [Array]
+    },
+    {
+      text: ' was very proud of him, and although he hated his cis, he still really lived in the day of all nazis and was all catholic-fessional, and he was just painting everything.',
+      start: 51.025,
+      end: 58.01,
+      speaker: 'SPEAKER_01',
+      words: [Array]
+    },
+    {
+      text: 'But then after that he developed this really kind of strange sense of humor.',
+      start: 58.19,
+      end: 60.711,
+      speaker: 'SPEAKER_01',
+      words: [Array]
+    },
+    {
+      text: 'So his songs are very dark, and his songs are very, for me, very litty, and also this humor comes from this sort of music and all that.',
+      start: 60.951,
+      end: 65.855,
+      speaker: 'SPEAKER_01',
+      words: [Array]
+    },
+    {
+      text: "And I just wanted to know if you think that it's true that, you know, the kind of sense you may hold back, you know, comes from this business sense, or is this a cliche, something she knows, like, it's very comic and...",
+      start: 66.055,
+      end: 74.06,
+      speaker: 'SPEAKER_01',
+      words: [Array]
+    },
+    {
+      text: " I don't know.",
+      start: 75.461,
+      end: 76.402,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: "I know that there's a response to things that are difficult.",
+      start: 76.462,
+      end: 79.463,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: "In the US, in the East, there's a strange situation where, in some respects, humor and irony are political responses, and they're reductive.",
+      start: 79.904,
+      end: 87.468,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: "And in another sense, particularly in popular entertainment, irony and kind of dark humor can become a way of, it's pretending a protest when it really isn't.",
+      start: 87.768,
+      end: 96.393,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: 'Someone once called irony the song of a bird that has come to love its cage.',
+      start: 96.453,
+      end: 98.455,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: "And even though it's saying something about not liking the cage, it really likes it in there.",
+      start: 98.815,
+      end: 102.697,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: "There's a... So it can...",
+      start: 102.717,
+      end: 103.277,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: ' can be both a wake-up call and an aesthetic.',
+      start: 104.372,
+      end: 106.693,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: 'And the difference in the US now is very tricky and very complicated, it seems to me.',
+      start: 106.713,
+      end: 109.955,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: 'Hi.',
+      start: 109.975,
+      end: 110.475,
+      speaker: 'SPEAKER_01',
+      words: [Array]
+    },
+    {
+      text: " I'm not often all that aware of stuff that's really funny in the book.",
+      start: 124.364,
+      end: 127.226,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: 'In the American version of Infinite Jest, I set out to write a side book, and when people liked it and told me that the thing they liked about it was that it was so funny, it was just very surprising.',
+      start: 127.266,
+      end: 133.592,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: "It's the other strange thing about humor.",
+      start: 133.612,
+      end: 134.893,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: "I teach school, and I teach literature, and some of it I teach Kafka, and there's a story about Kafka that in some of Kafka's most horrific stories, his neighbors would complain because he would be laughing so hard late at night, so he found them very, very funny.",
+      start: 135.413,
+      end: 143.66,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: "Americans are funny, but I don't know that many people would understand laughing so hard that your neighbors would complain.",
+      start: 143.76,
+      end: 147.283,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: " so there's something, it's probably difficult to talk to a writer about the humor or status or something in her own work because her sense of it has to be very different from yours.",
+      start: 147.363,
+      end: 155.227,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: 'It was a while ago.',
+      start: 156.047,
+      end: 157.107,
+      speaker: 'SPEAKER_01',
+      words: [Array]
+    },
+    {
+      text: " The easiest way to talk about it would be that for the upper middle class in the US, particularly younger people, things are often materially very comfortable, and there's also a number of sadness in that sense.",
+      start: 172.984,
+      end: 182.431,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: "And it's difficult to think about, and difficult to come up with answers in the abstract.",
+      start: 182.892,
+      end: 187.755,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: 'And I think I started that book after a couple of people, not close friends, but people I knew who I should have committed suicide.',
+      start: 188.056,
+      end: 195.361,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: 'It just became obvious that something was going on.',
+      start: 196.762,
+      end: 198.283,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: ' and I know that that impulse was part of starting the book.',
+      start: 200.593,
+      end: 203.474,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: "The book is so long gone, it took so long to write, that it's almost hard to remember the impulses at the beginning because everything sort of changed.",
+      start: 203.614,
+      end: 207.616,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: "I mean, it's something you live with for years and years rather than something you just have an idea or a feeling that needs to.",
+      start: 207.796,
+      end: 211.137,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: "I think one of the ideas of the book is that there's a particular ethos in US culture, especially in entertainment marketing culture, that very much appeals to people as individuals, that you don't have to be devoted or subservient to anything else.",
+      start: 211.217,
+      end: 222.621,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: 'There is no larger good than your own good and your own happiness.',
+      start: 223.281,
+      end: 225.062,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: "And in the book, it's best I can recall",
+      start: 225.282,
+      end: 227.483,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: ' in the book, in which various people are',
+      start: 228.447,
+      end: 229.809,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: ' are living out something that I think is true, which is that we all worship, and we all have religious symbols.',
+      start: 242.56,
+      end: 245.621,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: 'We can choose to understand what we worship, but the myth that we worship nothing and give ourselves away to nothing simply sets us up to give ourselves away to something different.',
+      start: 246.242,
+      end: 253.525,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: 'For instance, pleasure, or drugs, or the idea of having a lot of money and being able to buy nice stuff.',
+      start: 253.705,
+      end: 258.047,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: "Or in the tennis academy, it's somewhat different.",
+      start: 258.307,
+      end: 260.168,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: "It's devotion to an athlete that requires a certain amount of sacrifice and discipline, but it's nevertheless an individual sport, and one's trying to get at it as an individual.",
+      start: 260.208,
+      end: 267.331,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: 'I doubt this makes very much sense,',
+      start: 267.551,
+      end: 268.732,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: " Whatever the conditions of hopelessness you're talking about, at least in Infinite Jest, have to do, I think, with an American idea, and not a universal one, but one that I think kids get exposed to very early, that you are the most important, and what you want is the most important, and that your job in life is to gratify your own desires.",
+      start: 269.552,
+      end: 284.821,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: "That's a little crude to say it that way, but in fact, it's something of the ideology here, and it's certainly the ideology that's perpetrated by television, advertising, and entertainment.",
+      start: 285.602,
+      end: 294.327,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: 'The economy thrives on it.',
+      start: 294.887,
+      end: 295.768,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: " and what happens when this ALG becomes... Oh, I'm sorry.",
+      start: 295.928,
+      end: 300.069,
+      speaker: 'SPEAKER_01',
+      words: [Array]
+    },
+    {
+      text: "I'm sorry.",
+      start: 300.209,
+      end: 300.49,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: 'Okay, thank you.',
+      start: 300.53,
+      end: 304.331,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: 'Very nice work.',
+      start: 304.351,
+      end: 304.651,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: 'Okay.',
+      start: 304.691,
+      end: 304.811,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: ' Well, nobody tells you.',
+      start: 324.287,
+      end: 325.447,
+      speaker: 'SPEAKER_01',
+      words: [Array]
+    },
+    {
+      text: "I mean, mom and dad don't sit you down and say, this is something, this is something.",
+      start: 325.467,
+      end: 330.589,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: ' is something very subtle and is delivered by a great many messages.',
+      start: 354.909,
+      end: 358.472,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: "Just conversationally, do you get what I'm talking about?",
+      start: 358.772,
+      end: 364.637,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: "I rather doubt that Julian's idea of America is very different from this.",
+      start: 365.017,
+      end: 367.159,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: 'This is one enormous engine and temple of self-provocation and self-advancement, and in some ways it works very, very well.',
+      start: 367.459,
+      end: 375.306,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: "In other ways, it doesn't work all that well because",
+      start: 375.646,
+      end: 377.287,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: " for me, it seems as if there are whole other parts of me that need to worry about things larger than me, that don't get nourished in that system.",
+      start: 379.056,
+      end: 386.258,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: 'And do you think the Europeans know that?',
+      start: 386.678,
+      end: 389.019,
+      speaker: 'SPEAKER_01',
+      words: [Array]
+    },
+    {
+      text: 'From the Europeans I talk to, yeah.',
+      start: 389.039,
+      end: 389.939,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: 'I mean, when I get in arguments with Europeans, their view of it is sort of exaggerated and simplistic.',
+      start: 390.079,
+      end: 396.001,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: "It's a very complicated thing, and full of paradoxes and ironies and all kinds of stuff.",
+      start: 396.021,
+      end: 399.902,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: 'And the idea that America is one great, big shopping mall, and that all anyone wants to do is spit their credit card and run out and buy stuff,',
+      start: 399.982,
+      end: 406.464,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: " is stereotyped and it's a generalization, but as a way to summarize certain ethos in the US, it's pretty accurate, particularly after the elections, which is that on Tuesdays, the US is not getting better, and there it seems like it's getting worse.",
+      start: 408.59,
+      end: 418.436,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: ' I mean, there are certain paradoxes that go along with being',
+      start: 419.057,
+      end: 422.718,
+      speaker: 'SPEAKER_01',
+      words: [Array]
+    },
+    {
+      text: " a wealthy Western industrial country, and it just seems as though they're probably somewhat common, you know?",
+      start: 441.904,
+      end: 446.726,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: 'We have our own problems, you have the problems of absorbing Eastern and dealing with all that stuff.',
+      start: 446.746,
+      end: 451.248,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: "I'll stay out of politics, it's too exciting.",
+      start: 451.728,
+      end: 454.789,
+      speaker: 'SPEAKER_01',
+      words: [Array]
+    },
+    {
+      text: 'Well, my memory is one of the reasons for studying the book in the future was that',
+      start: 455.129,
+      end: 459.251,
+      speaker: 'SPEAKER_01',
+      words: [Array]
+    },
+    {
+      text: " was that I'm now 40, so I was born in the early 60s, and to an extent, I think my generation tends to think of itself as children still, and as people with parents, and I remember wanting to do something about what would be the situation of our children, kind of the next generation.",
+      start: 471.26,
+      end: 484.973,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: "And on this child life thing, has this also something, there's one story in interviews that they use, where the depressed person is always talking about that they're living with a child.",
+      start: 485.253,
+      end: 492.7,
+      speaker: 'SPEAKER_01',
+      words: [Array]
+    },
+    {
+      text: 'Is that something that belongs together, or is it...',
+      start: 492.74,
+      end: 494.862,
+      speaker: 'SPEAKER_01',
+      words: [Array]
+    },
+    {
+      text: " language like that, the wounded inner child, the inner pain, is part of a kind of pop psychological movement in the United States that is a sort of popular organism that has its own paradox, which is that the more we're taught to list and resent the things of which we were deprived as children, the more we live in that anger and frustration, and the more we remain children.",
+      start: 497.915,
+      end: 514.928,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: "I mean, that's a very simple way of putting it, but I think the character in that story is sort of a compendium of kind of all the worst and most painful features of the popular psychology movement in the US, and I don't know whether there's any analog to that in Western Europe or not.",
+      start: 514.948,
+      end: 525.977,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: ' No, I think that is, actually.',
+      start: 526.477,
+      end: 527.498,
+      speaker: 'SPEAKER_01',
+      words: [Array]
+    },
+    {
+      text: "When you said that, I mean, I find that you know that there's this lack of opportunity to really grow up and to live life on those terms.",
+      start: 528.598,
+      end: 535.241,
+      speaker: 'SPEAKER_01',
+      words: [Array]
+    },
+    {
+      text: 'So, I mean, what should this generation, which is not able to grow up, do about it?',
+      start: 536.021,
+      end: 539.763,
+      speaker: 'SPEAKER_01',
+      words: [Array]
+    },
+    {
+      text: " Let me insert one thing, which I'll bet you've noticed from talking to writers, is that most of the stuff that we think we're writing about in books is very difficult to talk about straight up, you know, question and answer.",
+      start: 541.485,
+      end: 549.735,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: "And in some sense, it probably can't be talked about directly, and that's why people make up stories about it.",
+      start: 550.095,
+      end: 553.679,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: "This is all a big offense, because I feel like what I'm saying is so simple and so reductive.",
+      start: 553.879,
+      end: 557.544,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: " to the extent that I understand it, being what you call grown up isn't a lot of fun a lot of the time.",
+      start: 559.545,
+      end: 565.55,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: "There are things you have to do, there are things you want to do that you can't do for a variety of reasons, and I think for young people in America, there are very mixed messages from the culture.",
+      start: 565.67,
+      end: 573.876,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    },
+    {
+      text: "There's a streak of more",
+      start: 574.917,
+      end: 575.578,
+      speaker: 'SPEAKER_00',
+      words: [Array]
+    }
+  ]
+}

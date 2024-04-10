@@ -158,7 +158,7 @@ describe("Future", () => {
       const s = FutureString.concat("a");
       expect(s).toBeInstanceOf(FutureString);
       // @ts-expect-error (protected access)
-      expect(s.directive).toEqual(new StringConcat(["a"]));
+      expect(s._directive).toEqual(new StringConcat(["a"]));
     });
 
     test(".concat", () => {
@@ -166,7 +166,7 @@ describe("Future", () => {
       const s2 = s1.concat("b", "c");
       expect(s2).toBeInstanceOf(FutureString);
       // @ts-expect-error (protected access)
-      expect(s2.directive).toEqual(new StringConcat([s1, "b", "c"]));
+      expect(s2._directive).toEqual(new StringConcat([s1, "b", "c"]));
     });
 
     test(".interpolate", async () => {
