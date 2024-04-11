@@ -45,7 +45,7 @@ import {
   DeleteVectors,
 } from "substrate";
 
-const id = (name) => `kitchen-sink-${name}`
+const id = (name) => `kitchen-sink-${name}`;
 
 const examples = [
   new GenerateText({
