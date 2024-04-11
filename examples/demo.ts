@@ -1,3 +1,5 @@
+#!/usr/bin/env -S npx ts-node --transpileOnly
+
 import {
   Substrate,
   QueryVectorStore,
@@ -21,7 +23,7 @@ async function main() {
   const query = new QueryVectorStore({
     name: "feed_embeddings",
     model: "jina-v2",
-    query_vectors: [jokeEmb.future.embedding.vector]
+    query_vectors: [jokeEmb.future.embedding.vector],
     // query_strings: ["hello world"],
   });
   const res = await substrate.run(query, joke, jokeEmb);
