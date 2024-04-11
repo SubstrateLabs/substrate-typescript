@@ -3,6 +3,7 @@
  * Do not make direct changes to the file.
  */
 
+
 export interface paths {
   "/GenerateText": {
     /**
@@ -381,9 +382,9 @@ export interface components {
     /** MultiGenerateTextOut */
     MultiGenerateTextOut: {
       choices: {
-        /** @description Text response. */
-        text?: string;
-      }[];
+          /** @description Text response. */
+          text?: string;
+        }[];
     };
     /** MultiGenerateJSONIn */
     MultiGenerateJSONIn: {
@@ -416,11 +417,11 @@ export interface components {
     /** MultiGenerateJSONOut */
     MultiGenerateJSONOut: {
       choices: {
-        /** @description JSON response. */
-        json_object?: {
-          [key: string]: unknown;
-        };
-      }[];
+          /** @description JSON response. */
+          json_object?: {
+            [key: string]: unknown;
+          };
+        }[];
     };
     /** Mistral7BInstructIn */
     Mistral7BInstructIn: {
@@ -452,13 +453,13 @@ export interface components {
     /** Mistral7BInstructOut */
     Mistral7BInstructOut: {
       choices: {
-        /** @description Text response, if `json_schema` was not provided. */
-        text?: string;
-        /** @description JSON response, if `json_schema` was provided. */
-        json_object?: {
-          [key: string]: unknown;
-        };
-      }[];
+          /** @description Text response, if `json_schema` was not provided. */
+          text?: string;
+          /** @description JSON response, if `json_schema` was provided. */
+          json_object?: {
+            [key: string]: unknown;
+          };
+        }[];
     };
     /** GenerateTextVisionIn */
     GenerateTextVisionIn: {
@@ -541,9 +542,9 @@ export interface components {
     /** MultiGenerateImageOut */
     MultiGenerateImageOut: {
       outputs: {
-        /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-        image_uri: string;
-      }[];
+          /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+          image_uri: string;
+        }[];
     };
     /** StableDiffusionXLIn */
     StableDiffusionXLIn: {
@@ -583,11 +584,11 @@ export interface components {
     /** StableDiffusionXLOut */
     StableDiffusionXLOut: {
       outputs: {
-        /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-        image_uri: string;
-        /** @description The random noise seed used for generation. */
-        seed: number;
-      }[];
+          /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+          image_uri: string;
+          /** @description The random noise seed used for generation. */
+          seed: number;
+        }[];
     };
     /** StableDiffusionXLLightningIn */
     StableDiffusionXLLightningIn: {
@@ -612,11 +613,11 @@ export interface components {
     /** StableDiffusionXLLightningOut */
     StableDiffusionXLLightningOut: {
       outputs: {
-        /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-        image_uri: string;
-        /** @description The random noise seed used for generation. */
-        seed: number;
-      }[];
+          /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+          image_uri: string;
+          /** @description The random noise seed used for generation. */
+          seed: number;
+        }[];
     };
     /** StableDiffusionXLIPAdapterIn */
     StableDiffusionXLIPAdapterIn: {
@@ -648,11 +649,11 @@ export interface components {
     /** StableDiffusionXLIPAdapterOut */
     StableDiffusionXLIPAdapterOut: {
       outputs: {
-        /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-        image_uri: string;
-        /** @description The random noise seed used for generation. */
-        seed: number;
-      }[];
+          /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+          image_uri: string;
+          /** @description The random noise seed used for generation. */
+          seed: number;
+        }[];
     };
     /** StableDiffusionXLControlNetIn */
     StableDiffusionXLControlNetIn: {
@@ -690,11 +691,11 @@ export interface components {
     /** StableDiffusionXLControlNetOut */
     StableDiffusionXLControlNetOut: {
       outputs: {
-        /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-        image_uri: string;
-        /** @description The random noise seed used for generation. */
-        seed: number;
-      }[];
+          /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+          image_uri: string;
+          /** @description The random noise seed used for generation. */
+          seed: number;
+        }[];
     };
     /** GenerativeEditImageIn */
     GenerativeEditImageIn: {
@@ -740,9 +741,9 @@ export interface components {
     /** MultiGenerativeEditImageOut */
     MultiGenerativeEditImageOut: {
       outputs: {
-        /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-        image_uri: string;
-      }[];
+          /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+          image_uri: string;
+        }[];
     };
     /** StableDiffusionXLInpaintIn */
     StableDiffusionXLInpaintIn: {
@@ -778,11 +779,11 @@ export interface components {
     /** StableDiffusionXLInpaintOut */
     StableDiffusionXLInpaintOut: {
       outputs: {
-        /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-        image_uri: string;
-        /** @description The random noise seed used for generation. */
-        seed: number;
-      }[];
+          /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+          image_uri: string;
+          /** @description The random noise seed used for generation. */
+          seed: number;
+        }[];
     };
     /** BoundingBox */
     BoundingBox: {
@@ -946,34 +947,34 @@ export interface components {
       image_uri: string;
       /** @description Point prompts, to detect a segment under the point. One of `point_prompts` or `box_prompts` must be set. */
       point_prompts?: {
-        /** @description X position. */
-        x: number;
-        /** @description Y position. */
-        y: number;
-      }[];
+          /** @description X position. */
+          x: number;
+          /** @description Y position. */
+          y: number;
+        }[];
       /** @description Box prompts, to detect a segment within the bounding box. One of `point_prompts` or `box_prompts` must be set. */
       box_prompts?: {
-        /**
-         * Format: float
-         * @description Top left corner x.
-         */
-        x1: number;
-        /**
-         * Format: float
-         * @description Top left corner y.
-         */
-        y1: number;
-        /**
-         * Format: float
-         * @description Bottom right corner x.
-         */
-        x2: number;
-        /**
-         * Format: float
-         * @description Bottom right corner y.
-         */
-        y2: number;
-      }[];
+          /**
+           * Format: float
+           * @description Top left corner x.
+           */
+          x1: number;
+          /**
+           * Format: float
+           * @description Top left corner y.
+           */
+          y1: number;
+          /**
+           * Format: float
+           * @description Bottom right corner x.
+           */
+          x2: number;
+          /**
+           * Format: float
+           * @description Bottom right corner y.
+           */
+          y2: number;
+        }[];
       /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
     };
@@ -1049,21 +1050,21 @@ export interface components {
       speaker?: string;
       /** @description Aligned words, if `align` is enabled. */
       words?: {
-        /** @description Text of word. */
-        word: string;
-        /**
-         * Format: float
-         * @description Start time of word, in seconds.
-         */
-        start?: number;
-        /**
-         * Format: float
-         * @description End time of word, in seconds.
-         */
-        end?: number;
-        /** @description ID of speaker, if `diarize` is enabled. */
-        speaker?: string;
-      }[];
+          /** @description Text of word. */
+          word: string;
+          /**
+           * Format: float
+           * @description Start time of word, in seconds.
+           */
+          start?: number;
+          /**
+           * Format: float
+           * @description End time of word, in seconds.
+           */
+          end?: number;
+          /** @description ID of speaker, if `diarize` is enabled. */
+          speaker?: string;
+        }[];
     };
     /** ChapterMarker */
     ChapterMarker: {
@@ -1081,48 +1082,48 @@ export interface components {
       text: string;
       /** @description Transcribed segments, if `segment` is enabled. */
       segments?: {
-        /** @description Text of segment. */
-        text: string;
-        /**
-         * Format: float
-         * @description Start time of segment, in seconds.
-         */
-        start: number;
-        /**
-         * Format: float
-         * @description End time of segment, in seconds.
-         */
-        end: number;
-        /** @description ID of speaker, if `diarize` is enabled. */
-        speaker?: string;
-        /** @description Aligned words, if `align` is enabled. */
-        words?: {
-          /** @description Text of word. */
-          word: string;
+          /** @description Text of segment. */
+          text: string;
           /**
            * Format: float
-           * @description Start time of word, in seconds.
+           * @description Start time of segment, in seconds.
            */
-          start?: number;
+          start: number;
           /**
            * Format: float
-           * @description End time of word, in seconds.
+           * @description End time of segment, in seconds.
            */
-          end?: number;
+          end: number;
           /** @description ID of speaker, if `diarize` is enabled. */
           speaker?: string;
+          /** @description Aligned words, if `align` is enabled. */
+          words?: {
+              /** @description Text of word. */
+              word: string;
+              /**
+               * Format: float
+               * @description Start time of word, in seconds.
+               */
+              start?: number;
+              /**
+               * Format: float
+               * @description End time of word, in seconds.
+               */
+              end?: number;
+              /** @description ID of speaker, if `diarize` is enabled. */
+              speaker?: string;
+            }[];
         }[];
-      }[];
       /** @description Chapter markers, if `suggest_chapters` is enabled. */
       chapters?: {
-        /** @description Chapter title. */
-        title: string;
-        /**
-         * Format: float
-         * @description Start time of chapter, in seconds.
-         */
-        start: number;
-      }[];
+          /** @description Chapter title. */
+          title: string;
+          /**
+           * Format: float
+           * @description Start time of chapter, in seconds.
+           */
+          start: number;
+        }[];
     };
     /** GenerateSpeechIn */
     GenerateSpeechIn: {
@@ -1221,15 +1222,15 @@ export interface components {
     MultiEmbedTextIn: {
       /** @description Items to embed. */
       items: {
-        /** @description Text to embed. */
-        text: string;
-        /** @description Metadata that can be used to query the vector store. Ignored if `store` is unset. */
-        metadata?: {
-          [key: string]: unknown;
-        };
-        /** @description Vector store document ID. Ignored if `store` is unset. */
-        doc_id?: string;
-      }[];
+          /** @description Text to embed. */
+          text: string;
+          /** @description Metadata that can be used to query the vector store. Ignored if `store` is unset. */
+          metadata?: {
+            [key: string]: unknown;
+          };
+          /** @description Vector store document ID. Ignored if `store` is unset. */
+          doc_id?: string;
+        }[];
       /** @description [Vector store](/docs/vector-stores) identifier. */
       store?: string;
       /** @description Choose keys from `metadata` to embed with text. */
@@ -1245,29 +1246,29 @@ export interface components {
     MultiEmbedTextOut: {
       /** @description Generated embeddings. */
       embeddings: {
-        /** @description Embedding vector. */
-        vector: number[];
-        /** @description Vector store document ID. */
-        doc_id?: string;
-        /** @description Vector store document metadata. */
-        metadata?: {
-          [key: string]: unknown;
-        };
-      }[];
+          /** @description Embedding vector. */
+          vector: number[];
+          /** @description Vector store document ID. */
+          doc_id?: string;
+          /** @description Vector store document metadata. */
+          metadata?: {
+            [key: string]: unknown;
+          };
+        }[];
     };
     /** JinaV2In */
     JinaV2In: {
       /** @description Items to embed. */
       items: {
-        /** @description Text to embed. */
-        text: string;
-        /** @description Metadata that can be used to query the vector store. Ignored if `store` is unset. */
-        metadata?: {
-          [key: string]: unknown;
-        };
-        /** @description Vector store document ID. Ignored if `store` is unset. */
-        doc_id?: string;
-      }[];
+          /** @description Text to embed. */
+          text: string;
+          /** @description Metadata that can be used to query the vector store. Ignored if `store` is unset. */
+          metadata?: {
+            [key: string]: unknown;
+          };
+          /** @description Vector store document ID. Ignored if `store` is unset. */
+          doc_id?: string;
+        }[];
       /** @description [Vector store](/docs/vector-stores) identifier. */
       store?: string;
       /** @description Choose keys from `metadata` to embed with text. */
@@ -1277,15 +1278,15 @@ export interface components {
     JinaV2Out: {
       /** @description Generated embeddings. */
       embeddings: {
-        /** @description Embedding vector. */
-        vector: number[];
-        /** @description Vector store document ID. */
-        doc_id?: string;
-        /** @description Vector store document metadata. */
-        metadata?: {
-          [key: string]: unknown;
-        };
-      }[];
+          /** @description Embedding vector. */
+          vector: number[];
+          /** @description Vector store document ID. */
+          doc_id?: string;
+          /** @description Vector store document metadata. */
+          metadata?: {
+            [key: string]: unknown;
+          };
+        }[];
     };
     /** EmbedImageIn */
     EmbedImageIn: {
@@ -1338,11 +1339,11 @@ export interface components {
     MultiEmbedImageIn: {
       /** @description Items to embed. */
       items: {
-        /** @description Image to embed. */
-        image_uri: string;
-        /** @description Vector store document ID. Ignored if `store` is unset. */
-        doc_id?: string;
-      }[];
+          /** @description Image to embed. */
+          image_uri: string;
+          /** @description Vector store document ID. Ignored if `store` is unset. */
+          doc_id?: string;
+        }[];
       /** @description [Vector store](/docs/vector-stores) identifier. */
       store?: string;
       /**
@@ -1356,31 +1357,31 @@ export interface components {
     MultiEmbedImageOut: {
       /** @description Generated embeddings. */
       embeddings: {
-        /** @description Embedding vector. */
-        vector: number[];
-        /** @description Vector store document ID. */
-        doc_id?: string;
-        /** @description Vector store document metadata. */
-        metadata?: {
-          [key: string]: unknown;
-        };
-      }[];
+          /** @description Embedding vector. */
+          vector: number[];
+          /** @description Vector store document ID. */
+          doc_id?: string;
+          /** @description Vector store document metadata. */
+          metadata?: {
+            [key: string]: unknown;
+          };
+        }[];
     };
     /** CLIPIn */
     CLIPIn: {
       /** @description Items to embed. */
       items: {
-        /** @description Image to embed. */
-        image_uri?: string;
-        /** @description Text to embed. */
-        text?: string;
-        /** @description Metadata that can be used to query the vector store. Ignored if `store` is unset. */
-        metadata?: {
-          [key: string]: unknown;
-        };
-        /** @description Vector store document ID. Ignored if `store` is unset. */
-        doc_id?: string;
-      }[];
+          /** @description Image to embed. */
+          image_uri?: string;
+          /** @description Text to embed. */
+          text?: string;
+          /** @description Metadata that can be used to query the vector store. Ignored if `store` is unset. */
+          metadata?: {
+            [key: string]: unknown;
+          };
+          /** @description Vector store document ID. Ignored if `store` is unset. */
+          doc_id?: string;
+        }[];
       /** @description Choose keys from `metadata` to embed with text, when embedding and storing text documents. */
       embedded_metadata_keys?: string[];
       /** @description [Vector store](/docs/vector-stores) identifier. */
@@ -1390,15 +1391,15 @@ export interface components {
     CLIPOut: {
       /** @description Generated embeddings. */
       embeddings: {
-        /** @description Embedding vector. */
-        vector: number[];
-        /** @description Vector store document ID. */
-        doc_id?: string;
-        /** @description Vector store document metadata. */
-        metadata?: {
-          [key: string]: unknown;
-        };
-      }[];
+          /** @description Embedding vector. */
+          vector: number[];
+          /** @description Vector store document ID. */
+          doc_id?: string;
+          /** @description Vector store document metadata. */
+          metadata?: {
+            [key: string]: unknown;
+          };
+        }[];
     };
     /** CreateVectorStoreIn */
     CreateVectorStoreIn: {
@@ -1457,31 +1458,31 @@ export interface components {
     /** ListVectorStoresOut */
     ListVectorStoresOut: {
       /** @description List of vector stores. */
-      stores?: {
-        /** @description Vector store name. */
-        name: string;
-        /**
-         * @description Selected embedding model
-         * @enum {string}
-         */
-        model: "jina-v2" | "clip";
-        /**
-         * @description The max number of connections per layer for the index.
-         * @default 16
-         */
-        m: number;
-        /**
-         * @description The size of the dynamic candidate list for constructing the index graph.
-         * @default 64
-         */
-        ef_construction: number;
-        /**
-         * @description The distance metric to construct the index with.
-         * @default inner
-         * @enum {string}
-         */
-        metric: "cosine" | "l2" | "inner";
-      }[];
+      stores?: ({
+          /** @description Vector store name. */
+          name: string;
+          /**
+           * @description Selected embedding model
+           * @enum {string}
+           */
+          model: "jina-v2" | "clip";
+          /**
+           * @description The max number of connections per layer for the index.
+           * @default 16
+           */
+          m: number;
+          /**
+           * @description The size of the dynamic candidate list for constructing the index graph.
+           * @default 64
+           */
+          ef_construction: number;
+          /**
+           * @description The distance metric to construct the index with.
+           * @default inner
+           * @enum {string}
+           */
+          metric: "cosine" | "l2" | "inner";
+        })[];
     };
     /** DeleteVectorStoreIn */
     DeleteVectorStoreIn: {
@@ -1533,15 +1534,15 @@ export interface components {
     FetchVectorsOut: {
       /** @description Retrieved vectors. */
       vectors: {
-        /** @description Document ID. */
-        id: string;
-        /** @description Embedding vector. */
-        vector: number[];
-        /** @description Document metadata. */
-        metadata: {
-          [key: string]: unknown;
-        };
-      }[];
+          /** @description Document ID. */
+          id: string;
+          /** @description Embedding vector. */
+          vector: number[];
+          /** @description Document metadata. */
+          metadata: {
+            [key: string]: unknown;
+          };
+        }[];
     };
     /** UpdateVectorsOut */
     UpdateVectorsOut: {
@@ -1575,15 +1576,15 @@ export interface components {
       model: "jina-v2" | "clip";
       /** @description Vectors to upsert. */
       vectors: {
-        /** @description Document ID. */
-        id: string;
-        /** @description Embedding vector. */
-        vector?: number[];
-        /** @description Document metadata. */
-        metadata?: {
-          [key: string]: unknown;
-        };
-      }[];
+          /** @description Document ID. */
+          id: string;
+          /** @description Embedding vector. */
+          vector?: number[];
+          /** @description Document metadata. */
+          metadata?: {
+            [key: string]: unknown;
+          };
+        }[];
     };
     /** DeleteVectorsIn */
     DeleteVectorsIn: {
@@ -1664,20 +1665,20 @@ export interface components {
     QueryVectorStoreOut: {
       /** @description Query results. */
       results: {
-        /** @description Document ID. */
-        id: string;
-        /**
-         * Format: float
-         * @description Similarity score.
-         */
-        distance: number;
-        /** @description Embedding vector. */
-        vector?: number[];
-        /** @description Document metadata. */
-        metadata?: {
-          [key: string]: unknown;
-        };
-      }[][];
+            /** @description Document ID. */
+            id: string;
+            /**
+             * Format: float
+             * @description Similarity score.
+             */
+            distance: number;
+            /** @description Embedding vector. */
+            vector?: number[];
+            /** @description Document metadata. */
+            metadata?: {
+              [key: string]: unknown;
+            };
+          }[][];
       /** @description Vector store name. */
       name?: string;
       /**
@@ -1704,6 +1705,7 @@ export type $defs = Record<string, never>;
 export type external = Record<string, never>;
 
 export interface operations {
+
   /**
    * GenerateText
    * @description Generate text using a language model.
@@ -1781,9 +1783,9 @@ export interface operations {
         content: {
           "application/json": {
             choices: {
-              /** @description Text response. */
-              text?: string;
-            }[];
+                /** @description Text response. */
+                text?: string;
+              }[];
           };
         };
       };
@@ -1876,11 +1878,11 @@ export interface operations {
         content: {
           "application/json": {
             choices: {
-              /** @description JSON response. */
-              json_object?: {
-                [key: string]: unknown;
-              };
-            }[];
+                /** @description JSON response. */
+                json_object?: {
+                  [key: string]: unknown;
+                };
+              }[];
           };
         };
       };
@@ -1956,13 +1958,13 @@ export interface operations {
         content: {
           "application/json": {
             choices: {
-              /** @description Text response, if `json_schema` was not provided. */
-              text?: string;
-              /** @description JSON response, if `json_schema` was provided. */
-              json_object?: {
-                [key: string]: unknown;
-              };
-            }[];
+                /** @description Text response, if `json_schema` was not provided. */
+                text?: string;
+                /** @description JSON response, if `json_schema` was provided. */
+                json_object?: {
+                  [key: string]: unknown;
+                };
+              }[];
           };
         };
       };
@@ -2067,9 +2069,9 @@ export interface operations {
         content: {
           "application/json": {
             outputs: {
-              /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-              image_uri: string;
-            }[];
+                /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+                image_uri: string;
+              }[];
           };
         };
       };
@@ -2145,9 +2147,9 @@ export interface operations {
         content: {
           "application/json": {
             outputs: {
-              /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-              image_uri: string;
-            }[];
+                /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+                image_uri: string;
+              }[];
           };
         };
       };
@@ -2195,11 +2197,11 @@ export interface operations {
         content: {
           "application/json": {
             outputs: {
-              /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-              image_uri: string;
-              /** @description The random noise seed used for generation. */
-              seed: number;
-            }[];
+                /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+                image_uri: string;
+                /** @description The random noise seed used for generation. */
+                seed: number;
+              }[];
           };
         };
       };
@@ -2239,11 +2241,11 @@ export interface operations {
         content: {
           "application/json": {
             outputs: {
-              /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-              image_uri: string;
-              /** @description The random noise seed used for generation. */
-              seed: number;
-            }[];
+                /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+                image_uri: string;
+                /** @description The random noise seed used for generation. */
+                seed: number;
+              }[];
           };
         };
       };
@@ -2294,11 +2296,11 @@ export interface operations {
         content: {
           "application/json": {
             outputs: {
-              /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-              image_uri: string;
-              /** @description The random noise seed used for generation. */
-              seed: number;
-            }[];
+                /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+                image_uri: string;
+                /** @description The random noise seed used for generation. */
+                seed: number;
+              }[];
           };
         };
       };
@@ -2345,11 +2347,11 @@ export interface operations {
         content: {
           "application/json": {
             outputs: {
-              /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-              image_uri: string;
-              /** @description The random noise seed used for generation. */
-              seed: number;
-            }[];
+                /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+                image_uri: string;
+                /** @description The random noise seed used for generation. */
+                seed: number;
+              }[];
           };
         };
       };
@@ -2402,11 +2404,11 @@ export interface operations {
         content: {
           "application/json": {
             outputs: {
-              /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-              image_uri: string;
-              /** @description The random noise seed used for generation. */
-              seed: number;
-            }[];
+                /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+                image_uri: string;
+                /** @description The random noise seed used for generation. */
+                seed: number;
+              }[];
           };
         };
       };
@@ -2655,34 +2657,34 @@ export interface operations {
           image_uri: string;
           /** @description Point prompts, to detect a segment under the point. One of `point_prompts` or `box_prompts` must be set. */
           point_prompts?: {
-            /** @description X position. */
-            x: number;
-            /** @description Y position. */
-            y: number;
-          }[];
+              /** @description X position. */
+              x: number;
+              /** @description Y position. */
+              y: number;
+            }[];
           /** @description Box prompts, to detect a segment within the bounding box. One of `point_prompts` or `box_prompts` must be set. */
           box_prompts?: {
-            /**
-             * Format: float
-             * @description Top left corner x.
-             */
-            x1: number;
-            /**
-             * Format: float
-             * @description Top left corner y.
-             */
-            y1: number;
-            /**
-             * Format: float
-             * @description Bottom right corner x.
-             */
-            x2: number;
-            /**
-             * Format: float
-             * @description Bottom right corner y.
-             */
-            y2: number;
-          }[];
+              /**
+               * Format: float
+               * @description Top left corner x.
+               */
+              x1: number;
+              /**
+               * Format: float
+               * @description Top left corner y.
+               */
+              y1: number;
+              /**
+               * Format: float
+               * @description Bottom right corner x.
+               */
+              x2: number;
+              /**
+               * Format: float
+               * @description Bottom right corner y.
+               */
+              y2: number;
+            }[];
           /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
         };
@@ -2749,48 +2751,48 @@ export interface operations {
             text: string;
             /** @description Transcribed segments, if `segment` is enabled. */
             segments?: {
-              /** @description Text of segment. */
-              text: string;
-              /**
-               * Format: float
-               * @description Start time of segment, in seconds.
-               */
-              start: number;
-              /**
-               * Format: float
-               * @description End time of segment, in seconds.
-               */
-              end: number;
-              /** @description ID of speaker, if `diarize` is enabled. */
-              speaker?: string;
-              /** @description Aligned words, if `align` is enabled. */
-              words?: {
-                /** @description Text of word. */
-                word: string;
+                /** @description Text of segment. */
+                text: string;
                 /**
                  * Format: float
-                 * @description Start time of word, in seconds.
+                 * @description Start time of segment, in seconds.
                  */
-                start?: number;
+                start: number;
                 /**
                  * Format: float
-                 * @description End time of word, in seconds.
+                 * @description End time of segment, in seconds.
                  */
-                end?: number;
+                end: number;
                 /** @description ID of speaker, if `diarize` is enabled. */
                 speaker?: string;
+                /** @description Aligned words, if `align` is enabled. */
+                words?: {
+                    /** @description Text of word. */
+                    word: string;
+                    /**
+                     * Format: float
+                     * @description Start time of word, in seconds.
+                     */
+                    start?: number;
+                    /**
+                     * Format: float
+                     * @description End time of word, in seconds.
+                     */
+                    end?: number;
+                    /** @description ID of speaker, if `diarize` is enabled. */
+                    speaker?: string;
+                  }[];
               }[];
-            }[];
             /** @description Chapter markers, if `suggest_chapters` is enabled. */
             chapters?: {
-              /** @description Chapter title. */
-              title: string;
-              /**
-               * Format: float
-               * @description Start time of chapter, in seconds.
-               */
-              start: number;
-            }[];
+                /** @description Chapter title. */
+                title: string;
+                /**
+                 * Format: float
+                 * @description Start time of chapter, in seconds.
+                 */
+                start: number;
+              }[];
           };
         };
       };
@@ -2923,15 +2925,15 @@ export interface operations {
         undefined?: {
           /** @description Items to embed. */
           items: {
-            /** @description Text to embed. */
-            text: string;
-            /** @description Metadata that can be used to query the vector store. Ignored if `store` is unset. */
-            metadata?: {
-              [key: string]: unknown;
-            };
-            /** @description Vector store document ID. Ignored if `store` is unset. */
-            doc_id?: string;
-          }[];
+              /** @description Text to embed. */
+              text: string;
+              /** @description Metadata that can be used to query the vector store. Ignored if `store` is unset. */
+              metadata?: {
+                [key: string]: unknown;
+              };
+              /** @description Vector store document ID. Ignored if `store` is unset. */
+              doc_id?: string;
+            }[];
           /** @description [Vector store](/docs/vector-stores) identifier. */
           store?: string;
           /** @description Choose keys from `metadata` to embed with text. */
@@ -2952,15 +2954,15 @@ export interface operations {
           "application/json": {
             /** @description Generated embeddings. */
             embeddings: {
-              /** @description Embedding vector. */
-              vector: number[];
-              /** @description Vector store document ID. */
-              doc_id?: string;
-              /** @description Vector store document metadata. */
-              metadata?: {
-                [key: string]: unknown;
-              };
-            }[];
+                /** @description Embedding vector. */
+                vector: number[];
+                /** @description Vector store document ID. */
+                doc_id?: string;
+                /** @description Vector store document metadata. */
+                metadata?: {
+                  [key: string]: unknown;
+                };
+              }[];
           };
         };
       };
@@ -3020,11 +3022,11 @@ export interface operations {
         undefined?: {
           /** @description Items to embed. */
           items: {
-            /** @description Image to embed. */
-            image_uri: string;
-            /** @description Vector store document ID. Ignored if `store` is unset. */
-            doc_id?: string;
-          }[];
+              /** @description Image to embed. */
+              image_uri: string;
+              /** @description Vector store document ID. Ignored if `store` is unset. */
+              doc_id?: string;
+            }[];
           /** @description [Vector store](/docs/vector-stores) identifier. */
           store?: string;
           /**
@@ -3043,15 +3045,15 @@ export interface operations {
           "application/json": {
             /** @description Generated embeddings. */
             embeddings: {
-              /** @description Embedding vector. */
-              vector: number[];
-              /** @description Vector store document ID. */
-              doc_id?: string;
-              /** @description Vector store document metadata. */
-              metadata?: {
-                [key: string]: unknown;
-              };
-            }[];
+                /** @description Embedding vector. */
+                vector: number[];
+                /** @description Vector store document ID. */
+                doc_id?: string;
+                /** @description Vector store document metadata. */
+                metadata?: {
+                  [key: string]: unknown;
+                };
+              }[];
           };
         };
       };
@@ -3067,15 +3069,15 @@ export interface operations {
         undefined?: {
           /** @description Items to embed. */
           items: {
-            /** @description Text to embed. */
-            text: string;
-            /** @description Metadata that can be used to query the vector store. Ignored if `store` is unset. */
-            metadata?: {
-              [key: string]: unknown;
-            };
-            /** @description Vector store document ID. Ignored if `store` is unset. */
-            doc_id?: string;
-          }[];
+              /** @description Text to embed. */
+              text: string;
+              /** @description Metadata that can be used to query the vector store. Ignored if `store` is unset. */
+              metadata?: {
+                [key: string]: unknown;
+              };
+              /** @description Vector store document ID. Ignored if `store` is unset. */
+              doc_id?: string;
+            }[];
           /** @description [Vector store](/docs/vector-stores) identifier. */
           store?: string;
           /** @description Choose keys from `metadata` to embed with text. */
@@ -3090,15 +3092,15 @@ export interface operations {
           "application/json": {
             /** @description Generated embeddings. */
             embeddings: {
-              /** @description Embedding vector. */
-              vector: number[];
-              /** @description Vector store document ID. */
-              doc_id?: string;
-              /** @description Vector store document metadata. */
-              metadata?: {
-                [key: string]: unknown;
-              };
-            }[];
+                /** @description Embedding vector. */
+                vector: number[];
+                /** @description Vector store document ID. */
+                doc_id?: string;
+                /** @description Vector store document metadata. */
+                metadata?: {
+                  [key: string]: unknown;
+                };
+              }[];
           };
         };
       };
@@ -3114,17 +3116,17 @@ export interface operations {
         undefined?: {
           /** @description Items to embed. */
           items: {
-            /** @description Image to embed. */
-            image_uri?: string;
-            /** @description Text to embed. */
-            text?: string;
-            /** @description Metadata that can be used to query the vector store. Ignored if `store` is unset. */
-            metadata?: {
-              [key: string]: unknown;
-            };
-            /** @description Vector store document ID. Ignored if `store` is unset. */
-            doc_id?: string;
-          }[];
+              /** @description Image to embed. */
+              image_uri?: string;
+              /** @description Text to embed. */
+              text?: string;
+              /** @description Metadata that can be used to query the vector store. Ignored if `store` is unset. */
+              metadata?: {
+                [key: string]: unknown;
+              };
+              /** @description Vector store document ID. Ignored if `store` is unset. */
+              doc_id?: string;
+            }[];
           /** @description Choose keys from `metadata` to embed with text, when embedding and storing text documents. */
           embedded_metadata_keys?: string[];
           /** @description [Vector store](/docs/vector-stores) identifier. */
@@ -3139,15 +3141,15 @@ export interface operations {
           "application/json": {
             /** @description Generated embeddings. */
             embeddings: {
-              /** @description Embedding vector. */
-              vector: number[];
-              /** @description Vector store document ID. */
-              doc_id?: string;
-              /** @description Vector store document metadata. */
-              metadata?: {
-                [key: string]: unknown;
-              };
-            }[];
+                /** @description Embedding vector. */
+                vector: number[];
+                /** @description Vector store document ID. */
+                doc_id?: string;
+                /** @description Vector store document metadata. */
+                metadata?: {
+                  [key: string]: unknown;
+                };
+              }[];
           };
         };
       };
@@ -3236,31 +3238,31 @@ export interface operations {
         content: {
           "application/json": {
             /** @description List of vector stores. */
-            stores?: {
-              /** @description Vector store name. */
-              name: string;
-              /**
-               * @description Selected embedding model
-               * @enum {string}
-               */
-              model: "jina-v2" | "clip";
-              /**
-               * @description The max number of connections per layer for the index.
-               * @default 16
-               */
-              m: number;
-              /**
-               * @description The size of the dynamic candidate list for constructing the index graph.
-               * @default 64
-               */
-              ef_construction: number;
-              /**
-               * @description The distance metric to construct the index with.
-               * @default inner
-               * @enum {string}
-               */
-              metric: "cosine" | "l2" | "inner";
-            }[];
+            stores?: ({
+                /** @description Vector store name. */
+                name: string;
+                /**
+                 * @description Selected embedding model
+                 * @enum {string}
+                 */
+                model: "jina-v2" | "clip";
+                /**
+                 * @description The max number of connections per layer for the index.
+                 * @default 16
+                 */
+                m: number;
+                /**
+                 * @description The size of the dynamic candidate list for constructing the index graph.
+                 * @default 64
+                 */
+                ef_construction: number;
+                /**
+                 * @description The distance metric to construct the index with.
+                 * @default inner
+                 * @enum {string}
+                 */
+                metric: "cosine" | "l2" | "inner";
+              })[];
           };
         };
       };
@@ -3363,20 +3365,20 @@ export interface operations {
           "application/json": {
             /** @description Query results. */
             results: {
-              /** @description Document ID. */
-              id: string;
-              /**
-               * Format: float
-               * @description Similarity score.
-               */
-              distance: number;
-              /** @description Embedding vector. */
-              vector?: number[];
-              /** @description Document metadata. */
-              metadata?: {
-                [key: string]: unknown;
-              };
-            }[][];
+                  /** @description Document ID. */
+                  id: string;
+                  /**
+                   * Format: float
+                   * @description Similarity score.
+                   */
+                  distance: number;
+                  /** @description Embedding vector. */
+                  vector?: number[];
+                  /** @description Document metadata. */
+                  metadata?: {
+                    [key: string]: unknown;
+                  };
+                }[][];
             /** @description Vector store name. */
             name?: string;
             /**
@@ -3421,15 +3423,15 @@ export interface operations {
           "application/json": {
             /** @description Retrieved vectors. */
             vectors: {
-              /** @description Document ID. */
-              id: string;
-              /** @description Embedding vector. */
-              vector: number[];
-              /** @description Document metadata. */
-              metadata: {
-                [key: string]: unknown;
-              };
-            }[];
+                /** @description Document ID. */
+                id: string;
+                /** @description Embedding vector. */
+                vector: number[];
+                /** @description Document metadata. */
+                metadata: {
+                  [key: string]: unknown;
+                };
+              }[];
           };
         };
       };
@@ -3452,15 +3454,15 @@ export interface operations {
           model: "jina-v2" | "clip";
           /** @description Vectors to upsert. */
           vectors: {
-            /** @description Document ID. */
-            id: string;
-            /** @description Embedding vector. */
-            vector?: number[];
-            /** @description Document metadata. */
-            metadata?: {
-              [key: string]: unknown;
-            };
-          }[];
+              /** @description Document ID. */
+              id: string;
+              /** @description Embedding vector. */
+              vector?: number[];
+              /** @description Document metadata. */
+              metadata?: {
+                [key: string]: unknown;
+              };
+            }[];
         };
       };
     };
