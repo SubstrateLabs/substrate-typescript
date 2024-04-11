@@ -1076,6 +1076,7 @@
           },
           "point": {
             "description": "Point prompt.",
+            "type": "object",
             "$ref": "#/components/schemas/Point"
           },
           "store": {
@@ -1422,6 +1423,7 @@
       },
       "EmbedTextItem": {
         "type": "object",
+        "title": "EmbedTextItem",
         "properties": {
           "text": {
             "type": "string",
@@ -1562,6 +1564,7 @@
       },
       "EmbedImageItem": {
         "type": "object",
+        "title": "EmbedImageItem",
         "properties": {
           "image_uri": {
             "type": "string",
@@ -1576,6 +1579,7 @@
       },
       "EmbedTextOrImageItem": {
         "type": "object",
+        "title": "EmbedTextOrImageItem",
         "properties": {
           "image_uri": {
             "type": "string",
