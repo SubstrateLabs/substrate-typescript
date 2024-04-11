@@ -49,7 +49,6 @@ async function main() {
     vectors: [
       {
         id: "celsius",
-        // @ts-expect-error (bad record?)
         metadata: { some_metadata: "12345" },
       },
     ],
