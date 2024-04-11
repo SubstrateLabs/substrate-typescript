@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Substrate API",
-    "version": "2024-04-05",
+    "version": "2024-04-11",
     "contact": {
       "email": "support@substrate.run"
     },
@@ -41,10 +41,11 @@
             "description": "Input prompt."
           },
           "temperature": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 10,
-            "default": 4,
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "maximum": 1,
+            "default": 0.4,
             "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic."
           },
           "max_tokens": {
@@ -80,13 +81,15 @@
           },
           "json_schema": {
             "type": "object",
-            "description": "JSON schema to guide `json_object` response."
+            "description": "JSON schema to guide `json_object` response.",
+            "additionalProperties": true
           },
           "temperature": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 10,
-            "default": 4,
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "maximum": 1,
+            "default": 0.4,
             "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic."
           },
           "max_tokens": {
@@ -108,7 +111,8 @@
         "properties": {
           "json_object": {
             "type": "object",
-            "description": "JSON response."
+            "description": "JSON response.",
+            "additionalProperties": true
           }
         }
       },
@@ -127,10 +131,11 @@
             "default": 1
           },
           "temperature": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 10,
-            "default": 4,
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "maximum": 1,
+            "default": 0.4,
             "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic."
           },
           "max_tokens": {
@@ -169,7 +174,8 @@
           },
           "json_schema": {
             "type": "object",
-            "description": "JSON schema to guide `json_object` response."
+            "description": "JSON schema to guide `json_object` response.",
+            "additionalProperties": true
           },
           "num_choices": {
             "type": "integer",
@@ -178,10 +184,11 @@
             "default": 1
           },
           "temperature": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 10,
-            "default": 4,
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "maximum": 1,
+            "default": 0.4,
             "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic."
           },
           "max_tokens": {
@@ -224,7 +231,8 @@
           },
           "json_schema": {
             "type": "object",
-            "description": "JSON schema to guide response."
+            "description": "JSON schema to guide response.",
+            "additionalProperties": true
           },
           "temperature": {
             "type": "number",
@@ -250,7 +258,8 @@
           },
           "json_object": {
             "type": "object",
-            "description": "JSON response, if `json_schema` was provided."
+            "description": "JSON response, if `json_schema` was provided.",
+            "additionalProperties": true
           }
         }
       },
@@ -281,13 +290,6 @@
             "items": {
               "type": "string"
             }
-          },
-          "temperature": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 10,
-            "default": 4,
-            "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic."
           },
           "max_tokens": {
             "type": "integer",
@@ -491,58 +493,6 @@
       },
       "StableDiffusionXLOut": {
         "title": "StableDiffusionXLOut",
-        "type": "object",
-        "properties": {
-          "outputs": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/StableDiffusionImage"
-            }
-          }
-        },
-        "required": ["outputs"]
-      },
-      "StableDiffusionXLTurboIn": {
-        "title": "StableDiffusionXLTurboIn",
-        "type": "object",
-        "properties": {
-          "prompt": {
-            "type": "string",
-            "description": "Text prompt."
-          },
-          "negative_prompt": {
-            "type": "string",
-            "description": "Negative input prompt."
-          },
-          "num_images": {
-            "type": "integer",
-            "description": "Number of images to generate.",
-            "default": 1
-          },
-          "store": {
-            "type": "string",
-            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
-          },
-          "height": {
-            "type": "integer",
-            "description": "Height of output image, in pixels."
-          },
-          "width": {
-            "type": "integer",
-            "description": "Width of output image, in pixels."
-          },
-          "seeds": {
-            "type": "array",
-            "items": {
-              "type": "integer"
-            },
-            "description": "Seeds for deterministic generation. Default is a random seed."
-          }
-        },
-        "required": ["prompt"]
-      },
-      "StableDiffusionXLTurboOut": {
-        "title": "StableDiffusionXLTurboOut",
         "type": "object",
         "properties": {
           "outputs": {
@@ -1001,7 +951,8 @@
           },
           "return_mask": {
             "type": "boolean",
-            "description": "Return a mask image instead of the original content."
+            "description": "Return a mask image instead of the original content.",
+            "default": false
           },
           "background_color": {
             "type": "string",
@@ -1414,7 +1365,8 @@
           },
           "metadata": {
             "type": "object",
-            "description": "Vector store document metadata."
+            "description": "Vector store document metadata.",
+            "additionalProperties": true
           }
         },
         "required": ["vector"]
@@ -1433,7 +1385,8 @@
           },
           "metadata": {
             "type": "object",
-            "description": "Metadata that can be used to query the vector store. Ignored if `store` is unset."
+            "description": "Metadata that can be used to query the vector store. Ignored if `store` is unset.",
+            "additionalProperties": true
           },
           "embedded_metadata_keys": {
             "type": "array",
@@ -1476,7 +1429,8 @@
           },
           "metadata": {
             "type": "object",
-            "description": "Metadata that can be used to query the vector store. Ignored if `store` is unset."
+            "description": "Metadata that can be used to query the vector store. Ignored if `store` is unset.",
+            "additionalProperties": true
           },
           "doc_id": {
             "type": "string",
@@ -1633,7 +1587,8 @@
           },
           "metadata": {
             "type": "object",
-            "description": "Metadata that can be used to query the vector store. Ignored if `store` is unset."
+            "description": "Metadata that can be used to query the vector store. Ignored if `store` is unset.",
+            "additionalProperties": true
           },
           "doc_id": {
             "type": "string",
@@ -1864,7 +1819,8 @@
           },
           "metadata": {
             "type": "object",
-            "description": "Document metadata."
+            "description": "Document metadata.",
+            "additionalProperties": true
           }
         },
         "required": ["id", "vector", "metadata"]
@@ -1947,7 +1903,8 @@
           },
           "metadata": {
             "type": "object",
-            "description": "Document metadata."
+            "description": "Document metadata.",
+            "additionalProperties": true
           }
         },
         "required": ["id"]
@@ -2071,7 +2028,13 @@
           },
           "filters": {
             "type": "object",
-            "description": "Filter metadata by key-value pairs."
+            "description": "Filter metadata by key-value pairs.",
+            "additionalProperties": true
+          },
+          "metric": {
+            "type": "string",
+            "enum": ["cosine", "l2", "inner"],
+            "description": "The distance metric used for the query. Defaults to the distance metric the vector store was created with."
           }
         },
         "required": ["name", "model"]
@@ -2099,7 +2062,8 @@
           },
           "metadata": {
             "type": "object",
-            "description": "Document metadata."
+            "description": "Document metadata.",
+            "additionalProperties": true
           }
         },
         "required": ["id", "distance"]
@@ -2479,7 +2443,7 @@
         "summary": "StableDiffusionXLLightning",
         "operationId": "StableDiffusionXLLightning",
         "tags": ["image-generation", "low"],
-        "description": "Generate an image using [Stable Diffusion XL](https://arxiv.org/abs/2307.01952) Lightning.",
+        "description": "Generate an image using [Stable Diffusion XL Lightning](https://arxiv.org/abs/2402.13929).",
         "parameters": [
           {
             "in": "query",
@@ -2495,34 +2459,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/StableDiffusionXLLightningOut"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/StableDiffusionXLTurbo": {
-      "post": {
-        "summary": "StableDiffusionXLTurbo",
-        "operationId": "StableDiffusionXLTurbo",
-        "tags": ["image-generation", "low"],
-        "description": "Generate an image using [Stable Diffusion XL](https://arxiv.org/abs/2307.01952) Turbo.",
-        "parameters": [
-          {
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/StableDiffusionXLTurboIn"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/StableDiffusionXLTurboOut"
                 }
               }
             }
