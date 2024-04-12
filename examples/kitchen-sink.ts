@@ -15,7 +15,6 @@ import {
   MultiGenerativeEditImage,
   StableDiffusionXL,
   StableDiffusionXLLightning,
-  StableDiffusionXLTurbo,
   StableDiffusionXLInpaint,
   StableDiffusionXLIPAdapter,
   StableDiffusionXLControlNet,
@@ -44,8 +43,6 @@ import {
   UpdateVectors,
   DeleteVectors,
 } from "substrate";
-
-const id = (name) => `kitchen-sink-${name}`;
 
 const examples = [
   new GenerateText({
@@ -160,12 +157,6 @@ const examples = [
     num_images: 2,
   }),
   new StableDiffusionXLLightning({
-    prompt:
-      "hokusai futuristic supercell spiral cloud with glowing core over turbulent ocean",
-    store: "hosted",
-    num_images: 2,
-  }),
-  new StableDiffusionXLTurbo({
     prompt:
       "hokusai futuristic supercell spiral cloud with glowing core over turbulent ocean",
     store: "hosted",
@@ -362,22 +353,41 @@ const error = (message: string, ...rest: any[]) =>
 async function main() {
   const SUBSTRATE_API_KEY = process.env["SUBSTRATE_API_KEY"];
 
-  const substrate = new Substrate({
-    apiKey: SUBSTRATE_API_KEY,
-    // baseUrl: "https://api-staging.substrate.run",
-    backend: "v1",
-  });
+  const urls = [
+    { name: "staging", value: "https://api-staging.substrate.run" },
+    { name: "production", value: "https://api-staging.substrate.run" },
+  ];
+  const envs = [
+    { name: "v0 (modal)", value: "v0" as const },
+    { name: "v1 (ray)", value: "v1" as const },
+  ];
 
-  const run = async (example: any) => {
-    try {
-      const res = await substrate.run(example);
-      const output = res.get(example);
-      ok(example.node, Object.keys(output));
-    } catch (err: any) {
-      error(example.node, err?.type, err.message);
+  for (let example of examples) {
+    for (let env of envs) {
+      for (let url of urls) {
+        const substrate = new Substrate({
+          apiKey: SUBSTRATE_API_KEY,
+          baseUrl: url.value,
+          backend: env.value,
+        });
+        const tag = `[${url.name}:${env.value}]`;
+        try {
+          const res = await substrate.run(example);
+          const err = res.getError(example);
+          if (err) {
+            error(example.node, tag, {
+              via: "node",
+              type: err.type,
+              msg: err.message,
+            });
+          } else {
+            ok(example.node, tag);
+          }
+        } catch (err: any) {
+          error(example.node, tag, { via: "request", msg: err.message });
+        }
+      }
     }
-  };
-
-  for (let example of examples) run(example);
+  }
 }
 main();
