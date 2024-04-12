@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Substrate API",
-    "version": "2024-04-05",
+    "version": "2024-04-11",
     "contact": {
       "email": "support@substrate.run"
     },
@@ -41,10 +41,11 @@
             "description": "Input prompt."
           },
           "temperature": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 10,
-            "default": 4,
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "maximum": 1,
+            "default": 0.4,
             "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic."
           },
           "max_tokens": {
@@ -80,13 +81,15 @@
           },
           "json_schema": {
             "type": "object",
-            "description": "JSON schema to guide `json_object` response."
+            "description": "JSON schema to guide `json_object` response.",
+            "additionalProperties": true
           },
           "temperature": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 10,
-            "default": 4,
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "maximum": 1,
+            "default": 0.4,
             "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic."
           },
           "max_tokens": {
@@ -108,7 +111,8 @@
         "properties": {
           "json_object": {
             "type": "object",
-            "description": "JSON response."
+            "description": "JSON response.",
+            "additionalProperties": true
           }
         }
       },
@@ -122,13 +126,16 @@
           },
           "num_choices": {
             "type": "integer",
-            "description": "Number of choices to generate."
+            "description": "Number of choices to generate.",
+            "minimum": 1,
+            "default": 1
           },
           "temperature": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 10,
-            "default": 4,
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "maximum": 1,
+            "default": 0.4,
             "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic."
           },
           "max_tokens": {
@@ -167,17 +174,21 @@
           },
           "json_schema": {
             "type": "object",
-            "description": "JSON schema to guide `json_object` response."
+            "description": "JSON schema to guide `json_object` response.",
+            "additionalProperties": true
           },
           "num_choices": {
             "type": "integer",
-            "description": "Number of choices to generate."
+            "description": "Number of choices to generate.",
+            "minimum": 1,
+            "default": 1
           },
           "temperature": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 10,
-            "default": 4,
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "maximum": 1,
+            "default": 0.4,
             "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic."
           },
           "max_tokens": {
@@ -220,13 +231,14 @@
           },
           "json_schema": {
             "type": "object",
-            "description": "JSON schema to guide response."
+            "description": "JSON schema to guide response.",
+            "additionalProperties": true
           },
           "temperature": {
             "type": "number",
             "format": "float",
             "minimum": 0,
-            "maximum": 2,
+            "maximum": 1,
             "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic."
           },
           "max_tokens": {
@@ -246,7 +258,8 @@
           },
           "json_object": {
             "type": "object",
-            "description": "JSON response, if `json_schema` was provided."
+            "description": "JSON response, if `json_schema` was provided.",
+            "additionalProperties": true
           }
         }
       },
@@ -277,13 +290,6 @@
             "items": {
               "type": "string"
             }
-          },
-          "temperature": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 10,
-            "default": 4,
-            "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic."
           },
           "max_tokens": {
             "type": "integer",
@@ -438,7 +444,8 @@
           },
           "num_images": {
             "type": "integer",
-            "description": "Number of images to generate."
+            "description": "Number of images to generate.",
+            "default": 1
           },
           "store": {
             "type": "string",
@@ -453,7 +460,10 @@
             "description": "Width of output image, in pixels."
           },
           "seeds": {
-            "type": "integer",
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
             "description": "Seeds for deterministic generation. Default is a random seed."
           },
           "guidance_scale": {
@@ -494,6 +504,58 @@
         },
         "required": ["outputs"]
       },
+      "StableDiffusionXLLightningIn": {
+        "title": "StableDiffusionXLLightningIn",
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "Text prompt."
+          },
+          "negative_prompt": {
+            "type": "string",
+            "description": "Negative input prompt."
+          },
+          "num_images": {
+            "type": "integer",
+            "description": "Number of images to generate.",
+            "default": 1
+          },
+          "store": {
+            "type": "string",
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+          },
+          "height": {
+            "type": "integer",
+            "description": "Height of output image, in pixels."
+          },
+          "width": {
+            "type": "integer",
+            "description": "Width of output image, in pixels."
+          },
+          "seeds": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "description": "Seeds for deterministic generation. Default is a random seed."
+          }
+        },
+        "required": ["prompt"]
+      },
+      "StableDiffusionXLLightningOut": {
+        "title": "StableDiffusionXLLightningOut",
+        "type": "object",
+        "properties": {
+          "outputs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StableDiffusionImage"
+            }
+          }
+        },
+        "required": ["outputs"]
+      },
       "StableDiffusionXLIPAdapterIn": {
         "title": "StableDiffusionXLIPAdapterIn",
         "type": "object",
@@ -508,7 +570,8 @@
           },
           "num_images": {
             "type": "integer",
-            "description": "Number of images to generate."
+            "description": "Number of images to generate.",
+            "default": 1
           },
           "ip_adapter_scale": {
             "type": "number",
@@ -574,7 +637,8 @@
           },
           "num_images": {
             "type": "integer",
-            "description": "Number of images to generate."
+            "description": "Number of images to generate.",
+            "default": 1
           },
           "output_resolution": {
             "type": "integer",
@@ -722,7 +786,8 @@
           },
           "num_images": {
             "type": "integer",
-            "description": "Number of images to generate."
+            "description": "Number of images to generate.",
+            "default": 1
           },
           "output_resolution": {
             "type": "integer",
@@ -742,7 +807,8 @@
             "format": "float",
             "description": "Controls the strength of the generation process.",
             "minimum": 0,
-            "default": 0.5
+            "maximum": 1,
+            "default": 1.0
           },
           "seeds": {
             "description": "Random noise seeds. Default is random seeds for each generation.",
@@ -885,7 +951,8 @@
           },
           "return_mask": {
             "type": "boolean",
-            "description": "Return a mask image instead of the original content."
+            "description": "Return a mask image instead of the original content.",
+            "default": false
           },
           "background_color": {
             "type": "string",
@@ -980,12 +1047,6 @@
           "image_uri": {
             "type": "string",
             "description": "Input image."
-          },
-          "model": {
-            "type": "string",
-            "enum": ["real-esrgan-x4"],
-            "description": "Selected model.",
-            "default": "real-esrgan-x4"
           },
           "store": {
             "type": "string",
@@ -1291,7 +1352,7 @@
         "type": "object",
         "properties": {
           "vector": {
-            "type": "string",
+            "type": "array",
             "description": "Embedding vector.",
             "items": {
               "type": "number",
@@ -1304,7 +1365,8 @@
           },
           "metadata": {
             "type": "object",
-            "description": "Vector store document metadata."
+            "description": "Vector store document metadata.",
+            "additionalProperties": true
           }
         },
         "required": ["vector"]
@@ -1323,7 +1385,8 @@
           },
           "metadata": {
             "type": "object",
-            "description": "Metadata that can be used to query the vector store. Ignored if `store` is unset."
+            "description": "Metadata that can be used to query the vector store. Ignored if `store` is unset.",
+            "additionalProperties": true
           },
           "embedded_metadata_keys": {
             "type": "array",
@@ -1366,7 +1429,8 @@
           },
           "metadata": {
             "type": "object",
-            "description": "Metadata that can be used to query the vector store. Ignored if `store` is unset."
+            "description": "Metadata that can be used to query the vector store. Ignored if `store` is unset.",
+            "additionalProperties": true
           },
           "doc_id": {
             "type": "string",
@@ -1523,7 +1587,8 @@
           },
           "metadata": {
             "type": "object",
-            "description": "Metadata that can be used to query the vector store. Ignored if `store` is unset."
+            "description": "Metadata that can be used to query the vector store. Ignored if `store` is unset.",
+            "additionalProperties": true
           },
           "doc_id": {
             "type": "string",
@@ -1754,7 +1819,8 @@
           },
           "metadata": {
             "type": "object",
-            "description": "Document metadata."
+            "description": "Document metadata.",
+            "additionalProperties": true
           }
         },
         "required": ["id", "vector", "metadata"]
@@ -1837,7 +1903,8 @@
           },
           "metadata": {
             "type": "object",
-            "description": "Document metadata."
+            "description": "Document metadata.",
+            "additionalProperties": true
           }
         },
         "required": ["id"]
@@ -1961,7 +2028,13 @@
           },
           "filters": {
             "type": "object",
-            "description": "Filter metadata by key-value pairs."
+            "description": "Filter metadata by key-value pairs.",
+            "additionalProperties": true
+          },
+          "metric": {
+            "type": "string",
+            "enum": ["cosine", "l2", "inner"],
+            "description": "The distance metric used for the query. Defaults to the distance metric the vector store was created with."
           }
         },
         "required": ["name", "model"]
@@ -1989,7 +2062,8 @@
           },
           "metadata": {
             "type": "object",
-            "description": "Document metadata."
+            "description": "Document metadata.",
+            "additionalProperties": true
           }
         },
         "required": ["id", "distance"]
@@ -2172,7 +2246,7 @@
       "post": {
         "summary": "Mistral7BInstruct",
         "operationId": "Mistral7BInstruct",
-        "tags": ["language-generation", "raw"],
+        "tags": ["language-generation", "low"],
         "description": "Generate text using [Mistral 7B Instruct](https://mistral.ai/news/announcing-mistral-7b).",
         "parameters": [
           {
@@ -2200,7 +2274,7 @@
       "post": {
         "summary": "Firellava13B",
         "operationId": "Firellava13B",
-        "tags": ["language-generation", "raw"],
+        "tags": ["language-generation", "low"],
         "description": "Generate text with image input using [FireLLaVA 13B](https://fireworks.ai/blog/firellava-the-first-commercially-permissive-oss-llava-model).",
         "parameters": [
           {
@@ -2340,7 +2414,7 @@
       "post": {
         "summary": "StableDiffusionXL",
         "operationId": "StableDiffusionXL",
-        "tags": ["image-generation", "raw"],
+        "tags": ["image-generation", "low"],
         "description": "Generate an image using [Stable Diffusion XL](https://arxiv.org/abs/2307.01952).",
         "parameters": [
           {
@@ -2364,11 +2438,39 @@
         }
       }
     },
+    "/StableDiffusionXLLightning": {
+      "post": {
+        "summary": "StableDiffusionXLLightning",
+        "operationId": "StableDiffusionXLLightning",
+        "tags": ["image-generation", "low"],
+        "description": "Generate an image using [Stable Diffusion XL Lightning](https://arxiv.org/abs/2402.13929).",
+        "parameters": [
+          {
+            "in": "query",
+            "schema": {
+              "$ref": "#/components/schemas/StableDiffusionXLLightningIn"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StableDiffusionXLLightningOut"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/StableDiffusionXLInpaint": {
       "post": {
         "summary": "StableDiffusionXLInpaint",
         "operationId": "StableDiffusionXLInpaint",
-        "tags": ["image-generation", "raw"],
+        "tags": ["image-generation", "low"],
         "description": "Edit an image using [Stable Diffusion XL](https://arxiv.org/abs/2307.01952). Supports inpainting (edit part of the image with a mask) and image-to-image (edit the full image).",
         "parameters": [
           {
@@ -2396,7 +2498,7 @@
       "post": {
         "summary": "StableDiffusionXLIPAdapter",
         "operationId": "StableDiffusionXLIPAdapter",
-        "tags": ["image-generation", "raw"],
+        "tags": ["image-generation", "low"],
         "description": "Generate an image with an image prompt, using Stable Diffusion XL with [IP-Adapter](https://arxiv.org/abs/2308.06721).",
         "parameters": [
           {
@@ -2424,7 +2526,7 @@
       "post": {
         "summary": "StableDiffusionXLControlNet",
         "operationId": "StableDiffusionXLControlNet",
-        "tags": ["image-generation", "raw"],
+        "tags": ["image-generation", "low"],
         "description": "Generate an image with generation structured by an input image, using Stable Diffusion XL with [ControlNet](https://arxiv.org/abs/2302.05543).",
         "parameters": [
           {
@@ -2480,7 +2582,7 @@
       "post": {
         "summary": "BigLaMa",
         "operationId": "BigLaMa",
-        "tags": ["image-utility", "raw"],
+        "tags": ["image-utility", "low"],
         "description": "Inpaint a mask using [LaMa](https://github.com/advimman/lama).",
         "parameters": [
           {
@@ -2536,7 +2638,7 @@
       "post": {
         "summary": "RealESRGAN",
         "operationId": "RealESRGAN",
-        "tags": ["image-utility", "raw"],
+        "tags": ["image-utility", "low"],
         "description": "Upscale an image using [RealESRGAN](https://github.com/xinntao/Real-ESRGAN).",
         "parameters": [
           {
@@ -2592,7 +2694,7 @@
       "post": {
         "summary": "DISISNet",
         "operationId": "DISISNet",
-        "tags": ["image-utility", "raw"],
+        "tags": ["image-utility", "low"],
         "description": "Segment image foreground using [DIS IS-Net](https://github.com/xuebinqin/DIS).",
         "parameters": [
           {
@@ -2648,7 +2750,7 @@
       "post": {
         "summary": "SegmentAnything",
         "operationId": "SegmentAnything",
-        "tags": ["image-utility", "raw"],
+        "tags": ["image-utility", "low"],
         "description": "Segment an image using [SegmentAnything](https://github.com/facebookresearch/segment-anything).",
         "parameters": [
           {
@@ -2732,7 +2834,7 @@
       "post": {
         "summary": "XTTSV2",
         "operationId": "XTTSV2",
-        "tags": ["audio", "raw"],
+        "tags": ["audio", "low"],
         "description": "Generate speech from text using [XTTS v2](https://docs.coqui.ai/en/latest/models/xtts.html).",
         "parameters": [
           {
@@ -2872,7 +2974,7 @@
       "post": {
         "summary": "JinaV2",
         "operationId": "JinaV2",
-        "tags": ["embedding", "raw"],
+        "tags": ["embedding", "low"],
         "description": "Generate embeddings for multiple text documents using [Jina Embeddings 2](https://arxiv.org/abs/2310.19923).",
         "parameters": [
           {
@@ -2900,7 +3002,7 @@
       "post": {
         "summary": "CLIP",
         "operationId": "CLIP",
-        "tags": ["embedding", "raw"],
+        "tags": ["embedding", "low"],
         "description": "Generate embeddings for text or images using [CLIP](https://openai.com/research/clip).",
         "parameters": [
           {

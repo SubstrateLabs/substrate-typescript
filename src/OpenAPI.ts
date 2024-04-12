@@ -88,6 +88,13 @@ export interface paths {
      */
     post: operations["StableDiffusionXL"];
   };
+  "/StableDiffusionXLLightning": {
+    /**
+     * StableDiffusionXLLightning
+     * @description Generate an image using [Stable Diffusion XL Lightning](https://arxiv.org/abs/2402.13929).
+     */
+    post: operations["StableDiffusionXLLightning"];
+  };
   "/StableDiffusionXLInpaint": {
     /**
      * StableDiffusionXLInpaint
@@ -147,7 +154,7 @@ export interface paths {
   "/DISISNet": {
     /**
      * DISISNet
-     * @description Segment an image using [DIS IS-Net](https://github.com/xuebinqin/DIS).
+     * @description Segment image foreground using [DIS IS-Net](https://github.com/xuebinqin/DIS).
      */
     post: operations["DISISNet"];
   };
@@ -298,8 +305,9 @@ export interface components {
       /** @description Input prompt. */
       prompt: string;
       /**
+       * Format: float
        * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
-       * @default 4
+       * @default 0.4
        */
       temperature?: number;
       /** @description Maximum number of tokens to generate. */
@@ -321,10 +329,13 @@ export interface components {
       /** @description Input prompt. */
       prompt: string;
       /** @description JSON schema to guide `json_object` response. */
-      json_schema: Record<string, never>;
+      json_schema: {
+        [key: string]: unknown;
+      };
       /**
+       * Format: float
        * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
-       * @default 4
+       * @default 0.4
        */
       temperature?: number;
       /** @description Maximum number of tokens to generate. */
@@ -339,17 +350,23 @@ export interface components {
     /** GenerateJSONOut */
     GenerateJSONOut: {
       /** @description JSON response. */
-      json_object?: Record<string, never>;
+      json_object?: {
+        [key: string]: unknown;
+      };
     };
     /** MultiGenerateTextIn */
     MultiGenerateTextIn: {
       /** @description Input prompt. */
       prompt: string;
-      /** @description Number of choices to generate. */
+      /**
+       * @description Number of choices to generate.
+       * @default 1
+       */
       num_choices: number;
       /**
+       * Format: float
        * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
-       * @default 4
+       * @default 0.4
        */
       temperature?: number;
       /** @description Maximum number of tokens to generate. */
@@ -373,12 +390,18 @@ export interface components {
       /** @description Input prompt. */
       prompt: string;
       /** @description JSON schema to guide `json_object` response. */
-      json_schema: Record<string, never>;
-      /** @description Number of choices to generate. */
+      json_schema: {
+        [key: string]: unknown;
+      };
+      /**
+       * @description Number of choices to generate.
+       * @default 1
+       */
       num_choices: number;
       /**
+       * Format: float
        * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
-       * @default 4
+       * @default 0.4
        */
       temperature?: number;
       /** @description Maximum number of tokens to generate. */
@@ -394,7 +417,9 @@ export interface components {
     MultiGenerateJSONOut: {
       choices: {
         /** @description JSON response. */
-        json_object?: Record<string, never>;
+        json_object?: {
+          [key: string]: unknown;
+        };
       }[];
     };
     /** Mistral7BInstructIn */
@@ -404,7 +429,9 @@ export interface components {
       /** @description Number of choices to generate. */
       num_choices: number;
       /** @description JSON schema to guide response. */
-      json_schema?: Record<string, never>;
+      json_schema?: {
+        [key: string]: unknown;
+      };
       /**
        * Format: float
        * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
@@ -418,7 +445,9 @@ export interface components {
       /** @description Text response, if `json_schema` was not provided. */
       text?: string;
       /** @description JSON response, if `json_schema` was provided. */
-      json_object?: Record<string, never>;
+      json_object?: {
+        [key: string]: unknown;
+      };
     };
     /** Mistral7BInstructOut */
     Mistral7BInstructOut: {
@@ -426,7 +455,9 @@ export interface components {
         /** @description Text response, if `json_schema` was not provided. */
         text?: string;
         /** @description JSON response, if `json_schema` was provided. */
-        json_object?: Record<string, never>;
+        json_object?: {
+          [key: string]: unknown;
+        };
       }[];
     };
     /** GenerateTextVisionIn */
@@ -435,11 +466,6 @@ export interface components {
       prompt: string;
       /** @description Image prompts. */
       image_uris: string[];
-      /**
-       * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
-       * @default 4
-       */
-      temperature?: number;
       /**
        * @description Maximum number of tokens to generate.
        * @default 800
@@ -527,7 +553,10 @@ export interface components {
       negative_prompt?: string;
       /** @description Number of diffusion steps. */
       steps?: number;
-      /** @description Number of images to generate. */
+      /**
+       * @description Number of images to generate.
+       * @default 1
+       */
       num_images?: number;
       /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
@@ -536,7 +565,7 @@ export interface components {
       /** @description Width of output image, in pixels. */
       width?: number;
       /** @description Seeds for deterministic generation. Default is a random seed. */
-      seeds?: number;
+      seeds?: number[];
       /**
        * Format: float
        * @description Higher values adhere to the text prompt more strongly, typically at the expense of image quality.
@@ -560,13 +589,45 @@ export interface components {
         seed: number;
       }[];
     };
+    /** StableDiffusionXLLightningIn */
+    StableDiffusionXLLightningIn: {
+      /** @description Text prompt. */
+      prompt: string;
+      /** @description Negative input prompt. */
+      negative_prompt?: string;
+      /**
+       * @description Number of images to generate.
+       * @default 1
+       */
+      num_images?: number;
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      store?: string;
+      /** @description Height of output image, in pixels. */
+      height?: number;
+      /** @description Width of output image, in pixels. */
+      width?: number;
+      /** @description Seeds for deterministic generation. Default is a random seed. */
+      seeds?: number[];
+    };
+    /** StableDiffusionXLLightningOut */
+    StableDiffusionXLLightningOut: {
+      outputs: {
+        /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+        image_uri: string;
+        /** @description The random noise seed used for generation. */
+        seed: number;
+      }[];
+    };
     /** StableDiffusionXLIPAdapterIn */
     StableDiffusionXLIPAdapterIn: {
       /** @description Text prompt. */
       prompt: string;
       /** @description Image prompt. */
       image_prompt_uri?: string;
-      /** @description Number of images to generate. */
+      /**
+       * @description Number of images to generate.
+       * @default 1
+       */
       num_images: number;
       /**
        * Format: float
@@ -604,7 +665,10 @@ export interface components {
       control_method: "edge" | "depth" | "illusion";
       /** @description Text prompt. */
       prompt: string;
-      /** @description Number of images to generate. */
+      /**
+       * @description Number of images to generate.
+       * @default 1
+       */
       num_images: number;
       /**
        * @description Resolution of the output image, in pixels.
@@ -688,7 +752,10 @@ export interface components {
       prompt: string;
       /** @description Mask image that controls which pixels are edited (inpainting). If unset, the entire image is edited (image-to-image). */
       mask_image_uri?: string;
-      /** @description Number of images to generate. */
+      /**
+       * @description Number of images to generate.
+       * @default 1
+       */
       num_images: number;
       /**
        * @description Resolution of the output image, in pixels.
@@ -702,7 +769,7 @@ export interface components {
       /**
        * Format: float
        * @description Controls the strength of the generation process.
-       * @default 0.5
+       * @default 1
        */
       strength?: number;
       /** @description Random noise seeds. Default is random seeds for each generation. */
@@ -785,7 +852,10 @@ export interface components {
     RemoveBackgroundIn: {
       /** @description Input image. */
       image_uri: string;
-      /** @description Return a mask image instead of the original content. */
+      /**
+       * @description Return a mask image instead of the original content.
+       * @default false
+       */
       return_mask?: boolean;
       /** @description Hex value background color. Transparent if unset. */
       background_color?: string;
@@ -807,10 +877,6 @@ export interface components {
     DISISNetIn: {
       /** @description Input image. */
       image_uri: string;
-      /** @description Return a mask image instead of the original content. */
-      return_mask?: boolean;
-      /** @description Hex value background color. Transparent if unset. */
-      background_color?: string;
       /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
     };
@@ -841,12 +907,6 @@ export interface components {
     RealESRGANIn: {
       /** @description Input image. */
       image_uri: string;
-      /**
-       * @description Selected model.
-       * @default real-esrgan-x4
-       * @enum {string}
-       */
-      model?: "real-esrgan-x4";
       /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
     };
@@ -1104,11 +1164,13 @@ export interface components {
     /** Embedding */
     Embedding: {
       /** @description Embedding vector. */
-      vector: string;
+      vector: number[];
       /** @description Vector store document ID. */
       doc_id?: string;
       /** @description Vector store document metadata. */
-      metadata?: Record<string, never>;
+      metadata?: {
+        [key: string]: unknown;
+      };
     };
     /** EmbedTextIn */
     EmbedTextIn: {
@@ -1117,7 +1179,9 @@ export interface components {
       /** @description [Vector store](/docs/vector-stores) identifier. */
       store?: string;
       /** @description Metadata that can be used to query the vector store. Ignored if `store` is unset. */
-      metadata?: Record<string, never>;
+      metadata?: {
+        [key: string]: unknown;
+      };
       /** @description Choose keys from `metadata` to embed with text. */
       embedded_metadata_keys?: string[];
       /** @description Vector store document ID. Ignored if `store` is unset. */
@@ -1134,18 +1198,22 @@ export interface components {
       /** Embedding */
       embedding: {
         /** @description Embedding vector. */
-        vector: string;
+        vector: number[];
         /** @description Vector store document ID. */
         doc_id?: string;
         /** @description Vector store document metadata. */
-        metadata?: Record<string, never>;
+        metadata?: {
+          [key: string]: unknown;
+        };
       };
     };
     EmbedTextItem: {
       /** @description Text to embed. */
       text: string;
       /** @description Metadata that can be used to query the vector store. Ignored if `store` is unset. */
-      metadata?: Record<string, never>;
+      metadata?: {
+        [key: string]: unknown;
+      };
       /** @description Vector store document ID. Ignored if `store` is unset. */
       doc_id?: string;
     };
@@ -1156,7 +1224,9 @@ export interface components {
         /** @description Text to embed. */
         text: string;
         /** @description Metadata that can be used to query the vector store. Ignored if `store` is unset. */
-        metadata?: Record<string, never>;
+        metadata?: {
+          [key: string]: unknown;
+        };
         /** @description Vector store document ID. Ignored if `store` is unset. */
         doc_id?: string;
       }[];
@@ -1176,11 +1246,13 @@ export interface components {
       /** @description Generated embeddings. */
       embeddings: {
         /** @description Embedding vector. */
-        vector: string;
+        vector: number[];
         /** @description Vector store document ID. */
         doc_id?: string;
         /** @description Vector store document metadata. */
-        metadata?: Record<string, never>;
+        metadata?: {
+          [key: string]: unknown;
+        };
       }[];
     };
     /** JinaV2In */
@@ -1190,7 +1262,9 @@ export interface components {
         /** @description Text to embed. */
         text: string;
         /** @description Metadata that can be used to query the vector store. Ignored if `store` is unset. */
-        metadata?: Record<string, never>;
+        metadata?: {
+          [key: string]: unknown;
+        };
         /** @description Vector store document ID. Ignored if `store` is unset. */
         doc_id?: string;
       }[];
@@ -1204,11 +1278,13 @@ export interface components {
       /** @description Generated embeddings. */
       embeddings: {
         /** @description Embedding vector. */
-        vector: string;
+        vector: number[];
         /** @description Vector store document ID. */
         doc_id?: string;
         /** @description Vector store document metadata. */
-        metadata?: Record<string, never>;
+        metadata?: {
+          [key: string]: unknown;
+        };
       }[];
     };
     /** EmbedImageIn */
@@ -1231,11 +1307,13 @@ export interface components {
       /** Embedding */
       embedding: {
         /** @description Embedding vector. */
-        vector: string;
+        vector: number[];
         /** @description Vector store document ID. */
         doc_id?: string;
         /** @description Vector store document metadata. */
-        metadata?: Record<string, never>;
+        metadata?: {
+          [key: string]: unknown;
+        };
       };
     };
     EmbedImageItem: {
@@ -1250,7 +1328,9 @@ export interface components {
       /** @description Text to embed. */
       text?: string;
       /** @description Metadata that can be used to query the vector store. Ignored if `store` is unset. */
-      metadata?: Record<string, never>;
+      metadata?: {
+        [key: string]: unknown;
+      };
       /** @description Vector store document ID. Ignored if `store` is unset. */
       doc_id?: string;
     };
@@ -1277,11 +1357,13 @@ export interface components {
       /** @description Generated embeddings. */
       embeddings: {
         /** @description Embedding vector. */
-        vector: string;
+        vector: number[];
         /** @description Vector store document ID. */
         doc_id?: string;
         /** @description Vector store document metadata. */
-        metadata?: Record<string, never>;
+        metadata?: {
+          [key: string]: unknown;
+        };
       }[];
     };
     /** CLIPIn */
@@ -1293,7 +1375,9 @@ export interface components {
         /** @description Text to embed. */
         text?: string;
         /** @description Metadata that can be used to query the vector store. Ignored if `store` is unset. */
-        metadata?: Record<string, never>;
+        metadata?: {
+          [key: string]: unknown;
+        };
         /** @description Vector store document ID. Ignored if `store` is unset. */
         doc_id?: string;
       }[];
@@ -1307,11 +1391,13 @@ export interface components {
       /** @description Generated embeddings. */
       embeddings: {
         /** @description Embedding vector. */
-        vector: string;
+        vector: number[];
         /** @description Vector store document ID. */
         doc_id?: string;
         /** @description Vector store document metadata. */
-        metadata?: Record<string, never>;
+        metadata?: {
+          [key: string]: unknown;
+        };
       }[];
     };
     /** CreateVectorStoreIn */
@@ -1427,7 +1513,9 @@ export interface components {
       /** @description Embedding vector. */
       vector: number[];
       /** @description Document metadata. */
-      metadata: Record<string, never>;
+      metadata: {
+        [key: string]: unknown;
+      };
     };
     /** FetchVectorsIn */
     FetchVectorsIn: {
@@ -1450,7 +1538,9 @@ export interface components {
         /** @description Embedding vector. */
         vector: number[];
         /** @description Document metadata. */
-        metadata: Record<string, never>;
+        metadata: {
+          [key: string]: unknown;
+        };
       }[];
     };
     /** UpdateVectorsOut */
@@ -1470,7 +1560,9 @@ export interface components {
       /** @description Embedding vector. */
       vector?: number[];
       /** @description Document metadata. */
-      metadata?: Record<string, never>;
+      metadata?: {
+        [key: string]: unknown;
+      };
     };
     /** UpdateVectorsParams */
     UpdateVectorsIn: {
@@ -1488,7 +1580,9 @@ export interface components {
         /** @description Embedding vector. */
         vector?: number[];
         /** @description Document metadata. */
-        metadata?: Record<string, never>;
+        metadata?: {
+          [key: string]: unknown;
+        };
       }[];
     };
     /** DeleteVectorsIn */
@@ -1541,7 +1635,14 @@ export interface components {
        */
       include_metadata?: boolean;
       /** @description Filter metadata by key-value pairs. */
-      filters?: Record<string, never>;
+      filters?: {
+        [key: string]: unknown;
+      };
+      /**
+       * @description The distance metric used for the query. Defaults to the distance metric the vector store was created with.
+       * @enum {string}
+       */
+      metric?: "cosine" | "l2" | "inner";
     };
     /** VectorStoreQueryResult */
     VectorStoreQueryResult: {
@@ -1555,7 +1656,9 @@ export interface components {
       /** @description Embedding vector. */
       vector?: number[];
       /** @description Document metadata. */
-      metadata?: Record<string, never>;
+      metadata?: {
+        [key: string]: unknown;
+      };
     };
     /** QueryVectorStoreOut */
     QueryVectorStoreOut: {
@@ -1571,7 +1674,9 @@ export interface components {
         /** @description Embedding vector. */
         vector?: number[];
         /** @description Document metadata. */
-        metadata?: Record<string, never>;
+        metadata?: {
+          [key: string]: unknown;
+        };
       }[][];
       /** @description Vector store name. */
       name?: string;
@@ -1610,8 +1715,9 @@ export interface operations {
           /** @description Input prompt. */
           prompt: string;
           /**
+           * Format: float
            * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
-           * @default 4
+           * @default 0.4
            */
           temperature?: number;
           /** @description Maximum number of tokens to generate. */
@@ -1647,11 +1753,15 @@ export interface operations {
         undefined?: {
           /** @description Input prompt. */
           prompt: string;
-          /** @description Number of choices to generate. */
+          /**
+           * @description Number of choices to generate.
+           * @default 1
+           */
           num_choices: number;
           /**
+           * Format: float
            * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
-           * @default 4
+           * @default 0.4
            */
           temperature?: number;
           /** @description Maximum number of tokens to generate. */
@@ -1690,10 +1800,13 @@ export interface operations {
           /** @description Input prompt. */
           prompt: string;
           /** @description JSON schema to guide `json_object` response. */
-          json_schema: Record<string, never>;
+          json_schema: {
+            [key: string]: unknown;
+          };
           /**
+           * Format: float
            * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
-           * @default 4
+           * @default 0.4
            */
           temperature?: number;
           /** @description Maximum number of tokens to generate. */
@@ -1713,7 +1826,9 @@ export interface operations {
         content: {
           "application/json": {
             /** @description JSON response. */
-            json_object?: Record<string, never>;
+            json_object?: {
+              [key: string]: unknown;
+            };
           };
         };
       };
@@ -1730,12 +1845,18 @@ export interface operations {
           /** @description Input prompt. */
           prompt: string;
           /** @description JSON schema to guide `json_object` response. */
-          json_schema: Record<string, never>;
-          /** @description Number of choices to generate. */
+          json_schema: {
+            [key: string]: unknown;
+          };
+          /**
+           * @description Number of choices to generate.
+           * @default 1
+           */
           num_choices: number;
           /**
+           * Format: float
            * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
-           * @default 4
+           * @default 0.4
            */
           temperature?: number;
           /** @description Maximum number of tokens to generate. */
@@ -1756,7 +1877,9 @@ export interface operations {
           "application/json": {
             choices: {
               /** @description JSON response. */
-              json_object?: Record<string, never>;
+              json_object?: {
+                [key: string]: unknown;
+              };
             }[];
           };
         };
@@ -1775,11 +1898,6 @@ export interface operations {
           prompt: string;
           /** @description Image prompts. */
           image_uris: string[];
-          /**
-           * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
-           * @default 4
-           */
-          temperature?: number;
           /**
            * @description Maximum number of tokens to generate.
            * @default 800
@@ -1819,7 +1937,9 @@ export interface operations {
           /** @description Number of choices to generate. */
           num_choices: number;
           /** @description JSON schema to guide response. */
-          json_schema?: Record<string, never>;
+          json_schema?: {
+            [key: string]: unknown;
+          };
           /**
            * Format: float
            * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
@@ -1839,7 +1959,9 @@ export interface operations {
               /** @description Text response, if `json_schema` was not provided. */
               text?: string;
               /** @description JSON response, if `json_schema` was provided. */
-              json_object?: Record<string, never>;
+              json_object?: {
+                [key: string]: unknown;
+              };
             }[];
           };
         };
@@ -2045,7 +2167,10 @@ export interface operations {
           negative_prompt?: string;
           /** @description Number of diffusion steps. */
           steps?: number;
-          /** @description Number of images to generate. */
+          /**
+           * @description Number of images to generate.
+           * @default 1
+           */
           num_images?: number;
           /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
@@ -2054,13 +2179,57 @@ export interface operations {
           /** @description Width of output image, in pixels. */
           width?: number;
           /** @description Seeds for deterministic generation. Default is a random seed. */
-          seeds?: number;
+          seeds?: number[];
           /**
            * Format: float
            * @description Higher values adhere to the text prompt more strongly, typically at the expense of image quality.
            * @default 5
            */
           guidance_scale?: number;
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": {
+            outputs: {
+              /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+              image_uri: string;
+              /** @description The random noise seed used for generation. */
+              seed: number;
+            }[];
+          };
+        };
+      };
+    };
+  };
+  /**
+   * StableDiffusionXLLightning
+   * @description Generate an image using [Stable Diffusion XL Lightning](https://arxiv.org/abs/2402.13929).
+   */
+  StableDiffusionXLLightning: {
+    parameters: {
+      query?: {
+        undefined?: {
+          /** @description Text prompt. */
+          prompt: string;
+          /** @description Negative input prompt. */
+          negative_prompt?: string;
+          /**
+           * @description Number of images to generate.
+           * @default 1
+           */
+          num_images?: number;
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+          store?: string;
+          /** @description Height of output image, in pixels. */
+          height?: number;
+          /** @description Width of output image, in pixels. */
+          width?: number;
+          /** @description Seeds for deterministic generation. Default is a random seed. */
+          seeds?: number[];
         };
       };
     };
@@ -2094,7 +2263,10 @@ export interface operations {
           prompt: string;
           /** @description Mask image that controls which pixels are edited (inpainting). If unset, the entire image is edited (image-to-image). */
           mask_image_uri?: string;
-          /** @description Number of images to generate. */
+          /**
+           * @description Number of images to generate.
+           * @default 1
+           */
           num_images: number;
           /**
            * @description Resolution of the output image, in pixels.
@@ -2108,7 +2280,7 @@ export interface operations {
           /**
            * Format: float
            * @description Controls the strength of the generation process.
-           * @default 0.5
+           * @default 1
            */
           strength?: number;
           /** @description Random noise seeds. Default is random seeds for each generation. */
@@ -2144,7 +2316,10 @@ export interface operations {
           prompt: string;
           /** @description Image prompt. */
           image_prompt_uri?: string;
-          /** @description Number of images to generate. */
+          /**
+           * @description Number of images to generate.
+           * @default 1
+           */
           num_images: number;
           /**
            * Format: float
@@ -2197,7 +2372,10 @@ export interface operations {
           control_method: "edge" | "depth" | "illusion";
           /** @description Text prompt. */
           prompt: string;
-          /** @description Number of images to generate. */
+          /**
+           * @description Number of images to generate.
+           * @default 1
+           */
           num_images: number;
           /**
            * @description Resolution of the output image, in pixels.
@@ -2341,12 +2519,6 @@ export interface operations {
         undefined?: {
           /** @description Input image. */
           image_uri: string;
-          /**
-           * @description Selected model.
-           * @default real-esrgan-x4
-           * @enum {string}
-           */
-          model?: "real-esrgan-x4";
           /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
         };
@@ -2374,7 +2546,10 @@ export interface operations {
         undefined?: {
           /** @description Input image. */
           image_uri: string;
-          /** @description Return a mask image instead of the original content. */
+          /**
+           * @description Return a mask image instead of the original content.
+           * @default false
+           */
           return_mask?: boolean;
           /** @description Hex value background color. Transparent if unset. */
           background_color?: string;
@@ -2403,7 +2578,7 @@ export interface operations {
   };
   /**
    * DISISNet
-   * @description Segment an image using [DIS IS-Net](https://github.com/xuebinqin/DIS).
+   * @description Segment image foreground using [DIS IS-Net](https://github.com/xuebinqin/DIS).
    */
   DISISNet: {
     parameters: {
@@ -2411,10 +2586,6 @@ export interface operations {
         undefined?: {
           /** @description Input image. */
           image_uri: string;
-          /** @description Return a mask image instead of the original content. */
-          return_mask?: boolean;
-          /** @description Hex value background color. Transparent if unset. */
-          background_color?: string;
           /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
         };
@@ -2705,7 +2876,9 @@ export interface operations {
           /** @description [Vector store](/docs/vector-stores) identifier. */
           store?: string;
           /** @description Metadata that can be used to query the vector store. Ignored if `store` is unset. */
-          metadata?: Record<string, never>;
+          metadata?: {
+            [key: string]: unknown;
+          };
           /** @description Choose keys from `metadata` to embed with text. */
           embedded_metadata_keys?: string[];
           /** @description Vector store document ID. Ignored if `store` is unset. */
@@ -2727,11 +2900,13 @@ export interface operations {
             /** Embedding */
             embedding: {
               /** @description Embedding vector. */
-              vector: string;
+              vector: number[];
               /** @description Vector store document ID. */
               doc_id?: string;
               /** @description Vector store document metadata. */
-              metadata?: Record<string, never>;
+              metadata?: {
+                [key: string]: unknown;
+              };
             };
           };
         };
@@ -2751,7 +2926,9 @@ export interface operations {
             /** @description Text to embed. */
             text: string;
             /** @description Metadata that can be used to query the vector store. Ignored if `store` is unset. */
-            metadata?: Record<string, never>;
+            metadata?: {
+              [key: string]: unknown;
+            };
             /** @description Vector store document ID. Ignored if `store` is unset. */
             doc_id?: string;
           }[];
@@ -2776,11 +2953,13 @@ export interface operations {
             /** @description Generated embeddings. */
             embeddings: {
               /** @description Embedding vector. */
-              vector: string;
+              vector: number[];
               /** @description Vector store document ID. */
               doc_id?: string;
               /** @description Vector store document metadata. */
-              metadata?: Record<string, never>;
+              metadata?: {
+                [key: string]: unknown;
+              };
             }[];
           };
         };
@@ -2818,11 +2997,13 @@ export interface operations {
             /** Embedding */
             embedding: {
               /** @description Embedding vector. */
-              vector: string;
+              vector: number[];
               /** @description Vector store document ID. */
               doc_id?: string;
               /** @description Vector store document metadata. */
-              metadata?: Record<string, never>;
+              metadata?: {
+                [key: string]: unknown;
+              };
             };
           };
         };
@@ -2863,11 +3044,13 @@ export interface operations {
             /** @description Generated embeddings. */
             embeddings: {
               /** @description Embedding vector. */
-              vector: string;
+              vector: number[];
               /** @description Vector store document ID. */
               doc_id?: string;
               /** @description Vector store document metadata. */
-              metadata?: Record<string, never>;
+              metadata?: {
+                [key: string]: unknown;
+              };
             }[];
           };
         };
@@ -2887,7 +3070,9 @@ export interface operations {
             /** @description Text to embed. */
             text: string;
             /** @description Metadata that can be used to query the vector store. Ignored if `store` is unset. */
-            metadata?: Record<string, never>;
+            metadata?: {
+              [key: string]: unknown;
+            };
             /** @description Vector store document ID. Ignored if `store` is unset. */
             doc_id?: string;
           }[];
@@ -2906,11 +3091,13 @@ export interface operations {
             /** @description Generated embeddings. */
             embeddings: {
               /** @description Embedding vector. */
-              vector: string;
+              vector: number[];
               /** @description Vector store document ID. */
               doc_id?: string;
               /** @description Vector store document metadata. */
-              metadata?: Record<string, never>;
+              metadata?: {
+                [key: string]: unknown;
+              };
             }[];
           };
         };
@@ -2932,7 +3119,9 @@ export interface operations {
             /** @description Text to embed. */
             text?: string;
             /** @description Metadata that can be used to query the vector store. Ignored if `store` is unset. */
-            metadata?: Record<string, never>;
+            metadata?: {
+              [key: string]: unknown;
+            };
             /** @description Vector store document ID. Ignored if `store` is unset. */
             doc_id?: string;
           }[];
@@ -2951,11 +3140,13 @@ export interface operations {
             /** @description Generated embeddings. */
             embeddings: {
               /** @description Embedding vector. */
-              vector: string;
+              vector: number[];
               /** @description Vector store document ID. */
               doc_id?: string;
               /** @description Vector store document metadata. */
-              metadata?: Record<string, never>;
+              metadata?: {
+                [key: string]: unknown;
+              };
             }[];
           };
         };
@@ -3154,7 +3345,14 @@ export interface operations {
            */
           include_metadata?: boolean;
           /** @description Filter metadata by key-value pairs. */
-          filters?: Record<string, never>;
+          filters?: {
+            [key: string]: unknown;
+          };
+          /**
+           * @description The distance metric used for the query. Defaults to the distance metric the vector store was created with.
+           * @enum {string}
+           */
+          metric?: "cosine" | "l2" | "inner";
         };
       };
     };
@@ -3175,7 +3373,9 @@ export interface operations {
               /** @description Embedding vector. */
               vector?: number[];
               /** @description Document metadata. */
-              metadata?: Record<string, never>;
+              metadata?: {
+                [key: string]: unknown;
+              };
             }[][];
             /** @description Vector store name. */
             name?: string;
@@ -3226,7 +3426,9 @@ export interface operations {
               /** @description Embedding vector. */
               vector: number[];
               /** @description Document metadata. */
-              metadata: Record<string, never>;
+              metadata: {
+                [key: string]: unknown;
+              };
             }[];
           };
         };
@@ -3255,7 +3457,9 @@ export interface operations {
             /** @description Embedding vector. */
             vector?: number[];
             /** @description Document metadata. */
-            metadata?: Record<string, never>;
+            metadata?: {
+              [key: string]: unknown;
+            };
           }[];
         };
       };
