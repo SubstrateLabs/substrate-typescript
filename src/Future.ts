@@ -187,9 +187,9 @@ export abstract class Future {
   protected directive: Directive;
   protected id: string = "";
 
-  constructor(directive: Directive, id: string = newFutureId()) {
+  constructor(directive: Directive, id?: string | undefined) {
     this.directive = directive;
-    this.id = id;
+    this.id = id ?? newFutureId();
   }
 
   protected referencedFutures(): Future[] {
@@ -207,10 +207,13 @@ export abstract class Future {
   static jq<T extends Future>(
     query: string,
     future: JQDirectiveTarget,
-    klazz: new (directive: Directive) => T,
+    klazz?: T,
   ): T {
     const directive = new JQ([], query, future);
-    return new klazz(directive);
+    const Klazz = klazz ?? FutureAnyObject;
+    // @ts-ignore
+    return new Klazz(directive);
+    //   sb.jq<MyType>('myquery', mything) ==> Future<MyType>
   }
 
   toJSON() {
