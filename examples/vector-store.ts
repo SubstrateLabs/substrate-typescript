@@ -26,25 +26,8 @@ async function main() {
 
   const list = new ListVectorStores({});
 
-  const jina2 = new JinaV2({
-    store: COLLECTION_NAME,
-    items: [].map((p) => ({
-      text: p.text,
-      doc_id: String(p.publication_id),
-      metadata: { updated_at: p.updated_at.toISOString() },
-    })),
-  });
-
-  console.log(jina2);
-
   const insert = new JinaV2({
-    items: [
-      {
-        text: "tell me about celsius oasis vibe",
-        doc_id: "celsius",
-        metadata: { foo: "bar" },
-      },
-    ],
+    items: [{ text: "tell me about celsius oasis vibe", doc_id: "celsius" }],
     store: "vibes",
   });
 
