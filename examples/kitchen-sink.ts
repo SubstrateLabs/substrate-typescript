@@ -166,8 +166,10 @@ const examples = [
     envs: [STAGING_V0, PRODUCTION_V0],
   },
   {
-    // NOTE: mainly supported on backend v1, but v0 works for legacy use
-    // NOTE: the input types are not the same between v0 and v1 and we want to keep it that way for legacy support
+    // NOTE: mainly supported on backend v1, but v0 works for legacy use (see next node)
+    // NOTE: the input types are not the same between v0 and v1.
+    // FIXME: there seems to be an issue with v0 now though, when using either the new or
+    //        the old params and the v0 node doesn't work with either.
     node: new Firellava13B({
       prompt: "what are these paintings of and who made them?",
       image_uris: [
@@ -292,10 +294,6 @@ const examples = [
     envs: ALL_ENVS,
   },
   {
-    // FIXME: Am seeing an issue on staging v1:
-    // Error writing emb: (psycopg2.errors.DuplicateTable) relation "ix_jina_base_v2_docs_usr_pkhjwruqwbiyiljg_kitchensink" already exists
-    // I think this is trying create an index where it already exists, https://github.com/SubstrateLabs/substrate/blob/main/sb_models/vec_db.py#L111-L115
-    // Not sure why this only happens on staging v1 for now.
     node: new MultiEmbedText({
       items: [
         {
@@ -307,7 +305,7 @@ const examples = [
       ],
       store: VECTOR_STORE,
     }),
-    envs: [STAGING_V0, PRODUCTION_V0, PRODUCTION_V1],
+    envs: ALL_ENVS,
   },
   {
     node: new EmbedImage({
@@ -435,27 +433,30 @@ const examples = [
     envs: [STAGING_V0, STAGING_V1],
   },
   {
+    // FIXME: it looks like this should work for v1, but doesn't yet
     node: new XTTSV2({
       text: "Substrate: an underlying substance or layer.",
       audio_uri: "https://media.substrate.run/docs-speaker.wav",
       store: "hosted",
     }),
-    envs: ALL_ENVS,
+    envs: [STAGING_V0, STAGING_V1],
   },
   {
+    // FIXME: it looks like this should work for v1, but doesn't yet
     node: new RemoveBackground({
       image_uri: "https://media.substrate.run/docs-seurat.jpg",
       background_color: "002244",
       store: "hosted",
     }),
-    envs: ALL_ENVS,
+    envs: [STAGING_V0, STAGING_V1],
   },
   {
+    // FIXME: it looks like this should work for v1, but doesn't yet
     node: new UpscaleImage({
       image_uri: "https://media.substrate.run/docs-seurat.jpg",
       store: "hosted",
     }),
-    envs: ALL_ENVS,
+    envs: [STAGING_V0, STAGING_V1],
   },
   {
     node: new SegmentUnderPoint({
@@ -469,14 +470,16 @@ const examples = [
     envs: ALL_ENVS,
   },
   {
+    // FIXME: it looks like this should work for v1, but doesn't yet
     node: new DISISNet({
       image_uri: "https://media.substrate.run/docs-seurat.jpg",
       store: "hosted",
     }),
-    envs: ALL_ENVS,
+    envs: [STAGING_V0, PRODUCTION_V1],
   },
   {
-    // FIXME: From what I can gather on Modal this throws a runtime error, on Ray we don't have the biglama_app up and running
+    // FIXME: From what I can gather on Modal this throws a runtime error, 
+    //        on Ray we don't have the biglama_app up and running.
     node: new BigLaMa({
       image_uri: "https://media.substrate.run/docs-seurat.jpg",
       mask_image_uri: "https://media.substrate.run/spiral-logo.jpeg",
@@ -485,13 +488,15 @@ const examples = [
     envs: [],
   },
   {
+    // FIXME: it looks like this should work for v1, but doesn't yet
     node: new RealESRGAN({
       image_uri: "https://media.substrate.run/docs-seurat.jpg",
       store: "hosted",
     }),
-    envs: ALL_ENVS,
+    envs: [STAGING_V0, PRODUCTION_V0],
   },
   {
+    // FIXME: it looks like this should work for v1, but doesn't yet
     node: new SegmentAnything({
       image_uri: "https://media.substrate.run/docs-vg-bedroom.jpg",
       point_prompts: [
@@ -502,7 +507,7 @@ const examples = [
       ],
       store: "hosted",
     }),
-    envs: ALL_ENVS,
+    envs: [STAGING_V0, PRODUCTION_V0],
   },
   {
     node: new DeleteVectorStore({
@@ -537,8 +542,8 @@ async function main() {
     // const except = []
     // if (except.includes(node.node)) continue;
 
-    const only = ["Firellava13B"];
-    if (!only.includes(node.node)) continue;
+    // const only = ["SegmentAnything"];
+    // if (!only.includes(node.node)) continue;
 
     if (envs.length === 0) {
       warn(node.node, "Not enabled for any env.");
@@ -562,7 +567,6 @@ async function main() {
           });
         } else {
           ok(node.node, tag);
-          console.log(res.get(node));
         }
       } catch (err: any) {
         error(node.node, tag, { via: "substrate.run()", msg: err.message });
