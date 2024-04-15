@@ -1,7 +1,7 @@
 /**
  * ꩜ Substrate TypeScript SDK
  * @generated file
- * 20240411.20240411
+ * 20240411.20240415
  */
 
 export { SubstrateError } from "substrate/Error";
@@ -20,19 +20,19 @@ export {
   StableDiffusionXL,
   StableDiffusionXLLightning,
   StableDiffusionXLInpaint,
-  StableDiffusionXLIPAdapter,
   StableDiffusionXLControlNet,
-  FillMask,
-  BigLaMa,
-  UpscaleImage,
-  RealESRGAN,
-  RemoveBackground,
-  DISISNet,
-  SegmentUnderPoint,
-  SegmentAnything,
+  StableDiffusionXLIPAdapter,
   TranscribeMedia,
   GenerateSpeech,
   XTTSV2,
+  RemoveBackground,
+  FillMask,
+  UpscaleImage,
+  SegmentUnderPoint,
+  DISISNet,
+  BigLaMa,
+  RealESRGAN,
+  SegmentAnything,
   EmbedText,
   MultiEmbedText,
   EmbedImage,

@@ -1207,6 +1207,7 @@ export interface components {
         };
       };
     };
+    /** EmbedTextItem */
     EmbedTextItem: {
       /** @description Text to embed. */
       text: string;
@@ -1316,12 +1317,14 @@ export interface components {
         };
       };
     };
+    /** EmbedImageItem */
     EmbedImageItem: {
       /** @description Image to embed. */
       image_uri: string;
       /** @description Vector store document ID. Ignored if `store` is unset. */
       doc_id?: string;
     };
+    /** EmbedTextOrImageItem */
     EmbedTextOrImageItem: {
       /** @description Image to embed. */
       image_uri?: string;
@@ -1564,7 +1567,7 @@ export interface components {
         [key: string]: unknown;
       };
     };
-    /** UpdateVectorsParams */
+    /** UpdateVectorsIn */
     UpdateVectorsIn: {
       /** @description Vector store name. */
       name: string;

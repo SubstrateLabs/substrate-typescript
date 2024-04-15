@@ -6,7 +6,7 @@ import { AnyNode } from "substrate/Nodes";
 
 const generator = idGenerator("node");
 
-type Options = {
+export type Options = {
   /** The id of the node. Default: random id */
   id?: Node["id"];
   /** When true the server will omit this node's output. Default: false */
