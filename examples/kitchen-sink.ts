@@ -55,7 +55,7 @@ const backends = {
 
 // Not all nodes are available in all backend+env combinations yet, so
 // in order to only test nodes that should be operational we can target
-// them specifically.0
+// them specifically.
 const STAGING_V0 = { url: urls.staging, backend: backends.v0 };
 const STAGING_V1 = { url: urls.staging, backend: backends.v1 };
 const PRODUCTION_V0 = { url: urls.production, backend: backends.v0 };
