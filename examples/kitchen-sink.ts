@@ -424,7 +424,7 @@ const examples = [
     envs: [STAGING_V0, PRODUCTION_V0],
   },
   {
-    // FIXME: it looks like this should work in v0 and v1, but I'm seeing errors here from the server and haven't 
+    // FIXME: it looks like this should work in v0 and v1, but I'm seeing errors here from the server and haven't
     // been able to track down any server side errors to understand what the problem is.
     node: new GenerateSpeech({
       text: "Substrate: an underlying substance or layer.",
@@ -478,7 +478,7 @@ const examples = [
     envs: [STAGING_V0, PRODUCTION_V1],
   },
   {
-    // FIXME: From what I can gather on Modal this throws a runtime error, 
+    // FIXME: From what I can gather on Modal this throws a runtime error,
     //        on Ray we don't have the biglama_app up and running.
     node: new BigLaMa({
       image_uri: "https://media.substrate.run/docs-seurat.jpg",

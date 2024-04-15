@@ -1,8 +1,8 @@
 /**
-* ꩜ Substrate TypeScript SDK
-* @generated file
-* 20240411.20240415
-*/
+ * ꩜ Substrate TypeScript SDK
+ * @generated file
+ * 20240411.20240415
+ */
 
 export { SubstrateError } from "substrate/Error";
 export {
@@ -46,7 +46,7 @@ export {
   FetchVectors,
   UpdateVectors,
   DeleteVectors,
-  } from "substrate/Nodes";
+} from "substrate/Nodes";
 
 export { sb } from "substrate/sb";
 export { Substrate };
