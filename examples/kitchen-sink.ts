@@ -529,7 +529,7 @@ const ok = (message: string, ...rest: any[]) =>
 const warn = (message: string, ...rest: any[]) =>
   noColor
     ? console.warn(`● ${message}`, ...rest)
-    : console.warn(yellow(`x ${message}`), ...rest);
+    : console.warn(yellow(`● ${message}`), ...rest);
 const error = (message: string, ...rest: any[]) =>
   noColor
     ? console.error(`x ${message}`, ...rest)
