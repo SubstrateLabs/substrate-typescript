@@ -20,6 +20,7 @@ async function main() {
   const b = new GenerateText({ prompt: concatenated });
 
   const res = await substrate.run(a, b);
+  res.getError();
 
   console.log({ a: res.get(a), b: res.get(b) });
 }
