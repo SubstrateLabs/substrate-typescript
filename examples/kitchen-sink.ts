@@ -565,7 +565,7 @@ async function main() {
     }
 
     for (let env of envs) {
-    // for (let env of ALL_ENVS) {
+      // for (let env of ALL_ENVS) {
       // if (env.url.name === "staging") {
       //   if (env.backend.value !== "v1") continue;
       // }
