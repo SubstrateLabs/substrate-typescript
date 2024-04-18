@@ -51,7 +51,7 @@ export abstract class Node {
     if (data?.type && data?.message) {
       // NOTE: we only return these errors on client errors.
       // Server errors are typically 5xx replies.
-      return new NodeError(data.type, data.message);
+      return new NodeError(data.type, data.message, data?.request_id);
     } else if (data) {
       return data;
     }

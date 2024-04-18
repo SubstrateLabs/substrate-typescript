@@ -7,11 +7,13 @@ export class RequestTimeoutError extends SubstrateError {}
 
 export class NodeError extends SubstrateError {
   type: string;
+  request_id?: string;
   override message: string;
 
-  constructor(type: string, message: string) {
+  constructor(type: string, message: string, request_id?: string) {
     super(message);
     this.type = type;
     this.message = message;
+    this.request_id = request_id;
   }
 }

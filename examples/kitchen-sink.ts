@@ -49,8 +49,8 @@ const urls = {
   production: { name: "production", value: "https://api.substrate.run" },
 };
 const backends = {
-  v0: { name: "v0 (modal)", value: "v0" as const },
-  v1: { name: "v1 (ray)", value: "v1" as const },
+  v0: { name: "v0", value: "v0" as const },
+  v1: { name: "v1", value: "v1" as const },
 };
 
 // Not all nodes are available in all backend+env combinations yet, so
@@ -113,7 +113,7 @@ const examples = [
         },
       },
       temperature: 0.4,
-      max_tokens: 100,
+      max_tokens: 300,
     }),
     envs: ALL_ENVS,
   },
@@ -535,6 +535,21 @@ const error = (message: string, ...rest: any[]) =>
     ? console.error(`x ${message}`, ...rest)
     : console.error(red(`x ${message}`), ...rest);
 
+const measure = async (fn: any): Promise<any> => {
+  const startTime = new Date();
+  const time = (ms: any) => `${ms}ms`;
+  try {
+    const result = await fn;
+    const endTime = new Date();
+    // @ts-ignore: lazy
+    return { error: null, result, time: time(endTime - startTime) };
+  } catch (error) {
+    const endTime = new Date();
+    // @ts-ignore: lazy
+    return { error, result: null, time: time(endTime - startTime) };
+  }
+};
+
 async function main() {
   const SUBSTRATE_API_KEY = process.env["SUBSTRATE_API_KEY"];
 
@@ -542,34 +557,46 @@ async function main() {
     // const except = []
     // if (except.includes(node.node)) continue;
 
-    // const only = ["SegmentAnything"];
-    // if (!only.includes(node.node)) continue;
+    const only = ["GenerateJSON"];
+    if (!only.includes(node.node)) continue;
 
     if (envs.length === 0) {
       warn(node.node, "Not enabled for any env.");
     }
 
     for (let env of envs) {
+    // for (let env of ALL_ENVS) {
+      // if (env.url.name === "staging") {
+      //   if (env.backend.value !== "v1") continue;
+      // }
+      // if (env.url.name === "production") {
+      //   if (env.backend.value !== "v0") continue;
+      // }
+
       const substrate = new Substrate({
         apiKey: SUBSTRATE_API_KEY,
         baseUrl: env.url.value,
         backend: env.backend.value,
       });
       const tag = `[${env.url.name}:${env.backend.value}]`;
-      try {
-        const res = await substrate.run(node);
-        const err = res.getError(node);
+
+      // NOTE: measure doesn't throw
+      const res = await measure(substrate.run(node));
+
+      if (res.error) {
+        error(node.node, tag, `RequestError("${res.error.message}")`, res.time);
+      } else {
+        const err = res.result.getError(node);
         if (err) {
-          error(node.node, tag, {
-            via: "res.getError()",
-            type: err.type,
-            msg: err.message,
-          });
+          error(
+            node.node,
+            tag,
+            `NodeError("${err.message}", ${err.request_id})`,
+            res.time,
+          );
         } else {
-          ok(node.node, tag);
+          ok(node.node, tag, res.time);
         }
-      } catch (err: any) {
-        error(node.node, tag, { via: "substrate.run()", msg: err.message });
       }
     }
   }
