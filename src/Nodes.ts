@@ -1,7 +1,7 @@
 /**
  * ꩜ Substrate
  * @generated file
- * 20240411.20240415
+ * 20240416.20240418
  */
 
 import * as OpenAPI from "substrate/OpenAPI";
@@ -56,40 +56,109 @@ type AlsoAcceptFutures<T> = T extends (infer U)[][]
 
 export class GenerateJSONInJsonSchema extends FutureAnyObject {}
 export class GenerateJSONOutJsonObject extends FutureAnyObject {}
+/** Batch input prompts. */
+export class MultiGenerateTextInBatchPrompts extends FutureArray {
+  /** Returns `FutureString` at given index. */
+  override at(index: number) {
+    return new FutureString(this._directive.next(index));
+  }
+  /** Returns the result for `MultiGenerateTextInBatchPrompts` once it's node has been run. */
+  protected override async result(): Promise<FutureString[]> {
+    return super.result() as Promise<FutureString[]>;
+  }
+}
+export class MultiGenerateTextInBatchPromptsItem extends FutureString {}
 /** Response choices. */
-export class MultiGenerateTextOutChoices extends FutureArray {
+export class MultiGenerateTextOutputChoices extends FutureArray {
   /** Returns `GenerateTextOut` at given index. */
   override at(index: number) {
     return new GenerateTextOut(this._directive.next(index));
   }
-  /** Returns the result for `MultiGenerateTextOutChoices` once it's node has been run. */
+  /** Returns the result for `MultiGenerateTextOutputChoices` once it's node has been run. */
   protected override async result(): Promise<GenerateTextOut[]> {
     return super.result() as Promise<GenerateTextOut[]>;
   }
 }
+/** A single output for `prompt`, or multiple outputs for `batch_prompts`. */
+export class MultiGenerateTextOutOutputs extends FutureArray {
+  /** Returns `MultiGenerateTextOutput` at given index. */
+  override at(index: number) {
+    return new MultiGenerateTextOutput(this._directive.next(index));
+  }
+  /** Returns the result for `MultiGenerateTextOutOutputs` once it's node has been run. */
+  protected override async result(): Promise<MultiGenerateTextOutput[]> {
+    return super.result() as Promise<MultiGenerateTextOutput[]>;
+  }
+}
 export class MultiGenerateJSONInJsonSchema extends FutureAnyObject {}
+/** Batch input prompts. */
+export class MultiGenerateJSONInBatchPrompts extends FutureArray {
+  /** Returns `FutureString` at given index. */
+  override at(index: number) {
+    return new FutureString(this._directive.next(index));
+  }
+  /** Returns the result for `MultiGenerateJSONInBatchPrompts` once it's node has been run. */
+  protected override async result(): Promise<FutureString[]> {
+    return super.result() as Promise<FutureString[]>;
+  }
+}
+export class MultiGenerateJSONInBatchPromptsItem extends FutureString {}
 /** Response choices. */
-export class MultiGenerateJSONOutChoices extends FutureArray {
+export class MultiGenerateJSONOutputChoices extends FutureArray {
   /** Returns `GenerateJSONOut` at given index. */
   override at(index: number) {
     return new GenerateJSONOut(this._directive.next(index));
   }
-  /** Returns the result for `MultiGenerateJSONOutChoices` once it's node has been run. */
+  /** Returns the result for `MultiGenerateJSONOutputChoices` once it's node has been run. */
   protected override async result(): Promise<GenerateJSONOut[]> {
     return super.result() as Promise<GenerateJSONOut[]>;
   }
 }
+/** A single output for `prompt`, or multiple outputs for `batch_prompts`. */
+export class MultiGenerateJSONOutOutputs extends FutureArray {
+  /** Returns `MultiGenerateJSONOutput` at given index. */
+  override at(index: number) {
+    return new MultiGenerateJSONOutput(this._directive.next(index));
+  }
+  /** Returns the result for `MultiGenerateJSONOutOutputs` once it's node has been run. */
+  protected override async result(): Promise<MultiGenerateJSONOutput[]> {
+    return super.result() as Promise<MultiGenerateJSONOutput[]>;
+  }
+}
 export class Mistral7BInstructInJsonSchema extends FutureAnyObject {}
+/** Batch input prompts. */
+export class Mistral7BInstructInBatchPrompts extends FutureArray {
+  /** Returns `FutureString` at given index. */
+  override at(index: number) {
+    return new FutureString(this._directive.next(index));
+  }
+  /** Returns the result for `Mistral7BInstructInBatchPrompts` once it's node has been run. */
+  protected override async result(): Promise<FutureString[]> {
+    return super.result() as Promise<FutureString[]>;
+  }
+}
+export class Mistral7BInstructInBatchPromptsItem extends FutureString {}
 export class Mistral7BInstructChoiceJsonObject extends FutureAnyObject {}
 /** Response choices. */
-export class Mistral7BInstructOutChoices extends FutureArray {
+export class Mistral7BInstructOutputChoices extends FutureArray {
   /** Returns `Mistral7BInstructChoice` at given index. */
   override at(index: number) {
     return new Mistral7BInstructChoice(this._directive.next(index));
   }
-  /** Returns the result for `Mistral7BInstructOutChoices` once it's node has been run. */
+  /** Returns the result for `Mistral7BInstructOutputChoices` once it's node has been run. */
   protected override async result(): Promise<Mistral7BInstructChoice[]> {
     return super.result() as Promise<Mistral7BInstructChoice[]>;
+  }
+}
+/** A single output for `prompt`, or multiple outputs for `batch_prompts`. */
+export class Mistral7BInstructOutOutputs extends FutureArray {
+  /** Returns `Mistral7BInstructOutput` at given index. */
+  override at(index: number) {
+    return new Mistral7BInstructOutput(this._directive.next(index));
+  }
+  /** Returns the result for `Mistral7BInstructOutOutputs` once it's node has been run. */
+  protected override async result(): Promise<Mistral7BInstructOutput[]> {
+    return super.result() as Promise<Mistral7BInstructOutput[]>;
   }
 }
 /** Image prompts. */
@@ -722,19 +791,26 @@ export class MultiGenerateTextIn extends FutureObject {
   get prompt() {
     return new FutureString(this._directive.next("prompt"));
   }
+
+  /** Batch input prompts. */
+  get batch_prompts() {
+    return new MultiGenerateTextInBatchPrompts(
+      this._directive.next("batch_prompts"),
+    );
+  }
   /** Number of choices to generate. */
   get num_choices() {
     return new FutureNumber(this._directive.next("num_choices"));
   }
-  /** (Optional) Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic. */
+  /** Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic. */
   get temperature() {
     return new FutureNumber(this._directive.next("temperature"));
   }
-  /** (Optional) Maximum number of tokens to generate. */
+  /** Maximum number of tokens to generate. */
   get max_tokens() {
     return new FutureNumber(this._directive.next("max_tokens"));
   }
-  /** (Optional) Selected node. */
+  /** Selected node. */
   get node() {
     return new FutureString(this._directive.next("node"));
   }
@@ -743,11 +819,22 @@ export class MultiGenerateTextIn extends FutureObject {
     return super.result() as Promise<MultiGenerateTextIn>;
   }
 }
-/** MultiGenerateTextOut */
-export class MultiGenerateTextOut extends FutureObject {
+/** MultiGenerateTextOutput */
+export class MultiGenerateTextOutput extends FutureObject {
   /** Response choices. */
   get choices() {
-    return new MultiGenerateTextOutChoices(this._directive.next("choices"));
+    return new MultiGenerateTextOutputChoices(this._directive.next("choices"));
+  }
+  /** returns the result for `MultiGenerateTextOutput` once it's node has been run. */
+  protected override async result(): Promise<MultiGenerateTextOutput> {
+    return super.result() as Promise<MultiGenerateTextOutput>;
+  }
+}
+/** MultiGenerateTextOut */
+export class MultiGenerateTextOut extends FutureObject {
+  /** A single output for `prompt`, or multiple outputs for `batch_prompts`. */
+  get outputs() {
+    return new MultiGenerateTextOutOutputs(this._directive.next("outputs"));
   }
   /** returns the result for `MultiGenerateTextOut` once it's node has been run. */
   protected override async result(): Promise<MultiGenerateTextOut> {
@@ -756,7 +843,7 @@ export class MultiGenerateTextOut extends FutureObject {
 }
 /** MultiGenerateJSONIn */
 export class MultiGenerateJSONIn extends FutureObject {
-  /** Input prompt. */
+  /** (Optional) Input prompt. */
   get prompt() {
     return new FutureString(this._directive.next("prompt"));
   }
@@ -764,7 +851,14 @@ export class MultiGenerateJSONIn extends FutureObject {
   get json_schema() {
     return new FutureAnyObject(this._directive.next("json_schema"));
   }
-  /** Number of choices to generate. */
+
+  /** (Optional) Batch input prompts. */
+  get batch_prompts() {
+    return new MultiGenerateJSONInBatchPrompts(
+      this._directive.next("batch_prompts"),
+    );
+  }
+  /** (Optional) Number of choices to generate. */
   get num_choices() {
     return new FutureNumber(this._directive.next("num_choices"));
   }
@@ -785,11 +879,22 @@ export class MultiGenerateJSONIn extends FutureObject {
     return super.result() as Promise<MultiGenerateJSONIn>;
   }
 }
-/** MultiGenerateJSONOut */
-export class MultiGenerateJSONOut extends FutureObject {
+/** MultiGenerateJSONOutput */
+export class MultiGenerateJSONOutput extends FutureObject {
   /** Response choices. */
   get choices() {
-    return new MultiGenerateJSONOutChoices(this._directive.next("choices"));
+    return new MultiGenerateJSONOutputChoices(this._directive.next("choices"));
+  }
+  /** returns the result for `MultiGenerateJSONOutput` once it's node has been run. */
+  protected override async result(): Promise<MultiGenerateJSONOutput> {
+    return super.result() as Promise<MultiGenerateJSONOutput>;
+  }
+}
+/** MultiGenerateJSONOut */
+export class MultiGenerateJSONOut extends FutureObject {
+  /** A single output for `prompt`, or multiple outputs for `batch_prompts`. */
+  get outputs() {
+    return new MultiGenerateJSONOutOutputs(this._directive.next("outputs"));
   }
   /** returns the result for `MultiGenerateJSONOut` once it's node has been run. */
   protected override async result(): Promise<MultiGenerateJSONOut> {
@@ -806,15 +911,22 @@ export class Mistral7BInstructIn extends FutureObject {
   get num_choices() {
     return new FutureNumber(this._directive.next("num_choices"));
   }
-  /** (Optional) JSON schema to guide response. */
+  /** JSON schema to guide response. */
   get json_schema() {
     return new FutureAnyObject(this._directive.next("json_schema"));
   }
-  /** (Optional) Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic. */
+
+  /** Batch input prompts. */
+  get batch_prompts() {
+    return new Mistral7BInstructInBatchPrompts(
+      this._directive.next("batch_prompts"),
+    );
+  }
+  /** Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic. */
   get temperature() {
     return new FutureNumber(this._directive.next("temperature"));
   }
-  /** (Optional) Maximum number of tokens to generate. */
+  /** Maximum number of tokens to generate. */
   get max_tokens() {
     return new FutureNumber(this._directive.next("max_tokens"));
   }
@@ -838,11 +950,22 @@ export class Mistral7BInstructChoice extends FutureObject {
     return super.result() as Promise<Mistral7BInstructChoice>;
   }
 }
-/** Mistral7BInstructOut */
-export class Mistral7BInstructOut extends FutureObject {
+/** Mistral7BInstructOutput */
+export class Mistral7BInstructOutput extends FutureObject {
   /** Response choices. */
   get choices() {
-    return new Mistral7BInstructOutChoices(this._directive.next("choices"));
+    return new Mistral7BInstructOutputChoices(this._directive.next("choices"));
+  }
+  /** returns the result for `Mistral7BInstructOutput` once it's node has been run. */
+  protected override async result(): Promise<Mistral7BInstructOutput> {
+    return super.result() as Promise<Mistral7BInstructOutput>;
+  }
+}
+/** Mistral7BInstructOut */
+export class Mistral7BInstructOut extends FutureObject {
+  /** A single output for `prompt`, or multiple outputs for `batch_prompts`. */
+  get outputs() {
+    return new Mistral7BInstructOutOutputs(this._directive.next("outputs"));
   }
   /** returns the result for `Mistral7BInstructOut` once it's node has been run. */
   protected override async result(): Promise<Mistral7BInstructOut> {
@@ -2552,9 +2675,9 @@ export namespace MultiGenerateText {
  */
 export class MultiGenerateText extends Node {
   /**
-   * Input arguments: `prompt`, `num_choices`, `temperature` (optional), `max_tokens` (optional), `node` (optional)
+   * Input arguments: `prompt` (optional), `batch_prompts` (optional), `num_choices` (optional), `temperature` (optional), `max_tokens` (optional), `node` (optional)
    *
-   * Output fields: `choices`
+   * Output fields: `outputs`
    *
    * https://www.substrate.run/nodes#MultiGenerateText
    */
@@ -2570,7 +2693,7 @@ export class MultiGenerateText extends Node {
   /**
    * Retrieve this node's output from a response.
    *
-   * Output fields: `choices`
+   * Output fields: `outputs`
    *
    * https://www.substrate.run/nodes#MultiGenerateText
    */
@@ -2587,7 +2710,7 @@ export class MultiGenerateText extends Node {
   /**
    * Future reference to this node's output.
    *
-   * Output fields: `choices`
+   * Output fields: `outputs`
    *
    * https://www.substrate.run/nodes#MultiGenerateText
    */
@@ -2688,9 +2811,9 @@ export namespace MultiGenerateJSON {
  */
 export class MultiGenerateJSON extends Node {
   /**
-   * Input arguments: `prompt`, `json_schema`, `num_choices`, `temperature` (optional), `max_tokens` (optional), `node` (optional)
+   * Input arguments: `prompt` (optional), `json_schema`, `batch_prompts` (optional), `num_choices` (optional), `temperature` (optional), `max_tokens` (optional), `node` (optional)
    *
-   * Output fields: `choices`
+   * Output fields: `outputs`
    *
    * https://www.substrate.run/nodes#MultiGenerateJSON
    */
@@ -2706,7 +2829,7 @@ export class MultiGenerateJSON extends Node {
   /**
    * Retrieve this node's output from a response.
    *
-   * Output fields: `choices`
+   * Output fields: `outputs`
    *
    * https://www.substrate.run/nodes#MultiGenerateJSON
    */
@@ -2723,7 +2846,7 @@ export class MultiGenerateJSON extends Node {
   /**
    * Future reference to this node's output.
    *
-   * Output fields: `choices`
+   * Output fields: `outputs`
    *
    * https://www.substrate.run/nodes#MultiGenerateJSON
    */
@@ -2828,9 +2951,9 @@ export namespace Mistral7BInstruct {
  */
 export class Mistral7BInstruct extends Node {
   /**
-   * Input arguments: `prompt`, `num_choices`, `json_schema` (optional), `temperature` (optional), `max_tokens` (optional)
+   * Input arguments: `prompt` (optional), `num_choices` (optional), `json_schema` (optional), `batch_prompts` (optional), `temperature` (optional), `max_tokens` (optional)
    *
-   * Output fields: `choices`
+   * Output fields: `outputs`
    *
    * https://www.substrate.run/nodes#Mistral7BInstruct
    */
@@ -2846,7 +2969,7 @@ export class Mistral7BInstruct extends Node {
   /**
    * Retrieve this node's output from a response.
    *
-   * Output fields: `choices`
+   * Output fields: `outputs`
    *
    * https://www.substrate.run/nodes#Mistral7BInstruct
    */
@@ -2863,7 +2986,7 @@ export class Mistral7BInstruct extends Node {
   /**
    * Future reference to this node's output.
    *
-   * Output fields: `choices`
+   * Output fields: `outputs`
    *
    * https://www.substrate.run/nodes#Mistral7BInstruct
    */

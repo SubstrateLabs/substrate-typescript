@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Substrate API",
-    "version": "2024-04-11",
+    "version": "2024-04-16",
     "contact": {
       "email": "support@substrate.run"
     },
@@ -128,6 +128,13 @@
             "type": "string",
             "description": "Input prompt."
           },
+          "batch_prompts": {
+            "description": "Batch input prompts.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
           "num_choices": {
             "type": "integer",
             "description": "Number of choices to generate.",
@@ -154,10 +161,10 @@
             "default": "Mistral7BInstruct"
           }
         },
-        "required": ["prompt", "num_choices"]
+        "required": []
       },
-      "MultiGenerateTextOut": {
-        "title": "MultiGenerateTextOut",
+      "MultiGenerateTextOutput": {
+        "title": "MultiGenerateTextOutput",
         "type": "object",
         "properties": {
           "choices": {
@@ -169,6 +176,20 @@
           }
         },
         "required": ["choices"]
+      },
+      "MultiGenerateTextOut": {
+        "title": "MultiGenerateTextOut",
+        "type": "object",
+        "properties": {
+          "outputs": {
+            "type": "array",
+            "description": "A single output for `prompt`, or multiple outputs for `batch_prompts`.",
+            "items": {
+              "$ref": "#/components/schemas/MultiGenerateTextOutput"
+            }
+          }
+        },
+        "required": ["outputs"]
       },
       "MultiGenerateJSONIn": {
         "title": "MultiGenerateJSONIn",
@@ -182,6 +203,13 @@
             "type": "object",
             "description": "JSON schema to guide `json_object` response.",
             "additionalProperties": true
+          },
+          "batch_prompts": {
+            "description": "Batch input prompts.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           },
           "num_choices": {
             "type": "integer",
@@ -209,10 +237,10 @@
             "default": "Mistral7BInstruct"
           }
         },
-        "required": ["prompt", "json_schema", "num_choices"]
+        "required": ["json_schema"]
       },
-      "MultiGenerateJSONOut": {
-        "title": "MultiGenerateJSONOut",
+      "MultiGenerateJSONOutput": {
+        "title": "MultiGenerateJSONOutput",
         "type": "object",
         "properties": {
           "choices": {
@@ -224,6 +252,20 @@
           }
         },
         "required": ["choices"]
+      },
+      "MultiGenerateJSONOut": {
+        "title": "MultiGenerateJSONOut",
+        "type": "object",
+        "properties": {
+          "outputs": {
+            "type": "array",
+            "description": "A single output for `prompt`, or multiple outputs for `batch_prompts`.",
+            "items": {
+              "$ref": "#/components/schemas/MultiGenerateJSONOutput"
+            }
+          }
+        },
+        "required": ["outputs"]
       },
       "Mistral7BInstructIn": {
         "title": "Mistral7BInstructIn",
@@ -245,6 +287,13 @@
             "description": "JSON schema to guide response.",
             "additionalProperties": true
           },
+          "batch_prompts": {
+            "description": "Batch input prompts.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
           "temperature": {
             "type": "number",
             "format": "float",
@@ -257,7 +306,7 @@
             "description": "Maximum number of tokens to generate."
           }
         },
-        "required": ["prompt", "num_choices"]
+        "required": []
       },
       "Mistral7BInstructChoice": {
         "title": "Mistral7BInstructChoice",
@@ -274,8 +323,8 @@
           }
         }
       },
-      "Mistral7BInstructOut": {
-        "title": "Mistral7BInstructOut",
+      "Mistral7BInstructOutput": {
+        "title": "Mistral7BInstructOutput",
         "type": "object",
         "properties": {
           "choices": {
@@ -287,6 +336,20 @@
           }
         },
         "required": ["choices"]
+      },
+      "Mistral7BInstructOut": {
+        "title": "Mistral7BInstructOut",
+        "type": "object",
+        "properties": {
+          "outputs": {
+            "type": "array",
+            "description": "A single output for `prompt`, or multiple outputs for `batch_prompts`.",
+            "items": {
+              "$ref": "#/components/schemas/Mistral7BInstructOutput"
+            }
+          }
+        },
+        "required": ["outputs"]
       },
       "GenerateTextVisionIn": {
         "title": "GenerateTextVisionIn",
@@ -469,14 +532,14 @@
           "height": {
             "type": "integer",
             "description": "Height of output image, in pixels.",
-            "minimum": 640,
+            "minimum": 256,
             "maximum": 1536,
             "default": 1024
           },
           "width": {
             "type": "integer",
             "description": "Width of output image, in pixels.",
-            "minimum": 640,
+            "minimum": 256,
             "maximum": 1536,
             "default": 1024
           },
@@ -553,14 +616,14 @@
           "height": {
             "type": "integer",
             "description": "Height of output image, in pixels.",
-            "minimum": 640,
+            "minimum": 256,
             "maximum": 1536,
             "default": 1024
           },
           "width": {
             "type": "integer",
             "description": "Width of output image, in pixels.",
-            "minimum": 640,
+            "minimum": 256,
             "maximum": 1536,
             "default": 1024
           },
@@ -2220,12 +2283,16 @@
                   "$ref": "#/components/schemas/MultiGenerateTextOut"
                 },
                 "example": {
-                  "choices": [
+                  "outputs": [
                     {
-                      "text": "Don Quixote is a fictional character and the protagonist of the novel Don Quixote by Miguel..."
-                    },
-                    {
-                      "text": "Don Quixote is a fictional character created by the Spanish author Miguel de Cervantes..."
+                      "choices": [
+                        {
+                          "text": "Don Quixote is a fictional character and the protagonist of the novel Don Quixote by Miguel..."
+                        },
+                        {
+                          "text": "Don Quixote is a fictional character created by the Spanish author Miguel de Cervantes..."
+                        }
+                      ]
                     }
                   ]
                 }
@@ -2328,12 +2395,16 @@
                   "$ref": "#/components/schemas/MultiGenerateJSONOut"
                 },
                 "example": {
-                  "choices": [
+                  "outputs": [
                     {
-                      "json_object": {}
-                    },
-                    {
-                      "json_object": {}
+                      "choices": [
+                        {
+                          "json_object": {}
+                        },
+                        {
+                          "json_object": {}
+                        }
+                      ]
                     }
                   ]
                 }
@@ -2416,12 +2487,16 @@
                   "$ref": "#/components/schemas/Mistral7BInstructOut"
                 },
                 "example": {
-                  "choices": [
+                  "outputs": [
                     {
-                      "text": "Don Quixote is a fictional character and the protagonist of the novel Don Quixote by Miguel..."
-                    },
-                    {
-                      "text": "Don Quixote is a fictional character created by the Spanish author Miguel de Cervantes..."
+                      "choices": [
+                        {
+                          "text": "Don Quixote is a fictional character and the protagonist of the novel Don Quixote by Miguel..."
+                        },
+                        {
+                          "text": "Don Quixote is a fictional character created by the Spanish author Miguel de Cervantes..."
+                        }
+                      ]
                     }
                   ]
                 }
