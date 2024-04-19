@@ -63,6 +63,10 @@ export class Substrate {
 
   /**
    *  Run the given nodes.
+   *
+   *  @throws {SubstrateError} when the request has returned an error.
+   *  @throws {RequestTimeoutError} when the client has timed out (Configured by `Substrate.timeout`).
+   *  @throws {Error} when the request has failed.
    */
   async run(...nodes: Node[]): Promise<SubstrateResponse> {
     const url = this.baseUrl + "/compose";

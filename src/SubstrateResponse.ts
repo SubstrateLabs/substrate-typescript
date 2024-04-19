@@ -22,7 +22,9 @@ export class SubstrateResponse {
   }
 
   /**
-   * Returns the result for given `Node`
+   * Returns the result for given `Node`.
+   *
+   *  @throws {NodeError} when there was an error running the node.
    */
   get<T extends AnyNode>(node: T): NodeOutput<T> {
     const err = this.getError(node);
