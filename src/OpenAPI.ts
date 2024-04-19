@@ -324,7 +324,7 @@ export interface components {
     /** GenerateTextOut */
     GenerateTextOut: {
       /** @description Text response. */
-      text?: string;
+      text: string;
     };
     /** GenerateJSONIn */
     GenerateJSONIn: {
@@ -352,7 +352,7 @@ export interface components {
     /** GenerateJSONOut */
     GenerateJSONOut: {
       /** @description JSON response. */
-      json_object?: {
+      json_object: {
         [key: string]: unknown;
       };
     };
@@ -387,7 +387,7 @@ export interface components {
       /** @description Response choices. */
       choices: {
         /** @description Text response. */
-        text?: string;
+        text: string;
       }[];
     };
     /** MultiGenerateTextOut */
@@ -397,7 +397,7 @@ export interface components {
         /** @description Response choices. */
         choices: {
           /** @description Text response. */
-          text?: string;
+          text: string;
         }[];
       }[];
     };
@@ -436,7 +436,7 @@ export interface components {
       /** @description Response choices. */
       choices: {
         /** @description JSON response. */
-        json_object?: {
+        json_object: {
           [key: string]: unknown;
         };
       }[];
@@ -448,7 +448,7 @@ export interface components {
         /** @description Response choices. */
         choices: {
           /** @description JSON response. */
-          json_object?: {
+          json_object: {
             [key: string]: unknown;
           };
         }[];
@@ -1829,7 +1829,7 @@ export interface operations {
         content: {
           "application/json": {
             /** @description Text response. */
-            text?: string;
+            text: string;
           };
         };
       };
@@ -1886,7 +1886,7 @@ export interface operations {
               /** @description Response choices. */
               choices: {
                 /** @description Text response. */
-                text?: string;
+                text: string;
               }[];
             }[];
           };
@@ -1951,7 +1951,7 @@ export interface operations {
         content: {
           "application/json": {
             /** @description JSON response. */
-            json_object?: {
+            json_object: {
               [key: string]: unknown;
             };
           };
@@ -2028,7 +2028,7 @@ export interface operations {
               /** @description Response choices. */
               choices: {
                 /** @description JSON response. */
-                json_object?: {
+                json_object: {
                   [key: string]: unknown;
                 };
               }[];

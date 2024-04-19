@@ -73,7 +73,8 @@
             "type": "string",
             "description": "Text response."
           }
-        }
+        },
+        "required": ["text"]
       },
       "GenerateJSONIn": {
         "title": "GenerateJSONIn",
@@ -118,7 +119,8 @@
             "description": "JSON response.",
             "additionalProperties": true
           }
-        }
+        },
+        "required": ["json_object"]
       },
       "MultiGenerateTextIn": {
         "title": "MultiGenerateTextIn",
