@@ -86,11 +86,12 @@ export class Substrate {
     const timeout = setTimeout(() => abortController.abort(), this.timeout);
 
     try {
-      const apiResponse = await fetch(url, this.requestOptions(req, signal));
+      const request = new Request(url, this.requestOptions(req, signal));
+      const apiResponse = await fetch(request);
 
       if (apiResponse.ok) {
         const json = await apiResponse.json();
-        const res = new SubstrateResponse(apiResponse, json);
+        const res = new SubstrateResponse(request, apiResponse, json);
         // @ts-expect-error (accessing protected)
         for (let node of nodes) node.response = res;
 

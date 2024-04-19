@@ -5,12 +5,18 @@ import { NodeError } from "substrate/Error";
  * Response to a run request.
  */
 export class SubstrateResponse {
+  public apiRequest: Request;
   public apiResponse: Response;
   public json: any;
 
-  constructor(response: Response, json: any = null) {
+  constructor(request: Request, response: Response, json: any = null) {
+    this.apiRequest = request;
     this.apiResponse = response;
     this.json = json;
+  }
+
+  get requestId() {
+    return this.apiResponse.headers.get("cf-ray");
   }
 
   /**
