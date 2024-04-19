@@ -27,17 +27,23 @@ type Configuration = {
    * Switches between existing backend and newer backend
    */
   backend?: "v0" | "v1";
+
+  /**
+   * Add additional headers to each request. These may override headers set by the Substrate client.
+   */
+  additionalHeaders?: Record<string, string>;
 };
 
 /**
  * [docs/introduction](https://docs.substrate.run)
  */
 export class Substrate {
-  apiKey: string | undefined;
-  baseUrl: string;
-  apiVersion: string;
-  timeout: number;
-  backend: string;
+  apiKey: Configuration["apiKey"];
+  baseUrl: NonNullable<Configuration["baseUrl"]>;
+  apiVersion: NonNullable<Configuration["apiVersion"]>;
+  timeout: NonNullable<Configuration["timeout"]>;
+  backend: NonNullable<Configuration["backend"]>;
+  additionalHeaders: NonNullable<Configuration["additionalHeaders"]>;
 
   /**
    * Initialize the Substrate SDK.
@@ -48,6 +54,7 @@ export class Substrate {
     apiVersion,
     timeout,
     backend,
+    additionalHeaders,
   }: Configuration) {
     if (!apiKey) {
       console.warn(
@@ -59,6 +66,7 @@ export class Substrate {
     this.apiVersion = apiVersion ?? OpenAPIjson["info"]["version"];
     this.timeout = timeout ?? 300000;
     this.backend = backend ?? "v0";
+    this.additionalHeaders = additionalHeaders ?? {};
   }
 
   /**
@@ -151,6 +159,11 @@ export class Substrate {
     headers.append("X-Substrate-Arch", props.arch);
     headers.append("X-Substrate-Runtime", props.runtime);
     headers.append("X-Substrate-Runtime-Version", props.runtimeVersion);
+
+    // User-Provided
+    for (const [name, value] of Object.entries(this.additionalHeaders)) {
+      headers.append(name, value);
+    }
 
     return headers;
   }
