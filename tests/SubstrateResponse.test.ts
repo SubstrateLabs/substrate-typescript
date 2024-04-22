@@ -1,3 +1,6 @@
+// including polyfill for node16 support
+import "substrate/nodejs/polyfill";
+
 import { expect, describe, test } from "vitest";
 import { SubstrateResponse } from "substrate/SubstrateResponse";
 import { Node } from "substrate/Node";
