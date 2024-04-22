@@ -48,7 +48,11 @@ describe("SubstrateResponse", () => {
     // @ts-expect-error (accessing protected)
     node.response = sbResponse;
 
-    const nodeError = new NodeError("error_type", "error_message", "error_request_id");
+    const nodeError = new NodeError(
+      "error_type",
+      "error_message",
+      "error_request_id",
+    );
 
     // @ts-expect-error: the type AnyNode here should be expanded to encompass all Node instances, but it isn't yet.
     expect(sbResponse.getError(node)).toEqual(nodeError);
