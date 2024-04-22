@@ -3,11 +3,13 @@ import { Substrate } from "substrate/Substrate";
 import { Node } from "substrate/Node";
 import { sb } from "substrate/sb";
 
+class FooNode extends Node {}
+
 describe("Substrate", () => {
   describe(".serialize", () => {
     test("when there are nodes and futures", () => {
-      const a = new Node({ a: 123 });
-      const b = new Node({ b: a.future.get("x"), c: sb.concat("x", "y") });
+      const a = new FooNode({ a: 123 });
+      const b = new FooNode({ b: a.future.get("x"), c: sb.concat("x", "y") });
 
       const result = Substrate.serialize(a, b);
 
@@ -16,7 +18,7 @@ describe("Substrate", () => {
         initial_args: {},
         nodes: [
           {
-            node: "Node",
+            node: "FooNode",
             id: a.id,
             args: {
               a: 123,
@@ -24,7 +26,7 @@ describe("Substrate", () => {
             _should_output_globally: true,
           },
           {
-            node: "Node",
+            node: "FooNode",
             id: b.id,
             args: {
               b: {
