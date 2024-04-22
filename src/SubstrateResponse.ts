@@ -5,7 +5,7 @@ import { NodeError } from "substrate/Error";
  * Response to a run request.
  */
 export class SubstrateResponse {
-  public apiRequest: Request;
+  // public apiRequest: Request;
   public apiResponse: Response;
   public json: any;
 
@@ -15,9 +15,9 @@ export class SubstrateResponse {
     this.json = json;
   }
 
-  get requestId() {
-    return this.apiResponse.headers.get("cf-ray");
-  }
+  // get requestId() {
+  //   return this.apiResponse.headers.get("cf-ray");
+  // }
 
   /**
    * Returns an error from the `Node` if there was one.
