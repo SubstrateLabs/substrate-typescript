@@ -4,6 +4,7 @@ import OpenAPIjson from "substrate/openapi.json";
 import { SubstrateResponse } from "substrate/SubstrateResponse";
 import { Node } from "substrate/Node";
 import { getPlatformProperties } from "substrate/Platform";
+import { deflate } from "pako";
 
 type Configuration = {
   /**
@@ -155,11 +156,17 @@ export class Substrate {
    */
   static visualize(...nodes: Node[]): string {
     const serialized = this.serialize(...nodes);
-    const encodedJson = Buffer.from(JSON.stringify(serialized)).toString(
-      "base64",
-    );
-    const baseURL = "https://explore.substrate.run/b64/";
-    return baseURL + encodedJson;
+    const compressed = deflate(JSON.stringify(serialized), {
+      level: 9,
+    });
+    const numArray = Array.from(compressed);
+    const base64 = btoa(String.fromCharCode.apply(null, numArray));
+    const urlEncoded = base64
+      .replace(/\+/g, "-")
+      .replace(/\//g, "_")
+      .replace(/=+$/, "");
+    const baseURL = "https://explore.substrate.run/g/";
+    return baseURL + urlEncoded;
   }
 
   protected requestOptions(body: any, signal: AbortSignal) {
