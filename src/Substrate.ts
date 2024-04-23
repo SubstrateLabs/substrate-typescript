@@ -77,8 +77,23 @@ export class Substrate {
    *  @throws {Error} when the client encounters an error making the request.
    */
   async run(...nodes: Node[]): Promise<SubstrateResponse> {
+    const serialized = Substrate.serialize(...nodes);
+    return this.runSerialized(serialized, nodes);
+  }
+
+  /**
+   *  Run the given nodes, serialized using `Substrate.serialize`.
+   *
+   *  @throws {SubstrateError} when the server response is an error.
+   *  @throws {RequestTimeoutError} when the client has timed out (Configured by `Substrate.timeout`).
+   *  @throws {Error} when the client encounters an error making the request.
+   */
+  async runSerialized(
+    serialized: any,
+    nodes: Node[] | null = null,
+  ): Promise<SubstrateResponse> {
     const url = this.baseUrl + "/compose";
-    const req = { dag: Substrate.serialize(...nodes) };
+    const req = { dag: serialized };
     // NOTE: we're creating the signal this way instead of AbortController.timeout because it is only very
     // recently available on some environments, so this is a bit more supported.
     const abortController = new AbortController();
@@ -92,8 +107,11 @@ export class Substrate {
       if (apiResponse.ok) {
         const json = await apiResponse.json();
         const res = new SubstrateResponse(request, apiResponse, json);
-        // @ts-expect-error (accessing protected)
-        for (let node of nodes) node.response = res;
+        /** TODO stop setting output on node */
+        if (nodes) {
+          // @ts-expect-error (accessing protected)
+          for (let node of nodes) node.response = res;
+        }
 
         return res;
       } else {
@@ -130,6 +148,18 @@ export class Substrate {
       edges: [], // @deprecated
       initial_args: {}, // @deprecated
     };
+  }
+
+  /**
+   *  Returns a url to visualize the given nodes.
+   */
+  static visualize(...nodes: Node[]): string {
+    const serialized = this.serialize(...nodes);
+    const encodedJson = Buffer.from(JSON.stringify(serialized)).toString(
+      "base64",
+    );
+    const baseURL = "https://explore.substrate.run/b64/";
+    return baseURL + encodedJson;
   }
 
   protected requestOptions(body: any, signal: AbortSignal) {
