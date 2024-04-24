@@ -165,7 +165,7 @@ export class Substrate {
       .replace(/\+/g, "-")
       .replace(/\//g, "_")
       .replace(/=+$/, "");
-    const baseURL = "https://explore.substrate.run/g/";
+    const baseURL = "https://explore.substrate.run/s/";
     return baseURL + urlEncoded;
   }
 
