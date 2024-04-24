@@ -557,8 +557,8 @@ async function main() {
     // const except = []
     // if (except.includes(node.node)) continue;
 
-    const only = ["GenerateJSON"];
-    if (!only.includes(node.node)) continue;
+    // const only = ["GenerateJSON"];
+    // if (!only.includes(node.node)) continue;
 
     if (envs.length === 0) {
       warn(node.node, "Not enabled for any env.");
