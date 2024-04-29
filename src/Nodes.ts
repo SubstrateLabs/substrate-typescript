@@ -1,14 +1,13 @@
 /**
  * ꩜ Substrate
  * @generated file
- * 20240416.20240418
+ * 20240416.20240419
  */
 
 import * as OpenAPI from "substrate/OpenAPI";
 import { Node, Options } from "substrate/Node";
 import {
   Trace,
-  Future,
   FutureString,
   FutureNumber,
   FutureBoolean,
@@ -17,42 +16,32 @@ import {
   FutureAnyObject,
 } from "substrate/Future";
 
-// Type that extends some other type T (recursively) and expands it to also accept our
-// Future types too.
-//
-// For example, if a `string` is found it will be changed to `string | FutureString`.
-//
-// There may still be some edge cases here, so this will also allow for any `Future` when it makes sense.
-type AlsoAcceptFutures<T> = T extends (infer U)[][]
-  ? U extends string[]
-    ? FutureString[][]
-    : U extends number[]
-      ? FutureNumber[][]
-      : U extends boolean[]
-        ? FutureBoolean[][]
-        : Future[][] | FutureArray[]
-  : T extends (infer U)[]
-    ? U extends string
-      ? FutureString[]
-      : U extends number
-        ? FutureNumber[]
-        : U extends boolean
-          ? FutureBoolean[]
-          : Future[]
-    : T extends object
-      ? {
-          [P in keyof T]:
-            | AlsoAcceptFutures<T[P]>
-            | (T[P] extends string
-                ? FutureString
-                : T[P] extends number
-                  ? FutureNumber
-                  : T[P] extends boolean
-                    ? FutureBoolean
-                    : Future)
-            | T[P];
-        }
+// The following type helpers are used to "expand" Node input types to allow them to also accept
+// instances of their corresponding "Future" types.
+
+type FutureExpandScalar<T> = T extends string
+  ? string | FutureString
+  : T extends number
+    ? number | FutureNumber
+    : T extends boolean
+      ? boolean | FutureBoolean
       : T;
+
+type FutureExpandObject<T> = T extends object
+  ? { [P in keyof T]: FutureExpandAny<T[P]> } | FutureObject
+  : T;
+
+type FutureExpandArray<T> = T extends (infer U)[]
+  ? FutureExpandAny<U>[] | FutureArray
+  : FutureExpandAny<T>;
+
+type FutureExpandAny<T> = T extends (infer U)[][]
+  ? FutureExpandArray<U>[][] | FutureArray[]
+  : T extends (infer U)[]
+    ? FutureExpandArray<U>[] | FutureArray
+    : T extends object
+      ? FutureExpandObject<T>
+      : FutureExpandScalar<T>;
 
 export class GenerateJSONInJsonSchema extends FutureAnyObject {}
 export class GenerateJSONOutJsonObject extends FutureAnyObject {}
@@ -2591,7 +2580,7 @@ export namespace GenerateText {
    * GenerateText Input
    * https://www.substrate.run/nodes#GenerateText
    */
-  export type Input = AlsoAcceptFutures<
+  export type Input = FutureExpandAny<
     OpenAPI.components["schemas"]["GenerateTextIn"]
   >;
 
@@ -2611,12 +2600,12 @@ export class GenerateText extends Node {
   /**
    * Input arguments: `prompt`, `temperature` (optional), `max_tokens` (optional), `node` (optional)
    *
-   * Output fields: `text` (optional)
+   * Output fields: `text`
    *
    * https://www.substrate.run/nodes#GenerateText
    */
   constructor(
-    args: AlsoAcceptFutures<OpenAPI.components["schemas"]["GenerateTextIn"]>,
+    args: FutureExpandAny<OpenAPI.components["schemas"]["GenerateTextIn"]>,
     options?: Options,
   ) {
     super(args, options);
@@ -2625,7 +2614,7 @@ export class GenerateText extends Node {
   /**
    * Retrieve this node's output from a response.
    *
-   * Output fields: `text` (optional)
+   * Output fields: `text`
    *
    * https://www.substrate.run/nodes#GenerateText
    */
@@ -2640,7 +2629,7 @@ export class GenerateText extends Node {
   /**
    * Future reference to this node's output.
    *
-   * Output fields: `text` (optional)
+   * Output fields: `text`
    *
    * https://www.substrate.run/nodes#GenerateText
    */
@@ -2657,7 +2646,7 @@ export namespace MultiGenerateText {
    * MultiGenerateText Input
    * https://www.substrate.run/nodes#MultiGenerateText
    */
-  export type Input = AlsoAcceptFutures<
+  export type Input = FutureExpandAny<
     OpenAPI.components["schemas"]["MultiGenerateTextIn"]
   >;
 
@@ -2682,9 +2671,7 @@ export class MultiGenerateText extends Node {
    * https://www.substrate.run/nodes#MultiGenerateText
    */
   constructor(
-    args: AlsoAcceptFutures<
-      OpenAPI.components["schemas"]["MultiGenerateTextIn"]
-    >,
+    args: FutureExpandAny<OpenAPI.components["schemas"]["MultiGenerateTextIn"]>,
     options?: Options,
   ) {
     super(args, options);
@@ -2727,7 +2714,7 @@ export namespace GenerateJSON {
    * GenerateJSON Input
    * https://www.substrate.run/nodes#GenerateJSON
    */
-  export type Input = AlsoAcceptFutures<
+  export type Input = FutureExpandAny<
     OpenAPI.components["schemas"]["GenerateJSONIn"]
   >;
 
@@ -2747,12 +2734,12 @@ export class GenerateJSON extends Node {
   /**
    * Input arguments: `prompt`, `json_schema`, `temperature` (optional), `max_tokens` (optional), `node` (optional)
    *
-   * Output fields: `json_object` (optional)
+   * Output fields: `json_object`
    *
    * https://www.substrate.run/nodes#GenerateJSON
    */
   constructor(
-    args: AlsoAcceptFutures<OpenAPI.components["schemas"]["GenerateJSONIn"]>,
+    args: FutureExpandAny<OpenAPI.components["schemas"]["GenerateJSONIn"]>,
     options?: Options,
   ) {
     super(args, options);
@@ -2761,7 +2748,7 @@ export class GenerateJSON extends Node {
   /**
    * Retrieve this node's output from a response.
    *
-   * Output fields: `json_object` (optional)
+   * Output fields: `json_object`
    *
    * https://www.substrate.run/nodes#GenerateJSON
    */
@@ -2776,7 +2763,7 @@ export class GenerateJSON extends Node {
   /**
    * Future reference to this node's output.
    *
-   * Output fields: `json_object` (optional)
+   * Output fields: `json_object`
    *
    * https://www.substrate.run/nodes#GenerateJSON
    */
@@ -2793,7 +2780,7 @@ export namespace MultiGenerateJSON {
    * MultiGenerateJSON Input
    * https://www.substrate.run/nodes#MultiGenerateJSON
    */
-  export type Input = AlsoAcceptFutures<
+  export type Input = FutureExpandAny<
     OpenAPI.components["schemas"]["MultiGenerateJSONIn"]
   >;
 
@@ -2818,9 +2805,7 @@ export class MultiGenerateJSON extends Node {
    * https://www.substrate.run/nodes#MultiGenerateJSON
    */
   constructor(
-    args: AlsoAcceptFutures<
-      OpenAPI.components["schemas"]["MultiGenerateJSONIn"]
-    >,
+    args: FutureExpandAny<OpenAPI.components["schemas"]["MultiGenerateJSONIn"]>,
     options?: Options,
   ) {
     super(args, options);
@@ -2863,7 +2848,7 @@ export namespace GenerateTextVision {
    * GenerateTextVision Input
    * https://www.substrate.run/nodes#GenerateTextVision
    */
-  export type Input = AlsoAcceptFutures<
+  export type Input = FutureExpandAny<
     OpenAPI.components["schemas"]["GenerateTextVisionIn"]
   >;
 
@@ -2888,7 +2873,7 @@ export class GenerateTextVision extends Node {
    * https://www.substrate.run/nodes#GenerateTextVision
    */
   constructor(
-    args: AlsoAcceptFutures<
+    args: FutureExpandAny<
       OpenAPI.components["schemas"]["GenerateTextVisionIn"]
     >,
     options?: Options,
@@ -2933,7 +2918,7 @@ export namespace Mistral7BInstruct {
    * Mistral7BInstruct Input
    * https://www.substrate.run/nodes#Mistral7BInstruct
    */
-  export type Input = AlsoAcceptFutures<
+  export type Input = FutureExpandAny<
     OpenAPI.components["schemas"]["Mistral7BInstructIn"]
   >;
 
@@ -2958,9 +2943,7 @@ export class Mistral7BInstruct extends Node {
    * https://www.substrate.run/nodes#Mistral7BInstruct
    */
   constructor(
-    args: AlsoAcceptFutures<
-      OpenAPI.components["schemas"]["Mistral7BInstructIn"]
-    >,
+    args: FutureExpandAny<OpenAPI.components["schemas"]["Mistral7BInstructIn"]>,
     options?: Options,
   ) {
     super(args, options);
@@ -3003,7 +2986,7 @@ export namespace Firellava13B {
    * Firellava13B Input
    * https://www.substrate.run/nodes#Firellava13B
    */
-  export type Input = AlsoAcceptFutures<
+  export type Input = FutureExpandAny<
     OpenAPI.components["schemas"]["Firellava13BIn"]
   >;
 
@@ -3028,7 +3011,7 @@ export class Firellava13B extends Node {
    * https://www.substrate.run/nodes#Firellava13B
    */
   constructor(
-    args: AlsoAcceptFutures<OpenAPI.components["schemas"]["Firellava13BIn"]>,
+    args: FutureExpandAny<OpenAPI.components["schemas"]["Firellava13BIn"]>,
     options?: Options,
   ) {
     super(args, options);
@@ -3069,7 +3052,7 @@ export namespace GenerateImage {
    * GenerateImage Input
    * https://www.substrate.run/nodes#GenerateImage
    */
-  export type Input = AlsoAcceptFutures<
+  export type Input = FutureExpandAny<
     OpenAPI.components["schemas"]["GenerateImageIn"]
   >;
 
@@ -3094,7 +3077,7 @@ export class GenerateImage extends Node {
    * https://www.substrate.run/nodes#GenerateImage
    */
   constructor(
-    args: AlsoAcceptFutures<OpenAPI.components["schemas"]["GenerateImageIn"]>,
+    args: FutureExpandAny<OpenAPI.components["schemas"]["GenerateImageIn"]>,
     options?: Options,
   ) {
     super(args, options);
@@ -3135,7 +3118,7 @@ export namespace MultiGenerateImage {
    * MultiGenerateImage Input
    * https://www.substrate.run/nodes#MultiGenerateImage
    */
-  export type Input = AlsoAcceptFutures<
+  export type Input = FutureExpandAny<
     OpenAPI.components["schemas"]["MultiGenerateImageIn"]
   >;
 
@@ -3160,7 +3143,7 @@ export class MultiGenerateImage extends Node {
    * https://www.substrate.run/nodes#MultiGenerateImage
    */
   constructor(
-    args: AlsoAcceptFutures<
+    args: FutureExpandAny<
       OpenAPI.components["schemas"]["MultiGenerateImageIn"]
     >,
     options?: Options,
@@ -3205,7 +3188,7 @@ export namespace GenerativeEditImage {
    * GenerativeEditImage Input
    * https://www.substrate.run/nodes#GenerativeEditImage
    */
-  export type Input = AlsoAcceptFutures<
+  export type Input = FutureExpandAny<
     OpenAPI.components["schemas"]["GenerativeEditImageIn"]
   >;
 
@@ -3230,7 +3213,7 @@ export class GenerativeEditImage extends Node {
    * https://www.substrate.run/nodes#GenerativeEditImage
    */
   constructor(
-    args: AlsoAcceptFutures<
+    args: FutureExpandAny<
       OpenAPI.components["schemas"]["GenerativeEditImageIn"]
     >,
     options?: Options,
@@ -3275,7 +3258,7 @@ export namespace MultiGenerativeEditImage {
    * MultiGenerativeEditImage Input
    * https://www.substrate.run/nodes#MultiGenerativeEditImage
    */
-  export type Input = AlsoAcceptFutures<
+  export type Input = FutureExpandAny<
     OpenAPI.components["schemas"]["MultiGenerativeEditImageIn"]
   >;
 
@@ -3301,7 +3284,7 @@ export class MultiGenerativeEditImage extends Node {
    * https://www.substrate.run/nodes#MultiGenerativeEditImage
    */
   constructor(
-    args: AlsoAcceptFutures<
+    args: FutureExpandAny<
       OpenAPI.components["schemas"]["MultiGenerativeEditImageIn"]
     >,
     options?: Options,
@@ -3346,7 +3329,7 @@ export namespace StableDiffusionXL {
    * StableDiffusionXL Input
    * https://www.substrate.run/nodes#StableDiffusionXL
    */
-  export type Input = AlsoAcceptFutures<
+  export type Input = FutureExpandAny<
     OpenAPI.components["schemas"]["StableDiffusionXLIn"]
   >;
 
@@ -3371,9 +3354,7 @@ export class StableDiffusionXL extends Node {
    * https://www.substrate.run/nodes#StableDiffusionXL
    */
   constructor(
-    args: AlsoAcceptFutures<
-      OpenAPI.components["schemas"]["StableDiffusionXLIn"]
-    >,
+    args: FutureExpandAny<OpenAPI.components["schemas"]["StableDiffusionXLIn"]>,
     options?: Options,
   ) {
     super(args, options);
@@ -3416,7 +3397,7 @@ export namespace StableDiffusionXLLightning {
    * StableDiffusionXLLightning Input
    * https://www.substrate.run/nodes#StableDiffusionXLLightning
    */
-  export type Input = AlsoAcceptFutures<
+  export type Input = FutureExpandAny<
     OpenAPI.components["schemas"]["StableDiffusionXLLightningIn"]
   >;
 
@@ -3442,7 +3423,7 @@ export class StableDiffusionXLLightning extends Node {
    * https://www.substrate.run/nodes#StableDiffusionXLLightning
    */
   constructor(
-    args: AlsoAcceptFutures<
+    args: FutureExpandAny<
       OpenAPI.components["schemas"]["StableDiffusionXLLightningIn"]
     >,
     options?: Options,
@@ -3487,7 +3468,7 @@ export namespace StableDiffusionXLInpaint {
    * StableDiffusionXLInpaint Input
    * https://www.substrate.run/nodes#StableDiffusionXLInpaint
    */
-  export type Input = AlsoAcceptFutures<
+  export type Input = FutureExpandAny<
     OpenAPI.components["schemas"]["StableDiffusionXLInpaintIn"]
   >;
 
@@ -3513,7 +3494,7 @@ export class StableDiffusionXLInpaint extends Node {
    * https://www.substrate.run/nodes#StableDiffusionXLInpaint
    */
   constructor(
-    args: AlsoAcceptFutures<
+    args: FutureExpandAny<
       OpenAPI.components["schemas"]["StableDiffusionXLInpaintIn"]
     >,
     options?: Options,
@@ -3558,7 +3539,7 @@ export namespace StableDiffusionXLControlNet {
    * StableDiffusionXLControlNet Input
    * https://www.substrate.run/nodes#StableDiffusionXLControlNet
    */
-  export type Input = AlsoAcceptFutures<
+  export type Input = FutureExpandAny<
     OpenAPI.components["schemas"]["StableDiffusionXLControlNetIn"]
   >;
 
@@ -3584,7 +3565,7 @@ export class StableDiffusionXLControlNet extends Node {
    * https://www.substrate.run/nodes#StableDiffusionXLControlNet
    */
   constructor(
-    args: AlsoAcceptFutures<
+    args: FutureExpandAny<
       OpenAPI.components["schemas"]["StableDiffusionXLControlNetIn"]
     >,
     options?: Options,
@@ -3630,7 +3611,7 @@ export namespace StableDiffusionXLIPAdapter {
    * StableDiffusionXLIPAdapter Input
    * https://www.substrate.run/nodes#StableDiffusionXLIPAdapter
    */
-  export type Input = AlsoAcceptFutures<
+  export type Input = FutureExpandAny<
     OpenAPI.components["schemas"]["StableDiffusionXLIPAdapterIn"]
   >;
 
@@ -3656,7 +3637,7 @@ export class StableDiffusionXLIPAdapter extends Node {
    * https://www.substrate.run/nodes#StableDiffusionXLIPAdapter
    */
   constructor(
-    args: AlsoAcceptFutures<
+    args: FutureExpandAny<
       OpenAPI.components["schemas"]["StableDiffusionXLIPAdapterIn"]
     >,
     options?: Options,
@@ -3701,7 +3682,7 @@ export namespace TranscribeMedia {
    * TranscribeMedia Input
    * https://www.substrate.run/nodes#TranscribeMedia
    */
-  export type Input = AlsoAcceptFutures<
+  export type Input = FutureExpandAny<
     OpenAPI.components["schemas"]["TranscribeMediaIn"]
   >;
 
@@ -3726,7 +3707,7 @@ export class TranscribeMedia extends Node {
    * https://www.substrate.run/nodes#TranscribeMedia
    */
   constructor(
-    args: AlsoAcceptFutures<OpenAPI.components["schemas"]["TranscribeMediaIn"]>,
+    args: FutureExpandAny<OpenAPI.components["schemas"]["TranscribeMediaIn"]>,
     options?: Options,
   ) {
     super(args, options);
@@ -3769,7 +3750,7 @@ export namespace GenerateSpeech {
    * GenerateSpeech Input
    * https://www.substrate.run/nodes#GenerateSpeech
    */
-  export type Input = AlsoAcceptFutures<
+  export type Input = FutureExpandAny<
     OpenAPI.components["schemas"]["GenerateSpeechIn"]
   >;
 
@@ -3794,7 +3775,7 @@ export class GenerateSpeech extends Node {
    * https://www.substrate.run/nodes#GenerateSpeech
    */
   constructor(
-    args: AlsoAcceptFutures<OpenAPI.components["schemas"]["GenerateSpeechIn"]>,
+    args: FutureExpandAny<OpenAPI.components["schemas"]["GenerateSpeechIn"]>,
     options?: Options,
   ) {
     super(args, options);
@@ -3837,7 +3818,7 @@ export namespace XTTSV2 {
    * XTTSV2 Input
    * https://www.substrate.run/nodes#XTTSV2
    */
-  export type Input = AlsoAcceptFutures<
+  export type Input = FutureExpandAny<
     OpenAPI.components["schemas"]["XTTSV2In"]
   >;
 
@@ -3862,7 +3843,7 @@ export class XTTSV2 extends Node {
    * https://www.substrate.run/nodes#XTTSV2
    */
   constructor(
-    args: AlsoAcceptFutures<OpenAPI.components["schemas"]["XTTSV2In"]>,
+    args: FutureExpandAny<OpenAPI.components["schemas"]["XTTSV2In"]>,
     options?: Options,
   ) {
     super(args, options);
@@ -3903,7 +3884,7 @@ export namespace RemoveBackground {
    * RemoveBackground Input
    * https://www.substrate.run/nodes#RemoveBackground
    */
-  export type Input = AlsoAcceptFutures<
+  export type Input = FutureExpandAny<
     OpenAPI.components["schemas"]["RemoveBackgroundIn"]
   >;
 
@@ -3928,9 +3909,7 @@ export class RemoveBackground extends Node {
    * https://www.substrate.run/nodes#RemoveBackground
    */
   constructor(
-    args: AlsoAcceptFutures<
-      OpenAPI.components["schemas"]["RemoveBackgroundIn"]
-    >,
+    args: FutureExpandAny<OpenAPI.components["schemas"]["RemoveBackgroundIn"]>,
     options?: Options,
   ) {
     super(args, options);
@@ -3973,7 +3952,7 @@ export namespace FillMask {
    * FillMask Input
    * https://www.substrate.run/nodes#FillMask
    */
-  export type Input = AlsoAcceptFutures<
+  export type Input = FutureExpandAny<
     OpenAPI.components["schemas"]["FillMaskIn"]
   >;
 
@@ -3998,7 +3977,7 @@ export class FillMask extends Node {
    * https://www.substrate.run/nodes#FillMask
    */
   constructor(
-    args: AlsoAcceptFutures<OpenAPI.components["schemas"]["FillMaskIn"]>,
+    args: FutureExpandAny<OpenAPI.components["schemas"]["FillMaskIn"]>,
     options?: Options,
   ) {
     super(args, options);
@@ -4039,7 +4018,7 @@ export namespace UpscaleImage {
    * UpscaleImage Input
    * https://www.substrate.run/nodes#UpscaleImage
    */
-  export type Input = AlsoAcceptFutures<
+  export type Input = FutureExpandAny<
     OpenAPI.components["schemas"]["UpscaleImageIn"]
   >;
 
@@ -4064,7 +4043,7 @@ export class UpscaleImage extends Node {
    * https://www.substrate.run/nodes#UpscaleImage
    */
   constructor(
-    args: AlsoAcceptFutures<OpenAPI.components["schemas"]["UpscaleImageIn"]>,
+    args: FutureExpandAny<OpenAPI.components["schemas"]["UpscaleImageIn"]>,
     options?: Options,
   ) {
     super(args, options);
@@ -4105,7 +4084,7 @@ export namespace SegmentUnderPoint {
    * SegmentUnderPoint Input
    * https://www.substrate.run/nodes#SegmentUnderPoint
    */
-  export type Input = AlsoAcceptFutures<
+  export type Input = FutureExpandAny<
     OpenAPI.components["schemas"]["SegmentUnderPointIn"]
   >;
 
@@ -4130,9 +4109,7 @@ export class SegmentUnderPoint extends Node {
    * https://www.substrate.run/nodes#SegmentUnderPoint
    */
   constructor(
-    args: AlsoAcceptFutures<
-      OpenAPI.components["schemas"]["SegmentUnderPointIn"]
-    >,
+    args: FutureExpandAny<OpenAPI.components["schemas"]["SegmentUnderPointIn"]>,
     options?: Options,
   ) {
     super(args, options);
@@ -4175,7 +4152,7 @@ export namespace DISISNet {
    * DISISNet Input
    * https://www.substrate.run/nodes#DISISNet
    */
-  export type Input = AlsoAcceptFutures<
+  export type Input = FutureExpandAny<
     OpenAPI.components["schemas"]["DISISNetIn"]
   >;
 
@@ -4200,7 +4177,7 @@ export class DISISNet extends Node {
    * https://www.substrate.run/nodes#DISISNet
    */
   constructor(
-    args: AlsoAcceptFutures<OpenAPI.components["schemas"]["DISISNetIn"]>,
+    args: FutureExpandAny<OpenAPI.components["schemas"]["DISISNetIn"]>,
     options?: Options,
   ) {
     super(args, options);
@@ -4241,7 +4218,7 @@ export namespace BigLaMa {
    * BigLaMa Input
    * https://www.substrate.run/nodes#BigLaMa
    */
-  export type Input = AlsoAcceptFutures<
+  export type Input = FutureExpandAny<
     OpenAPI.components["schemas"]["BigLaMaIn"]
   >;
 
@@ -4266,7 +4243,7 @@ export class BigLaMa extends Node {
    * https://www.substrate.run/nodes#BigLaMa
    */
   constructor(
-    args: AlsoAcceptFutures<OpenAPI.components["schemas"]["BigLaMaIn"]>,
+    args: FutureExpandAny<OpenAPI.components["schemas"]["BigLaMaIn"]>,
     options?: Options,
   ) {
     super(args, options);
@@ -4307,7 +4284,7 @@ export namespace RealESRGAN {
    * RealESRGAN Input
    * https://www.substrate.run/nodes#RealESRGAN
    */
-  export type Input = AlsoAcceptFutures<
+  export type Input = FutureExpandAny<
     OpenAPI.components["schemas"]["RealESRGANIn"]
   >;
 
@@ -4332,7 +4309,7 @@ export class RealESRGAN extends Node {
    * https://www.substrate.run/nodes#RealESRGAN
    */
   constructor(
-    args: AlsoAcceptFutures<OpenAPI.components["schemas"]["RealESRGANIn"]>,
+    args: FutureExpandAny<OpenAPI.components["schemas"]["RealESRGANIn"]>,
     options?: Options,
   ) {
     super(args, options);
@@ -4373,7 +4350,7 @@ export namespace SegmentAnything {
    * SegmentAnything Input
    * https://www.substrate.run/nodes#SegmentAnything
    */
-  export type Input = AlsoAcceptFutures<
+  export type Input = FutureExpandAny<
     OpenAPI.components["schemas"]["SegmentAnythingIn"]
   >;
 
@@ -4398,7 +4375,7 @@ export class SegmentAnything extends Node {
    * https://www.substrate.run/nodes#SegmentAnything
    */
   constructor(
-    args: AlsoAcceptFutures<OpenAPI.components["schemas"]["SegmentAnythingIn"]>,
+    args: FutureExpandAny<OpenAPI.components["schemas"]["SegmentAnythingIn"]>,
     options?: Options,
   ) {
     super(args, options);
@@ -4441,7 +4418,7 @@ export namespace EmbedText {
    * EmbedText Input
    * https://www.substrate.run/nodes#EmbedText
    */
-  export type Input = AlsoAcceptFutures<
+  export type Input = FutureExpandAny<
     OpenAPI.components["schemas"]["EmbedTextIn"]
   >;
 
@@ -4466,7 +4443,7 @@ export class EmbedText extends Node {
    * https://www.substrate.run/nodes#EmbedText
    */
   constructor(
-    args: AlsoAcceptFutures<OpenAPI.components["schemas"]["EmbedTextIn"]>,
+    args: FutureExpandAny<OpenAPI.components["schemas"]["EmbedTextIn"]>,
     options?: Options,
   ) {
     super(args, options);
@@ -4507,7 +4484,7 @@ export namespace MultiEmbedText {
    * MultiEmbedText Input
    * https://www.substrate.run/nodes#MultiEmbedText
    */
-  export type Input = AlsoAcceptFutures<
+  export type Input = FutureExpandAny<
     OpenAPI.components["schemas"]["MultiEmbedTextIn"]
   >;
 
@@ -4532,7 +4509,7 @@ export class MultiEmbedText extends Node {
    * https://www.substrate.run/nodes#MultiEmbedText
    */
   constructor(
-    args: AlsoAcceptFutures<OpenAPI.components["schemas"]["MultiEmbedTextIn"]>,
+    args: FutureExpandAny<OpenAPI.components["schemas"]["MultiEmbedTextIn"]>,
     options?: Options,
   ) {
     super(args, options);
@@ -4575,7 +4552,7 @@ export namespace EmbedImage {
    * EmbedImage Input
    * https://www.substrate.run/nodes#EmbedImage
    */
-  export type Input = AlsoAcceptFutures<
+  export type Input = FutureExpandAny<
     OpenAPI.components["schemas"]["EmbedImageIn"]
   >;
 
@@ -4600,7 +4577,7 @@ export class EmbedImage extends Node {
    * https://www.substrate.run/nodes#EmbedImage
    */
   constructor(
-    args: AlsoAcceptFutures<OpenAPI.components["schemas"]["EmbedImageIn"]>,
+    args: FutureExpandAny<OpenAPI.components["schemas"]["EmbedImageIn"]>,
     options?: Options,
   ) {
     super(args, options);
@@ -4641,7 +4618,7 @@ export namespace MultiEmbedImage {
    * MultiEmbedImage Input
    * https://www.substrate.run/nodes#MultiEmbedImage
    */
-  export type Input = AlsoAcceptFutures<
+  export type Input = FutureExpandAny<
     OpenAPI.components["schemas"]["MultiEmbedImageIn"]
   >;
 
@@ -4666,7 +4643,7 @@ export class MultiEmbedImage extends Node {
    * https://www.substrate.run/nodes#MultiEmbedImage
    */
   constructor(
-    args: AlsoAcceptFutures<OpenAPI.components["schemas"]["MultiEmbedImageIn"]>,
+    args: FutureExpandAny<OpenAPI.components["schemas"]["MultiEmbedImageIn"]>,
     options?: Options,
   ) {
     super(args, options);
@@ -4709,7 +4686,7 @@ export namespace JinaV2 {
    * JinaV2 Input
    * https://www.substrate.run/nodes#JinaV2
    */
-  export type Input = AlsoAcceptFutures<
+  export type Input = FutureExpandAny<
     OpenAPI.components["schemas"]["JinaV2In"]
   >;
 
@@ -4734,7 +4711,7 @@ export class JinaV2 extends Node {
    * https://www.substrate.run/nodes#JinaV2
    */
   constructor(
-    args: AlsoAcceptFutures<OpenAPI.components["schemas"]["JinaV2In"]>,
+    args: FutureExpandAny<OpenAPI.components["schemas"]["JinaV2In"]>,
     options?: Options,
   ) {
     super(args, options);
@@ -4775,9 +4752,7 @@ export namespace CLIP {
    * CLIP Input
    * https://www.substrate.run/nodes#CLIP
    */
-  export type Input = AlsoAcceptFutures<
-    OpenAPI.components["schemas"]["CLIPIn"]
-  >;
+  export type Input = FutureExpandAny<OpenAPI.components["schemas"]["CLIPIn"]>;
 
   /**
    * CLIP Output
@@ -4800,7 +4775,7 @@ export class CLIP extends Node {
    * https://www.substrate.run/nodes#CLIP
    */
   constructor(
-    args: AlsoAcceptFutures<OpenAPI.components["schemas"]["CLIPIn"]>,
+    args: FutureExpandAny<OpenAPI.components["schemas"]["CLIPIn"]>,
     options?: Options,
   ) {
     super(args, options);
@@ -4841,7 +4816,7 @@ export namespace CreateVectorStore {
    * CreateVectorStore Input
    * https://www.substrate.run/nodes#CreateVectorStore
    */
-  export type Input = AlsoAcceptFutures<
+  export type Input = FutureExpandAny<
     OpenAPI.components["schemas"]["CreateVectorStoreIn"]
   >;
 
@@ -4866,9 +4841,7 @@ export class CreateVectorStore extends Node {
    * https://www.substrate.run/nodes#CreateVectorStore
    */
   constructor(
-    args: AlsoAcceptFutures<
-      OpenAPI.components["schemas"]["CreateVectorStoreIn"]
-    >,
+    args: FutureExpandAny<OpenAPI.components["schemas"]["CreateVectorStoreIn"]>,
     options?: Options,
   ) {
     super(args, options);
@@ -4911,7 +4884,7 @@ export namespace ListVectorStores {
    * ListVectorStores Input
    * https://www.substrate.run/nodes#ListVectorStores
    */
-  export type Input = AlsoAcceptFutures<
+  export type Input = FutureExpandAny<
     OpenAPI.components["schemas"]["ListVectorStoresIn"]
   >;
 
@@ -4936,9 +4909,7 @@ export class ListVectorStores extends Node {
    * https://www.substrate.run/nodes#ListVectorStores
    */
   constructor(
-    args: AlsoAcceptFutures<
-      OpenAPI.components["schemas"]["ListVectorStoresIn"]
-    >,
+    args: FutureExpandAny<OpenAPI.components["schemas"]["ListVectorStoresIn"]>,
     options?: Options,
   ) {
     super(args, options);
@@ -4981,7 +4952,7 @@ export namespace DeleteVectorStore {
    * DeleteVectorStore Input
    * https://www.substrate.run/nodes#DeleteVectorStore
    */
-  export type Input = AlsoAcceptFutures<
+  export type Input = FutureExpandAny<
     OpenAPI.components["schemas"]["DeleteVectorStoreIn"]
   >;
 
@@ -5006,9 +4977,7 @@ export class DeleteVectorStore extends Node {
    * https://www.substrate.run/nodes#DeleteVectorStore
    */
   constructor(
-    args: AlsoAcceptFutures<
-      OpenAPI.components["schemas"]["DeleteVectorStoreIn"]
-    >,
+    args: FutureExpandAny<OpenAPI.components["schemas"]["DeleteVectorStoreIn"]>,
     options?: Options,
   ) {
     super(args, options);
@@ -5051,7 +5020,7 @@ export namespace QueryVectorStore {
    * QueryVectorStore Input
    * https://www.substrate.run/nodes#QueryVectorStore
    */
-  export type Input = AlsoAcceptFutures<
+  export type Input = FutureExpandAny<
     OpenAPI.components["schemas"]["QueryVectorStoreIn"]
   >;
 
@@ -5076,9 +5045,7 @@ export class QueryVectorStore extends Node {
    * https://www.substrate.run/nodes#QueryVectorStore
    */
   constructor(
-    args: AlsoAcceptFutures<
-      OpenAPI.components["schemas"]["QueryVectorStoreIn"]
-    >,
+    args: FutureExpandAny<OpenAPI.components["schemas"]["QueryVectorStoreIn"]>,
     options?: Options,
   ) {
     super(args, options);
@@ -5121,7 +5088,7 @@ export namespace FetchVectors {
    * FetchVectors Input
    * https://www.substrate.run/nodes#FetchVectors
    */
-  export type Input = AlsoAcceptFutures<
+  export type Input = FutureExpandAny<
     OpenAPI.components["schemas"]["FetchVectorsIn"]
   >;
 
@@ -5146,7 +5113,7 @@ export class FetchVectors extends Node {
    * https://www.substrate.run/nodes#FetchVectors
    */
   constructor(
-    args: AlsoAcceptFutures<OpenAPI.components["schemas"]["FetchVectorsIn"]>,
+    args: FutureExpandAny<OpenAPI.components["schemas"]["FetchVectorsIn"]>,
     options?: Options,
   ) {
     super(args, options);
@@ -5187,7 +5154,7 @@ export namespace UpdateVectors {
    * UpdateVectors Input
    * https://www.substrate.run/nodes#UpdateVectors
    */
-  export type Input = AlsoAcceptFutures<
+  export type Input = FutureExpandAny<
     OpenAPI.components["schemas"]["UpdateVectorsIn"]
   >;
 
@@ -5212,7 +5179,7 @@ export class UpdateVectors extends Node {
    * https://www.substrate.run/nodes#UpdateVectors
    */
   constructor(
-    args: AlsoAcceptFutures<OpenAPI.components["schemas"]["UpdateVectorsIn"]>,
+    args: FutureExpandAny<OpenAPI.components["schemas"]["UpdateVectorsIn"]>,
     options?: Options,
   ) {
     super(args, options);
@@ -5253,7 +5220,7 @@ export namespace DeleteVectors {
    * DeleteVectors Input
    * https://www.substrate.run/nodes#DeleteVectors
    */
-  export type Input = AlsoAcceptFutures<
+  export type Input = FutureExpandAny<
     OpenAPI.components["schemas"]["DeleteVectorsIn"]
   >;
 
@@ -5278,7 +5245,7 @@ export class DeleteVectors extends Node {
    * https://www.substrate.run/nodes#DeleteVectors
    */
   constructor(
-    args: AlsoAcceptFutures<OpenAPI.components["schemas"]["DeleteVectorsIn"]>,
+    args: FutureExpandAny<OpenAPI.components["schemas"]["DeleteVectorsIn"]>,
     options?: Options,
   ) {
     super(args, options);
