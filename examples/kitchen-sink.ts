@@ -71,7 +71,7 @@ const VECTOR_STORE = "kitchen-sink";
 const examples = [
   {
     node: new CreateVectorStore({
-      name: VECTOR_STORE,
+      collection_name: VECTOR_STORE,
       model: "jina-v2",
     }),
     envs: [STAGING_V1, PRODUCTION_V1],
@@ -289,7 +289,7 @@ const examples = [
   {
     node: new EmbedText({
       text: "Your text to embed",
-      store: VECTOR_STORE,
+      collection_name: VECTOR_STORE,
     }),
     envs: ALL_ENVS,
   },
@@ -303,7 +303,7 @@ const examples = [
           text: "Other text",
         },
       ],
-      store: VECTOR_STORE,
+      collection_name: VECTOR_STORE,
     }),
     envs: ALL_ENVS,
   },
@@ -365,7 +365,7 @@ const examples = [
   {
     // NOTE: only supported by v1
     node: new QueryVectorStore({
-      name: VECTOR_STORE,
+      collection_name: VECTOR_STORE,
       model: "jina-v2",
       query_strings: ["first_comment_body", "second_comment_body"],
     }),
@@ -374,7 +374,7 @@ const examples = [
   {
     // NOTE: only supported by v1
     node: new FetchVectors({
-      name: VECTOR_STORE,
+      collection_name: VECTOR_STORE,
       model: "jina-v2",
       ids: ["bar", "baz"],
     }),
@@ -383,7 +383,7 @@ const examples = [
   {
     // NOTE: only supported by v1
     node: new UpdateVectors({
-      name: VECTOR_STORE,
+      collection_name: VECTOR_STORE,
       model: "jina-v2",
       vectors: [
         {
@@ -405,7 +405,7 @@ const examples = [
   {
     // NOTE: only supported by v1
     node: new DeleteVectors({
-      name: VECTOR_STORE,
+      collection_name: VECTOR_STORE,
       model: "jina-v2",
       ids: ["bar", "baz"],
     }),
@@ -511,7 +511,7 @@ const examples = [
   },
   {
     node: new DeleteVectorStore({
-      name: VECTOR_STORE,
+      collection_name: VECTOR_STORE,
       model: "jina-v2",
     }),
     envs: [STAGING_V1, PRODUCTION_V1],
