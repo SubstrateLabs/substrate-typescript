@@ -92,8 +92,9 @@ export class Substrate {
   async runSerialized(
     serialized: any,
     nodes: Node[] | null = null,
+    endpoint: string = "/compose",
   ): Promise<SubstrateResponse> {
-    const url = this.baseUrl + "/compose";
+    const url = this.baseUrl + endpoint;
     const req = { dag: serialized };
     // NOTE: we're creating the signal this way instead of AbortController.timeout because it is only very
     // recently available on some environments, so this is a bit more supported.
