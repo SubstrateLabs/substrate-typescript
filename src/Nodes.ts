@@ -1,7 +1,7 @@
 /**
  * ꩜ Substrate
  * @generated file
- * 20240416.20240419
+ * 20240418.20240429
  */
 
 import * as OpenAPI from "substrate/OpenAPI";
@@ -495,6 +495,18 @@ export class CLIPInItems extends FutureArray {
     return super.result() as Promise<EmbedTextOrImageItem[]>;
   }
 }
+/** Choose keys from `metadata` to embed with text. Only applies to text items. */
+export class CLIPInEmbeddedMetadataKeys extends FutureArray {
+  /** Returns `FutureString` at given index. */
+  override at(index: number) {
+    return new FutureString(this._directive.next(index));
+  }
+  /** Returns the result for `CLIPInEmbeddedMetadataKeys` once it's node has been run. */
+  protected override async result(): Promise<FutureString[]> {
+    return super.result() as Promise<FutureString[]>;
+  }
+}
+export class CLIPInEmbeddedMetadataKeysItem extends FutureString {}
 /** Generated embeddings. */
 export class CLIPOutEmbeddings extends FutureArray {
   /** Returns `Embedding` at given index. */
@@ -507,12 +519,12 @@ export class CLIPOutEmbeddings extends FutureArray {
   }
 }
 /** List of vector stores. */
-export class ListVectorStoresOutStores extends FutureArray {
+export class ListVectorStoresOutItems extends FutureArray {
   /** Returns `CreateVectorStoreOut` at given index. */
   override at(index: number) {
     return new CreateVectorStoreOut(this._directive.next(index));
   }
-  /** Returns the result for `ListVectorStoresOutStores` once it's node has been run. */
+  /** Returns the result for `ListVectorStoresOutItems` once it's node has been run. */
   protected override async result(): Promise<CreateVectorStoreOut[]> {
     return super.result() as Promise<CreateVectorStoreOut[]>;
   }
@@ -1035,7 +1047,7 @@ export class GenerateImageIn extends FutureObject {
   get prompt() {
     return new FutureString(this._directive.next("prompt"));
   }
-  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
   get store() {
     return new FutureString(this._directive.next("store"));
   }
@@ -1069,7 +1081,7 @@ export class MultiGenerateImageIn extends FutureObject {
   get num_images() {
     return new FutureNumber(this._directive.next("num_images"));
   }
-  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
   get store() {
     return new FutureString(this._directive.next("store"));
   }
@@ -1111,7 +1123,7 @@ export class StableDiffusionXLIn extends FutureObject {
   get num_images() {
     return new FutureNumber(this._directive.next("num_images"));
   }
-  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
   get store() {
     return new FutureString(this._directive.next("store"));
   }
@@ -1177,7 +1189,7 @@ export class StableDiffusionXLLightningIn extends FutureObject {
   get num_images() {
     return new FutureNumber(this._directive.next("num_images"));
   }
-  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
   get store() {
     return new FutureString(this._directive.next("store"));
   }
@@ -1234,7 +1246,7 @@ export class StableDiffusionXLIPAdapterIn extends FutureObject {
   get negative_prompt() {
     return new FutureString(this._directive.next("negative_prompt"));
   }
-  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
   get store() {
     return new FutureString(this._directive.next("store"));
   }
@@ -1295,7 +1307,7 @@ export class StableDiffusionXLControlNetIn extends FutureObject {
   get negative_prompt() {
     return new FutureString(this._directive.next("negative_prompt"));
   }
-  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
   get store() {
     return new FutureString(this._directive.next("store"));
   }
@@ -1342,7 +1354,7 @@ export class GenerativeEditImageIn extends FutureObject {
   get mask_image_uri() {
     return new FutureString(this._directive.next("mask_image_uri"));
   }
-  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
   get store() {
     return new FutureString(this._directive.next("store"));
   }
@@ -1384,7 +1396,7 @@ export class MultiGenerativeEditImageIn extends FutureObject {
   get num_images() {
     return new FutureNumber(this._directive.next("num_images"));
   }
-  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
   get store() {
     return new FutureString(this._directive.next("store"));
   }
@@ -1436,7 +1448,7 @@ export class StableDiffusionXLInpaintIn extends FutureObject {
   get negative_prompt() {
     return new FutureString(this._directive.next("negative_prompt"));
   }
-  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
   get store() {
     return new FutureString(this._directive.next("store"));
   }
@@ -1515,7 +1527,7 @@ export class FillMaskIn extends FutureObject {
   get mask_image_uri() {
     return new FutureString(this._directive.next("mask_image_uri"));
   }
-  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
   get store() {
     return new FutureString(this._directive.next("store"));
   }
@@ -1549,7 +1561,7 @@ export class BigLaMaIn extends FutureObject {
   get mask_image_uri() {
     return new FutureString(this._directive.next("mask_image_uri"));
   }
-  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
   get store() {
     return new FutureString(this._directive.next("store"));
   }
@@ -1583,7 +1595,7 @@ export class RemoveBackgroundIn extends FutureObject {
   get background_color() {
     return new FutureString(this._directive.next("background_color"));
   }
-  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
   get store() {
     return new FutureString(this._directive.next("store"));
   }
@@ -1613,7 +1625,7 @@ export class DISISNetIn extends FutureObject {
   get image_uri() {
     return new FutureString(this._directive.next("image_uri"));
   }
-  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
   get store() {
     return new FutureString(this._directive.next("store"));
   }
@@ -1639,7 +1651,7 @@ export class UpscaleImageIn extends FutureObject {
   get image_uri() {
     return new FutureString(this._directive.next("image_uri"));
   }
-  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
   get store() {
     return new FutureString(this._directive.next("store"));
   }
@@ -1669,7 +1681,7 @@ export class RealESRGANIn extends FutureObject {
   get image_uri() {
     return new FutureString(this._directive.next("image_uri"));
   }
-  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
   get store() {
     return new FutureString(this._directive.next("store"));
   }
@@ -1699,7 +1711,7 @@ export class SegmentUnderPointIn extends FutureObject {
   get point() {
     return new Point(this._directive.next("point"));
   }
-  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
   get store() {
     return new FutureString(this._directive.next("store"));
   }
@@ -1741,7 +1753,7 @@ export class SegmentAnythingIn extends FutureObject {
   get box_prompts() {
     return new SegmentAnythingInBoxPrompts(this._directive.next("box_prompts"));
   }
-  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
   get store() {
     return new FutureString(this._directive.next("store"));
   }
@@ -1889,7 +1901,7 @@ export class GenerateSpeechIn extends FutureObject {
   get text() {
     return new FutureString(this._directive.next("text"));
   }
-  /** (Optional) Use "hosted" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the audio data will be returned as a base64-encoded string. */
+  /** (Optional) Use "hosted" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the audio data will be returned as a base64-encoded string. */
   get store() {
     return new FutureString(this._directive.next("store"));
   }
@@ -1927,7 +1939,7 @@ export class XTTSV2In extends FutureObject {
   get language() {
     return new FutureString(this._directive.next("language"));
   }
-  /** (Optional) Use "hosted" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the audio data will be returned as a base64-encoded string. */
+  /** (Optional) Use "hosted" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the audio data will be returned as a base64-encoded string. */
   get store() {
     return new FutureString(this._directive.next("store"));
   }
@@ -1972,9 +1984,9 @@ export class EmbedTextIn extends FutureObject {
   get text() {
     return new FutureString(this._directive.next("text"));
   }
-  /** (Optional) [Vector store](/docs/vector-stores) identifier. */
-  get store() {
-    return new FutureString(this._directive.next("store"));
+  /** (Optional) Vector store name. */
+  get collection_name() {
+    return new FutureString(this._directive.next("collection_name"));
   }
   /** (Optional) Metadata that can be used to query the vector store. Ignored if `store` is unset. */
   get metadata() {
@@ -1991,9 +2003,9 @@ export class EmbedTextIn extends FutureObject {
   get doc_id() {
     return new FutureString(this._directive.next("doc_id"));
   }
-  /** (Optional) Selected node. */
-  get node() {
-    return new FutureString(this._directive.next("node"));
+  /** (Optional) Selected embedding model. */
+  get model() {
+    return new FutureString(this._directive.next("model"));
   }
   /** returns the result for `EmbedTextIn` once it's node has been run. */
   protected override async result(): Promise<EmbedTextIn> {
@@ -2036,9 +2048,9 @@ export class MultiEmbedTextIn extends FutureObject {
   get items() {
     return new MultiEmbedTextInItems(this._directive.next("items"));
   }
-  /** (Optional) [Vector store](/docs/vector-stores) identifier. */
-  get store() {
-    return new FutureString(this._directive.next("store"));
+  /** (Optional) Vector store name. */
+  get collection_name() {
+    return new FutureString(this._directive.next("collection_name"));
   }
 
   /** (Optional) Choose keys from `metadata` to embed with text. */
@@ -2047,9 +2059,9 @@ export class MultiEmbedTextIn extends FutureObject {
       this._directive.next("embedded_metadata_keys"),
     );
   }
-  /** (Optional) Selected node. */
-  get node() {
-    return new FutureString(this._directive.next("node"));
+  /** (Optional) Selected embedding model. */
+  get model() {
+    return new FutureString(this._directive.next("model"));
   }
   /** returns the result for `MultiEmbedTextIn` once it's node has been run. */
   protected override async result(): Promise<MultiEmbedTextIn> {
@@ -2073,9 +2085,9 @@ export class JinaV2In extends FutureObject {
   get items() {
     return new JinaV2InItems(this._directive.next("items"));
   }
-  /** (Optional) [Vector store](/docs/vector-stores) identifier. */
-  get store() {
-    return new FutureString(this._directive.next("store"));
+  /** (Optional) Vector store name. */
+  get collection_name() {
+    return new FutureString(this._directive.next("collection_name"));
   }
 
   /** (Optional) Choose keys from `metadata` to embed with text. */
@@ -2106,17 +2118,17 @@ export class EmbedImageIn extends FutureObject {
   get image_uri() {
     return new FutureString(this._directive.next("image_uri"));
   }
-  /** (Optional) [Vector store](/docs/vector-stores) identifier. */
-  get store() {
-    return new FutureString(this._directive.next("store"));
+  /** (Optional) Vector store name. */
+  get collection_name() {
+    return new FutureString(this._directive.next("collection_name"));
   }
   /** (Optional) Vector store document ID. Ignored if `store` is unset. */
   get doc_id() {
     return new FutureString(this._directive.next("doc_id"));
   }
-  /** (Optional) Selected node. */
-  get node() {
-    return new FutureString(this._directive.next("node"));
+  /** (Optional) Selected embedding model. */
+  get model() {
+    return new FutureString(this._directive.next("model"));
   }
   /** returns the result for `EmbedImageIn` once it's node has been run. */
   protected override async result(): Promise<EmbedImageIn> {
@@ -2178,13 +2190,13 @@ export class MultiEmbedImageIn extends FutureObject {
   get items() {
     return new MultiEmbedImageInItems(this._directive.next("items"));
   }
-  /** (Optional) [Vector store](/docs/vector-stores) identifier. */
-  get store() {
-    return new FutureString(this._directive.next("store"));
+  /** (Optional) Vector store name. */
+  get collection_name() {
+    return new FutureString(this._directive.next("collection_name"));
   }
-  /** (Optional) Selected node. */
-  get node() {
-    return new FutureString(this._directive.next("node"));
+  /** (Optional) Selected embedding model. */
+  get model() {
+    return new FutureString(this._directive.next("model"));
   }
   /** returns the result for `MultiEmbedImageIn` once it's node has been run. */
   protected override async result(): Promise<MultiEmbedImageIn> {
@@ -2208,9 +2220,16 @@ export class CLIPIn extends FutureObject {
   get items() {
     return new CLIPInItems(this._directive.next("items"));
   }
-  /** (Optional) [Vector store](/docs/vector-stores) identifier. */
-  get store() {
-    return new FutureString(this._directive.next("store"));
+  /** (Optional) Vector store name. */
+  get collection_name() {
+    return new FutureString(this._directive.next("collection_name"));
+  }
+
+  /** (Optional) Choose keys from `metadata` to embed with text. Only applies to text items. */
+  get embedded_metadata_keys() {
+    return new CLIPInEmbeddedMetadataKeys(
+      this._directive.next("embedded_metadata_keys"),
+    );
   }
   /** returns the result for `CLIPIn` once it's node has been run. */
   protected override async result(): Promise<CLIPIn> {
@@ -2231,8 +2250,8 @@ export class CLIPOut extends FutureObject {
 /** CreateVectorStoreIn */
 export class CreateVectorStoreIn extends FutureObject {
   /** Vector store name. */
-  get name() {
-    return new FutureString(this._directive.next("name"));
+  get collection_name() {
+    return new FutureString(this._directive.next("collection_name"));
   }
   /** Selected embedding model. */
   get model() {
@@ -2258,8 +2277,8 @@ export class CreateVectorStoreIn extends FutureObject {
 /** CreateVectorStoreOut */
 export class CreateVectorStoreOut extends FutureObject {
   /** Vector store name. */
-  get name() {
-    return new FutureString(this._directive.next("name"));
+  get collection_name() {
+    return new FutureString(this._directive.next("collection_name"));
   }
   /** Selected embedding model. */
   get model() {
@@ -2292,8 +2311,8 @@ export class ListVectorStoresIn extends FutureObject {
 /** ListVectorStoresOut */
 export class ListVectorStoresOut extends FutureObject {
   /** List of vector stores. */
-  get stores() {
-    return new ListVectorStoresOutStores(this._directive.next("stores"));
+  get items() {
+    return new ListVectorStoresOutItems(this._directive.next("items"));
   }
   /** returns the result for `ListVectorStoresOut` once it's node has been run. */
   protected override async result(): Promise<ListVectorStoresOut> {
@@ -2303,8 +2322,8 @@ export class ListVectorStoresOut extends FutureObject {
 /** DeleteVectorStoreIn */
 export class DeleteVectorStoreIn extends FutureObject {
   /** Vector store name. */
-  get name() {
-    return new FutureString(this._directive.next("name"));
+  get collection_name() {
+    return new FutureString(this._directive.next("collection_name"));
   }
   /** Selected embedding model. */
   get model() {
@@ -2318,8 +2337,8 @@ export class DeleteVectorStoreIn extends FutureObject {
 /** DeleteVectorStoreOut */
 export class DeleteVectorStoreOut extends FutureObject {
   /** Vector store name. */
-  get name() {
-    return new FutureString(this._directive.next("name"));
+  get collection_name() {
+    return new FutureString(this._directive.next("collection_name"));
   }
   /** Selected embedding model. */
   get model() {
@@ -2353,8 +2372,8 @@ export class Vector extends FutureObject {
 /** FetchVectorsIn */
 export class FetchVectorsIn extends FutureObject {
   /** Vector store name. */
-  get name() {
-    return new FutureString(this._directive.next("name"));
+  get collection_name() {
+    return new FutureString(this._directive.next("collection_name"));
   }
   /** Selected embedding model. */
   get model() {
@@ -2426,8 +2445,8 @@ export class UpdateVectorParams extends FutureObject {
 /** UpdateVectorsIn */
 export class UpdateVectorsIn extends FutureObject {
   /** Vector store name. */
-  get name() {
-    return new FutureString(this._directive.next("name"));
+  get collection_name() {
+    return new FutureString(this._directive.next("collection_name"));
   }
   /** Selected embedding model. */
   get model() {
@@ -2446,8 +2465,8 @@ export class UpdateVectorsIn extends FutureObject {
 /** DeleteVectorsIn */
 export class DeleteVectorsIn extends FutureObject {
   /** Vector store name. */
-  get name() {
-    return new FutureString(this._directive.next("name"));
+  get collection_name() {
+    return new FutureString(this._directive.next("collection_name"));
   }
   /** Selected embedding model. */
   get model() {
@@ -2466,8 +2485,8 @@ export class DeleteVectorsIn extends FutureObject {
 /** QueryVectorStoreIn */
 export class QueryVectorStoreIn extends FutureObject {
   /** Vector store to query against. */
-  get name() {
-    return new FutureString(this._directive.next("name"));
+  get collection_name() {
+    return new FutureString(this._directive.next("collection_name"));
   }
   /** Selected embedding model. */
   get model() {
@@ -2519,10 +2538,6 @@ export class QueryVectorStoreIn extends FutureObject {
   get filters() {
     return new FutureAnyObject(this._directive.next("filters"));
   }
-  /** (Optional) The distance metric used for the query. Defaults to the distance metric the vector store was created with. */
-  get metric() {
-    return new FutureString(this._directive.next("metric"));
-  }
   /** returns the result for `QueryVectorStoreIn` once it's node has been run. */
   protected override async result(): Promise<QueryVectorStoreIn> {
     return super.result() as Promise<QueryVectorStoreIn>;
@@ -2559,8 +2574,8 @@ export class QueryVectorStoreOut extends FutureObject {
     return new QueryVectorStoreOutResults(this._directive.next("results"));
   }
   /** (Optional) Vector store name. */
-  get name() {
-    return new FutureString(this._directive.next("name"));
+  get collection_name() {
+    return new FutureString(this._directive.next("collection_name"));
   }
   /** (Optional) Selected embedding model. */
   get model() {
@@ -4436,7 +4451,7 @@ export namespace EmbedText {
  */
 export class EmbedText extends Node {
   /**
-   * Input arguments: `text`, `store` (optional), `metadata` (optional), `embedded_metadata_keys` (optional), `doc_id` (optional), `node` (optional)
+   * Input arguments: `text`, `collection_name` (optional), `metadata` (optional), `embedded_metadata_keys` (optional), `doc_id` (optional), `model` (optional)
    *
    * Output fields: `embedding`
    *
@@ -4502,7 +4517,7 @@ export namespace MultiEmbedText {
  */
 export class MultiEmbedText extends Node {
   /**
-   * Input arguments: `items`, `store` (optional), `embedded_metadata_keys` (optional), `node` (optional)
+   * Input arguments: `items`, `collection_name` (optional), `embedded_metadata_keys` (optional), `model` (optional)
    *
    * Output fields: `embeddings`
    *
@@ -4570,7 +4585,7 @@ export namespace EmbedImage {
  */
 export class EmbedImage extends Node {
   /**
-   * Input arguments: `image_uri`, `store` (optional), `doc_id` (optional), `node` (optional)
+   * Input arguments: `image_uri`, `collection_name` (optional), `doc_id` (optional), `model` (optional)
    *
    * Output fields: `embedding`
    *
@@ -4636,7 +4651,7 @@ export namespace MultiEmbedImage {
  */
 export class MultiEmbedImage extends Node {
   /**
-   * Input arguments: `items`, `store` (optional), `node` (optional)
+   * Input arguments: `items`, `collection_name` (optional), `model` (optional)
    *
    * Output fields: `embeddings`
    *
@@ -4704,7 +4719,7 @@ export namespace JinaV2 {
  */
 export class JinaV2 extends Node {
   /**
-   * Input arguments: `items`, `store` (optional), `embedded_metadata_keys` (optional)
+   * Input arguments: `items`, `collection_name` (optional), `embedded_metadata_keys` (optional)
    *
    * Output fields: `embeddings`
    *
@@ -4768,7 +4783,7 @@ export namespace CLIP {
  */
 export class CLIP extends Node {
   /**
-   * Input arguments: `items`, `store` (optional)
+   * Input arguments: `items`, `collection_name` (optional), `embedded_metadata_keys` (optional)
    *
    * Output fields: `embeddings`
    *
@@ -4834,9 +4849,9 @@ export namespace CreateVectorStore {
  */
 export class CreateVectorStore extends Node {
   /**
-   * Input arguments: `name`, `model`, `m` (optional), `ef_construction` (optional), `metric` (optional)
+   * Input arguments: `collection_name`, `model`, `m` (optional), `ef_construction` (optional), `metric` (optional)
    *
-   * Output fields: `name`, `model`, `m`, `ef_construction`, `metric`
+   * Output fields: `collection_name`, `model`, `m`, `ef_construction`, `metric`
    *
    * https://www.substrate.run/nodes#CreateVectorStore
    */
@@ -4850,7 +4865,7 @@ export class CreateVectorStore extends Node {
   /**
    * Retrieve this node's output from a response.
    *
-   * Output fields: `name`, `model`, `m`, `ef_construction`, `metric`
+   * Output fields: `collection_name`, `model`, `m`, `ef_construction`, `metric`
    *
    * https://www.substrate.run/nodes#CreateVectorStore
    */
@@ -4867,7 +4882,7 @@ export class CreateVectorStore extends Node {
   /**
    * Future reference to this node's output.
    *
-   * Output fields: `name`, `model`, `m`, `ef_construction`, `metric`
+   * Output fields: `collection_name`, `model`, `m`, `ef_construction`, `metric`
    *
    * https://www.substrate.run/nodes#CreateVectorStore
    */
@@ -4904,7 +4919,7 @@ export class ListVectorStores extends Node {
   /**
    * Input arguments:
    *
-   * Output fields: `stores` (optional)
+   * Output fields: `items` (optional)
    *
    * https://www.substrate.run/nodes#ListVectorStores
    */
@@ -4918,7 +4933,7 @@ export class ListVectorStores extends Node {
   /**
    * Retrieve this node's output from a response.
    *
-   * Output fields: `stores` (optional)
+   * Output fields: `items` (optional)
    *
    * https://www.substrate.run/nodes#ListVectorStores
    */
@@ -4935,7 +4950,7 @@ export class ListVectorStores extends Node {
   /**
    * Future reference to this node's output.
    *
-   * Output fields: `stores` (optional)
+   * Output fields: `items` (optional)
    *
    * https://www.substrate.run/nodes#ListVectorStores
    */
@@ -4970,9 +4985,9 @@ export namespace DeleteVectorStore {
  */
 export class DeleteVectorStore extends Node {
   /**
-   * Input arguments: `name`, `model`
+   * Input arguments: `collection_name`, `model`
    *
-   * Output fields: `name`, `model`
+   * Output fields: `collection_name`, `model`
    *
    * https://www.substrate.run/nodes#DeleteVectorStore
    */
@@ -4986,7 +5001,7 @@ export class DeleteVectorStore extends Node {
   /**
    * Retrieve this node's output from a response.
    *
-   * Output fields: `name`, `model`
+   * Output fields: `collection_name`, `model`
    *
    * https://www.substrate.run/nodes#DeleteVectorStore
    */
@@ -5003,7 +5018,7 @@ export class DeleteVectorStore extends Node {
   /**
    * Future reference to this node's output.
    *
-   * Output fields: `name`, `model`
+   * Output fields: `collection_name`, `model`
    *
    * https://www.substrate.run/nodes#DeleteVectorStore
    */
@@ -5038,9 +5053,9 @@ export namespace QueryVectorStore {
  */
 export class QueryVectorStore extends Node {
   /**
-   * Input arguments: `name`, `model`, `query_strings` (optional), `query_image_uris` (optional), `query_vectors` (optional), `query_ids` (optional), `top_k` (optional), `ef_search` (optional), `include_values` (optional), `include_metadata` (optional), `filters` (optional), `metric` (optional)
+   * Input arguments: `collection_name`, `model`, `query_strings` (optional), `query_image_uris` (optional), `query_vectors` (optional), `query_ids` (optional), `top_k` (optional), `ef_search` (optional), `include_values` (optional), `include_metadata` (optional), `filters` (optional)
    *
-   * Output fields: `results`, `name` (optional), `model` (optional), `metric` (optional)
+   * Output fields: `results`, `collection_name` (optional), `model` (optional), `metric` (optional)
    *
    * https://www.substrate.run/nodes#QueryVectorStore
    */
@@ -5054,7 +5069,7 @@ export class QueryVectorStore extends Node {
   /**
    * Retrieve this node's output from a response.
    *
-   * Output fields: `results`, `name` (optional), `model` (optional), `metric` (optional)
+   * Output fields: `results`, `collection_name` (optional), `model` (optional), `metric` (optional)
    *
    * https://www.substrate.run/nodes#QueryVectorStore
    */
@@ -5071,7 +5086,7 @@ export class QueryVectorStore extends Node {
   /**
    * Future reference to this node's output.
    *
-   * Output fields: `results`, `name` (optional), `model` (optional), `metric` (optional)
+   * Output fields: `results`, `collection_name` (optional), `model` (optional), `metric` (optional)
    *
    * https://www.substrate.run/nodes#QueryVectorStore
    */
@@ -5106,7 +5121,7 @@ export namespace FetchVectors {
  */
 export class FetchVectors extends Node {
   /**
-   * Input arguments: `name`, `model`, `ids`
+   * Input arguments: `collection_name`, `model`, `ids`
    *
    * Output fields: `vectors`
    *
@@ -5172,7 +5187,7 @@ export namespace UpdateVectors {
  */
 export class UpdateVectors extends Node {
   /**
-   * Input arguments: `name`, `model`, `vectors`
+   * Input arguments: `collection_name`, `model`, `vectors`
    *
    * Output fields: `count`
    *
@@ -5238,7 +5253,7 @@ export namespace DeleteVectors {
  */
 export class DeleteVectors extends Node {
   /**
-   * Input arguments: `name`, `model`, `ids`
+   * Input arguments: `collection_name`, `model`, `ids`
    *
    * Output fields: `count`
    *

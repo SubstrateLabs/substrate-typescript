@@ -557,7 +557,7 @@ export interface components {
     GenerateImageIn: {
       /** @description Text prompt. */
       prompt: string;
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
       /**
        * @description Selected node.
@@ -580,7 +580,7 @@ export interface components {
        * @default 2
        */
       num_images: number;
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
       /**
        * @description Selected node.
@@ -613,7 +613,7 @@ export interface components {
        * @default 1
        */
       num_images: number;
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
       /**
        * @description Height of output image, in pixels.
@@ -662,7 +662,7 @@ export interface components {
        * @default 1
        */
       num_images?: number;
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
       /**
        * @description Height of output image, in pixels.
@@ -706,7 +706,7 @@ export interface components {
       ip_adapter_scale?: number;
       /** @description Negative input prompt. */
       negative_prompt?: string;
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
       /**
        * @description Width of output image, in pixels.
@@ -754,7 +754,7 @@ export interface components {
       output_resolution?: number;
       /** @description Negative input prompt. */
       negative_prompt?: string;
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
       /**
        * Format: float
@@ -783,7 +783,7 @@ export interface components {
       prompt: string;
       /** @description Mask image that controls which pixels are inpainted. If unset, the entire image is edited (image-to-image). */
       mask_image_uri?: string;
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
       /**
        * @description Selected node.
@@ -810,7 +810,7 @@ export interface components {
        * @default 2
        */
       num_images: number;
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
       /**
        * @description Selected node.
@@ -847,7 +847,7 @@ export interface components {
       output_resolution?: number;
       /** @description Negative input prompt. */
       negative_prompt?: string;
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
       /**
        * Format: float
@@ -904,7 +904,7 @@ export interface components {
       image_uri: string;
       /** @description Mask image that controls which pixels are inpainted. */
       mask_image_uri: string;
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
       /**
        * @description Selected node.
@@ -924,7 +924,7 @@ export interface components {
       image_uri: string;
       /** @description Mask image that controls which pixels are inpainted. */
       mask_image_uri: string;
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
     };
     /** BigLaMaOut */
@@ -943,7 +943,7 @@ export interface components {
       return_mask?: boolean;
       /** @description Hex value background color. Transparent if unset. */
       background_color?: string;
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
       /**
        * @description Selected node.
@@ -961,7 +961,7 @@ export interface components {
     DISISNetIn: {
       /** @description Input image. */
       image_uri: string;
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
     };
     /** DISISNetOut */
@@ -973,7 +973,7 @@ export interface components {
     UpscaleImageIn: {
       /** @description Input image. */
       image_uri: string;
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
       /**
        * @description Selected node.
@@ -991,7 +991,7 @@ export interface components {
     RealESRGANIn: {
       /** @description Input image. */
       image_uri: string;
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
     };
     /** RealESRGANOut */
@@ -1010,7 +1010,7 @@ export interface components {
         /** @description Y position. */
         y: number;
       };
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
       /**
        * @description Selected node.
@@ -1058,7 +1058,7 @@ export interface components {
          */
         y2: number;
       }[];
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
     };
     /** SegmentAnythingOut */
@@ -1212,7 +1212,7 @@ export interface components {
     GenerateSpeechIn: {
       /** @description Input text. */
       text: string;
-      /** @description Use "hosted" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the audio data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the audio data will be returned as a base64-encoded string. */
       store?: string;
       /**
        * @description Selected node.
@@ -1237,7 +1237,7 @@ export interface components {
        * @default en
        */
       language?: string;
-      /** @description Use "hosted" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the audio data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the audio data will be returned as a base64-encoded string. */
       store?: string;
     };
     /** XTTSV2Out */
@@ -1260,8 +1260,8 @@ export interface components {
     EmbedTextIn: {
       /** @description Text to embed. */
       text: string;
-      /** @description [Vector store](/docs/vector-stores) identifier. */
-      store?: string;
+      /** @description Vector store name. */
+      collection_name?: string;
       /** @description Metadata that can be used to query the vector store. Ignored if `store` is unset. */
       metadata?: {
         [key: string]: unknown;
@@ -1271,11 +1271,11 @@ export interface components {
       /** @description Vector store document ID. Ignored if `store` is unset. */
       doc_id?: string;
       /**
-       * @description Selected node.
-       * @default JinaV2
+       * @description Selected embedding model.
+       * @default jina-v2
        * @enum {string}
        */
-      node?: "JinaV2" | "CLIP";
+      model?: "jina-v2" | "clip";
     };
     /** EmbedTextOut */
     EmbedTextOut: {
@@ -1315,16 +1315,16 @@ export interface components {
         /** @description Vector store document ID. Ignored if `store` is unset. */
         doc_id?: string;
       }[];
-      /** @description [Vector store](/docs/vector-stores) identifier. */
-      store?: string;
+      /** @description Vector store name. */
+      collection_name?: string;
       /** @description Choose keys from `metadata` to embed with text. */
       embedded_metadata_keys?: string[];
       /**
-       * @description Selected node.
-       * @default JinaV2
+       * @description Selected embedding model.
+       * @default jina-v2
        * @enum {string}
        */
-      node?: "JinaV2" | "CLIP";
+      model?: "jina-v2" | "clip";
     };
     /** MultiEmbedTextOut */
     MultiEmbedTextOut: {
@@ -1353,8 +1353,8 @@ export interface components {
         /** @description Vector store document ID. Ignored if `store` is unset. */
         doc_id?: string;
       }[];
-      /** @description [Vector store](/docs/vector-stores) identifier. */
-      store?: string;
+      /** @description Vector store name. */
+      collection_name?: string;
       /** @description Choose keys from `metadata` to embed with text. */
       embedded_metadata_keys?: string[];
     };
@@ -1376,16 +1376,16 @@ export interface components {
     EmbedImageIn: {
       /** @description Image to embed. */
       image_uri: string;
-      /** @description [Vector store](/docs/vector-stores) identifier. */
-      store?: string;
+      /** @description Vector store name. */
+      collection_name?: string;
       /** @description Vector store document ID. Ignored if `store` is unset. */
       doc_id?: string;
       /**
-       * @description Selected node.
-       * @default CLIP
+       * @description Selected embedding model.
+       * @default clip
        * @enum {string}
        */
-      node?: "CLIP";
+      model?: "clip";
     };
     /** EmbedImageOut */
     EmbedImageOut: {
@@ -1430,14 +1430,14 @@ export interface components {
         /** @description Vector store document ID. Ignored if `store` is unset. */
         doc_id?: string;
       }[];
-      /** @description [Vector store](/docs/vector-stores) identifier. */
-      store?: string;
+      /** @description Vector store name. */
+      collection_name?: string;
       /**
-       * @description Selected node.
-       * @default CLIP
+       * @description Selected embedding model.
+       * @default clip
        * @enum {string}
        */
-      node?: "CLIP";
+      model?: "clip";
     };
     /** MultiEmbedImageOut */
     MultiEmbedImageOut: {
@@ -1468,8 +1468,10 @@ export interface components {
         /** @description Vector store document ID. Ignored if `store` is unset. */
         doc_id?: string;
       }[];
-      /** @description [Vector store](/docs/vector-stores) identifier. */
-      store?: string;
+      /** @description Vector store name. */
+      collection_name?: string;
+      /** @description Choose keys from `metadata` to embed with text. Only applies to text items. */
+      embedded_metadata_keys?: string[];
     };
     /** CLIPOut */
     CLIPOut: {
@@ -1488,7 +1490,7 @@ export interface components {
     /** CreateVectorStoreIn */
     CreateVectorStoreIn: {
       /** @description Vector store name. */
-      name: string;
+      collection_name: string;
       /**
        * @description Selected embedding model.
        * @enum {string}
@@ -1514,7 +1516,7 @@ export interface components {
     /** CreateVectorStoreOut */
     CreateVectorStoreOut: {
       /** @description Vector store name. */
-      name: string;
+      collection_name: string;
       /**
        * @description Selected embedding model.
        * @enum {string}
@@ -1542,9 +1544,9 @@ export interface components {
     /** ListVectorStoresOut */
     ListVectorStoresOut: {
       /** @description List of vector stores. */
-      stores?: {
+      items?: {
         /** @description Vector store name. */
-        name: string;
+        collection_name: string;
         /**
          * @description Selected embedding model.
          * @enum {string}
@@ -1571,7 +1573,7 @@ export interface components {
     /** DeleteVectorStoreIn */
     DeleteVectorStoreIn: {
       /** @description Vector store name. */
-      name: string;
+      collection_name: string;
       /**
        * @description Selected embedding model.
        * @enum {string}
@@ -1581,7 +1583,7 @@ export interface components {
     /** DeleteVectorStoreOut */
     DeleteVectorStoreOut: {
       /** @description Vector store name. */
-      name: string;
+      collection_name: string;
       /**
        * @description Selected embedding model.
        * @enum {string}
@@ -1605,7 +1607,7 @@ export interface components {
     /** FetchVectorsIn */
     FetchVectorsIn: {
       /** @description Vector store name. */
-      name: string;
+      collection_name: string;
       /**
        * @description Selected embedding model.
        * @enum {string}
@@ -1652,7 +1654,7 @@ export interface components {
     /** UpdateVectorsIn */
     UpdateVectorsIn: {
       /** @description Vector store name. */
-      name: string;
+      collection_name: string;
       /**
        * @description Selected embedding model.
        * @enum {string}
@@ -1673,7 +1675,7 @@ export interface components {
     /** DeleteVectorsIn */
     DeleteVectorsIn: {
       /** @description Vector store name. */
-      name: string;
+      collection_name: string;
       /**
        * @description Selected embedding model.
        * @enum {string}
@@ -1685,7 +1687,7 @@ export interface components {
     /** QueryVectorStoreIn */
     QueryVectorStoreIn: {
       /** @description Vector store to query against. */
-      name: string;
+      collection_name: string;
       /**
        * @description Selected embedding model.
        * @enum {string}
@@ -1723,11 +1725,6 @@ export interface components {
       filters?: {
         [key: string]: unknown;
       };
-      /**
-       * @description The distance metric used for the query. Defaults to the distance metric the vector store was created with.
-       * @enum {string}
-       */
-      metric?: "cosine" | "l2" | "inner";
     };
     /** VectorStoreQueryResult */
     VectorStoreQueryResult: {
@@ -1764,7 +1761,7 @@ export interface components {
         };
       }[][];
       /** @description Vector store name. */
-      name?: string;
+      collection_name?: string;
       /**
        * @description Selected embedding model.
        * @enum {string}
@@ -2203,7 +2200,7 @@ export interface operations {
         "application/json": {
           /** @description Text prompt. */
           prompt: string;
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
           /**
            * @description Selected node.
@@ -2248,7 +2245,7 @@ export interface operations {
            * @default 2
            */
           num_images: number;
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
           /**
            * @description Selected node.
@@ -2296,7 +2293,7 @@ export interface operations {
           prompt: string;
           /** @description Mask image that controls which pixels are inpainted. If unset, the entire image is edited (image-to-image). */
           mask_image_uri?: string;
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
           /**
            * @description Selected node.
@@ -2347,7 +2344,7 @@ export interface operations {
            * @default 2
            */
           num_images: number;
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
           /**
            * @description Selected node.
@@ -2408,7 +2405,7 @@ export interface operations {
            * @default 1
            */
           num_images: number;
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
           /**
            * @description Height of output image, in pixels.
@@ -2477,7 +2474,7 @@ export interface operations {
            * @default 1
            */
           num_images?: number;
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
           /**
            * @description Height of output image, in pixels.
@@ -2552,7 +2549,7 @@ export interface operations {
           output_resolution?: number;
           /** @description Negative input prompt. */
           negative_prompt?: string;
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
           /**
            * Format: float
@@ -2625,7 +2622,7 @@ export interface operations {
           output_resolution?: number;
           /** @description Negative input prompt. */
           negative_prompt?: string;
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
           /**
            * Format: float
@@ -2694,7 +2691,7 @@ export interface operations {
           ip_adapter_scale?: number;
           /** @description Negative input prompt. */
           negative_prompt?: string;
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
           /**
            * @description Width of output image, in pixels.
@@ -2850,7 +2847,7 @@ export interface operations {
         "application/json": {
           /** @description Input text. */
           text: string;
-          /** @description Use "hosted" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the audio data will be returned as a base64-encoded string. */
+          /** @description Use "hosted" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the audio data will be returned as a base64-encoded string. */
           store?: string;
           /**
            * @description Selected node.
@@ -2897,7 +2894,7 @@ export interface operations {
            * @default en
            */
           language?: string;
-          /** @description Use "hosted" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the audio data will be returned as a base64-encoded string. */
+          /** @description Use "hosted" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the audio data will be returned as a base64-encoded string. */
           store?: string;
         };
       };
@@ -2939,7 +2936,7 @@ export interface operations {
           return_mask?: boolean;
           /** @description Hex value background color. Transparent if unset. */
           background_color?: string;
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
           /**
            * @description Selected node.
@@ -2981,7 +2978,7 @@ export interface operations {
           image_uri: string;
           /** @description Mask image that controls which pixels are inpainted. */
           mask_image_uri: string;
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
           /**
            * @description Selected node.
@@ -3020,7 +3017,7 @@ export interface operations {
         "application/json": {
           /** @description Input image. */
           image_uri: string;
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
           /**
            * @description Selected node.
@@ -3070,7 +3067,7 @@ export interface operations {
             /** @description Y position. */
             y: number;
           };
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
           /**
            * @description Selected node.
@@ -3109,7 +3106,7 @@ export interface operations {
         "application/json": {
           /** @description Input image. */
           image_uri: string;
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
         };
       };
@@ -3145,7 +3142,7 @@ export interface operations {
           image_uri: string;
           /** @description Mask image that controls which pixels are inpainted. */
           mask_image_uri: string;
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
         };
       };
@@ -3178,7 +3175,7 @@ export interface operations {
         "application/json": {
           /** @description Input image. */
           image_uri: string;
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
         };
       };
@@ -3247,7 +3244,7 @@ export interface operations {
              */
             y2: number;
           }[];
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
         };
       };
@@ -3274,8 +3271,8 @@ export interface operations {
         /**
          * @example {
          *   "text": "Argon is the third most abundant gas in Earth's atmosphere, at 0.934% (9340 ppmv). It is more than twice as abundant as water vapor.",
-         *   "node": "JinaV2",
-         *   "store": "smoke_tests",
+         *   "model": "jina-v2",
+         *   "collection_name": "smoke_tests",
          *   "metadata": {
          *     "group": "18"
          *   },
@@ -3287,8 +3284,8 @@ export interface operations {
         "application/json": {
           /** @description Text to embed. */
           text: string;
-          /** @description [Vector store](/docs/vector-stores) identifier. */
-          store?: string;
+          /** @description Vector store name. */
+          collection_name?: string;
           /** @description Metadata that can be used to query the vector store. Ignored if `store` is unset. */
           metadata?: {
             [key: string]: unknown;
@@ -3298,11 +3295,11 @@ export interface operations {
           /** @description Vector store document ID. Ignored if `store` is unset. */
           doc_id?: string;
           /**
-           * @description Selected node.
-           * @default JinaV2
+           * @description Selected embedding model.
+           * @default jina-v2
            * @enum {string}
            */
-          node?: "JinaV2" | "CLIP";
+          model?: "jina-v2" | "clip";
         };
       };
     };
@@ -3336,7 +3333,7 @@ export interface operations {
       content: {
         /**
          * @example {
-         *   "node": "JinaV2",
+         *   "model": "jina-v2",
          *   "items": [
          *     {
          *       "text": "Osmium is the densest naturally occurring element. When experimentally measured using X-ray crystallography, it has a density of 22.59 g/cm3. Manufacturers use its alloys with platinum, iridium, and other platinum-group metals to make fountain pen nib tipping, electrical contacts, and in other applications that require extreme durability and hardness.",
@@ -3351,7 +3348,7 @@ export interface operations {
          *       }
          *     }
          *   ],
-         *   "store": "smoke_tests",
+         *   "collection_name": "smoke_tests",
          *   "embedded_metadata_keys": [
          *     "group"
          *   ]
@@ -3369,16 +3366,16 @@ export interface operations {
             /** @description Vector store document ID. Ignored if `store` is unset. */
             doc_id?: string;
           }[];
-          /** @description [Vector store](/docs/vector-stores) identifier. */
-          store?: string;
+          /** @description Vector store name. */
+          collection_name?: string;
           /** @description Choose keys from `metadata` to embed with text. */
           embedded_metadata_keys?: string[];
           /**
-           * @description Selected node.
-           * @default JinaV2
+           * @description Selected embedding model.
+           * @default jina-v2
            * @enum {string}
            */
-          node?: "JinaV2" | "CLIP";
+          model?: "jina-v2" | "clip";
         };
       };
     };
@@ -3413,22 +3410,22 @@ export interface operations {
         /**
          * @example {
          *   "image_uri": "https://media.substrate.run/docs-fuji-red.jpg",
-         *   "store": "smoke_tests"
+         *   "collection_name": "smoke_tests"
          * }
          */
         "application/json": {
           /** @description Image to embed. */
           image_uri: string;
-          /** @description [Vector store](/docs/vector-stores) identifier. */
-          store?: string;
+          /** @description Vector store name. */
+          collection_name?: string;
           /** @description Vector store document ID. Ignored if `store` is unset. */
           doc_id?: string;
           /**
-           * @description Selected node.
-           * @default CLIP
+           * @description Selected embedding model.
+           * @default clip
            * @enum {string}
            */
-          node?: "CLIP";
+          model?: "clip";
         };
       };
     };
@@ -3470,7 +3467,7 @@ export interface operations {
          *       "image_uri": "https://media.substrate.run/docs-fuji-blue.jpg"
          *     }
          *   ],
-         *   "store": "smoke_tests"
+         *   "collection_name": "smoke_tests"
          * }
          */
         "application/json": {
@@ -3481,14 +3478,14 @@ export interface operations {
             /** @description Vector store document ID. Ignored if `store` is unset. */
             doc_id?: string;
           }[];
-          /** @description [Vector store](/docs/vector-stores) identifier. */
-          store?: string;
+          /** @description Vector store name. */
+          collection_name?: string;
           /**
-           * @description Selected node.
-           * @default CLIP
+           * @description Selected embedding model.
+           * @default clip
            * @enum {string}
            */
-          node?: "CLIP";
+          model?: "clip";
         };
       };
     };
@@ -3536,7 +3533,7 @@ export interface operations {
          *       }
          *     }
          *   ],
-         *   "store": "smoke_tests",
+         *   "collection_name": "smoke_tests",
          *   "embedded_metadata_keys": [
          *     "group"
          *   ]
@@ -3554,8 +3551,8 @@ export interface operations {
             /** @description Vector store document ID. Ignored if `store` is unset. */
             doc_id?: string;
           }[];
-          /** @description [Vector store](/docs/vector-stores) identifier. */
-          store?: string;
+          /** @description Vector store name. */
+          collection_name?: string;
           /** @description Choose keys from `metadata` to embed with text. */
           embedded_metadata_keys?: string[];
         };
@@ -3599,7 +3596,7 @@ export interface operations {
          *       "image_uri": "https://media.substrate.run/docs-fuji-blue.jpg"
          *     }
          *   ],
-         *   "store": "smoke_tests"
+         *   "collection_name": "smoke_tests"
          * }
          */
         "application/json": {
@@ -3616,8 +3613,10 @@ export interface operations {
             /** @description Vector store document ID. Ignored if `store` is unset. */
             doc_id?: string;
           }[];
-          /** @description [Vector store](/docs/vector-stores) identifier. */
-          store?: string;
+          /** @description Vector store name. */
+          collection_name?: string;
+          /** @description Choose keys from `metadata` to embed with text. Only applies to text items. */
+          embedded_metadata_keys?: string[];
         };
       };
     };
@@ -3651,13 +3650,13 @@ export interface operations {
       content: {
         /**
          * @example {
-         *   "name": "smoke_tests",
+         *   "collection_name": "smoke_tests",
          *   "model": "jina-v2"
          * }
          */
         "application/json": {
           /** @description Vector store name. */
-          name: string;
+          collection_name: string;
           /**
            * @description Selected embedding model.
            * @enum {string}
@@ -3688,7 +3687,7 @@ export interface operations {
         content: {
           "application/json": {
             /** @description Vector store name. */
-            name: string;
+            collection_name: string;
             /**
              * @description Selected embedding model.
              * @enum {string}
@@ -3732,9 +3731,9 @@ export interface operations {
         content: {
           "application/json": {
             /** @description List of vector stores. */
-            stores?: {
+            items?: {
               /** @description Vector store name. */
-              name: string;
+              collection_name: string;
               /**
                * @description Selected embedding model.
                * @enum {string}
@@ -3771,13 +3770,13 @@ export interface operations {
       content: {
         /**
          * @example {
-         *   "name": "smoke_tests",
+         *   "collection_name": "fake_store",
          *   "model": "jina-v2"
          * }
          */
         "application/json": {
           /** @description Vector store name. */
-          name: string;
+          collection_name: string;
           /**
            * @description Selected embedding model.
            * @enum {string}
@@ -3792,7 +3791,7 @@ export interface operations {
         content: {
           "application/json": {
             /** @description Vector store name. */
-            name: string;
+            collection_name: string;
             /**
              * @description Selected embedding model.
              * @enum {string}
@@ -3812,7 +3811,7 @@ export interface operations {
       content: {
         /**
          * @example {
-         *   "name": "smoke_tests",
+         *   "collection_name": "smoke_tests",
          *   "model": "jina-v2",
          *   "query_strings": [
          *     "gas",
@@ -3824,7 +3823,7 @@ export interface operations {
          */
         "application/json": {
           /** @description Vector store to query against. */
-          name: string;
+          collection_name: string;
           /**
            * @description Selected embedding model.
            * @enum {string}
@@ -3862,11 +3861,6 @@ export interface operations {
           filters?: {
             [key: string]: unknown;
           };
-          /**
-           * @description The distance metric used for the query. Defaults to the distance metric the vector store was created with.
-           * @enum {string}
-           */
-          metric?: "cosine" | "l2" | "inner";
         };
       };
     };
@@ -3892,7 +3886,7 @@ export interface operations {
               };
             }[][];
             /** @description Vector store name. */
-            name?: string;
+            collection_name?: string;
             /**
              * @description Selected embedding model.
              * @enum {string}
@@ -3917,7 +3911,7 @@ export interface operations {
       content: {
         /**
          * @example {
-         *   "name": "smoke_tests",
+         *   "collection_name": "smoke_tests",
          *   "model": "jina-v2",
          *   "ids": [
          *     "dd8f3774e05d42caa53cfbaa7389c08f"
@@ -3926,7 +3920,7 @@ export interface operations {
          */
         "application/json": {
           /** @description Vector store name. */
-          name: string;
+          collection_name: string;
           /**
            * @description Selected embedding model.
            * @enum {string}
@@ -3967,7 +3961,7 @@ export interface operations {
       content: {
         /**
          * @example {
-         *   "name": "smoke_tests",
+         *   "collection_name": "smoke_tests",
          *   "model": "jina-v2",
          *   "vectors": [
          *     {
@@ -3981,7 +3975,7 @@ export interface operations {
          */
         "application/json": {
           /** @description Vector store name. */
-          name: string;
+          collection_name: string;
           /**
            * @description Selected embedding model.
            * @enum {string}
@@ -4022,7 +4016,7 @@ export interface operations {
       content: {
         /**
          * @example {
-         *   "name": "smoke_tests",
+         *   "collection_name": "smoke_tests",
          *   "model": "jina-v2",
          *   "ids": [
          *     "ac32b9a133dd4e3689004f6e8f0fd6cd",
@@ -4032,7 +4026,7 @@ export interface operations {
          */
         "application/json": {
           /** @description Vector store name. */
-          name: string;
+          collection_name: string;
           /**
            * @description Selected embedding model.
            * @enum {string}

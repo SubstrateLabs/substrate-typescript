@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Substrate API",
-    "version": "2024-04-16",
+    "version": "2024-04-18",
     "contact": {
       "email": "support@substrate.run"
     },
@@ -437,7 +437,7 @@
           },
           "store": {
             "type": "string",
-            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string."
           },
           "node": {
             "type": "string",
@@ -476,7 +476,7 @@
           },
           "store": {
             "type": "string",
-            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string."
           },
           "node": {
             "type": "string",
@@ -529,7 +529,7 @@
           },
           "store": {
             "type": "string",
-            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string."
           },
           "height": {
             "type": "integer",
@@ -613,7 +613,7 @@
           },
           "store": {
             "type": "string",
-            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string."
           },
           "height": {
             "type": "integer",
@@ -686,7 +686,7 @@
           },
           "store": {
             "type": "string",
-            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string."
           },
           "width": {
             "type": "integer",
@@ -761,7 +761,7 @@
           },
           "store": {
             "type": "string",
-            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string."
           },
           "conditioning_scale": {
             "type": "number",
@@ -813,7 +813,7 @@
           },
           "store": {
             "type": "string",
-            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string."
           },
           "node": {
             "type": "string",
@@ -860,7 +860,7 @@
           },
           "store": {
             "type": "string",
-            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string."
           },
           "node": {
             "type": "string",
@@ -919,7 +919,7 @@
           },
           "store": {
             "type": "string",
-            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string."
           },
           "strength": {
             "type": "number",
@@ -1009,7 +1009,7 @@
           },
           "store": {
             "type": "string",
-            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string."
           },
           "node": {
             "type": "string",
@@ -1045,7 +1045,7 @@
           },
           "store": {
             "type": "string",
-            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string."
           }
         },
         "required": ["image_uri", "mask_image_uri"]
@@ -1080,7 +1080,7 @@
           },
           "store": {
             "type": "string",
-            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string."
           },
           "node": {
             "type": "string",
@@ -1112,7 +1112,7 @@
           },
           "store": {
             "type": "string",
-            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string."
           }
         },
         "required": ["image_uri"]
@@ -1138,7 +1138,7 @@
           },
           "store": {
             "type": "string",
-            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string."
           },
           "node": {
             "type": "string",
@@ -1170,7 +1170,7 @@
           },
           "store": {
             "type": "string",
-            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string."
           }
         },
         "required": ["image_uri"]
@@ -1201,7 +1201,7 @@
           },
           "store": {
             "type": "string",
-            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string."
           },
           "node": {
             "type": "string",
@@ -1247,7 +1247,7 @@
           },
           "store": {
             "type": "string",
-            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string."
           }
         },
         "required": ["image_uri"]
@@ -1411,7 +1411,7 @@
           },
           "store": {
             "type": "string",
-            "description": "Use \"hosted\" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the audio data will be returned as a base64-encoded string."
+            "description": "Use \"hosted\" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the audio data will be returned as a base64-encoded string."
           },
           "node": {
             "type": "string",
@@ -1452,7 +1452,7 @@
           },
           "store": {
             "type": "string",
-            "description": "Use \"hosted\" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the audio data will be returned as a base64-encoded string."
+            "description": "Use \"hosted\" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the audio data will be returned as a base64-encoded string."
           }
         },
         "required": ["text"]
@@ -1500,9 +1500,9 @@
             "type": "string",
             "description": "Text to embed."
           },
-          "store": {
+          "collection_name": {
             "type": "string",
-            "description": "[Vector store](/docs/vector-stores) identifier."
+            "description": "Vector store name."
           },
           "metadata": {
             "type": "object",
@@ -1520,11 +1520,11 @@
             "type": "string",
             "description": "Vector store document ID. Ignored if `store` is unset."
           },
-          "node": {
+          "model": {
             "type": "string",
-            "enum": ["JinaV2", "CLIP"],
-            "description": "Selected node.",
-            "default": "JinaV2"
+            "enum": ["jina-v2", "clip"],
+            "description": "Selected embedding model.",
+            "default": "jina-v2"
           }
         },
         "required": ["text"]
@@ -1572,9 +1572,9 @@
               "$ref": "#/components/schemas/EmbedTextItem"
             }
           },
-          "store": {
+          "collection_name": {
             "type": "string",
-            "description": "[Vector store](/docs/vector-stores) identifier."
+            "description": "Vector store name."
           },
           "embedded_metadata_keys": {
             "type": "array",
@@ -1583,11 +1583,11 @@
               "type": "string"
             }
           },
-          "node": {
+          "model": {
             "type": "string",
-            "enum": ["JinaV2", "CLIP"],
-            "description": "Selected node.",
-            "default": "JinaV2"
+            "enum": ["jina-v2", "clip"],
+            "description": "Selected embedding model.",
+            "default": "jina-v2"
           }
         },
         "required": ["items"]
@@ -1617,9 +1617,9 @@
               "$ref": "#/components/schemas/EmbedTextItem"
             }
           },
-          "store": {
+          "collection_name": {
             "type": "string",
-            "description": "[Vector store](/docs/vector-stores) identifier."
+            "description": "Vector store name."
           },
           "embedded_metadata_keys": {
             "type": "array",
@@ -1653,19 +1653,19 @@
             "type": "string",
             "description": "Image to embed."
           },
-          "store": {
+          "collection_name": {
             "type": "string",
-            "description": "[Vector store](/docs/vector-stores) identifier."
+            "description": "Vector store name."
           },
           "doc_id": {
             "type": "string",
             "description": "Vector store document ID. Ignored if `store` is unset."
           },
-          "node": {
+          "model": {
             "type": "string",
-            "enum": ["CLIP"],
-            "description": "Selected node.",
-            "default": "CLIP"
+            "enum": ["clip"],
+            "description": "Selected embedding model.",
+            "default": "clip"
           }
         },
         "required": ["image_uri"]
@@ -1732,15 +1732,15 @@
               "$ref": "#/components/schemas/EmbedImageItem"
             }
           },
-          "store": {
+          "collection_name": {
             "type": "string",
-            "description": "[Vector store](/docs/vector-stores) identifier."
+            "description": "Vector store name."
           },
-          "node": {
+          "model": {
             "type": "string",
-            "enum": ["CLIP"],
-            "description": "Selected node.",
-            "default": "CLIP"
+            "enum": ["clip"],
+            "description": "Selected embedding model.",
+            "default": "clip"
           }
         },
         "required": ["items"]
@@ -1770,9 +1770,16 @@
               "$ref": "#/components/schemas/EmbedTextOrImageItem"
             }
           },
-          "store": {
+          "collection_name": {
             "type": "string",
-            "description": "[Vector store](/docs/vector-stores) identifier."
+            "description": "Vector store name."
+          },
+          "embedded_metadata_keys": {
+            "type": "array",
+            "description": "Choose keys from `metadata` to embed with text. Only applies to text items.",
+            "items": {
+              "type": "string"
+            }
           }
         },
         "required": ["items"]
@@ -1795,7 +1802,7 @@
         "title": "CreateVectorStoreIn",
         "type": "object",
         "properties": {
-          "name": {
+          "collection_name": {
             "type": "string",
             "description": "Vector store name.",
             "minLength": 1,
@@ -1827,13 +1834,13 @@
             "description": "The distance metric to construct the index with."
           }
         },
-        "required": ["name", "model"]
+        "required": ["collection_name", "model"]
       },
       "CreateVectorStoreOut": {
         "title": "CreateVectorStoreOut",
         "type": "object",
         "properties": {
-          "name": {
+          "collection_name": {
             "type": "string",
             "description": "Vector store name.",
             "minLength": 1,
@@ -1865,7 +1872,13 @@
             "description": "The distance metric to construct the index with."
           }
         },
-        "required": ["name", "model", "m", "ef_construction", "metric"]
+        "required": [
+          "collection_name",
+          "model",
+          "m",
+          "ef_construction",
+          "metric"
+        ]
       },
       "ListVectorStoresIn": {
         "title": "ListVectorStoresIn",
@@ -1876,7 +1889,7 @@
         "title": "ListVectorStoresOut",
         "type": "object",
         "properties": {
-          "stores": {
+          "items": {
             "type": "array",
             "description": "List of vector stores.",
             "items": {
@@ -1889,7 +1902,7 @@
         "title": "DeleteVectorStoreIn",
         "type": "object",
         "properties": {
-          "name": {
+          "collection_name": {
             "type": "string",
             "description": "Vector store name."
           },
@@ -1899,13 +1912,13 @@
             "enum": ["jina-v2", "clip"]
           }
         },
-        "required": ["name", "model"]
+        "required": ["collection_name", "model"]
       },
       "DeleteVectorStoreOut": {
         "title": "DeleteVectorStoreOut",
         "type": "object",
         "properties": {
-          "name": {
+          "collection_name": {
             "type": "string",
             "description": "Vector store name."
           },
@@ -1915,7 +1928,7 @@
             "enum": ["jina-v2", "clip"]
           }
         },
-        "required": ["name", "model"]
+        "required": ["collection_name", "model"]
       },
       "Vector": {
         "title": "Vector",
@@ -1946,7 +1959,7 @@
         "title": "FetchVectorsIn",
         "type": "object",
         "properties": {
-          "name": {
+          "collection_name": {
             "type": "string",
             "description": "Vector store name."
           },
@@ -1964,7 +1977,7 @@
             "maxItems": 100
           }
         },
-        "required": ["name", "model", "ids"]
+        "required": ["collection_name", "model", "ids"]
       },
       "FetchVectorsOut": {
         "title": "FetchVectorsOut",
@@ -2030,7 +2043,7 @@
         "title": "UpdateVectorsIn",
         "type": "object",
         "properties": {
-          "name": {
+          "collection_name": {
             "type": "string",
             "description": "Vector store name."
           },
@@ -2048,13 +2061,13 @@
             "maxItems": 100
           }
         },
-        "required": ["name", "model", "vectors"]
+        "required": ["collection_name", "model", "vectors"]
       },
       "DeleteVectorsIn": {
         "title": "DeleteVectorsIn",
         "type": "object",
         "properties": {
-          "name": {
+          "collection_name": {
             "type": "string",
             "description": "Vector store name."
           },
@@ -2072,13 +2085,13 @@
             "maxItems": 100
           }
         },
-        "required": ["name", "model", "ids"]
+        "required": ["collection_name", "model", "ids"]
       },
       "QueryVectorStoreIn": {
         "title": "QueryVectorStoreIn",
         "type": "object",
         "properties": {
-          "name": {
+          "collection_name": {
             "type": "string",
             "description": "Vector store to query against."
           },
@@ -2147,14 +2160,9 @@
             "type": "object",
             "description": "Filter metadata by key-value pairs.",
             "additionalProperties": true
-          },
-          "metric": {
-            "type": "string",
-            "enum": ["cosine", "l2", "inner"],
-            "description": "The distance metric used for the query. Defaults to the distance metric the vector store was created with."
           }
         },
-        "required": ["name", "model"]
+        "required": ["collection_name", "model"]
       },
       "VectorStoreQueryResult": {
         "title": "VectorStoreQueryResult",
@@ -2199,7 +2207,7 @@
               }
             }
           },
-          "name": {
+          "collection_name": {
             "type": "string",
             "description": "Vector store name."
           },
@@ -3424,8 +3432,8 @@
               },
               "example": {
                 "text": "Argon is the third most abundant gas in Earth's atmosphere, at 0.934% (9340 ppmv). It is more than twice as abundant as water vapor.",
-                "node": "JinaV2",
-                "store": "smoke_tests",
+                "model": "jina-v2",
+                "collection_name": "smoke_tests",
                 "metadata": {
                   "group": "18"
                 },
@@ -3475,7 +3483,7 @@
                 "$ref": "#/components/schemas/MultiEmbedTextIn"
               },
               "example": {
-                "node": "JinaV2",
+                "model": "jina-v2",
                 "items": [
                   {
                     "text": "Osmium is the densest naturally occurring element. When experimentally measured using X-ray crystallography, it has a density of 22.59 g/cm3. Manufacturers use its alloys with platinum, iridium, and other platinum-group metals to make fountain pen nib tipping, electrical contacts, and in other applications that require extreme durability and hardness.",
@@ -3490,7 +3498,7 @@
                     }
                   }
                 ],
-                "store": "smoke_tests",
+                "collection_name": "smoke_tests",
                 "embedded_metadata_keys": ["group"]
               }
             }
@@ -3552,7 +3560,7 @@
               },
               "example": {
                 "image_uri": "https://media.substrate.run/docs-fuji-red.jpg",
-                "store": "smoke_tests"
+                "collection_name": "smoke_tests"
               }
             }
           }
@@ -3601,7 +3609,7 @@
                     "image_uri": "https://media.substrate.run/docs-fuji-blue.jpg"
                   }
                 ],
-                "store": "smoke_tests"
+                "collection_name": "smoke_tests"
               }
             }
           }
@@ -3665,7 +3673,7 @@
                     }
                   }
                 ],
-                "store": "smoke_tests",
+                "collection_name": "smoke_tests",
                 "embedded_metadata_keys": ["group"]
               }
             }
@@ -3734,7 +3742,7 @@
                     "image_uri": "https://media.substrate.run/docs-fuji-blue.jpg"
                   }
                 ],
-                "store": "smoke_tests"
+                "collection_name": "smoke_tests"
               }
             }
           }
@@ -3784,7 +3792,7 @@
                 "$ref": "#/components/schemas/CreateVectorStoreIn"
               },
               "example": {
-                "name": "smoke_tests",
+                "collection_name": "smoke_tests",
                 "model": "jina-v2"
               }
             }
@@ -3799,7 +3807,7 @@
                   "$ref": "#/components/schemas/CreateVectorStoreOut"
                 },
                 "example": {
-                  "name": "smoke_tests",
+                  "collection_name": "smoke_tests",
                   "model": "jina-v2",
                   "m": 16,
                   "ef_construction": 64,
@@ -3836,20 +3844,20 @@
                   "$ref": "#/components/schemas/ListVectorStoresOut"
                 },
                 "example": {
-                  "stores": [
+                  "items": [
                     {
-                      "name": "comments",
+                      "collection_name": "comments",
                       "model": "jina-v2",
                       "m": 16,
                       "ef_construction": 64,
                       "metric": "inner"
                     },
                     {
-                      "name": "images",
+                      "collection_name": "images",
                       "model": "jina-v2",
-                      "m": 24,
-                      "ef_construction": 48,
-                      "metric": "cosine"
+                      "m": 16,
+                      "ef_construction": 64,
+                      "metric": "inner"
                     }
                   ]
                 }
@@ -3872,7 +3880,7 @@
                 "$ref": "#/components/schemas/DeleteVectorStoreIn"
               },
               "example": {
-                "name": "smoke_tests",
+                "collection_name": "fake_store",
                 "model": "jina-v2"
               }
             }
@@ -3887,7 +3895,7 @@
                   "$ref": "#/components/schemas/DeleteVectorStoreOut"
                 },
                 "example": {
-                  "name": "comments",
+                  "collection_name": "comments",
                   "model": "jina-v2"
                 }
               }
@@ -3909,7 +3917,7 @@
                 "$ref": "#/components/schemas/QueryVectorStoreIn"
               },
               "example": {
-                "name": "smoke_tests",
+                "collection_name": "smoke_tests",
                 "model": "jina-v2",
                 "query_strings": ["gas", "metal"],
                 "top_k": 1,
@@ -3951,7 +3959,7 @@
                       }
                     ]
                   ],
-                  "name": "comments",
+                  "collection_name": "comments",
                   "model": "jina-v2",
                   "metric": "inner"
                 }
@@ -3974,7 +3982,7 @@
                 "$ref": "#/components/schemas/FetchVectorsIn"
               },
               "example": {
-                "name": "smoke_tests",
+                "collection_name": "smoke_tests",
                 "model": "jina-v2",
                 "ids": ["dd8f3774e05d42caa53cfbaa7389c08f"]
               }
@@ -4021,12 +4029,14 @@
                 "$ref": "#/components/schemas/UpdateVectorsIn"
               },
               "example": {
-                "name": "smoke_tests",
+                "collection_name": "smoke_tests",
                 "model": "jina-v2",
                 "vectors": [
                   {
                     "id": "dd8f3774e05d42caa53cfbaa7389c08f",
-                    "metadata": { "appearance": "silvery, blue cast" }
+                    "metadata": {
+                      "appearance": "silvery, blue cast"
+                    }
                   }
                 ]
               }
@@ -4063,7 +4073,7 @@
                 "$ref": "#/components/schemas/DeleteVectorsIn"
               },
               "example": {
-                "name": "smoke_tests",
+                "collection_name": "smoke_tests",
                 "model": "jina-v2",
                 "ids": [
                   "ac32b9a133dd4e3689004f6e8f0fd6cd",
