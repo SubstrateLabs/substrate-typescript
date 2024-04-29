@@ -126,11 +126,21 @@ After making changes, you should:
 
 **NOTE:** The `make update-version` task will run after every `make sync-codegen` too!
 
-## CI
+## CI & Git Hooks
 
 We're using GitHub Actions for running tests, verifying successful builds, typechecking, and formatting (see `.github/workflows/node.js.yml`)
 
 Right now we're running these steps using Node 16 and Node 18, but may add more variants soon. Additionally we may automate the release process through this mechanism as well.
+
+In order to speed up the feedback you can also use the git hooks setup with [`pre-commit`](https://pre-commit.com/).
+
+```sh
+# install pre-commit
+brew install pre-commit
+
+# install git-hooks
+pre-commit install
+```
 
 ## Releasing
 
