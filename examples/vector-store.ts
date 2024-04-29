@@ -54,7 +54,10 @@ async function main() {
     ],
   });
 
-  const destroy = new DeleteVectorStore({ collection_name: "vibes", model: "jina-v2" });
+  const destroy = new DeleteVectorStore({
+    collection_name: "vibes",
+    model: "jina-v2",
+  });
 
   const res = await substrate.run(
     create,
