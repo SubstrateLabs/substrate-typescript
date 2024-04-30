@@ -10,7 +10,7 @@ If you're just getting started, head to [guides.substrate.run](https://guides.su
 
 For a detailed API reference covering the nodes available on Substrate, see [substrate.run/nodes](https://www.substrate.run/nodes).
 
-For an interactive reference, check out [explore.substrate.run](https://explore.substrate.run/). You can call `substrate.visualize(...nodes...)` to generate an [interactive visualization](https://explore.substrate.run/s/eNrFU11LAzEQ_CtH6OP1oa0f0DetcFbqt6IissTceg2XS45kUzzL_XeTtkilVRQE35JJZnYyu5kzbXJ0bPg4ZzJnw8W2B-Z08jC-La9YugACnqFGywlv8JUCym0RSHNWW1PVFM4JlUoqTHjiyNiGtSkDNzVe5WA81Z6gUOaZK9WwIVmPbbpWsA9Z_TKhER_8uOCcAXQ614eQXR1cHMP5BYyPOh2AwHzx5C0OwHUzr-4vz1j7KzMD2J-Jomiy8d-Z2QPV34PTbnn5AzNP6Yq11paNN6UslxYFyRnG-tTU0acjK3XRFUYLHo1KwmqpshSAKKa9UimbcRUJvqq4lW-YRI50qJpE6sRoTBxqQi1wmLCYz5rAat2HXkN-cnuu2UouKrdP7UecW-5tc02WCwxnxspCaoiZw_ZhNDU44qLc_qQSm8UkLnskBDpnbEA4kWWbvtaa8kdpBlCH-MiEbzDlsvRfZrcLdzuj45N-b_p9dp_u_Wt2YSoxLxYzGZZSS5JcweontO07U4J3WQ) of any graph.
+For an interactive reference, check out [explore.substrate.run](https://explore.substrate.run/). You can call `Substrate.visualize(...nodes...)` to generate an [interactive visualization](https://explore.substrate.run/s/eNrFU11LAzEQ_CtH6OP1oa0f0DetcFbqt6IissTceg2XS45kUzzL_XeTtkilVRQE35JJZnYyu5kzbXJ0bPg4ZzJnw8W2B-Z08jC-La9YugACnqFGywlv8JUCym0RSHNWW1PVFM4JlUoqTHjiyNiGtSkDNzVe5WA81Z6gUOaZK9WwIVmPbbpWsA9Z_TKhER_8uOCcAXQ614eQXR1cHMP5BYyPOh2AwHzx5C0OwHUzr-4vz1j7KzMD2J-Jomiy8d-Z2QPV34PTbnn5AzNP6Yq11paNN6UslxYFyRnG-tTU0acjK3XRFUYLHo1KwmqpshSAKKa9UimbcRUJvqq4lW-YRI50qJpE6sRoTBxqQi1wmLCYz5rAat2HXkN-cnuu2UouKrdP7UecW-5tc02WCwxnxspCaoiZw_ZhNDU44qLc_qQSm8UkLnskBDpnbEA4kWWbvtaa8kdpBlCH-MiEbzDlsvRfZrcLdzuj45N-b_p9dp_u_Wt2YSoxLxYzGZZSS5JcweontO07U4J3WQ) of any graph.
 
 ## Installation
 
