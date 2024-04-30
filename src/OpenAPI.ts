@@ -102,13 +102,6 @@ export interface paths {
      */
     post: operations["StableDiffusionXLInpaint"];
   };
-  "/StableDiffusionXLIPAdapter": {
-    /**
-     * StableDiffusionXLIPAdapter
-     * @description Generate an image with an image prompt, using Stable Diffusion XL with [IP-Adapter](https://arxiv.org/abs/2308.06721).
-     */
-    post: operations["StableDiffusionXLIPAdapter"];
-  };
   "/StableDiffusionXLControlNet": {
     /**
      * StableDiffusionXLControlNet
@@ -116,61 +109,12 @@ export interface paths {
      */
     post: operations["StableDiffusionXLControlNet"];
   };
-  "/FillMask": {
+  "/StableDiffusionXLIPAdapter": {
     /**
-     * FillMask
-     * @description Fill (inpaint) part of an image, e.g. to 'remove' an object.
+     * StableDiffusionXLIPAdapter
+     * @description Generate an image with an image prompt, using Stable Diffusion XL with [IP-Adapter](https://arxiv.org/abs/2308.06721).
      */
-    post: operations["FillMask"];
-  };
-  "/BigLaMa": {
-    /**
-     * BigLaMa
-     * @description Inpaint a mask using [LaMa](https://github.com/advimman/lama).
-     */
-    post: operations["BigLaMa"];
-  };
-  "/UpscaleImage": {
-    /**
-     * UpscaleImage
-     * @description Upscale an image.
-     */
-    post: operations["UpscaleImage"];
-  };
-  "/RealESRGAN": {
-    /**
-     * RealESRGAN
-     * @description Upscale an image using [RealESRGAN](https://github.com/xinntao/Real-ESRGAN).
-     */
-    post: operations["RealESRGAN"];
-  };
-  "/RemoveBackground": {
-    /**
-     * RemoveBackground
-     * @description Remove the background from an image, with the option to return the foreground as a mask.
-     */
-    post: operations["RemoveBackground"];
-  };
-  "/DISISNet": {
-    /**
-     * DISISNet
-     * @description Segment image foreground using [DIS IS-Net](https://github.com/xuebinqin/DIS).
-     */
-    post: operations["DISISNet"];
-  };
-  "/SegmentUnderPoint": {
-    /**
-     * SegmentUnderPoint
-     * @description Segment an image under a point and return the segment.
-     */
-    post: operations["SegmentUnderPoint"];
-  };
-  "/SegmentAnything": {
-    /**
-     * SegmentAnything
-     * @description Segment an image using [SegmentAnything](https://github.com/facebookresearch/segment-anything).
-     */
-    post: operations["SegmentAnything"];
+    post: operations["StableDiffusionXLIPAdapter"];
   };
   "/TranscribeMedia": {
     /**
@@ -192,6 +136,62 @@ export interface paths {
      * @description Generate speech from text using [XTTS v2](https://docs.coqui.ai/en/latest/models/xtts.html).
      */
     post: operations["XTTSV2"];
+  };
+  "/RemoveBackground": {
+    /**
+     * RemoveBackground
+     * @description Remove the background from an image, with the option to return the foreground as a mask.
+     */
+    post: operations["RemoveBackground"];
+  };
+  "/FillMask": {
+    /**
+     * FillMask
+     * @description Fill (inpaint) part of an image, e.g. to 'remove' an object.
+     */
+    post: operations["FillMask"];
+  };
+  "/UpscaleImage": {
+    /**
+     * UpscaleImage
+     * @description Upscale an image.
+     */
+    post: operations["UpscaleImage"];
+  };
+  "/SegmentUnderPoint": {
+    /**
+     * SegmentUnderPoint
+     * @description Segment an image under a point and return the segment.
+     */
+    post: operations["SegmentUnderPoint"];
+  };
+  "/DISISNet": {
+    /**
+     * DISISNet
+     * @description Segment image foreground using [DIS IS-Net](https://github.com/xuebinqin/DIS).
+     */
+    post: operations["DISISNet"];
+  };
+  "/BigLaMa": {
+    /**
+     * BigLaMa
+     * @description Inpaint a mask using [LaMa](https://github.com/advimman/lama).
+     */
+    post: operations["BigLaMa"];
+  };
+  "/RealESRGAN": {
+    /**
+     * RealESRGAN
+     * @description Upscale an image using [RealESRGAN](https://github.com/xinntao/Real-ESRGAN).
+     */
+    post: operations["RealESRGAN"];
+  };
+  "/SegmentAnything": {
+    /**
+     * SegmentAnything
+     * @description Segment an image using [SegmentAnything](https://github.com/facebookresearch/segment-anything).
+     */
+    post: operations["SegmentAnything"];
   };
   "/EmbedText": {
     /**
@@ -299,6 +299,8 @@ export interface components {
       type: "api_error" | "invalid_request_error";
       /** @description A message providing more details about the error. */
       message: string;
+      /** @description A unique identifier for the request. */
+      request_id?: string;
     };
     /** GenerateTextIn */
     GenerateTextIn: {
@@ -322,7 +324,7 @@ export interface components {
     /** GenerateTextOut */
     GenerateTextOut: {
       /** @description Text response. */
-      text?: string;
+      text: string;
     };
     /** GenerateJSONIn */
     GenerateJSONIn: {
@@ -350,19 +352,21 @@ export interface components {
     /** GenerateJSONOut */
     GenerateJSONOut: {
       /** @description JSON response. */
-      json_object?: {
+      json_object: {
         [key: string]: unknown;
       };
     };
     /** MultiGenerateTextIn */
     MultiGenerateTextIn: {
       /** @description Input prompt. */
-      prompt: string;
+      prompt?: string;
+      /** @description Batch input prompts. */
+      batch_prompts?: string[];
       /**
        * @description Number of choices to generate.
        * @default 1
        */
-      num_choices: number;
+      num_choices?: number;
       /**
        * Format: float
        * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
@@ -378,26 +382,40 @@ export interface components {
        */
       node?: "Mistral7BInstruct";
     };
-    /** MultiGenerateTextOut */
-    MultiGenerateTextOut: {
+    /** MultiGenerateTextOutput */
+    MultiGenerateTextOutput: {
+      /** @description Response choices. */
       choices: {
         /** @description Text response. */
-        text?: string;
+        text: string;
+      }[];
+    };
+    /** MultiGenerateTextOut */
+    MultiGenerateTextOut: {
+      /** @description A single output for `prompt`, or multiple outputs for `batch_prompts`. */
+      outputs: {
+        /** @description Response choices. */
+        choices: {
+          /** @description Text response. */
+          text: string;
+        }[];
       }[];
     };
     /** MultiGenerateJSONIn */
     MultiGenerateJSONIn: {
       /** @description Input prompt. */
-      prompt: string;
+      prompt?: string;
       /** @description JSON schema to guide `json_object` response. */
       json_schema: {
         [key: string]: unknown;
       };
+      /** @description Batch input prompts. */
+      batch_prompts?: string[];
       /**
        * @description Number of choices to generate.
-       * @default 1
+       * @default 2
        */
-      num_choices: number;
+      num_choices?: number;
       /**
        * Format: float
        * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
@@ -413,25 +431,44 @@ export interface components {
        */
       node?: "Mistral7BInstruct";
     };
-    /** MultiGenerateJSONOut */
-    MultiGenerateJSONOut: {
+    /** MultiGenerateJSONOutput */
+    MultiGenerateJSONOutput: {
+      /** @description Response choices. */
       choices: {
         /** @description JSON response. */
-        json_object?: {
+        json_object: {
           [key: string]: unknown;
         };
+      }[];
+    };
+    /** MultiGenerateJSONOut */
+    MultiGenerateJSONOut: {
+      /** @description A single output for `prompt`, or multiple outputs for `batch_prompts`. */
+      outputs: {
+        /** @description Response choices. */
+        choices: {
+          /** @description JSON response. */
+          json_object: {
+            [key: string]: unknown;
+          };
+        }[];
       }[];
     };
     /** Mistral7BInstructIn */
     Mistral7BInstructIn: {
       /** @description Input prompt. */
-      prompt: string;
-      /** @description Number of choices to generate. */
-      num_choices: number;
+      prompt?: string;
+      /**
+       * @description Number of choices to generate.
+       * @default 1
+       */
+      num_choices?: number;
       /** @description JSON schema to guide response. */
       json_schema?: {
         [key: string]: unknown;
       };
+      /** @description Batch input prompts. */
+      batch_prompts?: string[];
       /**
        * Format: float
        * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
@@ -449,8 +486,9 @@ export interface components {
         [key: string]: unknown;
       };
     };
-    /** Mistral7BInstructOut */
-    Mistral7BInstructOut: {
+    /** Mistral7BInstructOutput */
+    Mistral7BInstructOutput: {
+      /** @description Response choices. */
       choices: {
         /** @description Text response, if `json_schema` was not provided. */
         text?: string;
@@ -458,6 +496,21 @@ export interface components {
         json_object?: {
           [key: string]: unknown;
         };
+      }[];
+    };
+    /** Mistral7BInstructOut */
+    Mistral7BInstructOut: {
+      /** @description A single output for `prompt`, or multiple outputs for `batch_prompts`. */
+      outputs: {
+        /** @description Response choices. */
+        choices: {
+          /** @description Text response, if `json_schema` was not provided. */
+          text?: string;
+          /** @description JSON response, if `json_schema` was provided. */
+          json_object?: {
+            [key: string]: unknown;
+          };
+        }[];
       }[];
     };
     /** GenerateTextVisionIn */
@@ -490,11 +543,6 @@ export interface components {
       /** @description Image prompts. */
       image_uris: string[];
       /**
-       * Format: float
-       * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
-       */
-      temperature?: number;
-      /**
        * @description Maximum number of tokens to generate.
        * @default 800
        */
@@ -509,7 +557,7 @@ export interface components {
     GenerateImageIn: {
       /** @description Text prompt. */
       prompt: string;
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
       /**
        * @description Selected node.
@@ -527,9 +575,12 @@ export interface components {
     MultiGenerateImageIn: {
       /** @description Text prompt. */
       prompt: string;
-      /** @description Number of images to generate. */
+      /**
+       * @description Number of images to generate.
+       * @default 2
+       */
       num_images: number;
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
       /**
        * @description Selected node.
@@ -540,6 +591,7 @@ export interface components {
     };
     /** MultiGenerateImageOut */
     MultiGenerateImageOut: {
+      /** @description Generated images. */
       outputs: {
         /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
         image_uri: string;
@@ -551,25 +603,34 @@ export interface components {
       prompt: string;
       /** @description Negative input prompt. */
       negative_prompt?: string;
-      /** @description Number of diffusion steps. */
+      /**
+       * @description Number of diffusion steps.
+       * @default 30
+       */
       steps?: number;
       /**
        * @description Number of images to generate.
        * @default 1
        */
-      num_images?: number;
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      num_images: number;
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
-      /** @description Height of output image, in pixels. */
+      /**
+       * @description Height of output image, in pixels.
+       * @default 1024
+       */
       height?: number;
-      /** @description Width of output image, in pixels. */
+      /**
+       * @description Width of output image, in pixels.
+       * @default 1024
+       */
       width?: number;
       /** @description Seeds for deterministic generation. Default is a random seed. */
       seeds?: number[];
       /**
        * Format: float
        * @description Higher values adhere to the text prompt more strongly, typically at the expense of image quality.
-       * @default 5
+       * @default 7
        */
       guidance_scale?: number;
     };
@@ -582,6 +643,7 @@ export interface components {
     };
     /** StableDiffusionXLOut */
     StableDiffusionXLOut: {
+      /** @description Generated images. */
       outputs: {
         /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
         image_uri: string;
@@ -600,17 +662,24 @@ export interface components {
        * @default 1
        */
       num_images?: number;
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
-      /** @description Height of output image, in pixels. */
+      /**
+       * @description Height of output image, in pixels.
+       * @default 1024
+       */
       height?: number;
-      /** @description Width of output image, in pixels. */
+      /**
+       * @description Width of output image, in pixels.
+       * @default 1024
+       */
       width?: number;
       /** @description Seeds for deterministic generation. Default is a random seed. */
       seeds?: number[];
     };
     /** StableDiffusionXLLightningOut */
     StableDiffusionXLLightningOut: {
+      /** @description Generated images. */
       outputs: {
         /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
         image_uri: string;
@@ -632,21 +701,29 @@ export interface components {
       /**
        * Format: float
        * @description Controls the influence of the image prompt on the generated output.
+       * @default 0.5
        */
       ip_adapter_scale?: number;
       /** @description Negative input prompt. */
       negative_prompt?: string;
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
-      /** @description Width of output image, in pixels. */
+      /**
+       * @description Width of output image, in pixels.
+       * @default 1024
+       */
       width?: number;
-      /** @description Height of output image, in pixels. */
+      /**
+       * @description Height of output image, in pixels.
+       * @default 1024
+       */
       height?: number;
       /** @description Random noise seeds. Default is random seeds for each generation. */
       seeds?: number[];
     };
     /** StableDiffusionXLIPAdapterOut */
     StableDiffusionXLIPAdapterOut: {
+      /** @description Generated images. */
       outputs: {
         /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
         image_uri: string;
@@ -677,11 +754,12 @@ export interface components {
       output_resolution?: number;
       /** @description Negative input prompt. */
       negative_prompt?: string;
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
       /**
        * Format: float
        * @description Controls the influence of the input image on the generated output.
+       * @default 0.5
        */
       conditioning_scale?: number;
       /** @description Random noise seeds. Default is random seeds for each generation. */
@@ -689,6 +767,7 @@ export interface components {
     };
     /** StableDiffusionXLControlNetOut */
     StableDiffusionXLControlNetOut: {
+      /** @description Generated images. */
       outputs: {
         /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
         image_uri: string;
@@ -704,7 +783,7 @@ export interface components {
       prompt: string;
       /** @description Mask image that controls which pixels are inpainted. If unset, the entire image is edited (image-to-image). */
       mask_image_uri?: string;
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
       /**
        * @description Selected node.
@@ -726,9 +805,12 @@ export interface components {
       prompt: string;
       /** @description Mask image that controls which pixels are edited (inpainting). If unset, the entire image is edited (image-to-image). */
       mask_image_uri?: string;
-      /** @description Number of images to generate. */
+      /**
+       * @description Number of images to generate.
+       * @default 2
+       */
       num_images: number;
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
       /**
        * @description Selected node.
@@ -739,6 +821,7 @@ export interface components {
     };
     /** MultiGenerativeEditImageOut */
     MultiGenerativeEditImageOut: {
+      /** @description Generated images. */
       outputs: {
         /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
         image_uri: string;
@@ -764,12 +847,12 @@ export interface components {
       output_resolution?: number;
       /** @description Negative input prompt. */
       negative_prompt?: string;
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
       /**
        * Format: float
        * @description Controls the strength of the generation process.
-       * @default 1
+       * @default 0.8
        */
       strength?: number;
       /** @description Random noise seeds. Default is random seeds for each generation. */
@@ -777,6 +860,7 @@ export interface components {
     };
     /** StableDiffusionXLInpaintOut */
     StableDiffusionXLInpaintOut: {
+      /** @description Generated images. */
       outputs: {
         /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
         image_uri: string;
@@ -820,7 +904,7 @@ export interface components {
       image_uri: string;
       /** @description Mask image that controls which pixels are inpainted. */
       mask_image_uri: string;
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
       /**
        * @description Selected node.
@@ -840,7 +924,7 @@ export interface components {
       image_uri: string;
       /** @description Mask image that controls which pixels are inpainted. */
       mask_image_uri: string;
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
     };
     /** BigLaMaOut */
@@ -859,7 +943,7 @@ export interface components {
       return_mask?: boolean;
       /** @description Hex value background color. Transparent if unset. */
       background_color?: string;
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
       /**
        * @description Selected node.
@@ -877,7 +961,7 @@ export interface components {
     DISISNetIn: {
       /** @description Input image. */
       image_uri: string;
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
     };
     /** DISISNetOut */
@@ -889,7 +973,7 @@ export interface components {
     UpscaleImageIn: {
       /** @description Input image. */
       image_uri: string;
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
       /**
        * @description Selected node.
@@ -907,7 +991,7 @@ export interface components {
     RealESRGANIn: {
       /** @description Input image. */
       image_uri: string;
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
     };
     /** RealESRGANOut */
@@ -926,7 +1010,7 @@ export interface components {
         /** @description Y position. */
         y: number;
       };
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
       /**
        * @description Selected node.
@@ -974,7 +1058,7 @@ export interface components {
          */
         y2: number;
       }[];
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
     };
     /** SegmentAnythingOut */
@@ -1128,7 +1212,7 @@ export interface components {
     GenerateSpeechIn: {
       /** @description Input text. */
       text: string;
-      /** @description Use "hosted" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the audio data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the audio data will be returned as a base64-encoded string. */
       store?: string;
       /**
        * @description Selected node.
@@ -1153,7 +1237,7 @@ export interface components {
        * @default en
        */
       language?: string;
-      /** @description Use "hosted" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the audio data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the audio data will be returned as a base64-encoded string. */
       store?: string;
     };
     /** XTTSV2Out */
@@ -1176,8 +1260,8 @@ export interface components {
     EmbedTextIn: {
       /** @description Text to embed. */
       text: string;
-      /** @description [Vector store](/docs/vector-stores) identifier. */
-      store?: string;
+      /** @description Vector store name. */
+      collection_name?: string;
       /** @description Metadata that can be used to query the vector store. Ignored if `store` is unset. */
       metadata?: {
         [key: string]: unknown;
@@ -1187,11 +1271,11 @@ export interface components {
       /** @description Vector store document ID. Ignored if `store` is unset. */
       doc_id?: string;
       /**
-       * @description Selected node.
-       * @default JinaV2
+       * @description Selected embedding model.
+       * @default jina-v2
        * @enum {string}
        */
-      node?: "JinaV2" | "CLIP";
+      model?: "jina-v2" | "clip";
     };
     /** EmbedTextOut */
     EmbedTextOut: {
@@ -1207,6 +1291,7 @@ export interface components {
         };
       };
     };
+    /** EmbedTextItem */
     EmbedTextItem: {
       /** @description Text to embed. */
       text: string;
@@ -1230,16 +1315,16 @@ export interface components {
         /** @description Vector store document ID. Ignored if `store` is unset. */
         doc_id?: string;
       }[];
-      /** @description [Vector store](/docs/vector-stores) identifier. */
-      store?: string;
+      /** @description Vector store name. */
+      collection_name?: string;
       /** @description Choose keys from `metadata` to embed with text. */
       embedded_metadata_keys?: string[];
       /**
-       * @description Selected node.
-       * @default JinaV2
+       * @description Selected embedding model.
+       * @default jina-v2
        * @enum {string}
        */
-      node?: "JinaV2" | "CLIP";
+      model?: "jina-v2" | "clip";
     };
     /** MultiEmbedTextOut */
     MultiEmbedTextOut: {
@@ -1268,8 +1353,8 @@ export interface components {
         /** @description Vector store document ID. Ignored if `store` is unset. */
         doc_id?: string;
       }[];
-      /** @description [Vector store](/docs/vector-stores) identifier. */
-      store?: string;
+      /** @description Vector store name. */
+      collection_name?: string;
       /** @description Choose keys from `metadata` to embed with text. */
       embedded_metadata_keys?: string[];
     };
@@ -1291,16 +1376,16 @@ export interface components {
     EmbedImageIn: {
       /** @description Image to embed. */
       image_uri: string;
-      /** @description [Vector store](/docs/vector-stores) identifier. */
-      store?: string;
+      /** @description Vector store name. */
+      collection_name?: string;
       /** @description Vector store document ID. Ignored if `store` is unset. */
       doc_id?: string;
       /**
-       * @description Selected node.
-       * @default CLIP
+       * @description Selected embedding model.
+       * @default clip
        * @enum {string}
        */
-      node?: "CLIP";
+      model?: "clip";
     };
     /** EmbedImageOut */
     EmbedImageOut: {
@@ -1316,12 +1401,14 @@ export interface components {
         };
       };
     };
+    /** EmbedImageItem */
     EmbedImageItem: {
       /** @description Image to embed. */
       image_uri: string;
       /** @description Vector store document ID. Ignored if `store` is unset. */
       doc_id?: string;
     };
+    /** EmbedTextOrImageItem */
     EmbedTextOrImageItem: {
       /** @description Image to embed. */
       image_uri?: string;
@@ -1343,14 +1430,14 @@ export interface components {
         /** @description Vector store document ID. Ignored if `store` is unset. */
         doc_id?: string;
       }[];
-      /** @description [Vector store](/docs/vector-stores) identifier. */
-      store?: string;
+      /** @description Vector store name. */
+      collection_name?: string;
       /**
-       * @description Selected node.
-       * @default CLIP
+       * @description Selected embedding model.
+       * @default clip
        * @enum {string}
        */
-      node?: "CLIP";
+      model?: "clip";
     };
     /** MultiEmbedImageOut */
     MultiEmbedImageOut: {
@@ -1381,10 +1468,10 @@ export interface components {
         /** @description Vector store document ID. Ignored if `store` is unset. */
         doc_id?: string;
       }[];
-      /** @description Choose keys from `metadata` to embed with text, when embedding and storing text documents. */
+      /** @description Vector store name. */
+      collection_name?: string;
+      /** @description Choose keys from `metadata` to embed with text. Only applies to text items. */
       embedded_metadata_keys?: string[];
-      /** @description [Vector store](/docs/vector-stores) identifier. */
-      store?: string;
     };
     /** CLIPOut */
     CLIPOut: {
@@ -1403,9 +1490,9 @@ export interface components {
     /** CreateVectorStoreIn */
     CreateVectorStoreIn: {
       /** @description Vector store name. */
-      name: string;
+      collection_name: string;
       /**
-       * @description Selected embedding model
+       * @description Selected embedding model.
        * @enum {string}
        */
       model: "jina-v2" | "clip";
@@ -1429,9 +1516,9 @@ export interface components {
     /** CreateVectorStoreOut */
     CreateVectorStoreOut: {
       /** @description Vector store name. */
-      name: string;
+      collection_name: string;
       /**
-       * @description Selected embedding model
+       * @description Selected embedding model.
        * @enum {string}
        */
       model: "jina-v2" | "clip";
@@ -1457,11 +1544,11 @@ export interface components {
     /** ListVectorStoresOut */
     ListVectorStoresOut: {
       /** @description List of vector stores. */
-      stores?: {
+      items?: {
         /** @description Vector store name. */
-        name: string;
+        collection_name: string;
         /**
-         * @description Selected embedding model
+         * @description Selected embedding model.
          * @enum {string}
          */
         model: "jina-v2" | "clip";
@@ -1486,9 +1573,9 @@ export interface components {
     /** DeleteVectorStoreIn */
     DeleteVectorStoreIn: {
       /** @description Vector store name. */
-      name: string;
+      collection_name: string;
       /**
-       * @description Selected embedding model
+       * @description Selected embedding model.
        * @enum {string}
        */
       model: "jina-v2" | "clip";
@@ -1496,9 +1583,9 @@ export interface components {
     /** DeleteVectorStoreOut */
     DeleteVectorStoreOut: {
       /** @description Vector store name. */
-      name: string;
+      collection_name: string;
       /**
-       * @description Selected embedding model
+       * @description Selected embedding model.
        * @enum {string}
        */
       model: "jina-v2" | "clip";
@@ -1520,9 +1607,9 @@ export interface components {
     /** FetchVectorsIn */
     FetchVectorsIn: {
       /** @description Vector store name. */
-      name: string;
+      collection_name: string;
       /**
-       * @description Selected embedding model
+       * @description Selected embedding model.
        * @enum {string}
        */
       model: "jina-v2" | "clip";
@@ -1564,12 +1651,12 @@ export interface components {
         [key: string]: unknown;
       };
     };
-    /** UpdateVectorsParams */
+    /** UpdateVectorsIn */
     UpdateVectorsIn: {
       /** @description Vector store name. */
-      name: string;
+      collection_name: string;
       /**
-       * @description Selected embedding model
+       * @description Selected embedding model.
        * @enum {string}
        */
       model: "jina-v2" | "clip";
@@ -1588,9 +1675,9 @@ export interface components {
     /** DeleteVectorsIn */
     DeleteVectorsIn: {
       /** @description Vector store name. */
-      name: string;
+      collection_name: string;
       /**
-       * @description Selected embedding model
+       * @description Selected embedding model.
        * @enum {string}
        */
       model: "jina-v2" | "clip";
@@ -1600,20 +1687,20 @@ export interface components {
     /** QueryVectorStoreIn */
     QueryVectorStoreIn: {
       /** @description Vector store to query against. */
-      name: string;
+      collection_name: string;
       /**
-       * @description Selected embedding model
+       * @description Selected embedding model.
        * @enum {string}
        */
       model: "jina-v2" | "clip";
-      /** @description Document IDs to use for the query. */
-      query_ids?: string[];
-      /** @description Image URIs to embed and use for the query. */
-      query_image_uris?: string[];
-      /** @description Vector to use for the query. */
-      query_vectors?: number[][];
       /** @description Texts to embed and use for the query. */
       query_strings?: string[];
+      /** @description Image URIs to embed and use for the query. */
+      query_image_uris?: string[];
+      /** @description Vectors to use for the query. */
+      query_vectors?: number[][];
+      /** @description Document IDs to use for the query. */
+      query_ids?: string[];
       /**
        * @description Number of results to return.
        * @default 10
@@ -1638,11 +1725,6 @@ export interface components {
       filters?: {
         [key: string]: unknown;
       };
-      /**
-       * @description The distance metric used for the query. Defaults to the distance metric the vector store was created with.
-       * @enum {string}
-       */
-      metric?: "cosine" | "l2" | "inner";
     };
     /** VectorStoreQueryResult */
     VectorStoreQueryResult: {
@@ -1679,9 +1761,9 @@ export interface components {
         };
       }[][];
       /** @description Vector store name. */
-      name?: string;
+      collection_name?: string;
       /**
-       * @description Selected embedding model
+       * @description Selected embedding model.
        * @enum {string}
        */
       model?: "jina-v2" | "clip";
@@ -1709,9 +1791,16 @@ export interface operations {
    * @description Generate text using a language model.
    */
   GenerateText: {
-    parameters: {
-      query?: {
-        undefined?: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "prompt": "Who is Don Quixote?",
+         *   "temperature": 0.4,
+         *   "max_tokens": 800
+         * }
+         */
+        "application/json": {
           /** @description Input prompt. */
           prompt: string;
           /**
@@ -1737,7 +1826,7 @@ export interface operations {
         content: {
           "application/json": {
             /** @description Text response. */
-            text?: string;
+            text: string;
           };
         };
       };
@@ -1748,16 +1837,25 @@ export interface operations {
    * @description Generate multiple text choices using a language model.
    */
   MultiGenerateText: {
-    parameters: {
-      query?: {
-        undefined?: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "prompt": "Who is Don Quixote?",
+         *   "num_choices": 2,
+         *   "max_tokens": 800
+         * }
+         */
+        "application/json": {
           /** @description Input prompt. */
-          prompt: string;
+          prompt?: string;
+          /** @description Batch input prompts. */
+          batch_prompts?: string[];
           /**
            * @description Number of choices to generate.
            * @default 1
            */
-          num_choices: number;
+          num_choices?: number;
           /**
            * Format: float
            * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
@@ -1780,9 +1878,13 @@ export interface operations {
       200: {
         content: {
           "application/json": {
-            choices: {
-              /** @description Text response. */
-              text?: string;
+            /** @description A single output for `prompt`, or multiple outputs for `batch_prompts`. */
+            outputs: {
+              /** @description Response choices. */
+              choices: {
+                /** @description Text response. */
+                text: string;
+              }[];
             }[];
           };
         };
@@ -1794,9 +1896,29 @@ export interface operations {
    * @description Generate JSON using a language model.
    */
   GenerateJSON: {
-    parameters: {
-      query?: {
-        undefined?: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "prompt": "Who wrote Don Quixote?",
+         *   "json_schema": {
+         *     "type": "object",
+         *     "properties": {
+         *       "name": {
+         *         "type": "string",
+         *         "description": "The name of the author."
+         *       },
+         *       "bio": {
+         *         "type": "string",
+         *         "description": "Concise biography of the author."
+         *       }
+         *     }
+         *   },
+         *   "temperature": 0.4,
+         *   "max_tokens": 800
+         * }
+         */
+        "application/json": {
           /** @description Input prompt. */
           prompt: string;
           /** @description JSON schema to guide `json_object` response. */
@@ -1826,7 +1948,7 @@ export interface operations {
         content: {
           "application/json": {
             /** @description JSON response. */
-            json_object?: {
+            json_object: {
               [key: string]: unknown;
             };
           };
@@ -1839,20 +1961,43 @@ export interface operations {
    * @description Generate multiple JSON choices using a language model.
    */
   MultiGenerateJSON: {
-    parameters: {
-      query?: {
-        undefined?: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "prompt": "Who wrote Don Quixote?",
+         *   "json_schema": {
+         *     "type": "object",
+         *     "properties": {
+         *       "name": {
+         *         "type": "string",
+         *         "description": "The name of the author."
+         *       },
+         *       "bio": {
+         *         "type": "string",
+         *         "description": "Concise biography of the author."
+         *       }
+         *     }
+         *   },
+         *   "num_choices": 2,
+         *   "temperature": 0.4,
+         *   "max_tokens": 800
+         * }
+         */
+        "application/json": {
           /** @description Input prompt. */
-          prompt: string;
+          prompt?: string;
           /** @description JSON schema to guide `json_object` response. */
           json_schema: {
             [key: string]: unknown;
           };
+          /** @description Batch input prompts. */
+          batch_prompts?: string[];
           /**
            * @description Number of choices to generate.
-           * @default 1
+           * @default 2
            */
-          num_choices: number;
+          num_choices?: number;
           /**
            * Format: float
            * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
@@ -1875,11 +2020,15 @@ export interface operations {
       200: {
         content: {
           "application/json": {
-            choices: {
-              /** @description JSON response. */
-              json_object?: {
-                [key: string]: unknown;
-              };
+            /** @description A single output for `prompt`, or multiple outputs for `batch_prompts`. */
+            outputs: {
+              /** @description Response choices. */
+              choices: {
+                /** @description JSON response. */
+                json_object: {
+                  [key: string]: unknown;
+                };
+              }[];
             }[];
           };
         };
@@ -1891,9 +2040,18 @@ export interface operations {
    * @description Generate text with image input.
    */
   GenerateTextVision: {
-    parameters: {
-      query?: {
-        undefined?: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "prompt": "what are these paintings of and who made them?",
+         *   "image_uris": [
+         *     "https://media.substrate.run/docs-fuji-red.jpg",
+         *     "https://media.substrate.run/docs-fuji-blue.jpg"
+         *   ]
+         * }
+         */
+        "application/json": {
           /** @description Text prompt. */
           prompt: string;
           /** @description Image prompts. */
@@ -1929,17 +2087,30 @@ export interface operations {
    * @description Generate text using [Mistral 7B Instruct](https://mistral.ai/news/announcing-mistral-7b).
    */
   Mistral7BInstruct: {
-    parameters: {
-      query?: {
-        undefined?: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "prompt": "Who is Don Quixote?",
+         *   "num_choices": 2,
+         *   "temperature": 0.4,
+         *   "max_tokens": 800
+         * }
+         */
+        "application/json": {
           /** @description Input prompt. */
-          prompt: string;
-          /** @description Number of choices to generate. */
-          num_choices: number;
+          prompt?: string;
+          /**
+           * @description Number of choices to generate.
+           * @default 1
+           */
+          num_choices?: number;
           /** @description JSON schema to guide response. */
           json_schema?: {
             [key: string]: unknown;
           };
+          /** @description Batch input prompts. */
+          batch_prompts?: string[];
           /**
            * Format: float
            * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
@@ -1955,13 +2126,17 @@ export interface operations {
       200: {
         content: {
           "application/json": {
-            choices: {
-              /** @description Text response, if `json_schema` was not provided. */
-              text?: string;
-              /** @description JSON response, if `json_schema` was provided. */
-              json_object?: {
-                [key: string]: unknown;
-              };
+            /** @description A single output for `prompt`, or multiple outputs for `batch_prompts`. */
+            outputs: {
+              /** @description Response choices. */
+              choices: {
+                /** @description Text response, if `json_schema` was not provided. */
+                text?: string;
+                /** @description JSON response, if `json_schema` was provided. */
+                json_object?: {
+                  [key: string]: unknown;
+                };
+              }[];
             }[];
           };
         };
@@ -1973,18 +2148,22 @@ export interface operations {
    * @description Generate text with image input using [FireLLaVA 13B](https://fireworks.ai/blog/firellava-the-first-commercially-permissive-oss-llava-model).
    */
   Firellava13B: {
-    parameters: {
-      query?: {
-        undefined?: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "prompt": "what are these paintings of and who made them?",
+         *   "image_uris": [
+         *     "https://media.substrate.run/docs-fuji-red.jpg",
+         *     "https://media.substrate.run/docs-fuji-blue.jpg"
+         *   ]
+         * }
+         */
+        "application/json": {
           /** @description Text prompt. */
           prompt: string;
           /** @description Image prompts. */
           image_uris: string[];
-          /**
-           * Format: float
-           * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
-           */
-          temperature?: number;
           /**
            * @description Maximum number of tokens to generate.
            * @default 800
@@ -2010,12 +2189,18 @@ export interface operations {
    * @description Generate an image.
    */
   GenerateImage: {
-    parameters: {
-      query?: {
-        undefined?: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "prompt": "hokusai futuristic supercell spiral cloud with glowing core over turbulent ocean",
+         *   "store": "hosted"
+         * }
+         */
+        "application/json": {
           /** @description Text prompt. */
           prompt: string;
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
           /**
            * @description Selected node.
@@ -2043,14 +2228,24 @@ export interface operations {
    * @description Generate multiple images.
    */
   MultiGenerateImage: {
-    parameters: {
-      query?: {
-        undefined?: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "prompt": "hokusai futuristic supercell spiral cloud with glowing core over turbulent ocean",
+         *   "store": "hosted",
+         *   "num_images": 2
+         * }
+         */
+        "application/json": {
           /** @description Text prompt. */
           prompt: string;
-          /** @description Number of images to generate. */
+          /**
+           * @description Number of images to generate.
+           * @default 2
+           */
           num_images: number;
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
           /**
            * @description Selected node.
@@ -2066,6 +2261,7 @@ export interface operations {
       200: {
         content: {
           "application/json": {
+            /** @description Generated images. */
             outputs: {
               /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
               image_uri: string;
@@ -2080,16 +2276,24 @@ export interface operations {
    * @description Edit an image using image generation.
    */
   GenerativeEditImage: {
-    parameters: {
-      query?: {
-        undefined?: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "image_uri": "https://media.substrate.run/docs-klimt-park.jpg",
+         *   "mask_image_uri": "https://media.substrate.run/spiral-logo.jpeg",
+         *   "prompt": "large tropical colorful bright anime birds in a dark jungle full of vines, high resolution",
+         *   "store": "hosted"
+         * }
+         */
+        "application/json": {
           /** @description Original image. */
           image_uri: string;
           /** @description Text prompt. */
           prompt: string;
           /** @description Mask image that controls which pixels are inpainted. If unset, the entire image is edited (image-to-image). */
           mask_image_uri?: string;
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
           /**
            * @description Selected node.
@@ -2117,18 +2321,30 @@ export interface operations {
    * @description Edit multiple images using image generation.
    */
   MultiGenerativeEditImage: {
-    parameters: {
-      query?: {
-        undefined?: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "image_uri": "https://media.substrate.run/docs-klimt-park.jpg",
+         *   "mask_image_uri": "https://media.substrate.run/spiral-logo.jpeg",
+         *   "prompt": "large tropical colorful bright anime birds in a dark jungle full of vines, high resolution",
+         *   "num_images": 2,
+         *   "store": "hosted"
+         * }
+         */
+        "application/json": {
           /** @description Original image. */
           image_uri: string;
           /** @description Text prompt. */
           prompt: string;
           /** @description Mask image that controls which pixels are edited (inpainting). If unset, the entire image is edited (image-to-image). */
           mask_image_uri?: string;
-          /** @description Number of images to generate. */
+          /**
+           * @description Number of images to generate.
+           * @default 2
+           */
           num_images: number;
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
           /**
            * @description Selected node.
@@ -2144,6 +2360,7 @@ export interface operations {
       200: {
         content: {
           "application/json": {
+            /** @description Generated images. */
             outputs: {
               /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
               image_uri: string;
@@ -2158,32 +2375,54 @@ export interface operations {
    * @description Generate an image using [Stable Diffusion XL](https://arxiv.org/abs/2307.01952).
    */
   StableDiffusionXL: {
-    parameters: {
-      query?: {
-        undefined?: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "prompt": "hokusai futuristic supercell spiral cloud with glowing core over turbulent ocean",
+         *   "negative_prompt": "night, moon",
+         *   "store": "hosted",
+         *   "guidance_scale": 7,
+         *   "num_images": 2,
+         *   "seeds": [
+         *     3306990332671669000,
+         *     13641924104177017000
+         *   ]
+         * }
+         */
+        "application/json": {
           /** @description Text prompt. */
           prompt: string;
           /** @description Negative input prompt. */
           negative_prompt?: string;
-          /** @description Number of diffusion steps. */
+          /**
+           * @description Number of diffusion steps.
+           * @default 30
+           */
           steps?: number;
           /**
            * @description Number of images to generate.
            * @default 1
            */
-          num_images?: number;
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+          num_images: number;
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
-          /** @description Height of output image, in pixels. */
+          /**
+           * @description Height of output image, in pixels.
+           * @default 1024
+           */
           height?: number;
-          /** @description Width of output image, in pixels. */
+          /**
+           * @description Width of output image, in pixels.
+           * @default 1024
+           */
           width?: number;
           /** @description Seeds for deterministic generation. Default is a random seed. */
           seeds?: number[];
           /**
            * Format: float
            * @description Higher values adhere to the text prompt more strongly, typically at the expense of image quality.
-           * @default 5
+           * @default 7
            */
           guidance_scale?: number;
         };
@@ -2194,6 +2433,7 @@ export interface operations {
       200: {
         content: {
           "application/json": {
+            /** @description Generated images. */
             outputs: {
               /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
               image_uri: string;
@@ -2210,9 +2450,21 @@ export interface operations {
    * @description Generate an image using [Stable Diffusion XL Lightning](https://arxiv.org/abs/2402.13929).
    */
   StableDiffusionXLLightning: {
-    parameters: {
-      query?: {
-        undefined?: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "prompt": "hokusai futuristic supercell spiral cloud with glowing core over turbulent ocean",
+         *   "negative_prompt": "night, moon",
+         *   "store": "hosted",
+         *   "num_images": 2,
+         *   "seeds": [
+         *     3306990332671669000,
+         *     13641924104177017000
+         *   ]
+         * }
+         */
+        "application/json": {
           /** @description Text prompt. */
           prompt: string;
           /** @description Negative input prompt. */
@@ -2222,11 +2474,17 @@ export interface operations {
            * @default 1
            */
           num_images?: number;
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
-          /** @description Height of output image, in pixels. */
+          /**
+           * @description Height of output image, in pixels.
+           * @default 1024
+           */
           height?: number;
-          /** @description Width of output image, in pixels. */
+          /**
+           * @description Width of output image, in pixels.
+           * @default 1024
+           */
           width?: number;
           /** @description Seeds for deterministic generation. Default is a random seed. */
           seeds?: number[];
@@ -2238,6 +2496,7 @@ export interface operations {
       200: {
         content: {
           "application/json": {
+            /** @description Generated images. */
             outputs: {
               /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
               image_uri: string;
@@ -2254,9 +2513,24 @@ export interface operations {
    * @description Edit an image using [Stable Diffusion XL](https://arxiv.org/abs/2307.01952). Supports inpainting (edit part of the image with a mask) and image-to-image (edit the full image).
    */
   StableDiffusionXLInpaint: {
-    parameters: {
-      query?: {
-        undefined?: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "image_uri": "https://media.substrate.run/docs-klimt-park.jpg",
+         *   "mask_image_uri": "https://media.substrate.run/spiral-logo.jpeg",
+         *   "prompt": "large tropical colorful bright birds in a jungle, high resolution oil painting",
+         *   "negative_prompt": "dark, cartoon, anime",
+         *   "strength": 0.8,
+         *   "num_images": 2,
+         *   "store": "hosted",
+         *   "seeds": [
+         *     16072680593433106000,
+         *     17203982922585030000
+         *   ]
+         * }
+         */
+        "application/json": {
           /** @description Original image. */
           image_uri: string;
           /** @description Text prompt. */
@@ -2275,12 +2549,12 @@ export interface operations {
           output_resolution?: number;
           /** @description Negative input prompt. */
           negative_prompt?: string;
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
           /**
            * Format: float
            * @description Controls the strength of the generation process.
-           * @default 1
+           * @default 0.8
            */
           strength?: number;
           /** @description Random noise seeds. Default is random seeds for each generation. */
@@ -2293,57 +2567,7 @@ export interface operations {
       200: {
         content: {
           "application/json": {
-            outputs: {
-              /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-              image_uri: string;
-              /** @description The random noise seed used for generation. */
-              seed: number;
-            }[];
-          };
-        };
-      };
-    };
-  };
-  /**
-   * StableDiffusionXLIPAdapter
-   * @description Generate an image with an image prompt, using Stable Diffusion XL with [IP-Adapter](https://arxiv.org/abs/2308.06721).
-   */
-  StableDiffusionXLIPAdapter: {
-    parameters: {
-      query?: {
-        undefined?: {
-          /** @description Text prompt. */
-          prompt: string;
-          /** @description Image prompt. */
-          image_prompt_uri?: string;
-          /**
-           * @description Number of images to generate.
-           * @default 1
-           */
-          num_images: number;
-          /**
-           * Format: float
-           * @description Controls the influence of the image prompt on the generated output.
-           */
-          ip_adapter_scale?: number;
-          /** @description Negative input prompt. */
-          negative_prompt?: string;
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
-          store?: string;
-          /** @description Width of output image, in pixels. */
-          width?: number;
-          /** @description Height of output image, in pixels. */
-          height?: number;
-          /** @description Random noise seeds. Default is random seeds for each generation. */
-          seeds?: number[];
-        };
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": {
+            /** @description Generated images. */
             outputs: {
               /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
               image_uri: string;
@@ -2360,9 +2584,23 @@ export interface operations {
    * @description Generate an image with generation structured by an input image, using Stable Diffusion XL with [ControlNet](https://arxiv.org/abs/2302.05543).
    */
   StableDiffusionXLControlNet: {
-    parameters: {
-      query?: {
-        undefined?: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "image_uri": "https://media.substrate.run/spiral-logo.jpeg",
+         *   "prompt": "the futuristic solarpunk city of atlantis at sunset, cinematic bokeh HD",
+         *   "control_method": "illusion",
+         *   "conditioning_scale": 0.5,
+         *   "store": "hosted",
+         *   "num_images": 2,
+         *   "seeds": [
+         *     16072680593433106000,
+         *     17203982922585030000
+         *   ]
+         * }
+         */
+        "application/json": {
           /** @description Input image. */
           image_uri: string;
           /**
@@ -2384,11 +2622,12 @@ export interface operations {
           output_resolution?: number;
           /** @description Negative input prompt. */
           negative_prompt?: string;
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
           /**
            * Format: float
            * @description Controls the influence of the input image on the generated output.
+           * @default 0.5
            */
           conditioning_scale?: number;
           /** @description Random noise seeds. Default is random seeds for each generation. */
@@ -2401,6 +2640,7 @@ export interface operations {
       200: {
         content: {
           "application/json": {
+            /** @description Generated images. */
             outputs: {
               /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
               image_uri: string;
@@ -2413,87 +2653,58 @@ export interface operations {
     };
   };
   /**
-   * FillMask
-   * @description Fill (inpaint) part of an image, e.g. to 'remove' an object.
+   * StableDiffusionXLIPAdapter
+   * @description Generate an image with an image prompt, using Stable Diffusion XL with [IP-Adapter](https://arxiv.org/abs/2308.06721).
    */
-  FillMask: {
-    parameters: {
-      query?: {
-        undefined?: {
-          /** @description Input image. */
-          image_uri: string;
-          /** @description Mask image that controls which pixels are inpainted. */
-          mask_image_uri: string;
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
+  StableDiffusionXLIPAdapter: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "prompt": "woodblock wave at sunset",
+         *   "negative_prompt": "low quality, low resolution",
+         *   "image_prompt_uri": "https://guides.substrate.run/hokusai.jpeg",
+         *   "store": "hosted",
+         *   "num_images": 2,
+         *   "ip_adapter_scale": 0.9,
+         *   "seeds": [
+         *     6565750906821528000,
+         *     9762512681041689000
+         *   ]
+         * }
+         */
+        "application/json": {
+          /** @description Text prompt. */
+          prompt: string;
+          /** @description Image prompt. */
+          image_prompt_uri?: string;
+          /**
+           * @description Number of images to generate.
+           * @default 1
+           */
+          num_images: number;
+          /**
+           * Format: float
+           * @description Controls the influence of the image prompt on the generated output.
+           * @default 0.5
+           */
+          ip_adapter_scale?: number;
+          /** @description Negative input prompt. */
+          negative_prompt?: string;
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
           /**
-           * @description Selected node.
-           * @default BigLaMa
-           * @enum {string}
+           * @description Width of output image, in pixels.
+           * @default 1024
            */
-          node?: "BigLaMa";
-        };
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": {
-            /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-            image_uri: string;
-          };
-        };
-      };
-    };
-  };
-  /**
-   * BigLaMa
-   * @description Inpaint a mask using [LaMa](https://github.com/advimman/lama).
-   */
-  BigLaMa: {
-    parameters: {
-      query?: {
-        undefined?: {
-          /** @description Input image. */
-          image_uri: string;
-          /** @description Mask image that controls which pixels are inpainted. */
-          mask_image_uri: string;
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
-          store?: string;
-        };
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": {
-            /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-            image_uri: string;
-          };
-        };
-      };
-    };
-  };
-  /**
-   * UpscaleImage
-   * @description Upscale an image.
-   */
-  UpscaleImage: {
-    parameters: {
-      query?: {
-        undefined?: {
-          /** @description Input image. */
-          image_uri: string;
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
-          store?: string;
+          width?: number;
           /**
-           * @description Selected node.
-           * @default RealESRGAN
-           * @enum {string}
+           * @description Height of output image, in pixels.
+           * @default 1024
            */
-          node?: "RealESRGAN";
+          height?: number;
+          /** @description Random noise seeds. Default is random seeds for each generation. */
+          seeds?: number[];
         };
       };
     };
@@ -2502,199 +2713,13 @@ export interface operations {
       200: {
         content: {
           "application/json": {
-            /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-            image_uri: string;
-          };
-        };
-      };
-    };
-  };
-  /**
-   * RealESRGAN
-   * @description Upscale an image using [RealESRGAN](https://github.com/xinntao/Real-ESRGAN).
-   */
-  RealESRGAN: {
-    parameters: {
-      query?: {
-        undefined?: {
-          /** @description Input image. */
-          image_uri: string;
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
-          store?: string;
-        };
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": {
-            /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-            image_uri: string;
-          };
-        };
-      };
-    };
-  };
-  /**
-   * RemoveBackground
-   * @description Remove the background from an image, with the option to return the foreground as a mask.
-   */
-  RemoveBackground: {
-    parameters: {
-      query?: {
-        undefined?: {
-          /** @description Input image. */
-          image_uri: string;
-          /**
-           * @description Return a mask image instead of the original content.
-           * @default false
-           */
-          return_mask?: boolean;
-          /** @description Hex value background color. Transparent if unset. */
-          background_color?: string;
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
-          store?: string;
-          /**
-           * @description Selected node.
-           * @default DISISNet
-           * @enum {string}
-           */
-          node?: "DISISNet";
-        };
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": {
-            /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-            image_uri: string;
-          };
-        };
-      };
-    };
-  };
-  /**
-   * DISISNet
-   * @description Segment image foreground using [DIS IS-Net](https://github.com/xuebinqin/DIS).
-   */
-  DISISNet: {
-    parameters: {
-      query?: {
-        undefined?: {
-          /** @description Input image. */
-          image_uri: string;
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
-          store?: string;
-        };
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": {
-            /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-            image_uri: string;
-          };
-        };
-      };
-    };
-  };
-  /**
-   * SegmentUnderPoint
-   * @description Segment an image under a point and return the segment.
-   */
-  SegmentUnderPoint: {
-    parameters: {
-      query?: {
-        undefined?: {
-          /** @description Input image. */
-          image_uri: string;
-          /** Point */
-          point: {
-            /** @description X position. */
-            x: number;
-            /** @description Y position. */
-            y: number;
-          };
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
-          store?: string;
-          /**
-           * @description Selected node.
-           * @default SegmentAnything
-           * @enum {string}
-           */
-          node?: "SegmentAnything";
-        };
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": {
-            /** @description Detected segments in 'mask image' format. Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-            mask_image_uri: string;
-          };
-        };
-      };
-    };
-  };
-  /**
-   * SegmentAnything
-   * @description Segment an image using [SegmentAnything](https://github.com/facebookresearch/segment-anything).
-   */
-  SegmentAnything: {
-    parameters: {
-      query?: {
-        undefined?: {
-          /** @description Input image. */
-          image_uri: string;
-          /** @description Point prompts, to detect a segment under the point. One of `point_prompts` or `box_prompts` must be set. */
-          point_prompts?: {
-            /** @description X position. */
-            x: number;
-            /** @description Y position. */
-            y: number;
-          }[];
-          /** @description Box prompts, to detect a segment within the bounding box. One of `point_prompts` or `box_prompts` must be set. */
-          box_prompts?: {
-            /**
-             * Format: float
-             * @description Top left corner x.
-             */
-            x1: number;
-            /**
-             * Format: float
-             * @description Top left corner y.
-             */
-            y1: number;
-            /**
-             * Format: float
-             * @description Bottom right corner x.
-             */
-            x2: number;
-            /**
-             * Format: float
-             * @description Bottom right corner y.
-             */
-            y2: number;
-          }[];
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string. */
-          store?: string;
-        };
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": {
-            /** @description Detected segments in 'mask image' format. Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-            mask_image_uri: string;
+            /** @description Generated images. */
+            outputs: {
+              /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+              image_uri: string;
+              /** @description The random noise seed used for generation. */
+              seed: number;
+            }[];
           };
         };
       };
@@ -2705,9 +2730,19 @@ export interface operations {
    * @description Transcribe speech in an audio or video file.
    */
   TranscribeMedia: {
-    parameters: {
-      query?: {
-        undefined?: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "audio_uri": "https://media.substrate.run/dfw-clip.m4a",
+         *   "prompt": "David Foster Wallace interviewed about US culture, and Infinite Jest",
+         *   "segment": true,
+         *   "align": true,
+         *   "diarize": true,
+         *   "suggest_chapters": true
+         * }
+         */
+        "application/json": {
           /** @description Input audio. */
           audio_uri: string;
           /** @description Prompt to guide model on the content and context of input audio. */
@@ -2801,12 +2836,18 @@ export interface operations {
    * @description Generate speech from text.
    */
   GenerateSpeech: {
-    parameters: {
-      query?: {
-        undefined?: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "text": "Substrate: an underlying substance or layer.",
+         *   "store": "hosted"
+         * }
+         */
+        "application/json": {
           /** @description Input text. */
           text: string;
-          /** @description Use "hosted" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the audio data will be returned as a base64-encoded string. */
+          /** @description Use "hosted" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the audio data will be returned as a base64-encoded string. */
           store?: string;
           /**
            * @description Selected node.
@@ -2834,9 +2875,16 @@ export interface operations {
    * @description Generate speech from text using [XTTS v2](https://docs.coqui.ai/en/latest/models/xtts.html).
    */
   XTTSV2: {
-    parameters: {
-      query?: {
-        undefined?: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "text": "Substrate: an underlying substance or layer.",
+         *   "audio_uri": "https://media.substrate.run/docs-speaker.wav",
+         *   "store": "hosted"
+         * }
+         */
+        "application/json": {
           /** @description Input text. */
           text: string;
           /** @description Reference audio used to synthesize the speaker. If unset, a default speaker voice will be used. */
@@ -2846,7 +2894,7 @@ export interface operations {
            * @default en
            */
           language?: string;
-          /** @description Use "hosted" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the audio data will be returned as a base64-encoded string. */
+          /** @description Use "hosted" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the audio data will be returned as a base64-encoded string. */
           store?: string;
         };
       };
@@ -2864,17 +2912,380 @@ export interface operations {
     };
   };
   /**
+   * RemoveBackground
+   * @description Remove the background from an image, with the option to return the foreground as a mask.
+   */
+  RemoveBackground: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "image_uri": "https://guides.substrate.run/hokusai.jpeg",
+         *   "store": "hosted",
+         *   "background_color": "#E16E77",
+         *   "return_mask": false
+         * }
+         */
+        "application/json": {
+          /** @description Input image. */
+          image_uri: string;
+          /**
+           * @description Return a mask image instead of the original content.
+           * @default false
+           */
+          return_mask?: boolean;
+          /** @description Hex value background color. Transparent if unset. */
+          background_color?: string;
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+          store?: string;
+          /**
+           * @description Selected node.
+           * @default DISISNet
+           * @enum {string}
+           */
+          node?: "DISISNet";
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": {
+            /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+            image_uri: string;
+          };
+        };
+      };
+    };
+  };
+  /**
+   * FillMask
+   * @description Fill (inpaint) part of an image, e.g. to 'remove' an object.
+   */
+  FillMask: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "image_uri": "https://media.substrate.run/docs-seurat.jpg",
+         *   "mask_image_uri": "https://media.substrate.run/spiral-logo.jpeg",
+         *   "store": "hosted"
+         * }
+         */
+        "application/json": {
+          /** @description Input image. */
+          image_uri: string;
+          /** @description Mask image that controls which pixels are inpainted. */
+          mask_image_uri: string;
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+          store?: string;
+          /**
+           * @description Selected node.
+           * @default BigLaMa
+           * @enum {string}
+           */
+          node?: "BigLaMa";
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": {
+            /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+            image_uri: string;
+          };
+        };
+      };
+    };
+  };
+  /**
+   * UpscaleImage
+   * @description Upscale an image.
+   */
+  UpscaleImage: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "image_uri": "https://media.substrate.run/docs-seurat.jpg",
+         *   "store": "hosted"
+         * }
+         */
+        "application/json": {
+          /** @description Input image. */
+          image_uri: string;
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+          store?: string;
+          /**
+           * @description Selected node.
+           * @default RealESRGAN
+           * @enum {string}
+           */
+          node?: "RealESRGAN";
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": {
+            /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+            image_uri: string;
+          };
+        };
+      };
+    };
+  };
+  /**
+   * SegmentUnderPoint
+   * @description Segment an image under a point and return the segment.
+   */
+  SegmentUnderPoint: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "image_uri": "https://media.substrate.run/docs-vg-bedroom.jpg",
+         *   "point": {
+         *     "x": 189,
+         *     "y": 537
+         *   },
+         *   "store": "hosted"
+         * }
+         */
+        "application/json": {
+          /** @description Input image. */
+          image_uri: string;
+          /** Point */
+          point: {
+            /** @description X position. */
+            x: number;
+            /** @description Y position. */
+            y: number;
+          };
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+          store?: string;
+          /**
+           * @description Selected node.
+           * @default SegmentAnything
+           * @enum {string}
+           */
+          node?: "SegmentAnything";
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": {
+            /** @description Detected segments in 'mask image' format. Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+            mask_image_uri: string;
+          };
+        };
+      };
+    };
+  };
+  /**
+   * DISISNet
+   * @description Segment image foreground using [DIS IS-Net](https://github.com/xuebinqin/DIS).
+   */
+  DISISNet: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "image_uri": "https://guides.substrate.run/hokusai.jpeg",
+         *   "store": "hosted"
+         * }
+         */
+        "application/json": {
+          /** @description Input image. */
+          image_uri: string;
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+          store?: string;
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": {
+            /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+            image_uri: string;
+          };
+        };
+      };
+    };
+  };
+  /**
+   * BigLaMa
+   * @description Inpaint a mask using [LaMa](https://github.com/advimman/lama).
+   */
+  BigLaMa: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "image_uri": "https://media.substrate.run/docs-seurat.jpg",
+         *   "mask_image_uri": "https://media.substrate.run/spiral-logo.jpeg",
+         *   "store": "hosted"
+         * }
+         */
+        "application/json": {
+          /** @description Input image. */
+          image_uri: string;
+          /** @description Mask image that controls which pixels are inpainted. */
+          mask_image_uri: string;
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+          store?: string;
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": {
+            /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+            image_uri: string;
+          };
+        };
+      };
+    };
+  };
+  /**
+   * RealESRGAN
+   * @description Upscale an image using [RealESRGAN](https://github.com/xinntao/Real-ESRGAN).
+   */
+  RealESRGAN: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "image_uri": "https://media.substrate.run/docs-seurat.jpg",
+         *   "store": "hosted"
+         * }
+         */
+        "application/json": {
+          /** @description Input image. */
+          image_uri: string;
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+          store?: string;
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": {
+            /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+            image_uri: string;
+          };
+        };
+      };
+    };
+  };
+  /**
+   * SegmentAnything
+   * @description Segment an image using [SegmentAnything](https://github.com/facebookresearch/segment-anything).
+   */
+  SegmentAnything: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "image_uri": "https://media.substrate.run/docs-vg-bedroom.jpg",
+         *   "point_prompts": [
+         *     {
+         *       "x": 189,
+         *       "y": 537
+         *     }
+         *   ],
+         *   "store": "hosted"
+         * }
+         */
+        "application/json": {
+          /** @description Input image. */
+          image_uri: string;
+          /** @description Point prompts, to detect a segment under the point. One of `point_prompts` or `box_prompts` must be set. */
+          point_prompts?: {
+            /** @description X position. */
+            x: number;
+            /** @description Y position. */
+            y: number;
+          }[];
+          /** @description Box prompts, to detect a segment within the bounding box. One of `point_prompts` or `box_prompts` must be set. */
+          box_prompts?: {
+            /**
+             * Format: float
+             * @description Top left corner x.
+             */
+            x1: number;
+            /**
+             * Format: float
+             * @description Top left corner y.
+             */
+            y1: number;
+            /**
+             * Format: float
+             * @description Bottom right corner x.
+             */
+            x2: number;
+            /**
+             * Format: float
+             * @description Bottom right corner y.
+             */
+            y2: number;
+          }[];
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+          store?: string;
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": {
+            /** @description Detected segments in 'mask image' format. Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
+            mask_image_uri: string;
+          };
+        };
+      };
+    };
+  };
+  /**
    * EmbedText
    * @description Generate embedding for a text document.
    */
   EmbedText: {
-    parameters: {
-      query?: {
-        undefined?: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "text": "Argon is the third most abundant gas in Earth's atmosphere, at 0.934% (9340 ppmv). It is more than twice as abundant as water vapor.",
+         *   "model": "jina-v2",
+         *   "collection_name": "smoke_tests",
+         *   "metadata": {
+         *     "group": "18"
+         *   },
+         *   "embedded_metadata_keys": [
+         *     "group"
+         *   ]
+         * }
+         */
+        "application/json": {
           /** @description Text to embed. */
           text: string;
-          /** @description [Vector store](/docs/vector-stores) identifier. */
-          store?: string;
+          /** @description Vector store name. */
+          collection_name?: string;
           /** @description Metadata that can be used to query the vector store. Ignored if `store` is unset. */
           metadata?: {
             [key: string]: unknown;
@@ -2884,11 +3295,11 @@ export interface operations {
           /** @description Vector store document ID. Ignored if `store` is unset. */
           doc_id?: string;
           /**
-           * @description Selected node.
-           * @default JinaV2
+           * @description Selected embedding model.
+           * @default jina-v2
            * @enum {string}
            */
-          node?: "JinaV2" | "CLIP";
+          model?: "jina-v2" | "clip";
         };
       };
     };
@@ -2918,9 +3329,32 @@ export interface operations {
    * @description Generate embeddings for multiple text documents.
    */
   MultiEmbedText: {
-    parameters: {
-      query?: {
-        undefined?: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "model": "jina-v2",
+         *   "items": [
+         *     {
+         *       "text": "Osmium is the densest naturally occurring element. When experimentally measured using X-ray crystallography, it has a density of 22.59 g/cm3. Manufacturers use its alloys with platinum, iridium, and other platinum-group metals to make fountain pen nib tipping, electrical contacts, and in other applications that require extreme durability and hardness.",
+         *       "metadata": {
+         *         "group": "8"
+         *       }
+         *     },
+         *     {
+         *       "text": "Despite its abundant presence in the universe and Solar System—ranking fifth in cosmic abundance following hydrogen, helium, oxygen, and carbon—neon is comparatively scarce on Earth.",
+         *       "metadata": {
+         *         "group": "18"
+         *       }
+         *     }
+         *   ],
+         *   "collection_name": "smoke_tests",
+         *   "embedded_metadata_keys": [
+         *     "group"
+         *   ]
+         * }
+         */
+        "application/json": {
           /** @description Items to embed. */
           items: {
             /** @description Text to embed. */
@@ -2932,16 +3366,16 @@ export interface operations {
             /** @description Vector store document ID. Ignored if `store` is unset. */
             doc_id?: string;
           }[];
-          /** @description [Vector store](/docs/vector-stores) identifier. */
-          store?: string;
+          /** @description Vector store name. */
+          collection_name?: string;
           /** @description Choose keys from `metadata` to embed with text. */
           embedded_metadata_keys?: string[];
           /**
-           * @description Selected node.
-           * @default JinaV2
+           * @description Selected embedding model.
+           * @default jina-v2
            * @enum {string}
            */
-          node?: "JinaV2" | "CLIP";
+          model?: "jina-v2" | "clip";
         };
       };
     };
@@ -2971,21 +3405,27 @@ export interface operations {
    * @description Generate embedding for an image.
    */
   EmbedImage: {
-    parameters: {
-      query?: {
-        undefined?: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "image_uri": "https://media.substrate.run/docs-fuji-red.jpg",
+         *   "collection_name": "smoke_tests"
+         * }
+         */
+        "application/json": {
           /** @description Image to embed. */
           image_uri: string;
-          /** @description [Vector store](/docs/vector-stores) identifier. */
-          store?: string;
+          /** @description Vector store name. */
+          collection_name?: string;
           /** @description Vector store document ID. Ignored if `store` is unset. */
           doc_id?: string;
           /**
-           * @description Selected node.
-           * @default CLIP
+           * @description Selected embedding model.
+           * @default clip
            * @enum {string}
            */
-          node?: "CLIP";
+          model?: "clip";
         };
       };
     };
@@ -3015,9 +3455,22 @@ export interface operations {
    * @description Generate embeddings for multiple images.
    */
   MultiEmbedImage: {
-    parameters: {
-      query?: {
-        undefined?: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "items": [
+         *     {
+         *       "image_uri": "https://media.substrate.run/docs-fuji-red.jpg"
+         *     },
+         *     {
+         *       "image_uri": "https://media.substrate.run/docs-fuji-blue.jpg"
+         *     }
+         *   ],
+         *   "collection_name": "smoke_tests"
+         * }
+         */
+        "application/json": {
           /** @description Items to embed. */
           items: {
             /** @description Image to embed. */
@@ -3025,14 +3478,14 @@ export interface operations {
             /** @description Vector store document ID. Ignored if `store` is unset. */
             doc_id?: string;
           }[];
-          /** @description [Vector store](/docs/vector-stores) identifier. */
-          store?: string;
+          /** @description Vector store name. */
+          collection_name?: string;
           /**
-           * @description Selected node.
-           * @default CLIP
+           * @description Selected embedding model.
+           * @default clip
            * @enum {string}
            */
-          node?: "CLIP";
+          model?: "clip";
         };
       };
     };
@@ -3062,9 +3515,31 @@ export interface operations {
    * @description Generate embeddings for multiple text documents using [Jina Embeddings 2](https://arxiv.org/abs/2310.19923).
    */
   JinaV2: {
-    parameters: {
-      query?: {
-        undefined?: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "items": [
+         *     {
+         *       "text": "Hassium is a superheavy element; it has been produced in a laboratory only in very small quantities by fusing heavy nuclei with lighter ones. Natural occurrences of the element have been hypothesised but never found.",
+         *       "metadata": {
+         *         "group": "8"
+         *       }
+         *     },
+         *     {
+         *       "text": "Xenon is also used to search for hypothetical weakly interacting massive particles and as a propellant for ion thrusters in spacecraft.",
+         *       "metadata": {
+         *         "group": "18"
+         *       }
+         *     }
+         *   ],
+         *   "collection_name": "smoke_tests",
+         *   "embedded_metadata_keys": [
+         *     "group"
+         *   ]
+         * }
+         */
+        "application/json": {
           /** @description Items to embed. */
           items: {
             /** @description Text to embed. */
@@ -3076,8 +3551,8 @@ export interface operations {
             /** @description Vector store document ID. Ignored if `store` is unset. */
             doc_id?: string;
           }[];
-          /** @description [Vector store](/docs/vector-stores) identifier. */
-          store?: string;
+          /** @description Vector store name. */
+          collection_name?: string;
           /** @description Choose keys from `metadata` to embed with text. */
           embedded_metadata_keys?: string[];
         };
@@ -3109,9 +3584,22 @@ export interface operations {
    * @description Generate embeddings for text or images using [CLIP](https://openai.com/research/clip).
    */
   CLIP: {
-    parameters: {
-      query?: {
-        undefined?: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "items": [
+         *     {
+         *       "image_uri": "https://media.substrate.run/docs-fuji-red.jpg"
+         *     },
+         *     {
+         *       "image_uri": "https://media.substrate.run/docs-fuji-blue.jpg"
+         *     }
+         *   ],
+         *   "collection_name": "smoke_tests"
+         * }
+         */
+        "application/json": {
           /** @description Items to embed. */
           items: {
             /** @description Image to embed. */
@@ -3125,10 +3613,10 @@ export interface operations {
             /** @description Vector store document ID. Ignored if `store` is unset. */
             doc_id?: string;
           }[];
-          /** @description Choose keys from `metadata` to embed with text, when embedding and storing text documents. */
+          /** @description Vector store name. */
+          collection_name?: string;
+          /** @description Choose keys from `metadata` to embed with text. Only applies to text items. */
           embedded_metadata_keys?: string[];
-          /** @description [Vector store](/docs/vector-stores) identifier. */
-          store?: string;
         };
       };
     };
@@ -3158,13 +3646,19 @@ export interface operations {
    * @description Create a vector store for storing and querying embeddings.
    */
   CreateVectorStore: {
-    parameters: {
-      query?: {
-        undefined?: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "collection_name": "smoke_tests",
+         *   "model": "jina-v2"
+         * }
+         */
+        "application/json": {
           /** @description Vector store name. */
-          name: string;
+          collection_name: string;
           /**
-           * @description Selected embedding model
+           * @description Selected embedding model.
            * @enum {string}
            */
           model: "jina-v2" | "clip";
@@ -3193,9 +3687,9 @@ export interface operations {
         content: {
           "application/json": {
             /** @description Vector store name. */
-            name: string;
+            collection_name: string;
             /**
-             * @description Selected embedding model
+             * @description Selected embedding model.
              * @enum {string}
              */
             model: "jina-v2" | "clip";
@@ -3225,9 +3719,10 @@ export interface operations {
    * @description List all vector stores.
    */
   ListVectorStores: {
-    parameters: {
-      query?: {
-        undefined?: Record<string, never>;
+    requestBody?: {
+      content: {
+        /** @example {} */
+        "application/json": Record<string, never>;
       };
     };
     responses: {
@@ -3236,11 +3731,11 @@ export interface operations {
         content: {
           "application/json": {
             /** @description List of vector stores. */
-            stores?: {
+            items?: {
               /** @description Vector store name. */
-              name: string;
+              collection_name: string;
               /**
-               * @description Selected embedding model
+               * @description Selected embedding model.
                * @enum {string}
                */
               model: "jina-v2" | "clip";
@@ -3271,13 +3766,19 @@ export interface operations {
    * @description Delete a vector store.
    */
   DeleteVectorStore: {
-    parameters: {
-      query?: {
-        undefined?: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "collection_name": "fake_store",
+         *   "model": "jina-v2"
+         * }
+         */
+        "application/json": {
           /** @description Vector store name. */
-          name: string;
+          collection_name: string;
           /**
-           * @description Selected embedding model
+           * @description Selected embedding model.
            * @enum {string}
            */
           model: "jina-v2" | "clip";
@@ -3290,9 +3791,9 @@ export interface operations {
         content: {
           "application/json": {
             /** @description Vector store name. */
-            name: string;
+            collection_name: string;
             /**
-             * @description Selected embedding model
+             * @description Selected embedding model.
              * @enum {string}
              */
             model: "jina-v2" | "clip";
@@ -3306,24 +3807,36 @@ export interface operations {
    * @description Query a vector store for similar vectors.
    */
   QueryVectorStore: {
-    parameters: {
-      query?: {
-        undefined?: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "collection_name": "smoke_tests",
+         *   "model": "jina-v2",
+         *   "query_strings": [
+         *     "gas",
+         *     "metal"
+         *   ],
+         *   "top_k": 1,
+         *   "include_metadata": true
+         * }
+         */
+        "application/json": {
           /** @description Vector store to query against. */
-          name: string;
+          collection_name: string;
           /**
-           * @description Selected embedding model
+           * @description Selected embedding model.
            * @enum {string}
            */
           model: "jina-v2" | "clip";
-          /** @description Document IDs to use for the query. */
-          query_ids?: string[];
-          /** @description Image URIs to embed and use for the query. */
-          query_image_uris?: string[];
-          /** @description Vector to use for the query. */
-          query_vectors?: number[][];
           /** @description Texts to embed and use for the query. */
           query_strings?: string[];
+          /** @description Image URIs to embed and use for the query. */
+          query_image_uris?: string[];
+          /** @description Vectors to use for the query. */
+          query_vectors?: number[][];
+          /** @description Document IDs to use for the query. */
+          query_ids?: string[];
           /**
            * @description Number of results to return.
            * @default 10
@@ -3348,11 +3861,6 @@ export interface operations {
           filters?: {
             [key: string]: unknown;
           };
-          /**
-           * @description The distance metric used for the query. Defaults to the distance metric the vector store was created with.
-           * @enum {string}
-           */
-          metric?: "cosine" | "l2" | "inner";
         };
       };
     };
@@ -3378,9 +3886,9 @@ export interface operations {
               };
             }[][];
             /** @description Vector store name. */
-            name?: string;
+            collection_name?: string;
             /**
-             * @description Selected embedding model
+             * @description Selected embedding model.
              * @enum {string}
              */
             model?: "jina-v2" | "clip";
@@ -3399,13 +3907,22 @@ export interface operations {
    * @description Fetch vectors from a vector store.
    */
   FetchVectors: {
-    parameters: {
-      query?: {
-        undefined?: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "collection_name": "smoke_tests",
+         *   "model": "jina-v2",
+         *   "ids": [
+         *     "dd8f3774e05d42caa53cfbaa7389c08f"
+         *   ]
+         * }
+         */
+        "application/json": {
           /** @description Vector store name. */
-          name: string;
+          collection_name: string;
           /**
-           * @description Selected embedding model
+           * @description Selected embedding model.
            * @enum {string}
            */
           model: "jina-v2" | "clip";
@@ -3440,13 +3957,27 @@ export interface operations {
    * @description Update vectors in a vector store.
    */
   UpdateVectors: {
-    parameters: {
-      query?: {
-        undefined?: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "collection_name": "smoke_tests",
+         *   "model": "jina-v2",
+         *   "vectors": [
+         *     {
+         *       "id": "dd8f3774e05d42caa53cfbaa7389c08f",
+         *       "metadata": {
+         *         "appearance": "silvery, blue cast"
+         *       }
+         *     }
+         *   ]
+         * }
+         */
+        "application/json": {
           /** @description Vector store name. */
-          name: string;
+          collection_name: string;
           /**
-           * @description Selected embedding model
+           * @description Selected embedding model.
            * @enum {string}
            */
           model: "jina-v2" | "clip";
@@ -3481,13 +4012,23 @@ export interface operations {
    * @description Delete vectors in a vector store.
    */
   DeleteVectors: {
-    parameters: {
-      query?: {
-        undefined?: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "collection_name": "smoke_tests",
+         *   "model": "jina-v2",
+         *   "ids": [
+         *     "ac32b9a133dd4e3689004f6e8f0fd6cd",
+         *     "629df177c7644062a68bceeff223cefa"
+         *   ]
+         * }
+         */
+        "application/json": {
           /** @description Vector store name. */
-          name: string;
+          collection_name: string;
           /**
-           * @description Selected embedding model
+           * @description Selected embedding model.
            * @enum {string}
            */
           model: "jina-v2" | "clip";

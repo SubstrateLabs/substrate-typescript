@@ -20,7 +20,7 @@ async function main() {
   });
 
   const create = new CreateVectorStore({
-    name: "vibes",
+    collection_name: "vibes",
     model: "jina-v2",
   });
 
@@ -28,23 +28,23 @@ async function main() {
 
   const insert = new JinaV2({
     items: [{ text: "tell me about celsius oasis vibe", doc_id: "celsius" }],
-    store: "vibes",
+    collection_name: "vibes",
   });
 
   const query = new QueryVectorStore({
-    name: "vibes",
+    collection_name: "vibes",
     model: "jina-v2",
     query_strings: ["celsius", "oasis vibe"],
   });
 
   const fetch = new FetchVectors({
-    name: "vibes",
+    collection_name: "vibes",
     model: "jina-v2",
     ids: ["celsius"],
   });
 
   const update = new UpdateVectors({
-    name: "vibes",
+    collection_name: "vibes",
     model: "jina-v2",
     vectors: [
       {
@@ -54,7 +54,10 @@ async function main() {
     ],
   });
 
-  const destroy = new DeleteVectorStore({ name: "vibes", model: "jina-v2" });
+  const destroy = new DeleteVectorStore({
+    collection_name: "vibes",
+    model: "jina-v2",
+  });
 
   const res = await substrate.run(
     create,

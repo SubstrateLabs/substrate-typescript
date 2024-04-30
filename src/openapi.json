@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Substrate API",
-    "version": "2024-04-11",
+    "version": "2024-04-18",
     "contact": {
       "email": "support@substrate.run"
     },
@@ -28,6 +28,10 @@
           "message": {
             "type": "string",
             "description": "A message providing more details about the error."
+          },
+          "request_id": {
+            "type": "string",
+            "description": "A unique identifier for the request."
           }
         },
         "required": ["type", "message"]
@@ -69,7 +73,8 @@
             "type": "string",
             "description": "Text response."
           }
-        }
+        },
+        "required": ["text"]
       },
       "GenerateJSONIn": {
         "title": "GenerateJSONIn",
@@ -114,7 +119,8 @@
             "description": "JSON response.",
             "additionalProperties": true
           }
-        }
+        },
+        "required": ["json_object"]
       },
       "MultiGenerateTextIn": {
         "title": "MultiGenerateTextIn",
@@ -124,10 +130,18 @@
             "type": "string",
             "description": "Input prompt."
           },
+          "batch_prompts": {
+            "description": "Batch input prompts.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
           "num_choices": {
             "type": "integer",
             "description": "Number of choices to generate.",
             "minimum": 1,
+            "maximum": 8,
             "default": 1
           },
           "temperature": {
@@ -149,20 +163,35 @@
             "default": "Mistral7BInstruct"
           }
         },
-        "required": ["prompt", "num_choices"]
+        "required": []
       },
-      "MultiGenerateTextOut": {
-        "title": "MultiGenerateTextOut",
+      "MultiGenerateTextOutput": {
+        "title": "MultiGenerateTextOutput",
         "type": "object",
         "properties": {
           "choices": {
             "type": "array",
+            "description": "Response choices.",
             "items": {
               "$ref": "#/components/schemas/GenerateTextOut"
             }
           }
         },
         "required": ["choices"]
+      },
+      "MultiGenerateTextOut": {
+        "title": "MultiGenerateTextOut",
+        "type": "object",
+        "properties": {
+          "outputs": {
+            "type": "array",
+            "description": "A single output for `prompt`, or multiple outputs for `batch_prompts`.",
+            "items": {
+              "$ref": "#/components/schemas/MultiGenerateTextOutput"
+            }
+          }
+        },
+        "required": ["outputs"]
       },
       "MultiGenerateJSONIn": {
         "title": "MultiGenerateJSONIn",
@@ -177,11 +206,19 @@
             "description": "JSON schema to guide `json_object` response.",
             "additionalProperties": true
           },
+          "batch_prompts": {
+            "description": "Batch input prompts.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
           "num_choices": {
             "type": "integer",
             "description": "Number of choices to generate.",
             "minimum": 1,
-            "default": 1
+            "maximum": 8,
+            "default": 2
           },
           "temperature": {
             "type": "number",
@@ -202,20 +239,35 @@
             "default": "Mistral7BInstruct"
           }
         },
-        "required": ["prompt", "json_schema", "num_choices"]
+        "required": ["json_schema"]
       },
-      "MultiGenerateJSONOut": {
-        "title": "MultiGenerateJSONOut",
+      "MultiGenerateJSONOutput": {
+        "title": "MultiGenerateJSONOutput",
         "type": "object",
         "properties": {
           "choices": {
             "type": "array",
+            "description": "Response choices.",
             "items": {
               "$ref": "#/components/schemas/GenerateJSONOut"
             }
           }
         },
         "required": ["choices"]
+      },
+      "MultiGenerateJSONOut": {
+        "title": "MultiGenerateJSONOut",
+        "type": "object",
+        "properties": {
+          "outputs": {
+            "type": "array",
+            "description": "A single output for `prompt`, or multiple outputs for `batch_prompts`.",
+            "items": {
+              "$ref": "#/components/schemas/MultiGenerateJSONOutput"
+            }
+          }
+        },
+        "required": ["outputs"]
       },
       "Mistral7BInstructIn": {
         "title": "Mistral7BInstructIn",
@@ -227,12 +279,22 @@
           },
           "num_choices": {
             "type": "integer",
-            "description": "Number of choices to generate."
+            "description": "Number of choices to generate.",
+            "minimum": 1,
+            "maximum": 8,
+            "default": 1
           },
           "json_schema": {
             "type": "object",
             "description": "JSON schema to guide response.",
             "additionalProperties": true
+          },
+          "batch_prompts": {
+            "description": "Batch input prompts.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           },
           "temperature": {
             "type": "number",
@@ -246,7 +308,7 @@
             "description": "Maximum number of tokens to generate."
           }
         },
-        "required": ["prompt", "num_choices"]
+        "required": []
       },
       "Mistral7BInstructChoice": {
         "title": "Mistral7BInstructChoice",
@@ -263,18 +325,33 @@
           }
         }
       },
-      "Mistral7BInstructOut": {
-        "title": "Mistral7BInstructOut",
+      "Mistral7BInstructOutput": {
+        "title": "Mistral7BInstructOutput",
         "type": "object",
         "properties": {
           "choices": {
             "type": "array",
+            "description": "Response choices.",
             "items": {
               "$ref": "#/components/schemas/Mistral7BInstructChoice"
             }
           }
         },
         "required": ["choices"]
+      },
+      "Mistral7BInstructOut": {
+        "title": "Mistral7BInstructOut",
+        "type": "object",
+        "properties": {
+          "outputs": {
+            "type": "array",
+            "description": "A single output for `prompt`, or multiple outputs for `batch_prompts`.",
+            "items": {
+              "$ref": "#/components/schemas/Mistral7BInstructOutput"
+            }
+          }
+        },
+        "required": ["outputs"]
       },
       "GenerateTextVisionIn": {
         "title": "GenerateTextVisionIn",
@@ -331,12 +408,6 @@
               "type": "string"
             }
           },
-          "temperature": {
-            "type": "number",
-            "format": "float",
-            "minimum": 0,
-            "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic."
-          },
           "max_tokens": {
             "type": "integer",
             "description": "Maximum number of tokens to generate.",
@@ -366,7 +437,7 @@
           },
           "store": {
             "type": "string",
-            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string."
           },
           "node": {
             "type": "string",
@@ -398,11 +469,14 @@
           },
           "num_images": {
             "type": "integer",
-            "description": "Number of images to generate."
+            "description": "Number of images to generate.",
+            "minimum": 1,
+            "default": 2,
+            "maximum": 8
           },
           "store": {
             "type": "string",
-            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string."
           },
           "node": {
             "type": "string",
@@ -419,6 +493,7 @@
         "properties": {
           "outputs": {
             "type": "array",
+            "description": "Generated images.",
             "items": {
               "$ref": "#/components/schemas/GenerateImageOut"
             }
@@ -440,24 +515,35 @@
           },
           "steps": {
             "type": "integer",
-            "description": "Number of diffusion steps."
+            "description": "Number of diffusion steps.",
+            "default": 30,
+            "minimum": 0,
+            "maximum": 150
           },
           "num_images": {
             "type": "integer",
             "description": "Number of images to generate.",
-            "default": 1
+            "minimum": 1,
+            "default": 1,
+            "maximum": 8
           },
           "store": {
             "type": "string",
-            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string."
           },
           "height": {
             "type": "integer",
-            "description": "Height of output image, in pixels."
+            "description": "Height of output image, in pixels.",
+            "minimum": 256,
+            "maximum": 1536,
+            "default": 1024
           },
           "width": {
             "type": "integer",
-            "description": "Width of output image, in pixels."
+            "description": "Width of output image, in pixels.",
+            "minimum": 256,
+            "maximum": 1536,
+            "default": 1024
           },
           "seeds": {
             "type": "array",
@@ -471,10 +557,11 @@
             "format": "float",
             "description": "Higher values adhere to the text prompt more strongly, typically at the expense of image quality.",
             "minimum": 0,
-            "default": 5
+            "default": 7,
+            "maximum": 30
           }
         },
-        "required": ["prompt"]
+        "required": ["prompt", "num_images"]
       },
       "StableDiffusionImage": {
         "title": "StableDiffusionImage",
@@ -497,6 +584,7 @@
         "properties": {
           "outputs": {
             "type": "array",
+            "description": "Generated images.",
             "items": {
               "$ref": "#/components/schemas/StableDiffusionImage"
             }
@@ -519,19 +607,27 @@
           "num_images": {
             "type": "integer",
             "description": "Number of images to generate.",
-            "default": 1
+            "default": 1,
+            "minimum": 1,
+            "maximum": 8
           },
           "store": {
             "type": "string",
-            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string."
           },
           "height": {
             "type": "integer",
-            "description": "Height of output image, in pixels."
+            "description": "Height of output image, in pixels.",
+            "minimum": 256,
+            "maximum": 1536,
+            "default": 1024
           },
           "width": {
             "type": "integer",
-            "description": "Width of output image, in pixels."
+            "description": "Width of output image, in pixels.",
+            "minimum": 256,
+            "maximum": 1536,
+            "default": 1024
           },
           "seeds": {
             "type": "array",
@@ -549,6 +645,7 @@
         "properties": {
           "outputs": {
             "type": "array",
+            "description": "Generated images.",
             "items": {
               "$ref": "#/components/schemas/StableDiffusionImage"
             }
@@ -571,13 +668,17 @@
           "num_images": {
             "type": "integer",
             "description": "Number of images to generate.",
-            "default": 1
+            "default": 1,
+            "minimum": 1,
+            "maximum": 8
           },
           "ip_adapter_scale": {
             "type": "number",
             "format": "float",
             "description": "Controls the influence of the image prompt on the generated output.",
-            "minimum": 0
+            "minimum": 0,
+            "maximum": 1,
+            "default": 0.5
           },
           "negative_prompt": {
             "type": "string",
@@ -585,15 +686,21 @@
           },
           "store": {
             "type": "string",
-            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string."
           },
           "width": {
             "type": "integer",
-            "description": "Width of output image, in pixels."
+            "description": "Width of output image, in pixels.",
+            "minimum": 640,
+            "maximum": 1536,
+            "default": 1024
           },
           "height": {
             "type": "integer",
-            "description": "Height of output image, in pixels."
+            "description": "Height of output image, in pixels.",
+            "minimum": 640,
+            "maximum": 1536,
+            "default": 1024
           },
           "seeds": {
             "description": "Random noise seeds. Default is random seeds for each generation.",
@@ -611,6 +718,7 @@
         "properties": {
           "outputs": {
             "type": "array",
+            "description": "Generated images.",
             "items": {
               "$ref": "#/components/schemas/StableDiffusionImage"
             }
@@ -638,7 +746,9 @@
           "num_images": {
             "type": "integer",
             "description": "Number of images to generate.",
-            "default": 1
+            "default": 1,
+            "minimum": 1,
+            "maximum": 8
           },
           "output_resolution": {
             "type": "integer",
@@ -651,13 +761,15 @@
           },
           "store": {
             "type": "string",
-            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string."
           },
           "conditioning_scale": {
             "type": "number",
             "format": "float",
             "description": "Controls the influence of the input image on the generated output.",
-            "minimum": 0
+            "minimum": 0,
+            "maximum": 1,
+            "default": 0.5
           },
           "seeds": {
             "description": "Random noise seeds. Default is random seeds for each generation.",
@@ -675,6 +787,7 @@
         "properties": {
           "outputs": {
             "type": "array",
+            "description": "Generated images.",
             "items": {
               "$ref": "#/components/schemas/StableDiffusionImage"
             }
@@ -700,7 +813,7 @@
           },
           "store": {
             "type": "string",
-            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string."
           },
           "node": {
             "type": "string",
@@ -740,11 +853,14 @@
           },
           "num_images": {
             "type": "integer",
-            "description": "Number of images to generate."
+            "description": "Number of images to generate.",
+            "minimum": 1,
+            "default": 2,
+            "maximum": 8
           },
           "store": {
             "type": "string",
-            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string."
           },
           "node": {
             "type": "string",
@@ -761,6 +877,7 @@
         "properties": {
           "outputs": {
             "type": "array",
+            "description": "Generated images.",
             "items": {
               "$ref": "#/components/schemas/GenerativeEditImageOut"
             }
@@ -787,7 +904,9 @@
           "num_images": {
             "type": "integer",
             "description": "Number of images to generate.",
-            "default": 1
+            "default": 1,
+            "minimum": 1,
+            "maximum": 8
           },
           "output_resolution": {
             "type": "integer",
@@ -800,7 +919,7 @@
           },
           "store": {
             "type": "string",
-            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string."
           },
           "strength": {
             "type": "number",
@@ -808,7 +927,7 @@
             "description": "Controls the strength of the generation process.",
             "minimum": 0,
             "maximum": 1,
-            "default": 1.0
+            "default": 0.8
           },
           "seeds": {
             "description": "Random noise seeds. Default is random seeds for each generation.",
@@ -826,6 +945,7 @@
         "properties": {
           "outputs": {
             "type": "array",
+            "description": "Generated images.",
             "items": {
               "$ref": "#/components/schemas/StableDiffusionImage"
             }
@@ -889,7 +1009,7 @@
           },
           "store": {
             "type": "string",
-            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string."
           },
           "node": {
             "type": "string",
@@ -925,7 +1045,7 @@
           },
           "store": {
             "type": "string",
-            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string."
           }
         },
         "required": ["image_uri", "mask_image_uri"]
@@ -960,7 +1080,7 @@
           },
           "store": {
             "type": "string",
-            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string."
           },
           "node": {
             "type": "string",
@@ -992,7 +1112,7 @@
           },
           "store": {
             "type": "string",
-            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string."
           }
         },
         "required": ["image_uri"]
@@ -1018,7 +1138,7 @@
           },
           "store": {
             "type": "string",
-            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string."
           },
           "node": {
             "type": "string",
@@ -1050,7 +1170,7 @@
           },
           "store": {
             "type": "string",
-            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string."
           }
         },
         "required": ["image_uri"]
@@ -1076,11 +1196,12 @@
           },
           "point": {
             "description": "Point prompt.",
+            "type": "object",
             "$ref": "#/components/schemas/Point"
           },
           "store": {
             "type": "string",
-            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string."
           },
           "node": {
             "type": "string",
@@ -1126,7 +1247,7 @@
           },
           "store": {
             "type": "string",
-            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the image data will be returned as a base64-encoded string."
+            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string."
           }
         },
         "required": ["image_uri"]
@@ -1290,7 +1411,7 @@
           },
           "store": {
             "type": "string",
-            "description": "Use \"hosted\" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the audio data will be returned as a base64-encoded string."
+            "description": "Use \"hosted\" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the audio data will be returned as a base64-encoded string."
           },
           "node": {
             "type": "string",
@@ -1331,7 +1452,7 @@
           },
           "store": {
             "type": "string",
-            "description": "Use \"hosted\" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](/docs/file-stores). If unset, the audio data will be returned as a base64-encoded string."
+            "description": "Use \"hosted\" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the audio data will be returned as a base64-encoded string."
           }
         },
         "required": ["text"]
@@ -1379,9 +1500,9 @@
             "type": "string",
             "description": "Text to embed."
           },
-          "store": {
+          "collection_name": {
             "type": "string",
-            "description": "[Vector store](/docs/vector-stores) identifier."
+            "description": "Vector store name."
           },
           "metadata": {
             "type": "object",
@@ -1399,11 +1520,11 @@
             "type": "string",
             "description": "Vector store document ID. Ignored if `store` is unset."
           },
-          "node": {
+          "model": {
             "type": "string",
-            "enum": ["JinaV2", "CLIP"],
-            "description": "Selected node.",
-            "default": "JinaV2"
+            "enum": ["jina-v2", "clip"],
+            "description": "Selected embedding model.",
+            "default": "jina-v2"
           }
         },
         "required": ["text"]
@@ -1422,6 +1543,7 @@
       },
       "EmbedTextItem": {
         "type": "object",
+        "title": "EmbedTextItem",
         "properties": {
           "text": {
             "type": "string",
@@ -1450,9 +1572,9 @@
               "$ref": "#/components/schemas/EmbedTextItem"
             }
           },
-          "store": {
+          "collection_name": {
             "type": "string",
-            "description": "[Vector store](/docs/vector-stores) identifier."
+            "description": "Vector store name."
           },
           "embedded_metadata_keys": {
             "type": "array",
@@ -1461,11 +1583,11 @@
               "type": "string"
             }
           },
-          "node": {
+          "model": {
             "type": "string",
-            "enum": ["JinaV2", "CLIP"],
-            "description": "Selected node.",
-            "default": "JinaV2"
+            "enum": ["jina-v2", "clip"],
+            "description": "Selected embedding model.",
+            "default": "jina-v2"
           }
         },
         "required": ["items"]
@@ -1495,9 +1617,9 @@
               "$ref": "#/components/schemas/EmbedTextItem"
             }
           },
-          "store": {
+          "collection_name": {
             "type": "string",
-            "description": "[Vector store](/docs/vector-stores) identifier."
+            "description": "Vector store name."
           },
           "embedded_metadata_keys": {
             "type": "array",
@@ -1531,19 +1653,19 @@
             "type": "string",
             "description": "Image to embed."
           },
-          "store": {
+          "collection_name": {
             "type": "string",
-            "description": "[Vector store](/docs/vector-stores) identifier."
+            "description": "Vector store name."
           },
           "doc_id": {
             "type": "string",
             "description": "Vector store document ID. Ignored if `store` is unset."
           },
-          "node": {
+          "model": {
             "type": "string",
-            "enum": ["CLIP"],
-            "description": "Selected node.",
-            "default": "CLIP"
+            "enum": ["clip"],
+            "description": "Selected embedding model.",
+            "default": "clip"
           }
         },
         "required": ["image_uri"]
@@ -1562,6 +1684,7 @@
       },
       "EmbedImageItem": {
         "type": "object",
+        "title": "EmbedImageItem",
         "properties": {
           "image_uri": {
             "type": "string",
@@ -1576,6 +1699,7 @@
       },
       "EmbedTextOrImageItem": {
         "type": "object",
+        "title": "EmbedTextOrImageItem",
         "properties": {
           "image_uri": {
             "type": "string",
@@ -1608,15 +1732,15 @@
               "$ref": "#/components/schemas/EmbedImageItem"
             }
           },
-          "store": {
+          "collection_name": {
             "type": "string",
-            "description": "[Vector store](/docs/vector-stores) identifier."
+            "description": "Vector store name."
           },
-          "node": {
+          "model": {
             "type": "string",
-            "enum": ["CLIP"],
-            "description": "Selected node.",
-            "default": "CLIP"
+            "enum": ["clip"],
+            "description": "Selected embedding model.",
+            "default": "clip"
           }
         },
         "required": ["items"]
@@ -1646,16 +1770,16 @@
               "$ref": "#/components/schemas/EmbedTextOrImageItem"
             }
           },
+          "collection_name": {
+            "type": "string",
+            "description": "Vector store name."
+          },
           "embedded_metadata_keys": {
             "type": "array",
-            "description": "Choose keys from `metadata` to embed with text, when embedding and storing text documents.",
+            "description": "Choose keys from `metadata` to embed with text. Only applies to text items.",
             "items": {
               "type": "string"
             }
-          },
-          "store": {
-            "type": "string",
-            "description": "[Vector store](/docs/vector-stores) identifier."
           }
         },
         "required": ["items"]
@@ -1678,7 +1802,7 @@
         "title": "CreateVectorStoreIn",
         "type": "object",
         "properties": {
-          "name": {
+          "collection_name": {
             "type": "string",
             "description": "Vector store name.",
             "minLength": 1,
@@ -1686,7 +1810,7 @@
           },
           "model": {
             "type": "string",
-            "description": "Selected embedding model",
+            "description": "Selected embedding model.",
             "enum": ["jina-v2", "clip"]
           },
           "m": {
@@ -1710,13 +1834,13 @@
             "description": "The distance metric to construct the index with."
           }
         },
-        "required": ["name", "model"]
+        "required": ["collection_name", "model"]
       },
       "CreateVectorStoreOut": {
         "title": "CreateVectorStoreOut",
         "type": "object",
         "properties": {
-          "name": {
+          "collection_name": {
             "type": "string",
             "description": "Vector store name.",
             "minLength": 1,
@@ -1724,7 +1848,7 @@
           },
           "model": {
             "type": "string",
-            "description": "Selected embedding model",
+            "description": "Selected embedding model.",
             "enum": ["jina-v2", "clip"]
           },
           "m": {
@@ -1748,7 +1872,13 @@
             "description": "The distance metric to construct the index with."
           }
         },
-        "required": ["name", "model", "m", "ef_construction", "metric"]
+        "required": [
+          "collection_name",
+          "model",
+          "m",
+          "ef_construction",
+          "metric"
+        ]
       },
       "ListVectorStoresIn": {
         "title": "ListVectorStoresIn",
@@ -1759,7 +1889,7 @@
         "title": "ListVectorStoresOut",
         "type": "object",
         "properties": {
-          "stores": {
+          "items": {
             "type": "array",
             "description": "List of vector stores.",
             "items": {
@@ -1772,33 +1902,33 @@
         "title": "DeleteVectorStoreIn",
         "type": "object",
         "properties": {
-          "name": {
+          "collection_name": {
             "type": "string",
             "description": "Vector store name."
           },
           "model": {
             "type": "string",
-            "description": "Selected embedding model",
+            "description": "Selected embedding model.",
             "enum": ["jina-v2", "clip"]
           }
         },
-        "required": ["name", "model"]
+        "required": ["collection_name", "model"]
       },
       "DeleteVectorStoreOut": {
         "title": "DeleteVectorStoreOut",
         "type": "object",
         "properties": {
-          "name": {
+          "collection_name": {
             "type": "string",
             "description": "Vector store name."
           },
           "model": {
             "type": "string",
-            "description": "Selected embedding model",
+            "description": "Selected embedding model.",
             "enum": ["jina-v2", "clip"]
           }
         },
-        "required": ["name", "model"]
+        "required": ["collection_name", "model"]
       },
       "Vector": {
         "title": "Vector",
@@ -1829,13 +1959,13 @@
         "title": "FetchVectorsIn",
         "type": "object",
         "properties": {
-          "name": {
+          "collection_name": {
             "type": "string",
             "description": "Vector store name."
           },
           "model": {
             "type": "string",
-            "description": "Selected embedding model",
+            "description": "Selected embedding model.",
             "enum": ["jina-v2", "clip"]
           },
           "ids": {
@@ -1847,7 +1977,7 @@
             "maxItems": 100
           }
         },
-        "required": ["name", "model", "ids"]
+        "required": ["collection_name", "model", "ids"]
       },
       "FetchVectorsOut": {
         "title": "FetchVectorsOut",
@@ -1910,16 +2040,16 @@
         "required": ["id"]
       },
       "UpdateVectorsIn": {
-        "title": "UpdateVectorsParams",
+        "title": "UpdateVectorsIn",
         "type": "object",
         "properties": {
-          "name": {
+          "collection_name": {
             "type": "string",
             "description": "Vector store name."
           },
           "model": {
             "type": "string",
-            "description": "Selected embedding model",
+            "description": "Selected embedding model.",
             "enum": ["jina-v2", "clip"]
           },
           "vectors": {
@@ -1931,19 +2061,19 @@
             "maxItems": 100
           }
         },
-        "required": ["name", "model", "vectors"]
+        "required": ["collection_name", "model", "vectors"]
       },
       "DeleteVectorsIn": {
         "title": "DeleteVectorsIn",
         "type": "object",
         "properties": {
-          "name": {
+          "collection_name": {
             "type": "string",
             "description": "Vector store name."
           },
           "model": {
             "type": "string",
-            "description": "Selected embedding model",
+            "description": "Selected embedding model.",
             "enum": ["jina-v2", "clip"]
           },
           "ids": {
@@ -1955,24 +2085,24 @@
             "maxItems": 100
           }
         },
-        "required": ["name", "model", "ids"]
+        "required": ["collection_name", "model", "ids"]
       },
       "QueryVectorStoreIn": {
         "title": "QueryVectorStoreIn",
         "type": "object",
         "properties": {
-          "name": {
+          "collection_name": {
             "type": "string",
             "description": "Vector store to query against."
           },
           "model": {
             "type": "string",
-            "description": "Selected embedding model",
+            "description": "Selected embedding model.",
             "enum": ["jina-v2", "clip"]
           },
-          "query_ids": {
+          "query_strings": {
             "type": "array",
-            "description": "Document IDs to use for the query.",
+            "description": "Texts to embed and use for the query.",
             "items": {
               "type": "string"
             }
@@ -1986,7 +2116,7 @@
           },
           "query_vectors": {
             "type": "array",
-            "description": "Vector to use for the query.",
+            "description": "Vectors to use for the query.",
             "items": {
               "type": "array",
               "items": {
@@ -1995,9 +2125,9 @@
               }
             }
           },
-          "query_strings": {
+          "query_ids": {
             "type": "array",
-            "description": "Texts to embed and use for the query.",
+            "description": "Document IDs to use for the query.",
             "items": {
               "type": "string"
             }
@@ -2030,14 +2160,9 @@
             "type": "object",
             "description": "Filter metadata by key-value pairs.",
             "additionalProperties": true
-          },
-          "metric": {
-            "type": "string",
-            "enum": ["cosine", "l2", "inner"],
-            "description": "The distance metric used for the query. Defaults to the distance metric the vector store was created with."
           }
         },
-        "required": ["name", "model"]
+        "required": ["collection_name", "model"]
       },
       "VectorStoreQueryResult": {
         "title": "VectorStoreQueryResult",
@@ -2082,13 +2207,13 @@
               }
             }
           },
-          "name": {
+          "collection_name": {
             "type": "string",
             "description": "Vector store name."
           },
           "model": {
             "type": "string",
-            "description": "Selected embedding model",
+            "description": "Selected embedding model.",
             "enum": ["jina-v2", "clip"]
           },
           "metric": {
@@ -2106,16 +2231,22 @@
       "post": {
         "summary": "GenerateText",
         "operationId": "GenerateText",
-        "tags": ["language-generation"],
+        "tags": ["category:language-generation", "backend:v1"],
         "description": "Generate text using a language model.",
-        "parameters": [
-          {
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/GenerateTextIn"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateTextIn"
+              },
+              "example": {
+                "prompt": "Who is Don Quixote?",
+                "temperature": 0.4,
+                "max_tokens": 800
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -2123,6 +2254,9 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/GenerateTextOut"
+                },
+                "example": {
+                  "text": "Don Quixote is a fictional character in the novel of the same name by Miguel de Cervantes."
                 }
               }
             }
@@ -2134,16 +2268,22 @@
       "post": {
         "summary": "MultiGenerateText",
         "operationId": "MultiGenerateText",
-        "tags": ["language-generation"],
+        "tags": ["category:language-generation", "backend:v1"],
         "description": "Generate multiple text choices using a language model.",
-        "parameters": [
-          {
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/MultiGenerateTextIn"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MultiGenerateTextIn"
+              },
+              "example": {
+                "prompt": "Who is Don Quixote?",
+                "num_choices": 2,
+                "max_tokens": 800
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -2151,6 +2291,20 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/MultiGenerateTextOut"
+                },
+                "example": {
+                  "outputs": [
+                    {
+                      "choices": [
+                        {
+                          "text": "Don Quixote is a fictional character and the protagonist of the novel Don Quixote by Miguel..."
+                        },
+                        {
+                          "text": "Don Quixote is a fictional character created by the Spanish author Miguel de Cervantes..."
+                        }
+                      ]
+                    }
+                  ]
                 }
               }
             }
@@ -2162,16 +2316,35 @@
       "post": {
         "summary": "GenerateJSON",
         "operationId": "GenerateJSON",
-        "tags": ["language-generation"],
+        "tags": ["category:language-generation", "backend:v1"],
         "description": "Generate JSON using a language model.",
-        "parameters": [
-          {
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/GenerateJSONIn"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateJSONIn"
+              },
+              "example": {
+                "prompt": "Who wrote Don Quixote?",
+                "json_schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "description": "The name of the author."
+                    },
+                    "bio": {
+                      "type": "string",
+                      "description": "Concise biography of the author."
+                    }
+                  }
+                },
+                "temperature": 0.4,
+                "max_tokens": 800
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -2179,6 +2352,9 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/GenerateJSONOut"
+                },
+                "example": {
+                  "json_object": {}
                 }
               }
             }
@@ -2190,16 +2366,36 @@
       "post": {
         "summary": "MultiGenerateJSON",
         "operationId": "MultiGenerateJSON",
-        "tags": ["language-generation"],
+        "tags": ["category:language-generation", "backend:v1"],
         "description": "Generate multiple JSON choices using a language model.",
-        "parameters": [
-          {
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/MultiGenerateJSONIn"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MultiGenerateJSONIn"
+              },
+              "example": {
+                "prompt": "Who wrote Don Quixote?",
+                "json_schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "description": "The name of the author."
+                    },
+                    "bio": {
+                      "type": "string",
+                      "description": "Concise biography of the author."
+                    }
+                  }
+                },
+                "num_choices": 2,
+                "temperature": 0.4,
+                "max_tokens": 800
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -2207,6 +2403,20 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/MultiGenerateJSONOut"
+                },
+                "example": {
+                  "outputs": [
+                    {
+                      "choices": [
+                        {
+                          "json_object": {}
+                        },
+                        {
+                          "json_object": {}
+                        }
+                      ]
+                    }
+                  ]
                 }
               }
             }
@@ -2218,16 +2428,24 @@
       "post": {
         "summary": "GenerateTextVision",
         "operationId": "GenerateTextVision",
-        "tags": ["language-generation"],
+        "tags": ["category:language-generation", "backend:v1"],
         "description": "Generate text with image input.",
-        "parameters": [
-          {
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/GenerateTextVisionIn"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateTextVisionIn"
+              },
+              "example": {
+                "prompt": "what are these paintings of and who made them?",
+                "image_uris": [
+                  "https://media.substrate.run/docs-fuji-red.jpg",
+                  "https://media.substrate.run/docs-fuji-blue.jpg"
+                ]
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -2235,6 +2453,9 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/GenerateTextVisionOut"
+                },
+                "example": {
+                  "text": "The artist who created these paintings is Hokusai Katsushika, a renowned Japanese artist known for his woodblock prints and paintings."
                 }
               }
             }
@@ -2246,16 +2467,27 @@
       "post": {
         "summary": "Mistral7BInstruct",
         "operationId": "Mistral7BInstruct",
-        "tags": ["language-generation", "low"],
+        "tags": [
+          "category:language-generation",
+          "backend:v1",
+          "type:low-level"
+        ],
         "description": "Generate text using [Mistral 7B Instruct](https://mistral.ai/news/announcing-mistral-7b).",
-        "parameters": [
-          {
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/Mistral7BInstructIn"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Mistral7BInstructIn"
+              },
+              "example": {
+                "prompt": "Who is Don Quixote?",
+                "num_choices": 2,
+                "temperature": 0.4,
+                "max_tokens": 800
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -2263,6 +2495,20 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Mistral7BInstructOut"
+                },
+                "example": {
+                  "outputs": [
+                    {
+                      "choices": [
+                        {
+                          "text": "Don Quixote is a fictional character and the protagonist of the novel Don Quixote by Miguel..."
+                        },
+                        {
+                          "text": "Don Quixote is a fictional character created by the Spanish author Miguel de Cervantes..."
+                        }
+                      ]
+                    }
+                  ]
                 }
               }
             }
@@ -2274,16 +2520,28 @@
       "post": {
         "summary": "Firellava13B",
         "operationId": "Firellava13B",
-        "tags": ["language-generation", "low"],
+        "tags": [
+          "category:language-generation",
+          "backend:v1",
+          "type:low-level"
+        ],
         "description": "Generate text with image input using [FireLLaVA 13B](https://fireworks.ai/blog/firellava-the-first-commercially-permissive-oss-llava-model).",
-        "parameters": [
-          {
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/Firellava13BIn"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Firellava13BIn"
+              },
+              "example": {
+                "prompt": "what are these paintings of and who made them?",
+                "image_uris": [
+                  "https://media.substrate.run/docs-fuji-red.jpg",
+                  "https://media.substrate.run/docs-fuji-blue.jpg"
+                ]
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -2291,6 +2549,9 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Firellava13BOut"
+                },
+                "example": {
+                  "text": "The artist who created these paintings is Hokusai Katsushika, a renowned Japanese artist known for his woodblock prints and paintings."
                 }
               }
             }
@@ -2302,16 +2563,21 @@
       "post": {
         "summary": "GenerateImage",
         "operationId": "GenerateImage",
-        "tags": ["image-generation"],
+        "tags": ["category:image-generation", "backend:v0"],
         "description": "Generate an image.",
-        "parameters": [
-          {
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/GenerateImageIn"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateImageIn"
+              },
+              "example": {
+                "prompt": "hokusai futuristic supercell spiral cloud with glowing core over turbulent ocean",
+                "store": "hosted"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -2319,6 +2585,9 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/GenerateImageOut"
+                },
+                "example": {
+                  "image_uri": "https://assets.substrate.run/84848484.jpg"
                 }
               }
             }
@@ -2330,16 +2599,22 @@
       "post": {
         "summary": "MultiGenerateImage",
         "operationId": "MultiGenerateImage",
-        "tags": ["image-generation"],
+        "tags": ["category:image-generation", "backend:v0"],
         "description": "Generate multiple images.",
-        "parameters": [
-          {
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/MultiGenerateImageIn"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MultiGenerateImageIn"
+              },
+              "example": {
+                "prompt": "hokusai futuristic supercell spiral cloud with glowing core over turbulent ocean",
+                "store": "hosted",
+                "num_images": 2
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -2347,6 +2622,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/MultiGenerateImageOut"
+                },
+                "example": {
+                  "outputs": [
+                    {
+                      "image_uri": "https://assets.substrate.run/84848484.jpg"
+                    },
+                    {
+                      "image_uri": "https://assets.substrate.run/48484848.jpg"
+                    }
+                  ]
                 }
               }
             }
@@ -2358,16 +2643,23 @@
       "post": {
         "summary": "GenerativeEditImage",
         "operationId": "GenerativeEditImage",
-        "tags": ["image-generation"],
+        "tags": ["category:image-generation", "backend:v0"],
         "description": "Edit an image using image generation.",
-        "parameters": [
-          {
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/GenerativeEditImageIn"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerativeEditImageIn"
+              },
+              "example": {
+                "image_uri": "https://media.substrate.run/docs-klimt-park.jpg",
+                "mask_image_uri": "https://media.substrate.run/spiral-logo.jpeg",
+                "prompt": "large tropical colorful bright anime birds in a dark jungle full of vines, high resolution",
+                "store": "hosted"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -2375,6 +2667,9 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/GenerativeEditImageOut"
+                },
+                "example": {
+                  "image_uri": "https://assets.substrate.run/84848484.jpg"
                 }
               }
             }
@@ -2386,16 +2681,24 @@
       "post": {
         "summary": "MultiGenerativeEditImage",
         "operationId": "MultiGenerativeEditImage",
-        "tags": ["image-generation"],
+        "tags": ["category:image-generation", "backend:v0"],
         "description": "Edit multiple images using image generation.",
-        "parameters": [
-          {
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/MultiGenerativeEditImageIn"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MultiGenerativeEditImageIn"
+              },
+              "example": {
+                "image_uri": "https://media.substrate.run/docs-klimt-park.jpg",
+                "mask_image_uri": "https://media.substrate.run/spiral-logo.jpeg",
+                "prompt": "large tropical colorful bright anime birds in a dark jungle full of vines, high resolution",
+                "num_images": 2,
+                "store": "hosted"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -2403,6 +2706,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/MultiGenerativeEditImageOut"
+                },
+                "example": {
+                  "outputs": [
+                    {
+                      "image_uri": "https://assets.substrate.run/84848484.jpg"
+                    },
+                    {
+                      "image_uri": "https://assets.substrate.run/48484848.jpg"
+                    }
+                  ]
                 }
               }
             }
@@ -2414,16 +2727,25 @@
       "post": {
         "summary": "StableDiffusionXL",
         "operationId": "StableDiffusionXL",
-        "tags": ["image-generation", "low"],
+        "tags": ["category:image-generation", "backend:v0", "type:low-level"],
         "description": "Generate an image using [Stable Diffusion XL](https://arxiv.org/abs/2307.01952).",
-        "parameters": [
-          {
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/StableDiffusionXLIn"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StableDiffusionXLIn"
+              },
+              "example": {
+                "prompt": "hokusai futuristic supercell spiral cloud with glowing core over turbulent ocean",
+                "negative_prompt": "night, moon",
+                "store": "hosted",
+                "guidance_scale": 7,
+                "num_images": 2,
+                "seeds": [3306990332671669418, 13641924104177017164]
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -2431,6 +2753,18 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/StableDiffusionXLOut"
+                },
+                "example": {
+                  "outputs": [
+                    {
+                      "image_uri": "https://assets.substrate.run/84848484.jpg",
+                      "seed": 3306990332671669418
+                    },
+                    {
+                      "image_uri": "https://assets.substrate.run/48484848.jpg",
+                      "seed": 13641924104177017164
+                    }
+                  ]
                 }
               }
             }
@@ -2442,16 +2776,24 @@
       "post": {
         "summary": "StableDiffusionXLLightning",
         "operationId": "StableDiffusionXLLightning",
-        "tags": ["image-generation", "low"],
+        "tags": ["category:image-generation", "backend:v0", "type:low-level"],
         "description": "Generate an image using [Stable Diffusion XL Lightning](https://arxiv.org/abs/2402.13929).",
-        "parameters": [
-          {
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/StableDiffusionXLLightningIn"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StableDiffusionXLLightningIn"
+              },
+              "example": {
+                "prompt": "hokusai futuristic supercell spiral cloud with glowing core over turbulent ocean",
+                "negative_prompt": "night, moon",
+                "store": "hosted",
+                "num_images": 2,
+                "seeds": [3306990332671669418, 13641924104177017164]
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -2459,6 +2801,18 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/StableDiffusionXLLightningOut"
+                },
+                "example": {
+                  "outputs": [
+                    {
+                      "image_uri": "https://assets.substrate.run/84848484.jpg",
+                      "seed": 3306990332671669418
+                    },
+                    {
+                      "image_uri": "https://assets.substrate.run/48484848.jpg",
+                      "seed": 13641924104177017164
+                    }
+                  ]
                 }
               }
             }
@@ -2470,16 +2824,27 @@
       "post": {
         "summary": "StableDiffusionXLInpaint",
         "operationId": "StableDiffusionXLInpaint",
-        "tags": ["image-generation", "low"],
+        "tags": ["category:image-generation", "backend:v0", "type:low-level"],
         "description": "Edit an image using [Stable Diffusion XL](https://arxiv.org/abs/2307.01952). Supports inpainting (edit part of the image with a mask) and image-to-image (edit the full image).",
-        "parameters": [
-          {
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/StableDiffusionXLInpaintIn"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StableDiffusionXLInpaintIn"
+              },
+              "example": {
+                "image_uri": "https://media.substrate.run/docs-klimt-park.jpg",
+                "mask_image_uri": "https://media.substrate.run/spiral-logo.jpeg",
+                "prompt": "large tropical colorful bright birds in a jungle, high resolution oil painting",
+                "negative_prompt": "dark, cartoon, anime",
+                "strength": 0.8,
+                "num_images": 2,
+                "store": "hosted",
+                "seeds": [16072680593433107326, 17203982922585031095]
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -2487,34 +2852,18 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/StableDiffusionXLInpaintOut"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/StableDiffusionXLIPAdapter": {
-      "post": {
-        "summary": "StableDiffusionXLIPAdapter",
-        "operationId": "StableDiffusionXLIPAdapter",
-        "tags": ["image-generation", "low"],
-        "description": "Generate an image with an image prompt, using Stable Diffusion XL with [IP-Adapter](https://arxiv.org/abs/2308.06721).",
-        "parameters": [
-          {
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/StableDiffusionXLIPAdapterIn"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/StableDiffusionXLIPAdapterOut"
+                },
+                "example": {
+                  "outputs": [
+                    {
+                      "image_uri": "https://assets.substrate.run/84848484.jpg",
+                      "seed": 16072680593433107326
+                    },
+                    {
+                      "image_uri": "https://assets.substrate.run/48484848.jpg",
+                      "seed": 17203982922585031095
+                    }
+                  ]
                 }
               }
             }
@@ -2526,16 +2875,26 @@
       "post": {
         "summary": "StableDiffusionXLControlNet",
         "operationId": "StableDiffusionXLControlNet",
-        "tags": ["image-generation", "low"],
+        "tags": ["category:image-generation", "type:low-level", "backend:v0"],
         "description": "Generate an image with generation structured by an input image, using Stable Diffusion XL with [ControlNet](https://arxiv.org/abs/2302.05543).",
-        "parameters": [
-          {
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/StableDiffusionXLControlNetIn"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StableDiffusionXLControlNetIn"
+              },
+              "example": {
+                "image_uri": "https://media.substrate.run/spiral-logo.jpeg",
+                "prompt": "the futuristic solarpunk city of atlantis at sunset, cinematic bokeh HD",
+                "control_method": "illusion",
+                "conditioning_scale": 0.5,
+                "store": "hosted",
+                "num_images": 2,
+                "seeds": [16072680593433107326, 17203982922585031095]
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -2543,6 +2902,18 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/StableDiffusionXLControlNetOut"
+                },
+                "example": {
+                  "outputs": [
+                    {
+                      "image_uri": "https://assets.substrate.run/84848484.jpg",
+                      "seed": 16072680593433107326
+                    },
+                    {
+                      "image_uri": "https://assets.substrate.run/48484848.jpg",
+                      "seed": 17203982922585031095
+                    }
+                  ]
                 }
               }
             }
@@ -2550,223 +2921,49 @@
         }
       }
     },
-    "/FillMask": {
+    "/StableDiffusionXLIPAdapter": {
       "post": {
-        "summary": "FillMask",
-        "operationId": "FillMask",
-        "tags": ["image-utility"],
-        "description": "Fill (inpaint) part of an image, e.g. to 'remove' an object.",
-        "parameters": [
-          {
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/FillMaskIn"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/FillMaskOut"
-                }
+        "summary": "StableDiffusionXLIPAdapter",
+        "operationId": "StableDiffusionXLIPAdapter",
+        "tags": ["category:image-generation", "type:low-level", "backend:v0"],
+        "description": "Generate an image with an image prompt, using Stable Diffusion XL with [IP-Adapter](https://arxiv.org/abs/2308.06721).",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StableDiffusionXLIPAdapterIn"
+              },
+              "example": {
+                "prompt": "woodblock wave at sunset",
+                "negative_prompt": "low quality, low resolution",
+                "image_prompt_uri": "https://guides.substrate.run/hokusai.jpeg",
+                "store": "hosted",
+                "num_images": 2,
+                "ip_adapter_scale": 0.9,
+                "seeds": [6565750906821527600, 9762512681041688800]
               }
             }
           }
-        }
-      }
-    },
-    "/BigLaMa": {
-      "post": {
-        "summary": "BigLaMa",
-        "operationId": "BigLaMa",
-        "tags": ["image-utility", "low"],
-        "description": "Inpaint a mask using [LaMa](https://github.com/advimman/lama).",
-        "parameters": [
-          {
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/BigLaMaIn"
-            }
-          }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BigLaMaOut"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/UpscaleImage": {
-      "post": {
-        "summary": "UpscaleImage",
-        "operationId": "UpscaleImage",
-        "tags": ["image-utility"],
-        "description": "Upscale an image.",
-        "parameters": [
-          {
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/UpscaleImageIn"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UpscaleImageOut"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/RealESRGAN": {
-      "post": {
-        "summary": "RealESRGAN",
-        "operationId": "RealESRGAN",
-        "tags": ["image-utility", "low"],
-        "description": "Upscale an image using [RealESRGAN](https://github.com/xinntao/Real-ESRGAN).",
-        "parameters": [
-          {
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/RealESRGANIn"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RealESRGANOut"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/RemoveBackground": {
-      "post": {
-        "summary": "RemoveBackground",
-        "operationId": "RemoveBackground",
-        "tags": ["image-utility"],
-        "description": "Remove the background from an image, with the option to return the foreground as a mask.",
-        "parameters": [
-          {
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/RemoveBackgroundIn"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RemoveBackgroundOut"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/DISISNet": {
-      "post": {
-        "summary": "DISISNet",
-        "operationId": "DISISNet",
-        "tags": ["image-utility", "low"],
-        "description": "Segment image foreground using [DIS IS-Net](https://github.com/xuebinqin/DIS).",
-        "parameters": [
-          {
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/DISISNetIn"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DISISNetOut"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/SegmentUnderPoint": {
-      "post": {
-        "summary": "SegmentUnderPoint",
-        "operationId": "SegmentUnderPoint",
-        "tags": ["image-utility"],
-        "description": "Segment an image under a point and return the segment.",
-        "parameters": [
-          {
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/SegmentUnderPointIn"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SegmentUnderPointOut"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/SegmentAnything": {
-      "post": {
-        "summary": "SegmentAnything",
-        "operationId": "SegmentAnything",
-        "tags": ["image-utility", "low"],
-        "description": "Segment an image using [SegmentAnything](https://github.com/facebookresearch/segment-anything).",
-        "parameters": [
-          {
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/SegmentAnythingIn"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SegmentAnythingOut"
+                  "$ref": "#/components/schemas/StableDiffusionXLIPAdapterOut"
+                },
+                "example": {
+                  "outputs": [
+                    {
+                      "image_uri": "https://assets.substrate.run/84848484.jpg",
+                      "seed": 6565750906821527600
+                    },
+                    {
+                      "image_uri": "https://assets.substrate.run/48484848.jpg",
+                      "seed": 9762512681041688800
+                    }
+                  ]
                 }
               }
             }
@@ -2778,16 +2975,25 @@
       "post": {
         "summary": "TranscribeMedia",
         "operationId": "TranscribeMedia",
-        "tags": ["audio"],
+        "tags": ["category:audio", "backend:v0"],
         "description": "Transcribe speech in an audio or video file.",
-        "parameters": [
-          {
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/TranscribeMediaIn"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TranscribeMediaIn"
+              },
+              "example": {
+                "audio_uri": "https://media.substrate.run/dfw-clip.m4a",
+                "prompt": "David Foster Wallace interviewed about US culture, and Infinite Jest",
+                "segment": true,
+                "align": true,
+                "diarize": true,
+                "suggest_chapters": true
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -2795,6 +3001,41 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TranscribeMediaOut"
+                },
+                "example": {
+                  "text": "language like that, the wounded inner child, the inner pain, is part of a kind of pop psychological movement in the United States that is a sort of popular Freudianism that ...",
+                  "segments": [
+                    {
+                      "start": 0.874,
+                      "end": 15.353,
+                      "speaker": "SPEAKER_00",
+                      "text": "language like that, the wounded inner child, the inner pain, is part of a kind of pop psychological movement in the United States that is a sort of popular Freudianism that",
+                      "words": [
+                        {
+                          "word": "language",
+                          "start": 0.874,
+                          "end": 1.275,
+                          "speaker": "SPEAKER_00"
+                        },
+                        {
+                          "word": "like",
+                          "start": 1.295,
+                          "end": 1.455,
+                          "speaker": "SPEAKER_00"
+                        }
+                      ]
+                    }
+                  ],
+                  "chapters": [
+                    {
+                      "title": "Introduction to the Wounded Inner Child and Popular Psychology in US",
+                      "start": 0.794
+                    },
+                    {
+                      "title": "The Paradox of Popular Psychology and Anger in America",
+                      "start": 16.186
+                    }
+                  ]
                 }
               }
             }
@@ -2806,16 +3047,21 @@
       "post": {
         "summary": "GenerateSpeech",
         "operationId": "GenerateSpeech",
-        "tags": ["audio"],
+        "tags": ["category:audio", "backend:v1"],
         "description": "Generate speech from text.",
-        "parameters": [
-          {
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/GenerateSpeechIn"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateSpeechIn"
+              },
+              "example": {
+                "text": "Substrate: an underlying substance or layer.",
+                "store": "hosted"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -2823,6 +3069,9 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/GenerateSpeechOut"
+                },
+                "example": {
+                  "audio_uri": "https://assets.substrate.run/84848484.wav"
                 }
               }
             }
@@ -2834,16 +3083,22 @@
       "post": {
         "summary": "XTTSV2",
         "operationId": "XTTSV2",
-        "tags": ["audio", "low"],
+        "tags": ["category:audio", "type:low-level", "backend:v1"],
         "description": "Generate speech from text using [XTTS v2](https://docs.coqui.ai/en/latest/models/xtts.html).",
-        "parameters": [
-          {
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/XTTSV2In"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/XTTSV2In"
+              },
+              "example": {
+                "text": "Substrate: an underlying substance or layer.",
+                "audio_uri": "https://media.substrate.run/docs-speaker.wav",
+                "store": "hosted"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -2851,6 +3106,311 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/XTTSV2Out"
+                },
+                "example": {
+                  "audio_uri": "https://assets.substrate.run/84848484.wav"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/RemoveBackground": {
+      "post": {
+        "summary": "RemoveBackground",
+        "operationId": "RemoveBackground",
+        "tags": ["category:image-utility", "backend:v1"],
+        "description": "Remove the background from an image, with the option to return the foreground as a mask.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RemoveBackgroundIn"
+              },
+              "example": {
+                "image_uri": "https://guides.substrate.run/hokusai.jpeg",
+                "store": "hosted",
+                "background_color": "#E16E77",
+                "return_mask": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RemoveBackgroundOut"
+                },
+                "example": {
+                  "image_uri": "https://assets.substrate.run/84848484.jpg"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/FillMask": {
+      "post": {
+        "summary": "FillMask",
+        "operationId": "FillMask",
+        "tags": ["category:image-utility", "backend:v1"],
+        "description": "Fill (inpaint) part of an image, e.g. to 'remove' an object.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FillMaskIn"
+              },
+              "example": {
+                "image_uri": "https://media.substrate.run/docs-seurat.jpg",
+                "mask_image_uri": "https://media.substrate.run/spiral-logo.jpeg",
+                "store": "hosted"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FillMaskOut"
+                },
+                "example": {
+                  "image_uri": "https://assets.substrate.run/84848484.jpg"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/UpscaleImage": {
+      "post": {
+        "summary": "UpscaleImage",
+        "operationId": "UpscaleImage",
+        "tags": ["category:image-utility", "backend:v1"],
+        "description": "Upscale an image.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpscaleImageIn"
+              },
+              "example": {
+                "image_uri": "https://media.substrate.run/docs-seurat.jpg",
+                "store": "hosted"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpscaleImageOut"
+                },
+                "example": {
+                  "image_uri": "https://assets.substrate.run/84848484.jpg"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/SegmentUnderPoint": {
+      "post": {
+        "summary": "SegmentUnderPoint",
+        "operationId": "SegmentUnderPoint",
+        "tags": ["category:image-utility", "backend:v1"],
+        "description": "Segment an image under a point and return the segment.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SegmentUnderPointIn"
+              },
+              "example": {
+                "image_uri": "https://media.substrate.run/docs-vg-bedroom.jpg",
+                "point": {
+                  "x": 189,
+                  "y": 537
+                },
+                "store": "hosted"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SegmentUnderPointOut"
+                },
+                "example": {
+                  "mask_image_uri": "https://assets.substrate.run/84848484.jpg"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/DISISNet": {
+      "post": {
+        "summary": "DISISNet",
+        "operationId": "DISISNet",
+        "tags": ["category:image-utility", "backend:v1"],
+        "description": "Segment image foreground using [DIS IS-Net](https://github.com/xuebinqin/DIS).",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DISISNetIn"
+              },
+              "example": {
+                "image_uri": "https://guides.substrate.run/hokusai.jpeg",
+                "store": "hosted"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DISISNetOut"
+                },
+                "example": {
+                  "image_uri": "https://assets.substrate.run/84848484.jpg"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/BigLaMa": {
+      "post": {
+        "summary": "BigLaMa",
+        "operationId": "BigLaMa",
+        "tags": ["category:image-utility", "type:low-level", "backend:v1"],
+        "description": "Inpaint a mask using [LaMa](https://github.com/advimman/lama).",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BigLaMaIn"
+              },
+              "example": {
+                "image_uri": "https://media.substrate.run/docs-seurat.jpg",
+                "mask_image_uri": "https://media.substrate.run/spiral-logo.jpeg",
+                "store": "hosted"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BigLaMaOut"
+                },
+                "example": {
+                  "image_uri": "https://assets.substrate.run/84848484.jpg"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/RealESRGAN": {
+      "post": {
+        "summary": "RealESRGAN",
+        "operationId": "RealESRGAN",
+        "tags": ["category:image-utility", "type:low-level", "backend:v1"],
+        "description": "Upscale an image using [RealESRGAN](https://github.com/xinntao/Real-ESRGAN).",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RealESRGANIn"
+              },
+              "example": {
+                "image_uri": "https://media.substrate.run/docs-seurat.jpg",
+                "store": "hosted"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RealESRGANOut"
+                },
+                "example": {
+                  "image_uri": "https://assets.substrate.run/84848484.jpg"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/SegmentAnything": {
+      "post": {
+        "summary": "SegmentAnything",
+        "operationId": "SegmentAnything",
+        "tags": ["category:image-utility", "type:low-level", "backend:v1"],
+        "description": "Segment an image using [SegmentAnything](https://github.com/facebookresearch/segment-anything).",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SegmentAnythingIn"
+              },
+              "example": {
+                "image_uri": "https://media.substrate.run/docs-vg-bedroom.jpg",
+                "point_prompts": [
+                  {
+                    "x": 189,
+                    "y": 537
+                  }
+                ],
+                "store": "hosted"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SegmentAnythingOut"
+                },
+                "example": {
+                  "mask_image_uri": "https://assets.substrate.run/84848484.jpg"
                 }
               }
             }
@@ -2862,16 +3422,26 @@
       "post": {
         "summary": "EmbedText",
         "operationId": "EmbedText",
-        "tags": ["embedding"],
+        "tags": ["category:embedding", "backend:v1"],
         "description": "Generate embedding for a text document.",
-        "parameters": [
-          {
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/EmbedTextIn"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmbedTextIn"
+              },
+              "example": {
+                "text": "Argon is the third most abundant gas in Earth's atmosphere, at 0.934% (9340 ppmv). It is more than twice as abundant as water vapor.",
+                "model": "jina-v2",
+                "collection_name": "smoke_tests",
+                "metadata": {
+                  "group": "18"
+                },
+                "embedded_metadata_keys": ["group"]
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -2879,6 +3449,20 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/EmbedTextOut"
+                },
+                "example": {
+                  "embedding": {
+                    "vector": [
+                      -0.035030052065849304, -0.04128379374742508,
+                      0.05782046541571617
+                    ],
+                    "doc_id": "c9de81fb98804ce0afb2b8ac17c0799b",
+                    "metadata": {
+                      "group": "18",
+                      "doc_id": "c9de81fb98804ce0afb2b8ac17c0799b",
+                      "doc": "group: 18\n\nArgon is the third most abundant gas in Earth's atmosphere, at 0.934% (9340 ppmv). It is more than twice as abundant as water vapor."
+                    }
+                  }
                 }
               }
             }
@@ -2890,16 +3474,36 @@
       "post": {
         "summary": "MultiEmbedText",
         "operationId": "MultiEmbedText",
-        "tags": ["embedding"],
+        "tags": ["category:embedding", "backend:v1"],
         "description": "Generate embeddings for multiple text documents.",
-        "parameters": [
-          {
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/MultiEmbedTextIn"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MultiEmbedTextIn"
+              },
+              "example": {
+                "model": "jina-v2",
+                "items": [
+                  {
+                    "text": "Osmium is the densest naturally occurring element. When experimentally measured using X-ray crystallography, it has a density of 22.59 g/cm3. Manufacturers use its alloys with platinum, iridium, and other platinum-group metals to make fountain pen nib tipping, electrical contacts, and in other applications that require extreme durability and hardness.",
+                    "metadata": {
+                      "group": "8"
+                    }
+                  },
+                  {
+                    "text": "Despite its abundant presence in the universe and Solar System—ranking fifth in cosmic abundance following hydrogen, helium, oxygen, and carbon—neon is comparatively scarce on Earth.",
+                    "metadata": {
+                      "group": "18"
+                    }
+                  }
+                ],
+                "collection_name": "smoke_tests",
+                "embedded_metadata_keys": ["group"]
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -2907,6 +3511,34 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/MultiEmbedTextOut"
+                },
+                "example": {
+                  "embeddings": [
+                    {
+                      "vector": [
+                        -0.035030052065849304, -0.04128379374742508,
+                        0.05782046541571617
+                      ],
+                      "doc_id": "c9de81fb98804ce0afb2b8ac17c0799b",
+                      "metadata": {
+                        "group": "8",
+                        "doc_id": "c9de81fb98804ce0afb2b8ac17c0799b",
+                        "doc": "group: 8\n\nOsmium is the densest naturally occurring element. When experimentally measured using X-ray crystallography, it has a density of 22.59 g/cm3. Manufacturers use its alloys with platinum, iridium, and other platinum-group metals to make fountain pen nib tipping, electrical contacts, and in other applications that require extreme durability and hardness."
+                      }
+                    },
+                    {
+                      "vector": [
+                        0.0003024724137503654, -0.025219274684786797,
+                        -0.009984994307160378
+                      ],
+                      "doc_id": "c4464f69c93946a896925589681d38b4",
+                      "metadata": {
+                        "group": "18",
+                        "doc_id": "c4464f69c93946a896925589681d38b4",
+                        "doc": "group: 18\n\nDespite its abundant presence in the universe and Solar System—ranking fifth in cosmic abundance following hydrogen, helium, oxygen, and carbon—neon is comparatively scarce on Earth."
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -2918,16 +3550,21 @@
       "post": {
         "summary": "EmbedImage",
         "operationId": "EmbedImage",
-        "tags": ["embedding"],
+        "tags": ["category:embedding", "backend:v1"],
         "description": "Generate embedding for an image.",
-        "parameters": [
-          {
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/EmbedImageIn"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmbedImageIn"
+              },
+              "example": {
+                "image_uri": "https://media.substrate.run/docs-fuji-red.jpg",
+                "collection_name": "smoke_tests"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -2935,6 +3572,15 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/EmbedImageOut"
+                },
+                "example": {
+                  "embedding": {
+                    "vector": [
+                      0.0003024724137503654, -0.025219274684786797,
+                      -0.009984994307160378
+                    ],
+                    "doc_id": "c4464f69c93946a896925589681d38b4"
+                  }
                 }
               }
             }
@@ -2946,16 +3592,28 @@
       "post": {
         "summary": "MultiEmbedImage",
         "operationId": "MultiEmbedImage",
-        "tags": ["embedding"],
+        "tags": ["category:embedding", "backend:v1"],
         "description": "Generate embeddings for multiple images.",
-        "parameters": [
-          {
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/MultiEmbedImageIn"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MultiEmbedImageIn"
+              },
+              "example": {
+                "items": [
+                  {
+                    "image_uri": "https://media.substrate.run/docs-fuji-red.jpg"
+                  },
+                  {
+                    "image_uri": "https://media.substrate.run/docs-fuji-blue.jpg"
+                  }
+                ],
+                "collection_name": "smoke_tests"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -2963,6 +3621,24 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/MultiEmbedImageOut"
+                },
+                "example": {
+                  "embeddings": [
+                    {
+                      "vector": [
+                        -0.035030052065849304, -0.04128379374742508,
+                        0.05782046541571617
+                      ],
+                      "doc_id": "c9de81fb98804ce0afb2b8ac17c0799b"
+                    },
+                    {
+                      "vector": [
+                        0.0003024724137503654, -0.025219274684786797,
+                        -0.009984994307160378
+                      ],
+                      "doc_id": "c4464f69c93946a896925589681d38b4"
+                    }
+                  ]
                 }
               }
             }
@@ -2974,16 +3650,35 @@
       "post": {
         "summary": "JinaV2",
         "operationId": "JinaV2",
-        "tags": ["embedding", "low"],
+        "tags": ["category:embedding", "type:low-level", "backend:v1"],
         "description": "Generate embeddings for multiple text documents using [Jina Embeddings 2](https://arxiv.org/abs/2310.19923).",
-        "parameters": [
-          {
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/JinaV2In"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JinaV2In"
+              },
+              "example": {
+                "items": [
+                  {
+                    "text": "Hassium is a superheavy element; it has been produced in a laboratory only in very small quantities by fusing heavy nuclei with lighter ones. Natural occurrences of the element have been hypothesised but never found.",
+                    "metadata": {
+                      "group": "8"
+                    }
+                  },
+                  {
+                    "text": "Xenon is also used to search for hypothetical weakly interacting massive particles and as a propellant for ion thrusters in spacecraft.",
+                    "metadata": {
+                      "group": "18"
+                    }
+                  }
+                ],
+                "collection_name": "smoke_tests",
+                "embedded_metadata_keys": ["group"]
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -2991,6 +3686,34 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/JinaV2Out"
+                },
+                "example": {
+                  "embeddings": [
+                    {
+                      "vector": [
+                        -0.035030052065849304, -0.04128379374742508,
+                        0.05782046541571617
+                      ],
+                      "doc_id": "c9de81fb98804ce0afb2b8ac17c0799b",
+                      "metadata": {
+                        "group": "8",
+                        "doc_id": "c9de81fb98804ce0afb2b8ac17c0799b",
+                        "doc": "group: 8\n\nHassium is a superheavy element; it has been produced in a laboratory only in very small quantities by fusing heavy nuclei with lighter ones. Natural occurrences of the element have been hypothesised but never found."
+                      }
+                    },
+                    {
+                      "vector": [
+                        0.0003024724137503654, -0.025219274684786797,
+                        -0.009984994307160378
+                      ],
+                      "doc_id": "c4464f69c93946a896925589681d38b4",
+                      "metadata": {
+                        "group": "18",
+                        "doc_id": "c4464f69c93946a896925589681d38b4",
+                        "doc": "group: 18\n\nXenon is also used to search for hypothetical weakly interacting massive particles and as a propellant for ion thrusters in spacecraft."
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -3002,16 +3725,28 @@
       "post": {
         "summary": "CLIP",
         "operationId": "CLIP",
-        "tags": ["embedding", "low"],
+        "tags": ["category:embedding", "type:low-level", "backend:v1"],
         "description": "Generate embeddings for text or images using [CLIP](https://openai.com/research/clip).",
-        "parameters": [
-          {
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/CLIPIn"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CLIPIn"
+              },
+              "example": {
+                "items": [
+                  {
+                    "image_uri": "https://media.substrate.run/docs-fuji-red.jpg"
+                  },
+                  {
+                    "image_uri": "https://media.substrate.run/docs-fuji-blue.jpg"
+                  }
+                ],
+                "collection_name": "smoke_tests"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -3019,6 +3754,24 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/CLIPOut"
+                },
+                "example": {
+                  "embeddings": [
+                    {
+                      "vector": [
+                        -0.035030052065849304, -0.04128379374742508,
+                        0.05782046541571617
+                      ],
+                      "doc_id": "c9de81fb98804ce0afb2b8ac17c0799b"
+                    },
+                    {
+                      "vector": [
+                        0.0003024724137503654, -0.025219274684786797,
+                        -0.009984994307160378
+                      ],
+                      "doc_id": "c4464f69c93946a896925589681d38b4"
+                    }
+                  ]
                 }
               }
             }
@@ -3028,18 +3781,23 @@
     },
     "/CreateVectorStore": {
       "post": {
-        "tags": ["vector-store"],
+        "tags": ["category:vector-store", "backend:v1"],
         "summary": "CreateVectorStore",
         "operationId": "CreateVectorStore",
         "description": "Create a vector store for storing and querying embeddings.",
-        "parameters": [
-          {
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/CreateVectorStoreIn"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateVectorStoreIn"
+              },
+              "example": {
+                "collection_name": "smoke_tests",
+                "model": "jina-v2"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "Vector store created.",
@@ -3047,6 +3805,13 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/CreateVectorStoreOut"
+                },
+                "example": {
+                  "collection_name": "smoke_tests",
+                  "model": "jina-v2",
+                  "m": 16,
+                  "ef_construction": 64,
+                  "metric": "inner"
                 }
               }
             }
@@ -3056,18 +3821,20 @@
     },
     "/ListVectorStores": {
       "post": {
-        "tags": ["vector-store"],
+        "tags": ["category:vector-store", "backend:v1"],
         "summary": "ListVectorStores",
         "operationId": "ListVectorStores",
         "description": "List all vector stores.",
-        "parameters": [
-          {
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/ListVectorStoresIn"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ListVectorStoresIn"
+              },
+              "example": {}
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "List of vector stores.",
@@ -3075,6 +3842,24 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ListVectorStoresOut"
+                },
+                "example": {
+                  "items": [
+                    {
+                      "collection_name": "comments",
+                      "model": "jina-v2",
+                      "m": 16,
+                      "ef_construction": 64,
+                      "metric": "inner"
+                    },
+                    {
+                      "collection_name": "images",
+                      "model": "jina-v2",
+                      "m": 16,
+                      "ef_construction": 64,
+                      "metric": "inner"
+                    }
+                  ]
                 }
               }
             }
@@ -3084,18 +3869,23 @@
     },
     "/DeleteVectorStore": {
       "post": {
-        "tags": ["vector-store"],
+        "tags": ["category:vector-store", "backend:v1"],
         "summary": "DeleteVectorStore",
         "operationId": "DeleteVectorStore",
         "description": "Delete a vector store.",
-        "parameters": [
-          {
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/DeleteVectorStoreIn"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteVectorStoreIn"
+              },
+              "example": {
+                "collection_name": "fake_store",
+                "model": "jina-v2"
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -3103,6 +3893,10 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/DeleteVectorStoreOut"
+                },
+                "example": {
+                  "collection_name": "comments",
+                  "model": "jina-v2"
                 }
               }
             }
@@ -3112,18 +3906,26 @@
     },
     "/QueryVectorStore": {
       "post": {
-        "tags": ["vector-store"],
+        "tags": ["category:vector-store", "backend:v1"],
         "summary": "QueryVectorStore",
         "operationId": "QueryVectorStore",
         "description": "Query a vector store for similar vectors.",
-        "parameters": [
-          {
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/QueryVectorStoreIn"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QueryVectorStoreIn"
+              },
+              "example": {
+                "collection_name": "smoke_tests",
+                "model": "jina-v2",
+                "query_strings": ["gas", "metal"],
+                "top_k": 1,
+                "include_metadata": true
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "Query results.",
@@ -3131,6 +3933,35 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/QueryVectorStoreOut"
+                },
+                "example": {
+                  "results": [
+                    [
+                      {
+                        "id": "483e75021c9d4ad69c3d78ace76da2ea",
+                        "distance": -0.78324556350708,
+                        "metadata": {
+                          "doc": "group: 18\n\nArgon is the third most abundant gas in Earth's atmosphere, at 0.934% (9340 ppmv). It is more than twice as abundant as water vapor.",
+                          "group": "18",
+                          "doc_id": "483e75021c9d4ad69c3d78ace76da2ea"
+                        }
+                      }
+                    ],
+                    [
+                      {
+                        "id": "dd8f3774e05d42caa53cfbaa7389c08f",
+                        "distance": -0.74278724193573,
+                        "metadata": {
+                          "doc": "group: 8\n\nOsmium is the densest naturally occurring element. When experimentally measured using X-ray crystallography, it has a density of 22.59 g/cm3. Manufacturers use its alloys with platinum, iridium, and other platinum-group metals to make fountain pen nib tipping, electrical contacts, and in other applications that require extreme durability and hardness.",
+                          "group": "8",
+                          "doc_id": "dd8f3774e05d42caa53cfbaa7389c08f"
+                        }
+                      }
+                    ]
+                  ],
+                  "collection_name": "comments",
+                  "model": "jina-v2",
+                  "metric": "inner"
                 }
               }
             }
@@ -3140,18 +3971,24 @@
     },
     "/FetchVectors": {
       "post": {
-        "tags": ["vector-store"],
+        "tags": ["category:vector-store", "backend:v1"],
         "summary": "FetchVectors",
         "operationId": "FetchVectors",
         "description": "Fetch vectors from a vector store.",
-        "parameters": [
-          {
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/FetchVectorsIn"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FetchVectorsIn"
+              },
+              "example": {
+                "collection_name": "smoke_tests",
+                "model": "jina-v2",
+                "ids": ["dd8f3774e05d42caa53cfbaa7389c08f"]
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "Vector data.",
@@ -3159,6 +3996,19 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/FetchVectorsOut"
+                },
+                "example": {
+                  "vectors": [
+                    {
+                      "id": "dd8f3774e05d42caa53cfbaa7389c08f",
+                      "vector": [0.036658343, -0.0066040196, 0.028221145],
+                      "metadata": {
+                        "doc": "group: 8\n\nOsmium is the densest naturally occurring element. When experimentally measured using X-ray crystallography, it has a density of 22.59 g/cm3. Manufacturers use its alloys with platinum, iridium, and other platinum-group metals to make fountain pen nib tipping, electrical contacts, and in other applications that require extreme durability and hardness.",
+                        "group": "8",
+                        "doc_id": "dd8f3774e05d42caa53cfbaa7389c08f"
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -3168,18 +4018,31 @@
     },
     "/UpdateVectors": {
       "post": {
-        "tags": ["vector-store"],
+        "tags": ["category:vector-store", "backend:v1"],
         "summary": "UpdateVectors",
         "operationId": "UpdateVectors",
         "description": "Update vectors in a vector store.",
-        "parameters": [
-          {
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/UpdateVectorsIn"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateVectorsIn"
+              },
+              "example": {
+                "collection_name": "smoke_tests",
+                "model": "jina-v2",
+                "vectors": [
+                  {
+                    "id": "dd8f3774e05d42caa53cfbaa7389c08f",
+                    "metadata": {
+                      "appearance": "silvery, blue cast"
+                    }
+                  }
+                ]
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "Count of updated vectors.",
@@ -3187,6 +4050,9 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UpdateVectorsOut"
+                },
+                "example": {
+                  "count": 1
                 }
               }
             }
@@ -3196,18 +4062,27 @@
     },
     "/DeleteVectors": {
       "post": {
-        "tags": ["vector-store"],
+        "tags": ["category:vector-store", "backend:v1"],
         "summary": "DeleteVectors",
         "operationId": "DeleteVectors",
         "description": "Delete vectors in a vector store.",
-        "parameters": [
-          {
-            "in": "query",
-            "schema": {
-              "$ref": "#/components/schemas/DeleteVectorsIn"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteVectorsIn"
+              },
+              "example": {
+                "collection_name": "smoke_tests",
+                "model": "jina-v2",
+                "ids": [
+                  "ac32b9a133dd4e3689004f6e8f0fd6cd",
+                  "629df177c7644062a68bceeff223cefa"
+                ]
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "Count of deleted vectors.",
@@ -3215,6 +4090,9 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/DeleteVectorsOut"
+                },
+                "example": {
+                  "count": 2
                 }
               }
             }
@@ -3222,31 +4100,5 @@
         }
       }
     }
-  },
-  "tags": [
-    {
-      "name": "language-generation",
-      "description": "Language Generation Nodes"
-    },
-    {
-      "name": "image-generation",
-      "description": "Image Generation Nodes"
-    },
-    {
-      "name": "image-utility",
-      "description": "Image Utility Nodes"
-    },
-    {
-      "name": "audio",
-      "description": "Audio Nodes"
-    },
-    {
-      "name": "embedding",
-      "description": "Embedding Nodes"
-    },
-    {
-      "name": "vector-store",
-      "description": "Vector Store Nodes"
-    }
-  ]
+  }
 }

@@ -4,6 +4,7 @@ import OpenAPIjson from "substrate/openapi.json";
 import { SubstrateResponse } from "substrate/SubstrateResponse";
 import { Node } from "substrate/Node";
 import { getPlatformProperties } from "substrate/Platform";
+import { deflate } from "pako";
 
 type Configuration = {
   /**
@@ -27,17 +28,23 @@ type Configuration = {
    * Switches between existing backend and newer backend
    */
   backend?: "v0" | "v1";
+
+  /**
+   * Add additional headers to each request. These may override headers set by the Substrate client.
+   */
+  additionalHeaders?: Record<string, string>;
 };
 
 /**
  * [docs/introduction](https://docs.substrate.run)
  */
 export class Substrate {
-  apiKey: string | undefined;
-  baseUrl: string;
-  apiVersion: string;
-  timeout: number;
-  backend: string;
+  apiKey: Configuration["apiKey"];
+  baseUrl: NonNullable<Configuration["baseUrl"]>;
+  apiVersion: NonNullable<Configuration["apiVersion"]>;
+  timeout: NonNullable<Configuration["timeout"]>;
+  backend: NonNullable<Configuration["backend"]>;
+  additionalHeaders: NonNullable<Configuration["additionalHeaders"]>;
 
   /**
    * Initialize the Substrate SDK.
@@ -48,6 +55,7 @@ export class Substrate {
     apiVersion,
     timeout,
     backend,
+    additionalHeaders,
   }: Configuration) {
     if (!apiKey) {
       console.warn(
@@ -59,14 +67,35 @@ export class Substrate {
     this.apiVersion = apiVersion ?? OpenAPIjson["info"]["version"];
     this.timeout = timeout ?? 300_000;
     this.backend = backend ?? "v0";
+    this.additionalHeaders = additionalHeaders ?? {};
   }
 
   /**
    *  Run the given nodes.
+   *
+   *  @throws {SubstrateError} when the server response is an error.
+   *  @throws {RequestTimeoutError} when the client has timed out (Configured by `Substrate.timeout`).
+   *  @throws {Error} when the client encounters an error making the request.
    */
   async run(...nodes: Node[]): Promise<SubstrateResponse> {
-    const url = this.baseUrl + "/compose";
-    const req = { dag: Substrate.serialize(...nodes) };
+    const serialized = Substrate.serialize(...nodes);
+    return this.runSerialized(serialized, nodes);
+  }
+
+  /**
+   *  Run the given nodes, serialized using `Substrate.serialize`.
+   *
+   *  @throws {SubstrateError} when the server response is an error.
+   *  @throws {RequestTimeoutError} when the client has timed out (Configured by `Substrate.timeout`).
+   *  @throws {Error} when the client encounters an error making the request.
+   */
+  async runSerialized(
+    serialized: any,
+    nodes: Node[] | null = null,
+    endpoint: string = "/compose",
+  ): Promise<SubstrateResponse> {
+    const url = this.baseUrl + endpoint;
+    const req = { dag: serialized };
     // NOTE: we're creating the signal this way instead of AbortController.timeout because it is only very
     // recently available on some environments, so this is a bit more supported.
     const abortController = new AbortController();
@@ -74,13 +103,17 @@ export class Substrate {
     const timeout = setTimeout(() => abortController.abort(), this.timeout);
 
     try {
-      const apiResponse = await fetch(url, this.requestOptions(req, signal));
+      const request = new Request(url, this.requestOptions(req, signal));
+      const apiResponse = await fetch(request);
 
       if (apiResponse.ok) {
         const json = await apiResponse.json();
-        const res = new SubstrateResponse(apiResponse, json);
-        // @ts-expect-error (accessing protected)
-        for (let node of nodes) node.response = res;
+        const res = new SubstrateResponse(request, apiResponse, json);
+        /** TODO stop setting output on node */
+        if (nodes) {
+          // @ts-expect-error (accessing protected)
+          for (let node of nodes) node.response = res;
+        }
 
         return res;
       } else {
@@ -119,6 +152,24 @@ export class Substrate {
     };
   }
 
+  /**
+   *  Returns a url to visualize the given nodes.
+   */
+  static visualize(...nodes: Node[]): string {
+    const serialized = this.serialize(...nodes);
+    const compressed = deflate(JSON.stringify(serialized), {
+      level: 9,
+    });
+    const numArray = Array.from(compressed);
+    const base64 = btoa(String.fromCharCode.apply(null, numArray));
+    const urlEncoded = base64
+      .replace(/\+/g, "-")
+      .replace(/\//g, "_")
+      .replace(/=+$/, "");
+    const baseURL = "https://explore.substrate.run/s/";
+    return baseURL + urlEncoded;
+  }
+
   protected requestOptions(body: any, signal: AbortSignal) {
     return {
       method: "POST",
@@ -151,6 +202,11 @@ export class Substrate {
     headers.append("X-Substrate-Arch", props.arch);
     headers.append("X-Substrate-Runtime", props.runtime);
     headers.append("X-Substrate-Runtime-Version", props.runtimeVersion);
+
+    // User-Provided
+    for (const [name, value] of Object.entries(this.additionalHeaders)) {
+      headers.append(name, value);
+    }
 
     return headers;
   }

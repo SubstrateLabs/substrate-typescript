@@ -1,3 +1,4 @@
+// including polyfill for node16 support
 import "substrate/nodejs/polyfill";
 
 import { expect, describe, test } from "vitest";
@@ -19,8 +20,10 @@ const node = (id: string = "") => new FooNode({}, { id });
 // Helper that makes a Node and sets it's output with a fake SubstrateResponse
 const staticNode = (output: any) => {
   const node = new FooNode({});
+  // NOTE: request not being sent, but we need to provide a valid URI here to construct a Request
+  const req = new Request("http://127.0.0.1");
 
-  const res = new SubstrateResponse(new Response(), {
+  const res = new SubstrateResponse(req, new Response(), {
     data: { [node.id]: output },
   });
 
@@ -158,7 +161,7 @@ describe("Future", () => {
       const s = FutureString.concat("a");
       expect(s).toBeInstanceOf(FutureString);
       // @ts-expect-error (protected access)
-      expect(s.directive).toEqual(new StringConcat(["a"]));
+      expect(s._directive).toEqual(new StringConcat(["a"]));
     });
 
     test(".concat", () => {
@@ -166,7 +169,7 @@ describe("Future", () => {
       const s2 = s1.concat("b", "c");
       expect(s2).toBeInstanceOf(FutureString);
       // @ts-expect-error (protected access)
-      expect(s2.directive).toEqual(new StringConcat([s1, "b", "c"]));
+      expect(s2._directive).toEqual(new StringConcat([s1, "b", "c"]));
     });
 
     test(".interpolate", async () => {

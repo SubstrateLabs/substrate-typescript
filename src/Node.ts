@@ -6,7 +6,7 @@ import { AnyNode } from "substrate/Nodes";
 
 const generator = idGenerator("node");
 
-type Options = {
+export type Options = {
   /** The id of the node. Default: random id */
   id?: Node["id"];
   /** When true the server will omit this node's output. Default: false */
@@ -51,7 +51,7 @@ export abstract class Node {
     if (data?.type && data?.message) {
       // NOTE: we only return these errors on client errors.
       // Server errors are typically 5xx replies.
-      return new NodeError(data.type, data.message);
+      return new NodeError(data.type, data.message, data?.request_id);
     } else if (data) {
       return data;
     }
