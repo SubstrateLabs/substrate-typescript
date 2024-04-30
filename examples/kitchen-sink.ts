@@ -42,6 +42,10 @@ import {
   FetchVectors,
   UpdateVectors,
   DeleteVectors,
+  Mixtral8x7BInstruct,
+  Llama3Instruct8B,
+  Llama3Instruct70B,
+  RunCode,
 } from "substrate";
 
 const urls = {
@@ -478,25 +482,21 @@ const examples = [
     envs: [STAGING_V0, PRODUCTION_V1],
   },
   {
-    // FIXME: From what I can gather on Modal this throws a runtime error,
-    //        on Ray we don't have the biglama_app up and running.
     node: new BigLaMa({
       image_uri: "https://media.substrate.run/docs-seurat.jpg",
       mask_image_uri: "https://media.substrate.run/spiral-logo.jpeg",
-      store: "hosted",
+      // store: "hosted", // FIXME: not working yet
     }),
-    envs: [],
+    envs: [STAGING_V1, PRODUCTION_V1],
   },
   {
-    // FIXME: it looks like this should work for v1, but doesn't yet
     node: new RealESRGAN({
       image_uri: "https://media.substrate.run/docs-seurat.jpg",
-      store: "hosted",
+      // store: "hosted", // FIXME: not working yet
     }),
-    envs: [STAGING_V0, PRODUCTION_V0],
+    envs: [STAGING_V1, PRODUCTION_V1],
   },
   {
-    // FIXME: it looks like this should work for v1, but doesn't yet
     node: new SegmentAnything({
       image_uri: "https://media.substrate.run/docs-vg-bedroom.jpg",
       point_prompts: [
@@ -505,14 +505,40 @@ const examples = [
           y: 200,
         },
       ],
-      store: "hosted",
+      // store: "hosted", // FIXME: not working yet
     }),
-    envs: [STAGING_V0, PRODUCTION_V0],
+    envs: ALL_ENVS,
   },
   {
     node: new DeleteVectorStore({
       collection_name: VECTOR_STORE,
       model: "jina-v2",
+    }),
+    envs: [STAGING_V1, PRODUCTION_V1],
+  },
+  {
+    node: new Mixtral8x7BInstruct({
+      prompt: "what does quixotic mean?",
+    }),
+    envs: [STAGING_V1, PRODUCTION_V1],
+  },
+  {
+    node: new Llama3Instruct70B({
+      prompt: "what does quixotic mean?",
+    }),
+    envs: [STAGING_V1, PRODUCTION_V1],
+  },
+  {
+    node: new Llama3Instruct8B({
+      prompt: "what does quixotic mean?",
+    }),
+    envs: [STAGING_V1, PRODUCTION_V1],
+  },
+  {
+    node: new RunCode({
+      language: "python",
+      code: `import sys; print(f"hello {sys.argv[1]}")`,
+      args: ["substrate"],
     }),
     envs: [STAGING_V1, PRODUCTION_V1],
   },
@@ -565,14 +591,6 @@ async function main() {
     }
 
     for (let env of envs) {
-      // for (let env of ALL_ENVS) {
-      // if (env.url.name === "staging") {
-      //   if (env.backend.value !== "v1") continue;
-      // }
-      // if (env.url.name === "production") {
-      //   if (env.backend.value !== "v0") continue;
-      // }
-
       const substrate = new Substrate({
         apiKey: SUBSTRATE_API_KEY,
         baseUrl: env.url.value,

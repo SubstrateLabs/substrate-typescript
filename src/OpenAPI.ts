@@ -4,6 +4,13 @@
  */
 
 export interface paths {
+  "/RunCode": {
+    /**
+     * RunCode
+     * @description Evaluate code using a code interpreter.
+     */
+    post: operations["RunCode"];
+  };
   "/GenerateText": {
     /**
      * GenerateText
@@ -17,6 +24,20 @@ export interface paths {
      * @description Generate multiple text choices using a language model.
      */
     post: operations["MultiGenerateText"];
+  };
+  "/BatchGenerateText": {
+    /**
+     * BatchGenerateText
+     * @description Generate text for multiple prompts in batch using a language model.
+     */
+    post: operations["BatchGenerateText"];
+  };
+  "/BatchGenerateJSON": {
+    /**
+     * BatchGenerateJSON
+     * @description Generate JSON for multiple prompts in batch using a language model.
+     */
+    post: operations["BatchGenerateJSON"];
   };
   "/GenerateJSON": {
     /**
@@ -45,6 +66,27 @@ export interface paths {
      * @description Generate text using [Mistral 7B Instruct](https://mistral.ai/news/announcing-mistral-7b).
      */
     post: operations["Mistral7BInstruct"];
+  };
+  "/Mixtral8x7BInstruct": {
+    /**
+     * Mixtral8x7BInstruct
+     * @description Generate text using instruct-tuned [Mixtral 8x7B](https://mistral.ai/news/mixtral-of-experts/).
+     */
+    post: operations["Mixtral8x7BInstruct"];
+  };
+  "/Llama3Instruct8B": {
+    /**
+     * Llama3Instruct8B
+     * @description Generate text using instruct-tuned [Llama 3 8B](https://llama.meta.com/llama3/).
+     */
+    post: operations["Llama3Instruct8B"];
+  };
+  "/Llama3Instruct70B": {
+    /**
+     * Llama3Instruct70B
+     * @description Generate text using instruct-tuned [Llama 3 70B](https://llama.meta.com/llama3/).
+     */
+    post: operations["Llama3Instruct70B"];
   };
   "/Firellava13B": {
     /**
@@ -302,6 +344,30 @@ export interface components {
       /** @description A unique identifier for the request. */
       request_id?: string;
     };
+    /** RunCodeIn */
+    RunCodeIn: {
+      /** @description Code to execute. */
+      code: string;
+      /** @description List of command line arguments. */
+      args?: string[];
+      /**
+       * @description Interpreter to use.
+       * @default python
+       * @enum {string}
+       */
+      language?: "python" | "typescript" | "javascript";
+    };
+    /** RunCodeOut */
+    RunCodeOut: {
+      /** @description Contents of `stdout` after executing the code. */
+      output?: string;
+      /** @description `output` as parsed JSON. Print serialized json to `stdout` to receive JSON. */
+      json_output: {
+        [key: string]: unknown;
+      };
+      /** @description Contents of `stderr` after executing the code. */
+      error?: string;
+    };
     /** GenerateTextIn */
     GenerateTextIn: {
       /** @description Input prompt. */
@@ -319,7 +385,11 @@ export interface components {
        * @default Mistral7BInstruct
        * @enum {string}
        */
-      node?: "Mistral7BInstruct";
+      node?:
+        | "Mistral7BInstruct"
+        | "Mixtral8x7BInstruct"
+        | "Llama3Instruct8B"
+        | "Llama3Instruct70B";
     };
     /** GenerateTextOut */
     GenerateTextOut: {
@@ -347,7 +417,7 @@ export interface components {
        * @default Mistral7BInstruct
        * @enum {string}
        */
-      node?: "Mistral7BInstruct";
+      node?: "Mistral7BInstruct" | "Mixtral8x7BInstruct";
     };
     /** GenerateJSONOut */
     GenerateJSONOut: {
@@ -359,14 +429,12 @@ export interface components {
     /** MultiGenerateTextIn */
     MultiGenerateTextIn: {
       /** @description Input prompt. */
-      prompt?: string;
-      /** @description Batch input prompts. */
-      batch_prompts?: string[];
+      prompt: string;
       /**
        * @description Number of choices to generate.
        * @default 1
        */
-      num_choices?: number;
+      num_choices: number;
       /**
        * Format: float
        * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
@@ -380,42 +448,24 @@ export interface components {
        * @default Mistral7BInstruct
        * @enum {string}
        */
-      node?: "Mistral7BInstruct";
+      node?:
+        | "Mistral7BInstruct"
+        | "Mixtral8x7BInstruct"
+        | "Llama3Instruct8B"
+        | "Llama3Instruct70B";
     };
-    /** MultiGenerateTextOutput */
-    MultiGenerateTextOutput: {
+    /** MultiGenerateTextOut */
+    MultiGenerateTextOut: {
       /** @description Response choices. */
       choices: {
         /** @description Text response. */
         text: string;
       }[];
     };
-    /** MultiGenerateTextOut */
-    MultiGenerateTextOut: {
-      /** @description A single output for `prompt`, or multiple outputs for `batch_prompts`. */
-      outputs: {
-        /** @description Response choices. */
-        choices: {
-          /** @description Text response. */
-          text: string;
-        }[];
-      }[];
-    };
-    /** MultiGenerateJSONIn */
-    MultiGenerateJSONIn: {
-      /** @description Input prompt. */
-      prompt?: string;
-      /** @description JSON schema to guide `json_object` response. */
-      json_schema: {
-        [key: string]: unknown;
-      };
+    /** BatchGenerateTextIn */
+    BatchGenerateTextIn: {
       /** @description Batch input prompts. */
-      batch_prompts?: string[];
-      /**
-       * @description Number of choices to generate.
-       * @default 2
-       */
-      num_choices?: number;
+      prompts: string[];
       /**
        * Format: float
        * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
@@ -431,8 +481,44 @@ export interface components {
        */
       node?: "Mistral7BInstruct";
     };
-    /** MultiGenerateJSONOutput */
-    MultiGenerateJSONOutput: {
+    /** BatchGenerateTextOut */
+    BatchGenerateTextOut: {
+      /** @description Batch outputs. */
+      outputs: {
+        /** @description Text response. */
+        text: string;
+      }[];
+    };
+    /** MultiGenerateJSONIn */
+    MultiGenerateJSONIn: {
+      /** @description Input prompt. */
+      prompt: string;
+      /** @description JSON schema to guide `json_object` response. */
+      json_schema: {
+        [key: string]: unknown;
+      };
+      /**
+       * @description Number of choices to generate.
+       * @default 2
+       */
+      num_choices: number;
+      /**
+       * Format: float
+       * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
+       * @default 0.4
+       */
+      temperature?: number;
+      /** @description Maximum number of tokens to generate. */
+      max_tokens?: number;
+      /**
+       * @description Selected node.
+       * @default Mistral7BInstruct
+       * @enum {string}
+       */
+      node?: "Mistral7BInstruct" | "Mixtral8x7BInstruct";
+    };
+    /** MultiGenerateJSONOut */
+    MultiGenerateJSONOut: {
       /** @description Response choices. */
       choices: {
         /** @description JSON response. */
@@ -441,23 +527,43 @@ export interface components {
         };
       }[];
     };
-    /** MultiGenerateJSONOut */
-    MultiGenerateJSONOut: {
-      /** @description A single output for `prompt`, or multiple outputs for `batch_prompts`. */
+    /** BatchGenerateJSONIn */
+    BatchGenerateJSONIn: {
+      /** @description Batch input prompts. */
+      prompts: string[];
+      /** @description JSON schema to guide `json_object` response. */
+      json_schema: {
+        [key: string]: unknown;
+      };
+      /**
+       * Format: float
+       * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
+       * @default 0.4
+       */
+      temperature?: number;
+      /** @description Maximum number of tokens to generate. */
+      max_tokens?: number;
+      /**
+       * @description Selected node.
+       * @default Mistral7BInstruct
+       * @enum {string}
+       */
+      node?: "Mistral7BInstruct";
+    };
+    /** BatchGenerateJSONOut */
+    BatchGenerateJSONOut: {
+      /** @description Batch outputs. */
       outputs: {
-        /** @description Response choices. */
-        choices: {
-          /** @description JSON response. */
-          json_object: {
-            [key: string]: unknown;
-          };
-        }[];
+        /** @description JSON response. */
+        json_object: {
+          [key: string]: unknown;
+        };
       }[];
     };
     /** Mistral7BInstructIn */
     Mistral7BInstructIn: {
       /** @description Input prompt. */
-      prompt?: string;
+      prompt: string;
       /**
        * @description Number of choices to generate.
        * @default 1
@@ -467,8 +573,6 @@ export interface components {
       json_schema?: {
         [key: string]: unknown;
       };
-      /** @description Batch input prompts. */
-      batch_prompts?: string[];
       /**
        * Format: float
        * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
@@ -486,8 +590,8 @@ export interface components {
         [key: string]: unknown;
       };
     };
-    /** Mistral7BInstructOutput */
-    Mistral7BInstructOutput: {
+    /** Mistral7BInstructOut */
+    Mistral7BInstructOut: {
       /** @description Response choices. */
       choices: {
         /** @description Text response, if `json_schema` was not provided. */
@@ -498,19 +602,106 @@ export interface components {
         };
       }[];
     };
-    /** Mistral7BInstructOut */
-    Mistral7BInstructOut: {
-      /** @description A single output for `prompt`, or multiple outputs for `batch_prompts`. */
-      outputs: {
-        /** @description Response choices. */
-        choices: {
-          /** @description Text response, if `json_schema` was not provided. */
-          text?: string;
-          /** @description JSON response, if `json_schema` was provided. */
-          json_object?: {
-            [key: string]: unknown;
-          };
-        }[];
+    /** Mixtral8x7BInstructIn */
+    Mixtral8x7BInstructIn: {
+      /** @description Input prompt. */
+      prompt: string;
+      /**
+       * @description Number of choices to generate.
+       * @default 1
+       */
+      num_choices?: number;
+      /** @description JSON schema to guide response. */
+      json_schema?: {
+        [key: string]: unknown;
+      };
+      /**
+       * Format: float
+       * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
+       */
+      temperature?: number;
+      /** @description Maximum number of tokens to generate. */
+      max_tokens?: number;
+    };
+    /** Mixtral8x7BChoice */
+    Mixtral8x7BChoice: {
+      /** @description Text response, if `json_schema` was not provided. */
+      text?: string;
+      /** @description JSON response, if `json_schema` was provided. */
+      json_object?: {
+        [key: string]: unknown;
+      };
+    };
+    /** Mixtral8x7BInstructOut */
+    Mixtral8x7BInstructOut: {
+      /** @description Response choices. */
+      choices: {
+        /** @description Text response, if `json_schema` was not provided. */
+        text?: string;
+        /** @description JSON response, if `json_schema` was provided. */
+        json_object?: {
+          [key: string]: unknown;
+        };
+      }[];
+    };
+    /** Llama3Instruct8BIn */
+    Llama3Instruct8BIn: {
+      /** @description Input prompt. */
+      prompt: string;
+      /**
+       * @description Number of choices to generate.
+       * @default 1
+       */
+      num_choices?: number;
+      /**
+       * Format: float
+       * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
+       */
+      temperature?: number;
+      /** @description Maximum number of tokens to generate. */
+      max_tokens?: number;
+    };
+    /** Llama3Instruct8BChoice */
+    Llama3Instruct8BChoice: {
+      /** @description Text response. */
+      text?: string;
+    };
+    /** Llama3Instruct8BOut */
+    Llama3Instruct8BOut: {
+      /** @description Response choices. */
+      choices: {
+        /** @description Text response. */
+        text?: string;
+      }[];
+    };
+    /** Llama3Instruct70BIn */
+    Llama3Instruct70BIn: {
+      /** @description Input prompt. */
+      prompt: string;
+      /**
+       * @description Number of choices to generate.
+       * @default 1
+       */
+      num_choices?: number;
+      /**
+       * Format: float
+       * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
+       */
+      temperature?: number;
+      /** @description Maximum number of tokens to generate. */
+      max_tokens?: number;
+    };
+    /** Llama3Instruct70BChoice */
+    Llama3Instruct70BChoice: {
+      /** @description Text response. */
+      text?: string;
+    };
+    /** Llama3Instruct70BOut */
+    Llama3Instruct70BOut: {
+      /** @description Response choices. */
+      choices: {
+        /** @description Text response. */
+        text?: string;
       }[];
     };
     /** GenerateTextVisionIn */
@@ -1787,6 +1978,54 @@ export type external = Record<string, never>;
 
 export interface operations {
   /**
+   * RunCode
+   * @description Evaluate code using a code interpreter.
+   */
+  RunCode: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "code": "import json\nimport sys\nprint(json.dumps({'foo':sys.argv[1]}))",
+         *   "args": [
+         *     "bar"
+         *   ],
+         *   "language": "python"
+         * }
+         */
+        "application/json": {
+          /** @description Code to execute. */
+          code: string;
+          /** @description List of command line arguments. */
+          args?: string[];
+          /**
+           * @description Interpreter to use.
+           * @default python
+           * @enum {string}
+           */
+          language?: "python" | "typescript" | "javascript";
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": {
+            /** @description Contents of `stdout` after executing the code. */
+            output?: string;
+            /** @description `output` as parsed JSON. Print serialized json to `stdout` to receive JSON. */
+            json_output: {
+              [key: string]: unknown;
+            };
+            /** @description Contents of `stderr` after executing the code. */
+            error?: string;
+          };
+        };
+      };
+    };
+  };
+  /**
    * GenerateText
    * @description Generate text using a language model.
    */
@@ -1816,7 +2055,11 @@ export interface operations {
            * @default Mistral7BInstruct
            * @enum {string}
            */
-          node?: "Mistral7BInstruct";
+          node?:
+            | "Mistral7BInstruct"
+            | "Mixtral8x7BInstruct"
+            | "Llama3Instruct8B"
+            | "Llama3Instruct70B";
         };
       };
     };
@@ -1848,14 +2091,67 @@ export interface operations {
          */
         "application/json": {
           /** @description Input prompt. */
-          prompt?: string;
-          /** @description Batch input prompts. */
-          batch_prompts?: string[];
+          prompt: string;
           /**
            * @description Number of choices to generate.
            * @default 1
            */
-          num_choices?: number;
+          num_choices: number;
+          /**
+           * Format: float
+           * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
+           * @default 0.4
+           */
+          temperature?: number;
+          /** @description Maximum number of tokens to generate. */
+          max_tokens?: number;
+          /**
+           * @description Selected node.
+           * @default Mistral7BInstruct
+           * @enum {string}
+           */
+          node?:
+            | "Mistral7BInstruct"
+            | "Mixtral8x7BInstruct"
+            | "Llama3Instruct8B"
+            | "Llama3Instruct70B";
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": {
+            /** @description Response choices. */
+            choices: {
+              /** @description Text response. */
+              text: string;
+            }[];
+          };
+        };
+      };
+    };
+  };
+  /**
+   * BatchGenerateText
+   * @description Generate text for multiple prompts in batch using a language model.
+   */
+  BatchGenerateText: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "prompts": [
+         *     "Who is Don Quixote?",
+         *     "Who is Sancho Panza?"
+         *   ],
+         *   "max_tokens": 800
+         * }
+         */
+        "application/json": {
+          /** @description Batch input prompts. */
+          prompts: string[];
           /**
            * Format: float
            * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
@@ -1878,13 +2174,80 @@ export interface operations {
       200: {
         content: {
           "application/json": {
-            /** @description A single output for `prompt`, or multiple outputs for `batch_prompts`. */
+            /** @description Batch outputs. */
             outputs: {
-              /** @description Response choices. */
-              choices: {
-                /** @description Text response. */
-                text: string;
-              }[];
+              /** @description Text response. */
+              text: string;
+            }[];
+          };
+        };
+      };
+    };
+  };
+  /**
+   * BatchGenerateJSON
+   * @description Generate JSON for multiple prompts in batch using a language model.
+   */
+  BatchGenerateJSON: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "prompts": [
+         *     "Who is Don Quixote?",
+         *     "Who is Sancho Panza?"
+         *   ],
+         *   "max_tokens": 800,
+         *   "json_schema": {
+         *     "type": "object",
+         *     "properties": {
+         *       "name": {
+         *         "type": "string",
+         *         "description": "The name of the character."
+         *       },
+         *       "bio": {
+         *         "type": "string",
+         *         "description": "Concise biography of the character."
+         *       }
+         *     }
+         *   }
+         * }
+         */
+        "application/json": {
+          /** @description Batch input prompts. */
+          prompts: string[];
+          /** @description JSON schema to guide `json_object` response. */
+          json_schema: {
+            [key: string]: unknown;
+          };
+          /**
+           * Format: float
+           * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
+           * @default 0.4
+           */
+          temperature?: number;
+          /** @description Maximum number of tokens to generate. */
+          max_tokens?: number;
+          /**
+           * @description Selected node.
+           * @default Mistral7BInstruct
+           * @enum {string}
+           */
+          node?: "Mistral7BInstruct";
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": {
+            /** @description Batch outputs. */
+            outputs: {
+              /** @description JSON response. */
+              json_object: {
+                [key: string]: unknown;
+              };
             }[];
           };
         };
@@ -1938,7 +2301,7 @@ export interface operations {
            * @default Mistral7BInstruct
            * @enum {string}
            */
-          node?: "Mistral7BInstruct";
+          node?: "Mistral7BInstruct" | "Mixtral8x7BInstruct";
         };
       };
     };
@@ -1986,18 +2349,16 @@ export interface operations {
          */
         "application/json": {
           /** @description Input prompt. */
-          prompt?: string;
+          prompt: string;
           /** @description JSON schema to guide `json_object` response. */
           json_schema: {
             [key: string]: unknown;
           };
-          /** @description Batch input prompts. */
-          batch_prompts?: string[];
           /**
            * @description Number of choices to generate.
            * @default 2
            */
-          num_choices?: number;
+          num_choices: number;
           /**
            * Format: float
            * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
@@ -2011,7 +2372,7 @@ export interface operations {
            * @default Mistral7BInstruct
            * @enum {string}
            */
-          node?: "Mistral7BInstruct";
+          node?: "Mistral7BInstruct" | "Mixtral8x7BInstruct";
         };
       };
     };
@@ -2020,15 +2381,12 @@ export interface operations {
       200: {
         content: {
           "application/json": {
-            /** @description A single output for `prompt`, or multiple outputs for `batch_prompts`. */
-            outputs: {
-              /** @description Response choices. */
-              choices: {
-                /** @description JSON response. */
-                json_object: {
-                  [key: string]: unknown;
-                };
-              }[];
+            /** @description Response choices. */
+            choices: {
+              /** @description JSON response. */
+              json_object: {
+                [key: string]: unknown;
+              };
             }[];
           };
         };
@@ -2099,7 +2457,7 @@ export interface operations {
          */
         "application/json": {
           /** @description Input prompt. */
-          prompt?: string;
+          prompt: string;
           /**
            * @description Number of choices to generate.
            * @default 1
@@ -2109,8 +2467,6 @@ export interface operations {
           json_schema?: {
             [key: string]: unknown;
           };
-          /** @description Batch input prompts. */
-          batch_prompts?: string[];
           /**
            * Format: float
            * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
@@ -2126,17 +2482,166 @@ export interface operations {
       200: {
         content: {
           "application/json": {
-            /** @description A single output for `prompt`, or multiple outputs for `batch_prompts`. */
-            outputs: {
-              /** @description Response choices. */
-              choices: {
-                /** @description Text response, if `json_schema` was not provided. */
-                text?: string;
-                /** @description JSON response, if `json_schema` was provided. */
-                json_object?: {
-                  [key: string]: unknown;
-                };
-              }[];
+            /** @description Response choices. */
+            choices: {
+              /** @description Text response, if `json_schema` was not provided. */
+              text?: string;
+              /** @description JSON response, if `json_schema` was provided. */
+              json_object?: {
+                [key: string]: unknown;
+              };
+            }[];
+          };
+        };
+      };
+    };
+  };
+  /**
+   * Mixtral8x7BInstruct
+   * @description Generate text using instruct-tuned [Mixtral 8x7B](https://mistral.ai/news/mixtral-of-experts/).
+   */
+  Mixtral8x7BInstruct: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "prompt": "Who is Don Quixote?",
+         *   "num_choices": 2,
+         *   "temperature": 0.4,
+         *   "max_tokens": 800
+         * }
+         */
+        "application/json": {
+          /** @description Input prompt. */
+          prompt: string;
+          /**
+           * @description Number of choices to generate.
+           * @default 1
+           */
+          num_choices?: number;
+          /** @description JSON schema to guide response. */
+          json_schema?: {
+            [key: string]: unknown;
+          };
+          /**
+           * Format: float
+           * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
+           */
+          temperature?: number;
+          /** @description Maximum number of tokens to generate. */
+          max_tokens?: number;
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": {
+            /** @description Response choices. */
+            choices: {
+              /** @description Text response, if `json_schema` was not provided. */
+              text?: string;
+              /** @description JSON response, if `json_schema` was provided. */
+              json_object?: {
+                [key: string]: unknown;
+              };
+            }[];
+          };
+        };
+      };
+    };
+  };
+  /**
+   * Llama3Instruct8B
+   * @description Generate text using instruct-tuned [Llama 3 8B](https://llama.meta.com/llama3/).
+   */
+  Llama3Instruct8B: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "prompt": "Who is Don Quixote?",
+         *   "num_choices": 2,
+         *   "temperature": 0.4,
+         *   "max_tokens": 800
+         * }
+         */
+        "application/json": {
+          /** @description Input prompt. */
+          prompt: string;
+          /**
+           * @description Number of choices to generate.
+           * @default 1
+           */
+          num_choices?: number;
+          /**
+           * Format: float
+           * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
+           */
+          temperature?: number;
+          /** @description Maximum number of tokens to generate. */
+          max_tokens?: number;
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": {
+            /** @description Response choices. */
+            choices: {
+              /** @description Text response. */
+              text?: string;
+            }[];
+          };
+        };
+      };
+    };
+  };
+  /**
+   * Llama3Instruct70B
+   * @description Generate text using instruct-tuned [Llama 3 70B](https://llama.meta.com/llama3/).
+   */
+  Llama3Instruct70B: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "prompt": "Who is Don Quixote?",
+         *   "num_choices": 2,
+         *   "temperature": 0.4,
+         *   "max_tokens": 800
+         * }
+         */
+        "application/json": {
+          /** @description Input prompt. */
+          prompt: string;
+          /**
+           * @description Number of choices to generate.
+           * @default 1
+           */
+          num_choices?: number;
+          /**
+           * Format: float
+           * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
+           */
+          temperature?: number;
+          /** @description Maximum number of tokens to generate. */
+          max_tokens?: number;
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": {
+            /** @description Response choices. */
+            choices: {
+              /** @description Text response. */
+              text?: string;
             }[];
           };
         };

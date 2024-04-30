@@ -36,6 +36,50 @@
         },
         "required": ["type", "message"]
       },
+      "RunCodeIn": {
+        "title": "RunCodeIn",
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Code to execute."
+          },
+          "args": {
+            "description": "List of command line arguments.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "language": {
+            "type": "string",
+            "enum": ["python", "typescript", "javascript"],
+            "description": "Interpreter to use.",
+            "default": "python"
+          }
+        },
+        "required": ["code"]
+      },
+      "RunCodeOut": {
+        "title": "RunCodeOut",
+        "type": "object",
+        "properties": {
+          "output": {
+            "type": "string",
+            "description": "Contents of `stdout` after executing the code."
+          },
+          "json_output": {
+            "type": "object",
+            "description": "`output` as parsed JSON. Print serialized json to `stdout` to receive JSON.",
+            "additionalProperties": true
+          },
+          "error": {
+            "type": "string",
+            "description": "Contents of `stderr` after executing the code."
+          }
+        },
+        "required": ["json_output"]
+      },
       "GenerateTextIn": {
         "title": "GenerateTextIn",
         "type": "object",
@@ -58,7 +102,12 @@
           },
           "node": {
             "type": "string",
-            "enum": ["Mistral7BInstruct"],
+            "enum": [
+              "Mistral7BInstruct",
+              "Mixtral8x7BInstruct",
+              "Llama3Instruct8B",
+              "Llama3Instruct70B"
+            ],
             "description": "Selected node.",
             "default": "Mistral7BInstruct"
           }
@@ -103,7 +152,7 @@
           },
           "node": {
             "type": "string",
-            "enum": ["Mistral7BInstruct"],
+            "enum": ["Mistral7BInstruct", "Mixtral8x7BInstruct"],
             "description": "Selected node.",
             "default": "Mistral7BInstruct"
           }
@@ -130,13 +179,6 @@
             "type": "string",
             "description": "Input prompt."
           },
-          "batch_prompts": {
-            "description": "Batch input prompts.",
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
           "num_choices": {
             "type": "integer",
             "description": "Number of choices to generate.",
@@ -158,15 +200,20 @@
           },
           "node": {
             "type": "string",
-            "enum": ["Mistral7BInstruct"],
+            "enum": [
+              "Mistral7BInstruct",
+              "Mixtral8x7BInstruct",
+              "Llama3Instruct8B",
+              "Llama3Instruct70B"
+            ],
             "description": "Selected node.",
             "default": "Mistral7BInstruct"
           }
         },
-        "required": []
+        "required": ["prompt", "num_choices"]
       },
-      "MultiGenerateTextOutput": {
-        "title": "MultiGenerateTextOutput",
+      "MultiGenerateTextOut": {
+        "title": "MultiGenerateTextOut",
         "type": "object",
         "properties": {
           "choices": {
@@ -179,15 +226,47 @@
         },
         "required": ["choices"]
       },
-      "MultiGenerateTextOut": {
-        "title": "MultiGenerateTextOut",
+      "BatchGenerateTextIn": {
+        "title": "BatchGenerateTextIn",
+        "type": "object",
+        "properties": {
+          "prompts": {
+            "description": "Batch input prompts.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "temperature": {
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "maximum": 1,
+            "default": 0.4,
+            "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic."
+          },
+          "max_tokens": {
+            "type": "integer",
+            "description": "Maximum number of tokens to generate."
+          },
+          "node": {
+            "type": "string",
+            "enum": ["Mistral7BInstruct"],
+            "description": "Selected node.",
+            "default": "Mistral7BInstruct"
+          }
+        },
+        "required": ["prompts"]
+      },
+      "BatchGenerateTextOut": {
+        "title": "BatchGenerateTextOut",
         "type": "object",
         "properties": {
           "outputs": {
             "type": "array",
-            "description": "A single output for `prompt`, or multiple outputs for `batch_prompts`.",
+            "description": "Batch outputs.",
             "items": {
-              "$ref": "#/components/schemas/MultiGenerateTextOutput"
+              "$ref": "#/components/schemas/GenerateTextOut"
             }
           }
         },
@@ -205,13 +284,6 @@
             "type": "object",
             "description": "JSON schema to guide `json_object` response.",
             "additionalProperties": true
-          },
-          "batch_prompts": {
-            "description": "Batch input prompts.",
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
           },
           "num_choices": {
             "type": "integer",
@@ -234,15 +306,15 @@
           },
           "node": {
             "type": "string",
-            "enum": ["Mistral7BInstruct"],
+            "enum": ["Mistral7BInstruct", "Mixtral8x7BInstruct"],
             "description": "Selected node.",
             "default": "Mistral7BInstruct"
           }
         },
-        "required": ["json_schema"]
+        "required": ["prompt", "num_choices", "json_schema"]
       },
-      "MultiGenerateJSONOutput": {
-        "title": "MultiGenerateJSONOutput",
+      "MultiGenerateJSONOut": {
+        "title": "MultiGenerateJSONOut",
         "type": "object",
         "properties": {
           "choices": {
@@ -255,15 +327,52 @@
         },
         "required": ["choices"]
       },
-      "MultiGenerateJSONOut": {
-        "title": "MultiGenerateJSONOut",
+      "BatchGenerateJSONIn": {
+        "title": "BatchGenerateJSONIn",
+        "type": "object",
+        "properties": {
+          "prompts": {
+            "description": "Batch input prompts.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "json_schema": {
+            "type": "object",
+            "description": "JSON schema to guide `json_object` response.",
+            "additionalProperties": true
+          },
+          "temperature": {
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "maximum": 1,
+            "default": 0.4,
+            "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic."
+          },
+          "max_tokens": {
+            "type": "integer",
+            "description": "Maximum number of tokens to generate."
+          },
+          "node": {
+            "type": "string",
+            "enum": ["Mistral7BInstruct"],
+            "description": "Selected node.",
+            "default": "Mistral7BInstruct"
+          }
+        },
+        "required": ["prompts", "json_schema"]
+      },
+      "BatchGenerateJSONOut": {
+        "title": "BatchGenerateJSONOut",
         "type": "object",
         "properties": {
           "outputs": {
             "type": "array",
-            "description": "A single output for `prompt`, or multiple outputs for `batch_prompts`.",
+            "description": "Batch outputs.",
             "items": {
-              "$ref": "#/components/schemas/MultiGenerateJSONOutput"
+              "$ref": "#/components/schemas/GenerateJSONOut"
             }
           }
         },
@@ -289,13 +398,6 @@
             "description": "JSON schema to guide response.",
             "additionalProperties": true
           },
-          "batch_prompts": {
-            "description": "Batch input prompts.",
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
           "temperature": {
             "type": "number",
             "format": "float",
@@ -308,7 +410,7 @@
             "description": "Maximum number of tokens to generate."
           }
         },
-        "required": []
+        "required": ["prompt"]
       },
       "Mistral7BInstructChoice": {
         "title": "Mistral7BInstructChoice",
@@ -325,8 +427,8 @@
           }
         }
       },
-      "Mistral7BInstructOutput": {
-        "title": "Mistral7BInstructOutput",
+      "Mistral7BInstructOut": {
+        "title": "Mistral7BInstructOut",
         "type": "object",
         "properties": {
           "choices": {
@@ -339,19 +441,174 @@
         },
         "required": ["choices"]
       },
-      "Mistral7BInstructOut": {
-        "title": "Mistral7BInstructOut",
+      "Mixtral8x7BInstructIn": {
+        "title": "Mixtral8x7BInstructIn",
         "type": "object",
         "properties": {
-          "outputs": {
+          "prompt": {
+            "type": "string",
+            "description": "Input prompt."
+          },
+          "num_choices": {
+            "type": "integer",
+            "description": "Number of choices to generate.",
+            "minimum": 1,
+            "maximum": 8,
+            "default": 1
+          },
+          "json_schema": {
+            "type": "object",
+            "description": "JSON schema to guide response.",
+            "additionalProperties": true
+          },
+          "temperature": {
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic."
+          },
+          "max_tokens": {
+            "type": "integer",
+            "description": "Maximum number of tokens to generate."
+          }
+        },
+        "required": ["prompt"]
+      },
+      "Mixtral8x7BChoice": {
+        "title": "Mixtral8x7BChoice",
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "Text response, if `json_schema` was not provided."
+          },
+          "json_object": {
+            "type": "object",
+            "description": "JSON response, if `json_schema` was provided.",
+            "additionalProperties": true
+          }
+        }
+      },
+      "Mixtral8x7BInstructOut": {
+        "title": "Mixtral8x7BInstructOut",
+        "type": "object",
+        "properties": {
+          "choices": {
             "type": "array",
-            "description": "A single output for `prompt`, or multiple outputs for `batch_prompts`.",
+            "description": "Response choices.",
             "items": {
-              "$ref": "#/components/schemas/Mistral7BInstructOutput"
+              "$ref": "#/components/schemas/Mixtral8x7BChoice"
             }
           }
         },
-        "required": ["outputs"]
+        "required": ["choices"]
+      },
+      "Llama3Instruct8BIn": {
+        "title": "Llama3Instruct8BIn",
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "Input prompt."
+          },
+          "num_choices": {
+            "type": "integer",
+            "description": "Number of choices to generate.",
+            "minimum": 1,
+            "maximum": 8,
+            "default": 1
+          },
+          "temperature": {
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic."
+          },
+          "max_tokens": {
+            "type": "integer",
+            "description": "Maximum number of tokens to generate."
+          }
+        },
+        "required": ["prompt"]
+      },
+      "Llama3Instruct8BChoice": {
+        "title": "Llama3Instruct8BChoice",
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "Text response."
+          }
+        }
+      },
+      "Llama3Instruct8BOut": {
+        "title": "Llama3Instruct8BOut",
+        "type": "object",
+        "properties": {
+          "choices": {
+            "type": "array",
+            "description": "Response choices.",
+            "items": {
+              "$ref": "#/components/schemas/Llama3Instruct8BChoice"
+            }
+          }
+        },
+        "required": ["choices"]
+      },
+      "Llama3Instruct70BIn": {
+        "title": "Llama3Instruct70BIn",
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "Input prompt."
+          },
+          "num_choices": {
+            "type": "integer",
+            "description": "Number of choices to generate.",
+            "minimum": 1,
+            "maximum": 8,
+            "default": 1
+          },
+          "temperature": {
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic."
+          },
+          "max_tokens": {
+            "type": "integer",
+            "description": "Maximum number of tokens to generate."
+          }
+        },
+        "required": ["prompt"]
+      },
+      "Llama3Instruct70BChoice": {
+        "title": "Llama3Instruct70BChoice",
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "Text response."
+          }
+        }
+      },
+      "Llama3Instruct70BOut": {
+        "title": "Llama3Instruct70BOut",
+        "type": "object",
+        "properties": {
+          "choices": {
+            "type": "array",
+            "description": "Response choices.",
+            "items": {
+              "$ref": "#/components/schemas/Llama3Instruct70BChoice"
+            }
+          }
+        },
+        "required": ["choices"]
       },
       "GenerateTextVisionIn": {
         "title": "GenerateTextVisionIn",
@@ -2227,6 +2484,46 @@
     }
   },
   "paths": {
+    "/RunCode": {
+      "post": {
+        "summary": "RunCode",
+        "operationId": "RunCode",
+        "tags": ["category:utility", "backend:v1"],
+        "description": "Evaluate code using a code interpreter.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RunCodeIn"
+              },
+              "example": {
+                "code": "import json\nimport sys\nprint(json.dumps({'foo':sys.argv[1]}))",
+                "args": ["bar"],
+                "language": "python"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RunCodeOut"
+                },
+                "example": {
+                  "output": "{\"foo\": \"bar\"}\n",
+                  "json_output": {
+                    "foo": "bar"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/GenerateText": {
       "post": {
         "summary": "GenerateText",
@@ -2293,16 +2590,111 @@
                   "$ref": "#/components/schemas/MultiGenerateTextOut"
                 },
                 "example": {
+                  "choices": [
+                    {
+                      "text": "Don Quixote is a fictional character and the protagonist of the novel Don Quixote by Miguel..."
+                    },
+                    {
+                      "text": "Don Quixote is a fictional character created by the Spanish author Miguel de Cervantes..."
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/BatchGenerateText": {
+      "post": {
+        "summary": "BatchGenerateText",
+        "operationId": "BatchGenerateText",
+        "tags": ["category:language-generation", "backend:v1"],
+        "description": "Generate text for multiple prompts in batch using a language model.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BatchGenerateTextIn"
+              },
+              "example": {
+                "prompts": ["Who is Don Quixote?", "Who is Sancho Panza?"],
+                "max_tokens": 800
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BatchGenerateTextOut"
+                },
+                "example": {
                   "outputs": [
                     {
-                      "choices": [
-                        {
-                          "text": "Don Quixote is a fictional character and the protagonist of the novel Don Quixote by Miguel..."
-                        },
-                        {
-                          "text": "Don Quixote is a fictional character created by the Spanish author Miguel de Cervantes..."
-                        }
-                      ]
+                      "text": "Don Quixote is a fictional character and the protagonist of the novel Don Quixote by Miguel..."
+                    },
+                    {
+                      "text": "Don Quixote is a fictional character created by the Spanish author Miguel de Cervantes..."
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/BatchGenerateJSON": {
+      "post": {
+        "summary": "BatchGenerateJSON",
+        "operationId": "BatchGenerateJSON",
+        "tags": ["category:language-generation", "backend:v1"],
+        "description": "Generate JSON for multiple prompts in batch using a language model.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BatchGenerateJSONIn"
+              },
+              "example": {
+                "prompts": ["Who is Don Quixote?", "Who is Sancho Panza?"],
+                "max_tokens": 800,
+                "json_schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "description": "The name of the character."
+                    },
+                    "bio": {
+                      "type": "string",
+                      "description": "Concise biography of the character."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BatchGenerateJSONOut"
+                },
+                "example": {
+                  "outputs": [
+                    {
+                      "json_object": {}
+                    },
+                    {
+                      "json_object": {}
                     }
                   ]
                 }
@@ -2405,16 +2797,12 @@
                   "$ref": "#/components/schemas/MultiGenerateJSONOut"
                 },
                 "example": {
-                  "outputs": [
+                  "choices": [
                     {
-                      "choices": [
-                        {
-                          "json_object": {}
-                        },
-                        {
-                          "json_object": {}
-                        }
-                      ]
+                      "json_object": {}
+                    },
+                    {
+                      "json_object": {}
                     }
                   ]
                 }
@@ -2497,16 +2885,159 @@
                   "$ref": "#/components/schemas/Mistral7BInstructOut"
                 },
                 "example": {
-                  "outputs": [
+                  "choices": [
                     {
-                      "choices": [
-                        {
-                          "text": "Don Quixote is a fictional character and the protagonist of the novel Don Quixote by Miguel..."
-                        },
-                        {
-                          "text": "Don Quixote is a fictional character created by the Spanish author Miguel de Cervantes..."
-                        }
-                      ]
+                      "text": "Don Quixote is a fictional character and the protagonist of the novel Don Quixote by Miguel..."
+                    },
+                    {
+                      "text": "Don Quixote is a fictional character created by the Spanish author Miguel de Cervantes..."
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Mixtral8x7BInstruct": {
+      "post": {
+        "summary": "Mixtral8x7BInstruct",
+        "operationId": "Mixtral8x7BInstruct",
+        "tags": [
+          "category:language-generation",
+          "backend:v1",
+          "type:low-level"
+        ],
+        "description": "Generate text using instruct-tuned [Mixtral 8x7B](https://mistral.ai/news/mixtral-of-experts/).",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Mixtral8x7BInstructIn"
+              },
+              "example": {
+                "prompt": "Who is Don Quixote?",
+                "num_choices": 2,
+                "temperature": 0.4,
+                "max_tokens": 800
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Mixtral8x7BInstructOut"
+                },
+                "example": {
+                  "choices": [
+                    {
+                      "text": "Don Quixote is a fictional character and the protagonist of the novel Don Quixote by Miguel..."
+                    },
+                    {
+                      "text": "Don Quixote is a fictional character created by the Spanish author Miguel de Cervantes..."
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Llama3Instruct8B": {
+      "post": {
+        "summary": "Llama3Instruct8B",
+        "operationId": "Llama3Instruct8B",
+        "tags": [
+          "category:language-generation",
+          "backend:v1",
+          "type:low-level"
+        ],
+        "description": "Generate text using instruct-tuned [Llama 3 8B](https://llama.meta.com/llama3/).",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Llama3Instruct8BIn"
+              },
+              "example": {
+                "prompt": "Who is Don Quixote?",
+                "num_choices": 2,
+                "temperature": 0.4,
+                "max_tokens": 800
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Llama3Instruct8BOut"
+                },
+                "example": {
+                  "choices": [
+                    {
+                      "text": "Don Quixote is a fictional character and the protagonist of the novel Don Quixote by Miguel..."
+                    },
+                    {
+                      "text": "Don Quixote is a fictional character created by the Spanish author Miguel de Cervantes..."
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Llama3Instruct70B": {
+      "post": {
+        "summary": "Llama3Instruct70B",
+        "operationId": "Llama3Instruct70B",
+        "tags": [
+          "category:language-generation",
+          "backend:v1",
+          "type:low-level"
+        ],
+        "description": "Generate text using instruct-tuned [Llama 3 70B](https://llama.meta.com/llama3/).",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Llama3Instruct70BIn"
+              },
+              "example": {
+                "prompt": "Who is Don Quixote?",
+                "num_choices": 2,
+                "temperature": 0.4,
+                "max_tokens": 800
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Llama3Instruct70BOut"
+                },
+                "example": {
+                  "choices": [
+                    {
+                      "text": "Don Quixote is a fictional character and the protagonist of the novel Don Quixote by Miguel..."
+                    },
+                    {
+                      "text": "Don Quixote is a fictional character created by the Spanish author Miguel de Cervantes..."
                     }
                   ]
                 }
