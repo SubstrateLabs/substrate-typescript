@@ -1,6 +1,6 @@
 {
   "name": "substrate",
-  "version": "120240418.0.11",
+  "version": "120240418.0.12",
   "description": "The official SDK for the Substrate API",
   "repository": {
     "type": "git",
