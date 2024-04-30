@@ -1,26 +1,39 @@
 #!/usr/bin/env -S npx ts-node --transpileOnly
 
-import { Substrate, GenerateText, sb, FutureString } from "substrate";
+import { Substrate, GenerateText, sb, GenerateJSON } from "substrate";
 
 async function main() {
   const SUBSTRATE_API_KEY = process.env["SUBSTRATE_API_KEY"];
 
   const substrate = new Substrate({
     apiKey: SUBSTRATE_API_KEY,
-    baseUrl: "https://api-staging.substrate.run",
+    baseUrl: "https://api.substrate.run",
+    backend: "v1",
   });
 
-  const a = new GenerateText({
-    prompt: "name a random capital city: <city name>, <country>",
+  const a = new GenerateJSON({
+    prompt:
+      "Give me a random world capital city and its approximate population.",
+    json_schema: {
+      type: "object",
+      properties: {
+        cityName: { type: "string" },
+        country: { type: "string" },
+        approximatePopulation: { type: "number", greaterThan: 100000 },
+      },
+      required: ["text"],
+    },
   });
 
-  const jqUpperCase = ".text | ascii_upcase";
-  const concatenated = sb.jq<FutureString>(jqUpperCase, a.future, FutureString);
+  const jqParsePop = ".country";
+  const newQuestion = sb.concat(
+    "give me the leader of the country: ",
+    sb.jq<"string">(jqParsePop, a.future, "string"),
+  );
 
-  const b = new GenerateText({ prompt: concatenated });
+  const b = new GenerateText({ prompt: newQuestion });
 
   const res = await substrate.run(a, b);
-  res.getError();
 
   console.log({ a: res.get(a), b: res.get(b) });
 }

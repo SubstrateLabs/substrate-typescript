@@ -11,8 +11,13 @@ type TraceOperation = {
 type TraceProp = string | FutureString | number | FutureNumber;
 type Concatable = string | FutureString;
 type JQCompatible = Record<string, never> | any[] | string | number;
-type JQDirectiveTarget = Future | JQCompatible;
-
+type JQDirectiveTarget = Future<any> | JQCompatible;
+type FutureTypeMap = {
+  string: FutureString;
+  object: FutureAnyObject;
+  number: FutureNumber;
+  boolean: FutureBoolean;
+};
 const parsePath = (path: string): TraceProp[] => {
   // Split the path by dots or brackets, and filter out empty strings
   const parts = path.split(/\.|\[|\]\[?/).filter(Boolean);
@@ -48,7 +53,7 @@ export class Trace extends Directive {
   }
 
   static Operation = {
-    future: (accessor: Accessor, id: Future["_id"]) => ({
+    future: (accessor: Accessor, id: Future<any>["_id"]) => ({
       future_id: id,
       key: null,
       accessor,
@@ -111,12 +116,11 @@ export class JQ extends Directive {
   }
 
   static JQDirectiveTarget = {
-    future: (id: Future["id"]) => ({ future_id: id, val: null }),
+    future: (id: Future<any>["_id"]) => ({ future_id: id, val: null }),
     rawValue: (val: JQCompatible) => ({ future_id: null, val }),
   };
 
   override next(...items: TraceProp[]) {
-    // TODO(rob) - not really sure what to do here??
     return new JQ([...this.items, ...items], this.query, this.target);
   }
 
@@ -128,13 +132,14 @@ export class JQ extends Directive {
   }
 
   override toJSON(): any {
+    console.log("SERIALIZE", this.target);
     return {
       type: "jq",
       query: this.query,
       target:
         this.target instanceof Future
           ? // @ts-expect-error (accessing protected prop: id)
-            JQ.JQDirectiveTarget.future(this.target.id)
+            JQ.JQDirectiveTarget.future(this.target._id)
           : JQ.JQDirectiveTarget.rawValue(this.target),
     };
   }
@@ -150,7 +155,7 @@ export class StringConcat extends Directive {
 
   static Concatable = {
     string: (val: string) => ({ future_id: null, val }),
-    future: (id: Future["_id"]) => ({ future_id: id, val: null }),
+    future: (id: Future<string>["_id"]) => ({ future_id: id, val: null }),
   };
 
   override next(...items: Concatable[]) {
@@ -183,7 +188,7 @@ export class StringConcat extends Directive {
   }
 }
 
-export abstract class Future {
+export abstract class Future<T> {
   protected _directive: Directive;
   protected _id: string = "";
 
@@ -192,7 +197,7 @@ export abstract class Future {
     this._id = id;
   }
 
-  protected referencedFutures(): Future[] {
+  protected referencedFutures(): Future<T>[] {
     return this._directive.referencedFutures();
   }
 
@@ -200,20 +205,28 @@ export abstract class Future {
     return { __$$SB_GRAPH_OP_ID$$__: this._id };
   }
 
-  protected async result(): Promise<any> {
+  protected async result(): Promise<T> {
     return this._directive.result();
   }
 
-  static jq<T extends Future>(
+  static jq<T extends keyof FutureTypeMap>(
     query: string,
     future: JQDirectiveTarget,
-    klazz?: T,
-  ): T {
+    futureType: keyof FutureTypeMap = "object",
+  ): FutureTypeMap[T] {
     const directive = new JQ([], query, future);
-    const Klazz = klazz ?? FutureAnyObject;
-    // @ts-ignore
-    return new Klazz(directive);
-    //   sb.jq<MyType>('myquery', mything) ==> Future<MyType>
+    switch (futureType) {
+      case "string":
+        return new FutureString(directive) as FutureTypeMap[T];
+      case "number":
+        return new FutureNumber(directive) as FutureTypeMap[T];
+      case "object":
+        return new FutureAnyObject(directive) as FutureTypeMap[T];
+      case "boolean":
+        return new FutureBoolean(directive) as FutureTypeMap[T];
+      default:
+        throw new Error(`Unknown future type: ${futureType}`);
+    }
   }
 
   toJSON() {
@@ -224,13 +237,9 @@ export abstract class Future {
   }
 }
 
-export class FutureBoolean extends Future {
-  override async result(): Promise<boolean> {
-    return super.result();
-  }
-}
+export class FutureBoolean extends Future<boolean> {}
 
-export class FutureString extends Future {
+export class FutureString extends Future<string> {
   static concat(...items: (string | FutureString)[]) {
     return new FutureString(new StringConcat(items));
   }
@@ -260,22 +269,18 @@ export class FutureString extends Future {
   }
 }
 
-export class FutureNumber extends Future {
-  override async result(): Promise<number> {
-    return super.result();
-  }
-}
+export class FutureNumber extends Future<number> {}
 
-export abstract class FutureArray extends Future {
-  abstract at(index: number): Future;
+export abstract class FutureArray extends Future<any[] | FutureArray> {
+  abstract at(index: number): Future<any>;
 
   protected override async result(): Promise<any[] | FutureArray> {
     return super.result();
   }
 }
 
-export abstract class FutureObject extends Future {
-  get(path: string): Future {
+export abstract class FutureObject extends Future<Object> {
+  get(path: string): Future<any> {
     const props = parsePath(path);
     return props.reduce((future, prop) => {
       if (future instanceof FutureAnyObject) {
@@ -286,7 +291,7 @@ export abstract class FutureObject extends Future {
         // @ts-ignore
         return typeof prop === "string" ? future[prop] : future.at(prop);
       }
-    }, this) as Future;
+    }, this) as Future<any>;
   }
 
   protected override async result(): Promise<Object> {
@@ -294,7 +299,7 @@ export abstract class FutureObject extends Future {
   }
 }
 
-export class FutureAnyObject extends Future {
+export class FutureAnyObject extends Future<Object> {
   get(path: string | FutureString) {
     const d =
       typeof path === "string"

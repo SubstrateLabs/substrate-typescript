@@ -101,6 +101,7 @@ export class Substrate {
     const abortController = new AbortController();
     const { signal } = abortController;
     const timeout = setTimeout(() => abortController.abort(), this.timeout);
+    console.log(JSON.stringify(req));
 
     try {
       const request = new Request(url, this.requestOptions(req, signal));
