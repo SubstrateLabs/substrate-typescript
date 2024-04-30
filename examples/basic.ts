@@ -1,24 +1,23 @@
 #!/usr/bin/env -S npx ts-node --transpileOnly
 
-import { Substrate, GenerateText } from "substrate";
+import { Substrate, GenerateText, sb } from "substrate";
 
 async function main() {
   const SUBSTRATE_API_KEY = process.env["SUBSTRATE_API_KEY"];
 
-  const substrate = new Substrate({
-    apiKey: SUBSTRATE_API_KEY,
-    baseUrl: "https://api-staging.substrate.run",
+  const substrate = new Substrate({ apiKey: SUBSTRATE_API_KEY });
+
+  const story = new GenerateText({ prompt: "tell me a story" });
+  const summary = new GenerateText({
+    prompt: sb.interpolate`summarize this story in one sentence: ${story.future.text}`,
   });
 
-  const input: GenerateText.Input = { prompt: "asdf" };
+  const res = await substrate.run(story, summary);
 
-  const a = new GenerateText(input);
-  const b = new GenerateText({ prompt: a.future.text });
+  const summaryOut = res.get(summary);
+  console.log(summaryOut.text);
 
-  const res = await substrate.run(a, b);
-
-  const output: GenerateText.Output = res.get(b);
-
-  console.log({ a: res.get(a), b: output });
+  const visualize = Substrate.visualize(story, summary);
+  console.log(visualize);
 }
 main();
