@@ -46,10 +46,10 @@ Run the graph chaining `story` → `summary`. This is a simple example, but you 
 const response = await substrate.run(story, summary);
 ```
 
-Get the result of the summary node by passing it to `response.get`.
+Get the output of the summary node by passing it to `response.get`.
 ```typescript
-const summaryOutput = response.get(summary);
-console.log(summaryOutput.text);
+const summaryOut = response.get(summary);
+console.log(summaryOut.text);
 // Princess Lily, a kind-hearted young princess, discovers a book of spells and uses it to grant her family and kingdom happiness.
 ```
 
