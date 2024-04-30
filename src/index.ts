@@ -1,17 +1,23 @@
 /**
  * ꩜ Substrate TypeScript SDK
  * @generated file
- * 20240418.20240429
+ * 20240418.20240430
  */
 
 export { SubstrateError } from "substrate/Error";
 export {
+  RunCode,
   GenerateText,
   MultiGenerateText,
+  BatchGenerateText,
+  BatchGenerateJSON,
   GenerateJSON,
   MultiGenerateJSON,
   GenerateTextVision,
   Mistral7BInstruct,
+  Mixtral8x7BInstruct,
+  Llama3Instruct8B,
+  Llama3Instruct70B,
   Firellava13B,
   GenerateImage,
   MultiGenerateImage,
