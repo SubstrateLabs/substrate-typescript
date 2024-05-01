@@ -10,7 +10,7 @@ type TraceOperation = {
 
 type TraceProp = string | FutureString | number | FutureNumber;
 type Concatable = string | FutureString;
-type JQCompatible = Record<string, never> | any[] | string | number;
+type JQCompatible = Record<string, unknown> | any[] | string | number;
 type JQDirectiveTarget = Future<any> | JQCompatible;
 type FutureTypeMap = {
   string: FutureString;
