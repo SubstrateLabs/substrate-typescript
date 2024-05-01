@@ -108,9 +108,9 @@ export class JQ extends Directive {
   target: JQDirectiveTarget;
   query: string;
 
-  constructor(items: any[], query: string, target: JQDirectiveTarget) {
+  constructor(query: string, target: JQDirectiveTarget) {
     super();
-    this.items = items;
+    this.items = [target];
     this.target = target;
     this.query = query;
   }
@@ -121,7 +121,7 @@ export class JQ extends Directive {
   };
 
   override next(...items: TraceProp[]) {
-    return new JQ([...this.items, ...items], this.query, this.target);
+    return new JQ(this.query, this.target);
   }
 
   override async result(): Promise<JQCompatible> {
@@ -132,7 +132,6 @@ export class JQ extends Directive {
   }
 
   override toJSON(): any {
-    console.log("SERIALIZE", this.target);
     return {
       type: "jq",
       query: this.query,
@@ -214,7 +213,7 @@ export abstract class Future<T> {
     future: JQDirectiveTarget,
     futureType: keyof FutureTypeMap = "object",
   ): FutureTypeMap[T] {
-    const directive = new JQ([], query, future);
+    const directive = new JQ(query, future);
     switch (futureType) {
       case "string":
         return new FutureString(directive) as FutureTypeMap[T];

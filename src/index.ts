@@ -54,14 +54,6 @@ export {
   DeleteVectors,
 } from "substrate/Nodes";
 
-export {
-  FutureString,
-  FutureNumber,
-  FutureAnyObject,
-  FutureArray,
-  FutureObject,
-} from "substrate/Future";
-
 export { sb } from "substrate/sb";
 export { Substrate };
 import { Substrate } from "substrate/Substrate";
