@@ -27,7 +27,7 @@ async function main() {
   const b = new GenerateText({
     prompt: sb.concat(
       "give me the leader of the country: ",
-      sb.jq<"string">(".country", a.future.json_object, "string"),
+      sb.jq<"string">(".country", a.future.json_object),
     ),
   });
 
