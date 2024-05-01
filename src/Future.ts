@@ -196,7 +196,7 @@ export abstract class Future<T> {
     this._id = id;
   }
 
-  protected referencedFutures(): Future<T>[] {
+  protected referencedFutures(): Future<any>[] {
     return this._directive.referencedFutures();
   }
 
