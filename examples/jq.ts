@@ -24,12 +24,12 @@ async function main() {
     },
   });
 
-  const newQuestion = sb.concat(
-    "give me the leader of the country: ",
-    sb.jq<"string">(".country", a.future.json_object, "string"),
-  );
-
-  const b = new GenerateText({ prompt: newQuestion });
+  const b = new GenerateText({
+    prompt: sb.concat(
+      "give me the leader of the country: ",
+      sb.jq<"string">(".country", a.future.json_object, "string"),
+    ),
+  });
 
   const res = await substrate.run(a, b);
   console.log({ a: res.get(a), b: res.get(b) });
