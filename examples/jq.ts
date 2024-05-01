@@ -12,8 +12,7 @@ async function main() {
   });
 
   const a = new GenerateJSON({
-    prompt:
-      "Give me a random world capital city and its approximate population.",
+    prompt: "Give me an African capital city and its approximate population.",
     json_schema: {
       type: "object",
       properties: {
@@ -25,16 +24,14 @@ async function main() {
     },
   });
 
-  const jqParsePop = ".country";
   const newQuestion = sb.concat(
     "give me the leader of the country: ",
-    sb.jq<"string">(jqParsePop, a.future, "string"),
+    sb.jq<"string">(".country", a.future.json_object, "string"),
   );
 
   const b = new GenerateText({ prompt: newQuestion });
 
   const res = await substrate.run(a, b);
-
   console.log({ a: res.get(a), b: res.get(b) });
 }
 main();
