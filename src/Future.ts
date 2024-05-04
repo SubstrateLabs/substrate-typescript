@@ -209,8 +209,8 @@ export abstract class Future<T> {
   }
 
   static jq<T extends keyof FutureTypeMap>(
-    query: string,
     future: JQDirectiveTarget,
+    query: string,
     futureType: keyof FutureTypeMap = "string",
   ): FutureTypeMap[T] {
     const directive = new JQ(query, future);
