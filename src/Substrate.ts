@@ -66,7 +66,7 @@ export class Substrate {
     this.baseUrl = baseUrl ?? "https://api.substrate.run";
     this.apiVersion = apiVersion ?? OpenAPIjson["info"]["version"];
     this.timeout = timeout ?? 300_000;
-    this.backend = backend ?? "v0";
+    this.backend = backend ?? "v1";
     this.additionalHeaders = additionalHeaders ?? {};
   }
 
