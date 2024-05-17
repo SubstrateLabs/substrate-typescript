@@ -5,6 +5,7 @@ import { SubstrateResponse } from "substrate/SubstrateResponse";
 import { Node } from "substrate/Node";
 import { getPlatformProperties } from "substrate/Platform";
 import { deflate } from "pako";
+import { randomString } from "substrate/idGenerator";
 
 type Configuration = {
   /**
@@ -188,6 +189,7 @@ export class Substrate {
     headers.append("User-Agent", `APIClient/JS ${VERSION}`);
     headers.append("X-Substrate-Version", this.apiVersion);
     headers.append("X-Substrate-Backend", this.backend); // Switch between old and new backends
+    headers.append("X-Substrate-Request-Id", randomString(32));
 
     // Auth
     headers.append("Authorization", `Bearer ${this.apiKey}`);
