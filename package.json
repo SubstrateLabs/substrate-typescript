@@ -44,7 +44,9 @@
   },
   "dependencies": {
     "@types/node-fetch": "^2.6.11",
+    "eventsource-parser": "^1.1.2",
     "node-fetch": "2.7.0",
-    "pako": "^2.1.0"
+    "pako": "^2.1.0",
+    "web-streams-polyfill": "^4.0.0"
   }
 }

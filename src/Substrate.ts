@@ -6,6 +6,7 @@ import { Node } from "substrate/Node";
 import { getPlatformProperties } from "substrate/Platform";
 import { deflate } from "pako";
 import { randomString } from "substrate/idGenerator";
+import { EventSourceParserStream } from "eventsource-parser/stream";
 
 type Configuration = {
   /**
@@ -84,6 +85,14 @@ export class Substrate {
   }
 
   /**
+   *  Stream the given nodes.
+   */
+  async stream(...nodes: Node[]): Promise<any> {
+    const serialized = Substrate.serialize(...nodes);
+    return this.streamSerialized(serialized, nodes);
+  }
+
+  /**
    *  Run the given nodes, serialized using `Substrate.serialize`.
    *
    *  @throws {SubstrateError} when the server response is an error.
@@ -133,6 +142,31 @@ export class Substrate {
         }
       }
       throw err;
+    } finally {
+      clearTimeout(timeout);
+    }
+  }
+
+  /**
+   *  Stream the given nodes, serialized using `Substrate.serialize`.
+   */
+  async streamSerialized(
+    serialized: any,
+    nodes: Node[] | null = null,
+    endpoint: string = "/compose",
+  ): Promise<any> {
+    const url = this.baseUrl + endpoint;
+    const req = { dag: serialized };
+    const abortController = new AbortController();
+    const { signal } = abortController;
+    const timeout = setTimeout(() => abortController.abort(), this.timeout);
+
+    try {
+      const request = new Request(url, this.requestOptions(req, signal));
+      const res = await fetch(request);
+      return StreamResponse.fromSSEResponse(res);
+    } catch (err) {
+      console.log(err);
     } finally {
       clearTimeout(timeout);
     }
@@ -207,9 +241,73 @@ export class Substrate {
 
     // User-Provided
     for (const [name, value] of Object.entries(this.additionalHeaders)) {
-      headers.append(name, value);
+      headers.set(name, value);
     }
 
     return headers;
+  }
+}
+
+class StreamResponse {
+  iterator: any;
+  constructor(iterator: any) {
+    this.iterator = iterator;
+  }
+
+  [Symbol.asyncIterator]() {
+    return this.iterator;
+  }
+
+  // Since the iterable is stateful you can't iterate over it again,
+  // but we can split it.
+  tee() {
+    const left: any[] = [];
+    const right: any[] = [];
+    const iterator = this.iterator;
+
+    const teeIterator = (queue: any) => {
+      return {
+        next: () => {
+          if (queue.length === 0) {
+            const result = iterator.next();
+            left.push(result);
+            right.push(result);
+          }
+          return queue.shift();
+        },
+      };
+    };
+
+    return [
+      new StreamResponse(teeIterator(left)),
+      new StreamResponse(teeIterator(right)),
+    ];
+  }
+
+  static fromSSEResponse(response: any) {
+    if (!response.body) throw "need a body here";
+
+    // const decoder = new TextDecoder("utf-8");
+
+    const stream = response.body
+      .pipeThrough(new TextDecoderStream())
+      .pipeThrough(new EventSourceParserStream());
+
+    const iteratable = streamToAsyncIterable(stream);
+    return new StreamResponse(iteratable);
+  }
+}
+
+async function* streamToAsyncIterable(stream: any) {
+  const reader = stream.getReader();
+  try {
+    let { done, value } = await reader.read();
+    while (!done) {
+      yield value;
+      ({ done, value } = await reader.read());
+    }
+    reader.releaseLock();
+  } catch (err) {
+    throw err;
   }
 }
