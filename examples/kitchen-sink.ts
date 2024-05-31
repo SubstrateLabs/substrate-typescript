@@ -510,8 +510,11 @@ const examples = [
   },
   {
     node: new RunPython({
-      code: `print(f"hello {SB_IN['message']}")`,
-      input: { message: "substrate" },
+      code: "import numpy as np; print(SB_IN['foo']); SB_OUT['result']=np.sum([1,2]).item()",
+      input: {
+        foo: "bar",
+      },
+      pip_install: ["numpy"],
     }),
     envs: [STAGING_V1, PRODUCTION_V1],
   },
