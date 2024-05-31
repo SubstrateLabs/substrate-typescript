@@ -4,12 +4,19 @@
  */
 
 export interface paths {
-  "/RunCode": {
+  "/Experimental": {
     /**
-     * RunCode
-     * @description Evaluate code using a code interpreter.
+     * Experimental
+     * @description Experimental node.
      */
-    post: operations["RunCode"];
+    post: operations["Experimental"];
+  };
+  "/RunPython": {
+    /**
+     * RunPython
+     * @description Run code using a Python interpreter.
+     */
+    post: operations["RunPython"];
   };
   "/GenerateText": {
     /**
@@ -207,27 +214,6 @@ export interface paths {
      */
     post: operations["SegmentUnderPoint"];
   };
-  "/DISISNet": {
-    /**
-     * DISISNet
-     * @description Segment image foreground using [DIS IS-Net](https://github.com/xuebinqin/DIS).
-     */
-    post: operations["DISISNet"];
-  };
-  "/BigLaMa": {
-    /**
-     * BigLaMa
-     * @description Inpaint a mask using [LaMa](https://github.com/advimman/lama).
-     */
-    post: operations["BigLaMa"];
-  };
-  "/RealESRGAN": {
-    /**
-     * RealESRGAN
-     * @description Upscale an image using [RealESRGAN](https://github.com/xinntao/Real-ESRGAN).
-     */
-    post: operations["RealESRGAN"];
-  };
   "/SegmentAnything": {
     /**
      * SegmentAnything
@@ -341,32 +327,49 @@ export interface components {
       type: "api_error" | "invalid_request_error";
       /** @description A message providing more details about the error. */
       message: string;
-      /** @description A unique identifier for the request. */
-      request_id?: string;
     };
-    /** RunCodeIn */
-    RunCodeIn: {
-      /** @description Code to execute. */
-      code: string;
-      /** @description List of command line arguments. */
-      args?: string[];
-      /**
-       * @description Interpreter to use.
-       * @default python
-       * @enum {string}
-       */
-      language?: "python" | "typescript" | "javascript";
-    };
-    /** RunCodeOut */
-    RunCodeOut: {
-      /** @description Contents of `stdout` after executing the code. */
-      output?: string;
-      /** @description `output` as parsed JSON. Print serialized json to `stdout` to receive JSON. */
-      json_output: {
+    /** ExperimentalIn */
+    ExperimentalIn: {
+      /** @description Identifier. */
+      name: string;
+      /** @description Arguments. */
+      args: {
         [key: string]: unknown;
       };
-      /** @description Contents of `stderr` after executing the code. */
-      error?: string;
+      /**
+       * @description Timeout in seconds.
+       * @default 60
+       */
+      timeout?: number;
+    };
+    /** ExperimentalOut */
+    ExperimentalOut: {
+      /** @description Response. */
+      output: {
+        [key: string]: unknown;
+      };
+    };
+    /** RunPythonIn */
+    RunPythonIn: {
+      /** @description Python code to execute. In your code, access values from the `input` parameter using the `SB_IN` variable. Update the `SB_OUT` variable with results you want returned in `output`. */
+      code: string;
+      /** @description Input to your code, accessible using the preloaded `SB_IN` variable. */
+      input?: {
+        [key: string]: unknown;
+      };
+      /** @description Python packages to install. You must import them in your code. */
+      pip_install?: string[];
+    };
+    /** RunPythonOut */
+    RunPythonOut: {
+      /** @description Everything printed to stdout while running your code. */
+      stdout: string;
+      /** @description Contents of the `SB_OUT` variable after running your code. */
+      output: {
+        [key: string]: unknown;
+      };
+      /** @description Contents of stderr if your code did not run successfully. */
+      stderr: string;
     };
     /** GenerateTextIn */
     GenerateTextIn: {
@@ -417,14 +420,16 @@ export interface components {
        * @default Mistral7BInstruct
        * @enum {string}
        */
-      node?: "Mistral7BInstruct" | "Mixtral8x7BInstruct";
+      node?: "Mistral7BInstruct" | "Mixtral8x7BInstruct" | "Llama3Instruct8B";
     };
     /** GenerateJSONOut */
     GenerateJSONOut: {
       /** @description JSON response. */
-      json_object: {
+      json_object?: {
         [key: string]: unknown;
       };
+      /** @description If the model output could not be parsed to JSON, this is the raw text output. */
+      text?: string;
     };
     /** MultiGenerateTextIn */
     MultiGenerateTextIn: {
@@ -474,12 +479,6 @@ export interface components {
       temperature?: number;
       /** @description Maximum number of tokens to generate. */
       max_tokens?: number;
-      /**
-       * @description Selected node.
-       * @default Mistral7BInstruct
-       * @enum {string}
-       */
-      node?: "Mistral7BInstruct";
     };
     /** BatchGenerateTextOut */
     BatchGenerateTextOut: {
@@ -515,20 +514,28 @@ export interface components {
        * @default Mistral7BInstruct
        * @enum {string}
        */
-      node?: "Mistral7BInstruct" | "Mixtral8x7BInstruct";
+      node?: "Mistral7BInstruct" | "Mixtral8x7BInstruct" | "Llama3Instruct8B";
     };
     /** MultiGenerateJSONOut */
     MultiGenerateJSONOut: {
       /** @description Response choices. */
       choices: {
         /** @description JSON response. */
-        json_object: {
+        json_object?: {
           [key: string]: unknown;
         };
+        /** @description If the model output could not be parsed to JSON, this is the raw text output. */
+        text?: string;
       }[];
     };
     /** BatchGenerateJSONIn */
     BatchGenerateJSONIn: {
+      /**
+       * @description Selected node.
+       * @default Mistral7BInstruct
+       * @enum {string}
+       */
+      node?: "Mistral7BInstruct" | "Llama3Instruct8B";
       /** @description Batch input prompts. */
       prompts: string[];
       /** @description JSON schema to guide `json_object` response. */
@@ -543,21 +550,17 @@ export interface components {
       temperature?: number;
       /** @description Maximum number of tokens to generate. */
       max_tokens?: number;
-      /**
-       * @description Selected node.
-       * @default Mistral7BInstruct
-       * @enum {string}
-       */
-      node?: "Mistral7BInstruct";
     };
     /** BatchGenerateJSONOut */
     BatchGenerateJSONOut: {
       /** @description Batch outputs. */
       outputs: {
         /** @description JSON response. */
-        json_object: {
+        json_object?: {
           [key: string]: unknown;
         };
+        /** @description If the model output could not be parsed to JSON, this is the raw text output. */
+        text?: string;
       }[];
     };
     /** Mistral7BInstructIn */
@@ -660,11 +663,19 @@ export interface components {
       temperature?: number;
       /** @description Maximum number of tokens to generate. */
       max_tokens?: number;
+      /** @description JSON schema to guide response. */
+      json_schema?: {
+        [key: string]: unknown;
+      };
     };
     /** Llama3Instruct8BChoice */
     Llama3Instruct8BChoice: {
       /** @description Text response. */
       text?: string;
+      /** @description JSON response, if `json_schema` was provided. */
+      json_object?: {
+        [key: string]: unknown;
+      };
     };
     /** Llama3Instruct8BOut */
     Llama3Instruct8BOut: {
@@ -672,6 +683,10 @@ export interface components {
       choices: {
         /** @description Text response. */
         text?: string;
+        /** @description JSON response, if `json_schema` was provided. */
+        json_object?: {
+          [key: string]: unknown;
+        };
       }[];
     };
     /** Llama3Instruct70BIn */
@@ -715,12 +730,6 @@ export interface components {
        * @default 800
        */
       max_tokens?: number;
-      /**
-       * @description Selected node.
-       * @default Firellava13B
-       * @enum {string}
-       */
-      node?: "Firellava13B";
     };
     /** GenerateTextVisionOut */
     GenerateTextVisionOut: {
@@ -750,12 +759,6 @@ export interface components {
       prompt: string;
       /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
-      /**
-       * @description Selected node.
-       * @default StableDiffusionXL
-       * @enum {string}
-       */
-      node?: "StableDiffusionXL";
     };
     /** GenerateImageOut */
     GenerateImageOut: {
@@ -773,12 +776,6 @@ export interface components {
       num_images: number;
       /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
-      /**
-       * @description Selected node.
-       * @default StableDiffusionXL
-       * @enum {string}
-       */
-      node?: "StableDiffusionXL";
     };
     /** MultiGenerateImageOut */
     MultiGenerateImageOut: {
@@ -883,7 +880,7 @@ export interface components {
       /** @description Text prompt. */
       prompt: string;
       /** @description Image prompt. */
-      image_prompt_uri?: string;
+      image_prompt_uri: string;
       /**
        * @description Number of images to generate.
        * @default 1
@@ -976,12 +973,6 @@ export interface components {
       mask_image_uri?: string;
       /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
-      /**
-       * @description Selected node.
-       * @default StableDiffusionXLInpaint
-       * @enum {string}
-       */
-      node?: "StableDiffusionXLInpaint";
     };
     /** GenerativeEditImageOut */
     GenerativeEditImageOut: {
@@ -1003,12 +994,6 @@ export interface components {
       num_images: number;
       /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
-      /**
-       * @description Selected node.
-       * @default StableDiffusionXLInpaint
-       * @enum {string}
-       */
-      node?: "StableDiffusionXLInpaint";
     };
     /** MultiGenerativeEditImageOut */
     MultiGenerativeEditImageOut: {
@@ -1097,12 +1082,6 @@ export interface components {
       mask_image_uri: string;
       /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
-      /**
-       * @description Selected node.
-       * @default BigLaMa
-       * @enum {string}
-       */
-      node?: "BigLaMa";
     };
     /** FillMaskOut */
     FillMaskOut: {
@@ -1136,12 +1115,6 @@ export interface components {
       background_color?: string;
       /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
-      /**
-       * @description Selected node.
-       * @default DISISNet
-       * @enum {string}
-       */
-      node?: "DISISNet";
     };
     /** RemoveBackgroundOut */
     RemoveBackgroundOut: {
@@ -1166,12 +1139,6 @@ export interface components {
       image_uri: string;
       /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
-      /**
-       * @description Selected node.
-       * @default RealESRGAN
-       * @enum {string}
-       */
-      node?: "RealESRGAN";
     };
     /** UpscaleImageOut */
     UpscaleImageOut: {
@@ -1203,12 +1170,6 @@ export interface components {
       };
       /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
-      /**
-       * @description Selected node.
-       * @default SegmentAnything
-       * @enum {string}
-       */
-      node?: "SegmentAnything";
     };
     /** SegmentUnderPointOut */
     SegmentUnderPointOut: {
@@ -1405,12 +1366,6 @@ export interface components {
       text: string;
       /** @description Use "hosted" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the audio data will be returned as a base64-encoded string. */
       store?: string;
-      /**
-       * @description Selected node.
-       * @default XTTSV2
-       * @enum {string}
-       */
-      node?: "XTTSV2";
     };
     /** GenerateSpeechOut */
     GenerateSpeechOut: {
@@ -1453,7 +1408,7 @@ export interface components {
       text: string;
       /** @description Vector store name. */
       collection_name?: string;
-      /** @description Metadata that can be used to query the vector store. Ignored if `store` is unset. */
+      /** @description Metadata that can be used to query the vector store. Ignored if `collection_name` is unset. */
       metadata?: {
         [key: string]: unknown;
       };
@@ -1486,11 +1441,11 @@ export interface components {
     EmbedTextItem: {
       /** @description Text to embed. */
       text: string;
-      /** @description Metadata that can be used to query the vector store. Ignored if `store` is unset. */
+      /** @description Metadata that can be used to query the vector store. Ignored if `collection_name` is unset. */
       metadata?: {
         [key: string]: unknown;
       };
-      /** @description Vector store document ID. Ignored if `store` is unset. */
+      /** @description Vector store document ID. Ignored if `collection_name` is unset. */
       doc_id?: string;
     };
     /** MultiEmbedTextIn */
@@ -1499,11 +1454,11 @@ export interface components {
       items: {
         /** @description Text to embed. */
         text: string;
-        /** @description Metadata that can be used to query the vector store. Ignored if `store` is unset. */
+        /** @description Metadata that can be used to query the vector store. Ignored if `collection_name` is unset. */
         metadata?: {
           [key: string]: unknown;
         };
-        /** @description Vector store document ID. Ignored if `store` is unset. */
+        /** @description Vector store document ID. Ignored if `collection_name` is unset. */
         doc_id?: string;
       }[];
       /** @description Vector store name. */
@@ -1537,11 +1492,11 @@ export interface components {
       items: {
         /** @description Text to embed. */
         text: string;
-        /** @description Metadata that can be used to query the vector store. Ignored if `store` is unset. */
+        /** @description Metadata that can be used to query the vector store. Ignored if `collection_name` is unset. */
         metadata?: {
           [key: string]: unknown;
         };
-        /** @description Vector store document ID. Ignored if `store` is unset. */
+        /** @description Vector store document ID. Ignored if `collection_name` is unset. */
         doc_id?: string;
       }[];
       /** @description Vector store name. */
@@ -1569,7 +1524,7 @@ export interface components {
       image_uri: string;
       /** @description Vector store name. */
       collection_name?: string;
-      /** @description Vector store document ID. Ignored if `store` is unset. */
+      /** @description Vector store document ID. Ignored if `collection_name` is unset. */
       doc_id?: string;
       /**
        * @description Selected embedding model.
@@ -1596,7 +1551,7 @@ export interface components {
     EmbedImageItem: {
       /** @description Image to embed. */
       image_uri: string;
-      /** @description Vector store document ID. Ignored if `store` is unset. */
+      /** @description Vector store document ID. Ignored if `collection_name` is unset. */
       doc_id?: string;
     };
     /** EmbedTextOrImageItem */
@@ -1605,11 +1560,11 @@ export interface components {
       image_uri?: string;
       /** @description Text to embed. */
       text?: string;
-      /** @description Metadata that can be used to query the vector store. Ignored if `store` is unset. */
+      /** @description Metadata that can be used to query the vector store. Ignored if `collection_name` is unset. */
       metadata?: {
         [key: string]: unknown;
       };
-      /** @description Vector store document ID. Ignored if `store` is unset. */
+      /** @description Vector store document ID. Ignored if `collection_name` is unset. */
       doc_id?: string;
     };
     /** MultiEmbedImageIn */
@@ -1618,7 +1573,7 @@ export interface components {
       items: {
         /** @description Image to embed. */
         image_uri: string;
-        /** @description Vector store document ID. Ignored if `store` is unset. */
+        /** @description Vector store document ID. Ignored if `collection_name` is unset. */
         doc_id?: string;
       }[];
       /** @description Vector store name. */
@@ -1652,11 +1607,11 @@ export interface components {
         image_uri?: string;
         /** @description Text to embed. */
         text?: string;
-        /** @description Metadata that can be used to query the vector store. Ignored if `store` is unset. */
+        /** @description Metadata that can be used to query the vector store. Ignored if `collection_name` is unset. */
         metadata?: {
           [key: string]: unknown;
         };
-        /** @description Vector store document ID. Ignored if `store` is unset. */
+        /** @description Vector store document ID. Ignored if `collection_name` is unset. */
         doc_id?: string;
       }[];
       /** @description Vector store name. */
@@ -1978,32 +1933,32 @@ export type external = Record<string, never>;
 
 export interface operations {
   /**
-   * RunCode
-   * @description Evaluate code using a code interpreter.
+   * Experimental
+   * @description Experimental node.
    */
-  RunCode: {
+  Experimental: {
     requestBody?: {
       content: {
         /**
          * @example {
-         *   "code": "import json\nimport sys\nprint(json.dumps({'foo':sys.argv[1]}))",
-         *   "args": [
-         *     "bar"
-         *   ],
-         *   "language": "python"
+         *   "name": "some_name",
+         *   "args": {
+         *     "foo": "bar"
+         *   }
          * }
          */
         "application/json": {
-          /** @description Code to execute. */
-          code: string;
-          /** @description List of command line arguments. */
-          args?: string[];
+          /** @description Identifier. */
+          name: string;
+          /** @description Arguments. */
+          args: {
+            [key: string]: unknown;
+          };
           /**
-           * @description Interpreter to use.
-           * @default python
-           * @enum {string}
+           * @description Timeout in seconds.
+           * @default 60
            */
-          language?: "python" | "typescript" | "javascript";
+          timeout?: number;
         };
       };
     };
@@ -2012,14 +1967,58 @@ export interface operations {
       200: {
         content: {
           "application/json": {
-            /** @description Contents of `stdout` after executing the code. */
-            output?: string;
-            /** @description `output` as parsed JSON. Print serialized json to `stdout` to receive JSON. */
-            json_output: {
+            /** @description Response. */
+            output: {
               [key: string]: unknown;
             };
-            /** @description Contents of `stderr` after executing the code. */
-            error?: string;
+          };
+        };
+      };
+    };
+  };
+  /**
+   * RunPython
+   * @description Run code using a Python interpreter.
+   */
+  RunPython: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "code": "import numpy as np; print(SB_IN['foo']); SB_OUT['result']=np.sum([1,2]).item()",
+         *   "input": {
+         *     "foo": "bar"
+         *   },
+         *   "pip_install": [
+         *     "numpy"
+         *   ]
+         * }
+         */
+        "application/json": {
+          /** @description Python code to execute. In your code, access values from the `input` parameter using the `SB_IN` variable. Update the `SB_OUT` variable with results you want returned in `output`. */
+          code: string;
+          /** @description Input to your code, accessible using the preloaded `SB_IN` variable. */
+          input?: {
+            [key: string]: unknown;
+          };
+          /** @description Python packages to install. You must import them in your code. */
+          pip_install?: string[];
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": {
+            /** @description Everything printed to stdout while running your code. */
+            stdout: string;
+            /** @description Contents of the `SB_OUT` variable after running your code. */
+            output: {
+              [key: string]: unknown;
+            };
+            /** @description Contents of stderr if your code did not run successfully. */
+            stderr: string;
           };
         };
       };
@@ -2160,12 +2159,6 @@ export interface operations {
           temperature?: number;
           /** @description Maximum number of tokens to generate. */
           max_tokens?: number;
-          /**
-           * @description Selected node.
-           * @default Mistral7BInstruct
-           * @enum {string}
-           */
-          node?: "Mistral7BInstruct";
         };
       };
     };
@@ -2214,6 +2207,12 @@ export interface operations {
          * }
          */
         "application/json": {
+          /**
+           * @description Selected node.
+           * @default Mistral7BInstruct
+           * @enum {string}
+           */
+          node?: "Mistral7BInstruct" | "Llama3Instruct8B";
           /** @description Batch input prompts. */
           prompts: string[];
           /** @description JSON schema to guide `json_object` response. */
@@ -2228,12 +2227,6 @@ export interface operations {
           temperature?: number;
           /** @description Maximum number of tokens to generate. */
           max_tokens?: number;
-          /**
-           * @description Selected node.
-           * @default Mistral7BInstruct
-           * @enum {string}
-           */
-          node?: "Mistral7BInstruct";
         };
       };
     };
@@ -2245,9 +2238,11 @@ export interface operations {
             /** @description Batch outputs. */
             outputs: {
               /** @description JSON response. */
-              json_object: {
+              json_object?: {
                 [key: string]: unknown;
               };
+              /** @description If the model output could not be parsed to JSON, this is the raw text output. */
+              text?: string;
             }[];
           };
         };
@@ -2301,7 +2296,10 @@ export interface operations {
            * @default Mistral7BInstruct
            * @enum {string}
            */
-          node?: "Mistral7BInstruct" | "Mixtral8x7BInstruct";
+          node?:
+            | "Mistral7BInstruct"
+            | "Mixtral8x7BInstruct"
+            | "Llama3Instruct8B";
         };
       };
     };
@@ -2311,9 +2309,11 @@ export interface operations {
         content: {
           "application/json": {
             /** @description JSON response. */
-            json_object: {
+            json_object?: {
               [key: string]: unknown;
             };
+            /** @description If the model output could not be parsed to JSON, this is the raw text output. */
+            text?: string;
           };
         };
       };
@@ -2372,7 +2372,10 @@ export interface operations {
            * @default Mistral7BInstruct
            * @enum {string}
            */
-          node?: "Mistral7BInstruct" | "Mixtral8x7BInstruct";
+          node?:
+            | "Mistral7BInstruct"
+            | "Mixtral8x7BInstruct"
+            | "Llama3Instruct8B";
         };
       };
     };
@@ -2384,9 +2387,11 @@ export interface operations {
             /** @description Response choices. */
             choices: {
               /** @description JSON response. */
-              json_object: {
+              json_object?: {
                 [key: string]: unknown;
               };
+              /** @description If the model output could not be parsed to JSON, this is the raw text output. */
+              text?: string;
             }[];
           };
         };
@@ -2419,12 +2424,6 @@ export interface operations {
            * @default 800
            */
           max_tokens?: number;
-          /**
-           * @description Selected node.
-           * @default Firellava13B
-           * @enum {string}
-           */
-          node?: "Firellava13B";
         };
       };
     };
@@ -2582,6 +2581,10 @@ export interface operations {
           temperature?: number;
           /** @description Maximum number of tokens to generate. */
           max_tokens?: number;
+          /** @description JSON schema to guide response. */
+          json_schema?: {
+            [key: string]: unknown;
+          };
         };
       };
     };
@@ -2594,6 +2597,10 @@ export interface operations {
             choices: {
               /** @description Text response. */
               text?: string;
+              /** @description JSON response, if `json_schema` was provided. */
+              json_object?: {
+                [key: string]: unknown;
+              };
             }[];
           };
         };
@@ -2707,12 +2714,6 @@ export interface operations {
           prompt: string;
           /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
-          /**
-           * @description Selected node.
-           * @default StableDiffusionXL
-           * @enum {string}
-           */
-          node?: "StableDiffusionXL";
         };
       };
     };
@@ -2738,8 +2739,8 @@ export interface operations {
         /**
          * @example {
          *   "prompt": "hokusai futuristic supercell spiral cloud with glowing core over turbulent ocean",
-         *   "store": "hosted",
-         *   "num_images": 2
+         *   "num_images": 2,
+         *   "store": "hosted"
          * }
          */
         "application/json": {
@@ -2752,12 +2753,6 @@ export interface operations {
           num_images: number;
           /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
-          /**
-           * @description Selected node.
-           * @default StableDiffusionXL
-           * @enum {string}
-           */
-          node?: "StableDiffusionXL";
         };
       };
     };
@@ -2800,12 +2795,6 @@ export interface operations {
           mask_image_uri?: string;
           /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
-          /**
-           * @description Selected node.
-           * @default StableDiffusionXLInpaint
-           * @enum {string}
-           */
-          node?: "StableDiffusionXLInpaint";
         };
       };
     };
@@ -2851,12 +2840,6 @@ export interface operations {
           num_images: number;
           /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
-          /**
-           * @description Selected node.
-           * @default StableDiffusionXLInpaint
-           * @enum {string}
-           */
-          node?: "StableDiffusionXLInpaint";
         };
       };
     };
@@ -2961,12 +2944,12 @@ export interface operations {
          * @example {
          *   "prompt": "hokusai futuristic supercell spiral cloud with glowing core over turbulent ocean",
          *   "negative_prompt": "night, moon",
-         *   "store": "hosted",
          *   "num_images": 2,
          *   "seeds": [
          *     3306990332671669000,
          *     13641924104177017000
-         *   ]
+         *   ],
+         *   "store": "hosted"
          * }
          */
         "application/json": {
@@ -3182,7 +3165,7 @@ export interface operations {
           /** @description Text prompt. */
           prompt: string;
           /** @description Image prompt. */
-          image_prompt_uri?: string;
+          image_prompt_uri: string;
           /**
            * @description Number of images to generate.
            * @default 1
@@ -3354,12 +3337,6 @@ export interface operations {
           text: string;
           /** @description Use "hosted" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the audio data will be returned as a base64-encoded string. */
           store?: string;
-          /**
-           * @description Selected node.
-           * @default XTTSV2
-           * @enum {string}
-           */
-          node?: "XTTSV2";
         };
       };
     };
@@ -3425,10 +3402,8 @@ export interface operations {
       content: {
         /**
          * @example {
-         *   "image_uri": "https://guides.substrate.run/hokusai.jpeg",
-         *   "store": "hosted",
-         *   "background_color": "#E16E77",
-         *   "return_mask": false
+         *   "image_uri": "https://media.substrate.run/apple-forest.jpeg",
+         *   "store": "hosted"
          * }
          */
         "application/json": {
@@ -3443,12 +3418,6 @@ export interface operations {
           background_color?: string;
           /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
-          /**
-           * @description Selected node.
-           * @default DISISNet
-           * @enum {string}
-           */
-          node?: "DISISNet";
         };
       };
     };
@@ -3473,8 +3442,8 @@ export interface operations {
       content: {
         /**
          * @example {
-         *   "image_uri": "https://media.substrate.run/docs-seurat.jpg",
-         *   "mask_image_uri": "https://media.substrate.run/spiral-logo.jpeg",
+         *   "image_uri": "https://media.substrate.run/apple-forest.jpeg",
+         *   "mask_image_uri": "https://media.substrate.run/apple-forest-mask.jpeg",
          *   "store": "hosted"
          * }
          */
@@ -3485,12 +3454,6 @@ export interface operations {
           mask_image_uri: string;
           /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
-          /**
-           * @description Selected node.
-           * @default BigLaMa
-           * @enum {string}
-           */
-          node?: "BigLaMa";
         };
       };
     };
@@ -3524,12 +3487,6 @@ export interface operations {
           image_uri: string;
           /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
-          /**
-           * @description Selected node.
-           * @default RealESRGAN
-           * @enum {string}
-           */
-          node?: "RealESRGAN";
         };
       };
     };
@@ -3574,12 +3531,6 @@ export interface operations {
           };
           /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
-          /**
-           * @description Selected node.
-           * @default SegmentAnything
-           * @enum {string}
-           */
-          node?: "SegmentAnything";
         };
       };
     };
@@ -3590,108 +3541,6 @@ export interface operations {
           "application/json": {
             /** @description Detected segments in 'mask image' format. Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
             mask_image_uri: string;
-          };
-        };
-      };
-    };
-  };
-  /**
-   * DISISNet
-   * @description Segment image foreground using [DIS IS-Net](https://github.com/xuebinqin/DIS).
-   */
-  DISISNet: {
-    requestBody?: {
-      content: {
-        /**
-         * @example {
-         *   "image_uri": "https://guides.substrate.run/hokusai.jpeg",
-         *   "store": "hosted"
-         * }
-         */
-        "application/json": {
-          /** @description Input image. */
-          image_uri: string;
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
-          store?: string;
-        };
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": {
-            /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-            image_uri: string;
-          };
-        };
-      };
-    };
-  };
-  /**
-   * BigLaMa
-   * @description Inpaint a mask using [LaMa](https://github.com/advimman/lama).
-   */
-  BigLaMa: {
-    requestBody?: {
-      content: {
-        /**
-         * @example {
-         *   "image_uri": "https://media.substrate.run/docs-seurat.jpg",
-         *   "mask_image_uri": "https://media.substrate.run/spiral-logo.jpeg",
-         *   "store": "hosted"
-         * }
-         */
-        "application/json": {
-          /** @description Input image. */
-          image_uri: string;
-          /** @description Mask image that controls which pixels are inpainted. */
-          mask_image_uri: string;
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
-          store?: string;
-        };
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": {
-            /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-            image_uri: string;
-          };
-        };
-      };
-    };
-  };
-  /**
-   * RealESRGAN
-   * @description Upscale an image using [RealESRGAN](https://github.com/xinntao/Real-ESRGAN).
-   */
-  RealESRGAN: {
-    requestBody?: {
-      content: {
-        /**
-         * @example {
-         *   "image_uri": "https://media.substrate.run/docs-seurat.jpg",
-         *   "store": "hosted"
-         * }
-         */
-        "application/json": {
-          /** @description Input image. */
-          image_uri: string;
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
-          store?: string;
-        };
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": {
-            /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-            image_uri: string;
           };
         };
       };
@@ -3791,7 +3640,7 @@ export interface operations {
           text: string;
           /** @description Vector store name. */
           collection_name?: string;
-          /** @description Metadata that can be used to query the vector store. Ignored if `store` is unset. */
+          /** @description Metadata that can be used to query the vector store. Ignored if `collection_name` is unset. */
           metadata?: {
             [key: string]: unknown;
           };
@@ -3864,11 +3713,11 @@ export interface operations {
           items: {
             /** @description Text to embed. */
             text: string;
-            /** @description Metadata that can be used to query the vector store. Ignored if `store` is unset. */
+            /** @description Metadata that can be used to query the vector store. Ignored if `collection_name` is unset. */
             metadata?: {
               [key: string]: unknown;
             };
-            /** @description Vector store document ID. Ignored if `store` is unset. */
+            /** @description Vector store document ID. Ignored if `collection_name` is unset. */
             doc_id?: string;
           }[];
           /** @description Vector store name. */
@@ -3923,7 +3772,7 @@ export interface operations {
           image_uri: string;
           /** @description Vector store name. */
           collection_name?: string;
-          /** @description Vector store document ID. Ignored if `store` is unset. */
+          /** @description Vector store document ID. Ignored if `collection_name` is unset. */
           doc_id?: string;
           /**
            * @description Selected embedding model.
@@ -3980,7 +3829,7 @@ export interface operations {
           items: {
             /** @description Image to embed. */
             image_uri: string;
-            /** @description Vector store document ID. Ignored if `store` is unset. */
+            /** @description Vector store document ID. Ignored if `collection_name` is unset. */
             doc_id?: string;
           }[];
           /** @description Vector store name. */
@@ -4049,11 +3898,11 @@ export interface operations {
           items: {
             /** @description Text to embed. */
             text: string;
-            /** @description Metadata that can be used to query the vector store. Ignored if `store` is unset. */
+            /** @description Metadata that can be used to query the vector store. Ignored if `collection_name` is unset. */
             metadata?: {
               [key: string]: unknown;
             };
-            /** @description Vector store document ID. Ignored if `store` is unset. */
+            /** @description Vector store document ID. Ignored if `collection_name` is unset. */
             doc_id?: string;
           }[];
           /** @description Vector store name. */
@@ -4111,11 +3960,11 @@ export interface operations {
             image_uri?: string;
             /** @description Text to embed. */
             text?: string;
-            /** @description Metadata that can be used to query the vector store. Ignored if `store` is unset. */
+            /** @description Metadata that can be used to query the vector store. Ignored if `collection_name` is unset. */
             metadata?: {
               [key: string]: unknown;
             };
-            /** @description Vector store document ID. Ignored if `store` is unset. */
+            /** @description Vector store document ID. Ignored if `collection_name` is unset. */
             doc_id?: string;
           }[];
           /** @description Vector store name. */
