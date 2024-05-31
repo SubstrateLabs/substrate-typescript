@@ -2,11 +2,11 @@ import { SubstrateError, RequestTimeoutError } from "substrate/Error";
 import { VERSION } from "substrate/version";
 import OpenAPIjson from "substrate/openapi.json";
 import { SubstrateResponse } from "substrate/SubstrateResponse";
+import { SubstrateStreamingResponse } from "substrate/SubstrateStreamingResponse";
 import { Node } from "substrate/Node";
 import { getPlatformProperties } from "substrate/Platform";
 import { deflate } from "pako";
 import { randomString } from "substrate/idGenerator";
-import { EventSourceParserStream } from "eventsource-parser/stream";
 
 type Configuration = {
   /**
@@ -89,7 +89,7 @@ export class Substrate {
    */
   async stream(...nodes: Node[]): Promise<any> {
     const serialized = Substrate.serialize(...nodes);
-    return this.streamSerialized(serialized, nodes);
+    return this.streamSerialized(serialized);
   }
 
   /**
@@ -152,7 +152,6 @@ export class Substrate {
    */
   async streamSerialized(
     serialized: any,
-    nodes: Node[] | null = null,
     endpoint: string = "/compose",
   ): Promise<any> {
     const url = this.baseUrl + endpoint;
@@ -160,11 +159,16 @@ export class Substrate {
     const abortController = new AbortController();
     const { signal } = abortController;
     const timeout = setTimeout(() => abortController.abort(), this.timeout);
+    const requestOptions = this.requestOptions(req, signal);
+
+    // Add Streaming Headers
+    requestOptions.headers.set("Accept", "text/event-stream");
+    requestOptions.headers.set("X-Substrate-Streaming", "1");
 
     try {
-      const request = new Request(url, this.requestOptions(req, signal));
+      const request = new Request(url, requestOptions);
       const res = await fetch(request);
-      return StreamResponse.fromSSEResponse(res);
+      return await SubstrateStreamingResponse.fromRequest(request, res);
     } catch (err) {
       console.log(err);
     } finally {
@@ -245,69 +249,5 @@ export class Substrate {
     }
 
     return headers;
-  }
-}
-
-class StreamResponse {
-  iterator: any;
-  constructor(iterator: any) {
-    this.iterator = iterator;
-  }
-
-  [Symbol.asyncIterator]() {
-    return this.iterator;
-  }
-
-  // Since the iterable is stateful you can't iterate over it again,
-  // but we can split it.
-  tee() {
-    const left: any[] = [];
-    const right: any[] = [];
-    const iterator = this.iterator;
-
-    const teeIterator = (queue: any) => {
-      return {
-        next: () => {
-          if (queue.length === 0) {
-            const result = iterator.next();
-            left.push(result);
-            right.push(result);
-          }
-          return queue.shift();
-        },
-      };
-    };
-
-    return [
-      new StreamResponse(teeIterator(left)),
-      new StreamResponse(teeIterator(right)),
-    ];
-  }
-
-  static fromSSEResponse(response: any) {
-    if (!response.body) throw "need a body here";
-
-    // const decoder = new TextDecoder("utf-8");
-
-    const stream = response.body
-      .pipeThrough(new TextDecoderStream())
-      .pipeThrough(new EventSourceParserStream());
-
-    const iteratable = streamToAsyncIterable(stream);
-    return new StreamResponse(iteratable);
-  }
-}
-
-async function* streamToAsyncIterable(stream: any) {
-  const reader = stream.getReader();
-  try {
-    let { done, value } = await reader.read();
-    while (!done) {
-      yield value;
-      ({ done, value } = await reader.read());
-    }
-    reader.releaseLock();
-  } catch (err) {
-    throw err;
   }
 }
