@@ -1,4 +1,4 @@
-# ꩜ Substrate TypeScript SDK
+# Substrate TypeScript SDK
 
 [![NPM version](https://img.shields.io/npm/v/substrate.svg)](https://npmjs.org/package/substrate)
 
