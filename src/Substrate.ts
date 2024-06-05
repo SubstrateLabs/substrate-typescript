@@ -87,7 +87,7 @@ export class Substrate {
   /**
    *  Stream the given nodes.
    */
-  async stream(...nodes: Node[]): Promise<any> {
+  async stream(...nodes: Node[]): Promise<SubstrateStreamingResponse> {
     const serialized = Substrate.serialize(...nodes);
     return this.streamSerialized(serialized);
   }

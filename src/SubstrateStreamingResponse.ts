@@ -1,7 +1,7 @@
 import { createParser } from "substrate/EventSource";
-import { SSEMessage } from "substrate/Streaming";
-import { Node } from "substrate/Node";
+import { NodeMessage, SSEMessage } from "substrate/Streaming";
 import { SubstrateError } from "substrate/Error";
+import { AnyNode, NodeOutput } from "substrate/Nodes";
 
 export class SubstrateStreamingResponse {
   public apiRequest: Request;
@@ -18,42 +18,41 @@ export class SubstrateStreamingResponse {
     return this.iterator;
   }
 
-  tee() {
-    const left: any[] = [];
-    const right: any[] = [];
+  tee(n: number = 2) {
+    const queues: any[] = [];
+    for (let i = 0; i < n; i++) {
+      queues.push([]);
+    }
+
     const iterator = this.iterator;
 
-    const teeIterator = (queue: any) => {
+    const teeIterator = (queue: SSEMessage[]) => {
       return {
         next: () => {
           if (queue.length === 0) {
             const result = iterator.next();
-            left.push(result);
-            right.push(result);
+            for (let q of queues) q.push(result);
           }
           return queue.shift();
         },
       };
     };
 
-    return [
-      new SubstrateStreamingResponse(
+    return queues.map((q) => {
+      return new SubstrateStreamingResponse(
         this.apiRequest,
         this.apiResponse,
-        teeIterator(left),
-      ),
-      new SubstrateStreamingResponse(
-        this.apiRequest,
-        this.apiResponse,
-        teeIterator(right),
-      ),
-    ];
+        teeIterator(q),
+      );
+    });
   }
 
-  async *filter(node: Node) {
-    for await (const message of this) {
-      if (message?.nodeId === node.id) {
-        yield message;
+  async *get<T extends AnyNode>(
+    node: T,
+  ): AsyncGenerator<NodeMessage<NodeOutput<T>>> {
+    for await (let message of this) {
+      if (message?.node_id === node.id) {
+        yield message as NodeMessage<NodeOutput<T>>;
       }
     }
   }
