@@ -1,7 +1,7 @@
 import { createParser } from "substrate/EventSource";
 import { SSEMessage } from "substrate/Streaming";
 import { Node } from "substrate/Node";
-import { SubstrateError } from "./Error";
+import { SubstrateError } from "substrate/Error";
 
 export class SubstrateStreamingResponse {
   public apiRequest: Request;
@@ -59,7 +59,8 @@ export class SubstrateStreamingResponse {
   }
 
   static async fromRequest(request: Request, response: Response) {
-    if (!response.body) throw "need a body here";
+    if (!response.body)
+      throw new SubstrateError("Response body must be present");
 
     const decoder = new TextDecoder("utf-8");
     const parser = createParser();
