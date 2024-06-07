@@ -16,5 +16,7 @@ export async function POST(request: Request) {
 
   const streamResponse = await substrate.stream(node);
   const body = streamResponse.apiResponse.body;
-  return new Response(body);
+  return new Response(body, {
+    headers: { "Content-Type": "text/event-stream" },
+  });
 }

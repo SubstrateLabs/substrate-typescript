@@ -1,6 +1,8 @@
-# Simple NextJS example
+# Streaming outputs from multiple nodes
 
-This example uses a NextJS app that makes a request to Substrate in a route handler and sends the Server-Sent Events directly back to the client.
+This example uses a NextJS app that makes a request to Substrate in a route handler, processes the events, and streams back new SSE events back to the user.
+
+This example demonstrates recieving the results from different nodes in the a graph run as they complete.
 
 On the client we can use a helper to decode these messsages into JavaScript objects that can be used to render out the content as it arrives.
 
