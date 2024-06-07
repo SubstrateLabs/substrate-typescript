@@ -3,13 +3,14 @@ import { NodeMessage, SSEMessage } from "substrate/Streaming";
 import { SubstrateError } from "substrate/Error";
 import { AnyNode, NodeOutput } from "substrate/Nodes";
 
-export class SubstrateStreamingResponse {
-  public apiRequest: Request;
-  public apiResponse: Response;
-  protected iterator: any;
+/**
+ * `StreamingResponse` is an async iterator that is used to interact with a stream of Server-Sent Events
+ */
+export class StreamingResponse {
+  apiResponse: Response;
+  iterator: any;
 
-  constructor(request: Request, response: Response, iterator: any) {
-    this.apiRequest = request;
+  constructor(response: Response, iterator: any) {
     this.apiResponse = response;
     this.iterator = iterator;
   }
@@ -19,47 +20,15 @@ export class SubstrateStreamingResponse {
   }
 
   tee(n: number = 2) {
-    const queues: any[] = [];
-    for (let i = 0; i < n; i++) {
-      queues.push([]);
-    }
-
-    const iterator = this.iterator;
-
-    const teeIterator = (queue: SSEMessage[]) => {
-      return {
-        next: () => {
-          if (queue.length === 0) {
-            const result = iterator.next();
-            for (let q of queues) q.push(result);
-          }
-          return queue.shift();
-        },
-      };
-    };
-
-    return queues.map((q) => {
-      return new SubstrateStreamingResponse(
-        this.apiRequest,
-        this.apiResponse,
-        teeIterator(q),
-      );
-    });
+    return tee(n, this.iterator).map(
+      (iterator) => new StreamingResponse(this.apiResponse, iterator),
+    );
   }
 
-  async *get<T extends AnyNode>(
-    node: T,
-  ): AsyncGenerator<NodeMessage<NodeOutput<T>>> {
-    for await (let message of this) {
-      if (message?.node_id === node.id) {
-        yield message as NodeMessage<NodeOutput<T>>;
-      }
-    }
-  }
-
-  static async fromRequest(request: Request, response: Response) {
-    if (!response.body)
+  static async fromReponse(response: Response) {
+    if (!response.body) {
       throw new SubstrateError("Response body must be present");
+    }
 
     const decoder = new TextDecoder("utf-8");
     const parser = createParser();
@@ -83,7 +52,49 @@ export class SubstrateStreamingResponse {
       }
     }
 
-    return new SubstrateStreamingResponse(request, response, iterator());
+    return new StreamingResponse(response, iterator());
+  }
+}
+
+/**
+ * `SubstrateStreamingResponse`
+ */
+export class SubstrateStreamingResponse extends StreamingResponse {
+  public apiRequest: Request;
+
+  constructor(request: Request, response: Response, iterator: any) {
+    super(response, iterator);
+    this.apiRequest = request;
+  }
+
+  async *get<T extends AnyNode>(
+    node: T,
+  ): AsyncGenerator<NodeMessage<NodeOutput<T>>> {
+    for await (let message of this) {
+      if (message?.node_id === node.id) {
+        yield message as NodeMessage<NodeOutput<T>>;
+      }
+    }
+  }
+
+  override tee(n: number = 2) {
+    return tee(n, this.iterator).map(
+      (iterator) =>
+        new SubstrateStreamingResponse(
+          this.apiRequest,
+          this.apiResponse,
+          iterator,
+        ),
+    );
+  }
+
+  static async fromRequestReponse(request: Request, response: Response) {
+    const streamingResponse = await StreamingResponse.fromReponse(response);
+    return new SubstrateStreamingResponse(
+      request,
+      response,
+      streamingResponse.iterator,
+    );
   }
 }
 
@@ -117,4 +128,25 @@ function readableStreamAsyncIterable(stream: any) {
       return this;
     },
   };
+}
+
+function tee(n: number = 2, iterator: any) {
+  const queues: any[] = [];
+  for (let i = 0; i < n; i++) {
+    queues.push([]);
+  }
+
+  const teeIterator = (queue: SSEMessage[]) => {
+    return {
+      next: () => {
+        if (queue.length === 0) {
+          const result = iterator.next();
+          for (let q of queues) q.push(result);
+        }
+        return queue.shift();
+      },
+    };
+  };
+
+  return queues.map((q) => teeIterator(q));
 }

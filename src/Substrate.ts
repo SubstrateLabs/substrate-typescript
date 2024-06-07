@@ -167,8 +167,11 @@ export class Substrate {
 
     try {
       const request = new Request(url, requestOptions);
-      const res = await fetch(request);
-      return await SubstrateStreamingResponse.fromRequest(request, res);
+      const response = await fetch(request);
+      return await SubstrateStreamingResponse.fromRequestReponse(
+        request,
+        response,
+      );
     } catch (err) {
       console.log(err);
     } finally {
