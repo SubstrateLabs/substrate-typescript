@@ -150,10 +150,7 @@ export class Substrate {
   /**
    *  Stream the given nodes, serialized using `Substrate.serialize`.
    */
-  async streamSerialized(
-    serialized: any,
-    endpoint: string = "/compose",
-  ): Promise<any> {
+  async streamSerialized(serialized: any, endpoint: string = "/compose") {
     const url = this.baseUrl + endpoint;
     const req = { dag: serialized };
     const abortController = new AbortController();
@@ -172,8 +169,17 @@ export class Substrate {
         request,
         response,
       );
-    } catch (err) {
-      console.log(err);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        if (err.name === "AbortError") {
+          throw new RequestTimeoutError(
+            `Request timed out after ${this.timeout}ms`,
+          );
+          // TODO: We could propagate timeout errors to nodes too, but I'm
+          // not sure yet what might be easier for the user to manage.
+        }
+      }
+      throw err;
     } finally {
       clearTimeout(timeout);
     }
