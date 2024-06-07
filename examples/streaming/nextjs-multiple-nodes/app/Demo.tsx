@@ -9,18 +9,16 @@ type Vote = {
   commentary: string;
 };
 
-export default function Prompt() {
+export default function Demo() {
   const [tally, setTally] = useState<{ [x: string]: number }>({});
   const [output, setOutput] = useState<Vote[]>([]);
 
   async function submitPrompt(event: any) {
     event.preventDefault();
 
-    const formData = new FormData(event.currentTarget);
-
     const request = new Request("/api/this-or-that", {
       method: "POST",
-      body: formData,
+      body: new FormData(event.currentTarget),
     });
     const response = await fetch(request);
 

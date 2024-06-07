@@ -3,17 +3,15 @@
 import { useState } from "react";
 import { sb } from "substrate";
 
-export default function Prompt() {
+export default function Demo() {
   const [output, setOutput] = useState<string>("");
 
   async function submitPrompt(event: any) {
     event.preventDefault();
 
-    const formData = new FormData(event.currentTarget);
-
     const request = new Request("/api/generate-text", {
       method: "POST",
-      body: formData,
+      body: new FormData(event.currentTarget),
     });
     const response = await fetch(request);
 

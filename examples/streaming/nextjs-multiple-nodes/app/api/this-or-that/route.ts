@@ -39,7 +39,7 @@ function voter(about: string, items: any) {
         .describe("How confident you are in the vote"),
       commentary: z
         .string()
-        .describe("Rationale for why you voted the way you did."),
+        .describe("Rationale for why you voted the way you did"),
     })
     .describe(
       "Your vote on which item you prefer and how strongly you feel about it",
@@ -53,9 +53,10 @@ function voter(about: string, items: any) {
 
       === Your instructions
       Consider the following 2 items and based on your experience please vote for
-      which one you prefer generally. Also include a confidence rating for how 
-      stronly you believe in your position and any additionally commentary you would
-      like to share.
+      which one you prefer. 
+
+      Also include a confidence rating for how strongly you believe in your position 
+      and commentary on why you voted the way you did.
 
       You must vote for something, even if you have very no confidence.
 
@@ -81,18 +82,15 @@ export async function POST(request: Request) {
   ];
 
   const voters = [
-    voter("You are a farmer from the midwest", items),
+    voter("You are a cattle rancher from Houston", items),
     voter("You are a semi-pro tennis player from Chicago", items),
     voter("You are computer programmer based in Los Angeles", items),
     voter("You are cab driver based in New York City", items),
     voter("You are college professor based out of Montreal", items),
+    voter("You are an aspiring cellist that travels often to Vancouver", items),
+    voter("You are nurse stationed outside Toronto", items),
     voter("You are a chef at a fine dining restuarant in Mexico City", items),
-    voter("You are an amatuer cellist that travels often to Vancouver", items),
-    voter(
-      "You are retired journalist that has settled down along the coast of Oaxaca",
-      items,
-    ),
-    voter("You are soldier stationed outside Washington, DC", items),
+    voter("You are retired journalist that settled in Oaxaca", items),
   ];
 
   const streamResponse = await substrate.stream(thisAndThat, ...voters);
