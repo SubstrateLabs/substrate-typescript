@@ -253,7 +253,7 @@ export class FutureString extends Future<string> {
         .flatMap((s: string, i: number) => {
           const expr = exprs[i];
           return expr
-            ? [s, expr instanceof FutureString ? expr : expr.toString()]
+            ? [s, expr instanceof Future ? expr : expr.toString()]
             : [s];
         }),
     );
