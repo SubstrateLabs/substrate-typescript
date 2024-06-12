@@ -179,6 +179,7 @@ export class Substrate {
     headers.append("Content-Type", "application/json");
     headers.append("User-Agent", `APIClient/JS ${VERSION}`);
     headers.append("X-Substrate-Version", this.apiVersion);
+    headers.append("X-Substrate-Backend", "v1");
 
     // Auth
     headers.append("Authorization", `Bearer ${this.apiKey}`);
