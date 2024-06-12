@@ -25,11 +25,6 @@ type Configuration = {
   timeout?: number;
 
   /**
-   * Switches between existing backend and newer backend
-   */
-  backend?: "v0" | "v1";
-
-  /**
    * Add additional headers to each request. These may override headers set by the Substrate client.
    */
   additionalHeaders?: Record<string, string>;
@@ -43,7 +38,6 @@ export class Substrate {
   baseUrl: NonNullable<Configuration["baseUrl"]>;
   apiVersion: NonNullable<Configuration["apiVersion"]>;
   timeout: NonNullable<Configuration["timeout"]>;
-  backend: NonNullable<Configuration["backend"]>;
   additionalHeaders: NonNullable<Configuration["additionalHeaders"]>;
 
   /**
@@ -54,7 +48,6 @@ export class Substrate {
     baseUrl,
     apiVersion,
     timeout,
-    backend,
     additionalHeaders,
   }: Configuration) {
     if (!apiKey) {
@@ -66,7 +59,6 @@ export class Substrate {
     this.baseUrl = baseUrl ?? "https://api.substrate.run";
     this.apiVersion = apiVersion ?? OpenAPIjson["info"]["version"];
     this.timeout = timeout ?? 300_000;
-    this.backend = backend ?? "v1";
     this.additionalHeaders = additionalHeaders ?? {};
   }
 
@@ -187,7 +179,6 @@ export class Substrate {
     headers.append("Content-Type", "application/json");
     headers.append("User-Agent", `APIClient/JS ${VERSION}`);
     headers.append("X-Substrate-Version", this.apiVersion);
-    headers.append("X-Substrate-Backend", this.backend); // Switch between old and new backends
 
     // Auth
     headers.append("Authorization", `Bearer ${this.apiKey}`);

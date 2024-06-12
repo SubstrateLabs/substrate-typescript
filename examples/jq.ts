@@ -8,7 +8,6 @@ async function main() {
   const substrate = new Substrate({
     apiKey: SUBSTRATE_API_KEY,
     baseUrl: "https://api.substrate.run",
-    backend: "v1",
   });
 
   const a = new GenerateJSON({
