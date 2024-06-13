@@ -570,7 +570,6 @@ async function main() {
       const substrate = new Substrate({
         apiKey: SUBSTRATE_API_KEY,
         baseUrl: env.url.value,
-        backend: env.backend.value,
       });
       const tag = `[${env.url.name}:${env.backend.value}]`;
 
