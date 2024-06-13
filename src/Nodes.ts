@@ -2769,10 +2769,6 @@ export class QueryVectorStoreOut extends FutureObject {
   get model() {
     return new FutureString(this._directive.next("model"));
   }
-  /** (Optional) The distance metric used for the query. */
-  get metric() {
-    return new FutureString(this._directive.next("metric"));
-  }
   /** returns the result for `QueryVectorStoreOut` once it's node has been run. */
   protected override async result(): Promise<QueryVectorStoreOut> {
     return super.result() as Promise<QueryVectorStoreOut>;
@@ -5174,7 +5170,7 @@ export class QueryVectorStore extends Node {
   /**
    * Input arguments: `collection_name`, `model`, `query_strings` (optional), `query_image_uris` (optional), `query_vectors` (optional), `query_ids` (optional), `top_k` (optional), `ef_search` (optional), `include_values` (optional), `include_metadata` (optional), `filters` (optional)
    *
-   * Output fields: `results`, `collection_name` (optional), `model` (optional), `metric` (optional)
+   * Output fields: `results`, `collection_name` (optional), `model` (optional)
    *
    * https://www.substrate.run/nodes#QueryVectorStore
    */
@@ -5188,7 +5184,7 @@ export class QueryVectorStore extends Node {
   /**
    * Retrieve this node's output from a response.
    *
-   * Output fields: `results`, `collection_name` (optional), `model` (optional), `metric` (optional)
+   * Output fields: `results`, `collection_name` (optional), `model` (optional)
    *
    * https://www.substrate.run/nodes#QueryVectorStore
    */
@@ -5205,7 +5201,7 @@ export class QueryVectorStore extends Node {
   /**
    * Future reference to this node's output.
    *
-   * Output fields: `results`, `collection_name` (optional), `model` (optional), `metric` (optional)
+   * Output fields: `results`, `collection_name` (optional), `model` (optional)
    *
    * https://www.substrate.run/nodes#QueryVectorStore
    */

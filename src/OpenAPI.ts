@@ -1933,11 +1933,6 @@ export interface components {
        * @enum {string}
        */
       model?: "jina-v2" | "clip";
-      /**
-       * @description The distance metric used for the query.
-       * @enum {string}
-       */
-      metric?: "cosine" | "l2" | "inner";
     };
   };
   responses: never;
@@ -4113,11 +4108,6 @@ export interface operations {
              * @enum {string}
              */
             model?: "jina-v2" | "clip";
-            /**
-             * @description The distance metric used for the query.
-             * @enum {string}
-             */
-            metric?: "cosine" | "l2" | "inner";
           };
         };
       };

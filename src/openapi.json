@@ -2647,11 +2647,6 @@
             "type": "string",
             "description": "Selected embedding model.",
             "enum": ["jina-v2", "clip"]
-          },
-          "metric": {
-            "type": "string",
-            "enum": ["cosine", "l2", "inner"],
-            "description": "The distance metric used for the query."
           }
         },
         "required": ["results"]
@@ -4387,8 +4382,7 @@
                     ]
                   ],
                   "collection_name": "comments",
-                  "model": "jina-v2",
-                  "metric": "inner"
+                  "model": "jina-v2"
                 }
               }
             }
