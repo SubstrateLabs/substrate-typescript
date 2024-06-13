@@ -209,8 +209,8 @@ export abstract class Future<T> {
   }
 
   static jq<T extends keyof FutureTypeMap>(
-    query: string,
     future: JQDirectiveTarget,
+    query: string,
     futureType: keyof FutureTypeMap = "string",
   ): FutureTypeMap[T] {
     const directive = new JQ(query, future);
@@ -253,7 +253,7 @@ export class FutureString extends Future<string> {
         .flatMap((s: string, i: number) => {
           const expr = exprs[i];
           return expr
-            ? [s, expr instanceof FutureString ? expr : expr.toString()]
+            ? [s, expr instanceof Future ? expr : expr.toString()]
             : [s];
         }),
     );

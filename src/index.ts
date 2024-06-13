@@ -1,12 +1,13 @@
 /**
- * ꩜ Substrate TypeScript SDK
+ * 𐃏 Substrate TypeScript SDK
  * @generated file
- * 20240418.20240430
+ * 20240530.20240531
  */
 
 export { SubstrateError } from "substrate/Error";
 export {
-  RunCode,
+  Experimental,
+  RunPython,
   GenerateText,
   MultiGenerateText,
   BatchGenerateText,
@@ -35,9 +36,6 @@ export {
   FillMask,
   UpscaleImage,
   SegmentUnderPoint,
-  DISISNet,
-  BigLaMa,
-  RealESRGAN,
   SegmentAnything,
   EmbedText,
   MultiEmbedText,

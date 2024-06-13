@@ -19,12 +19,12 @@ describe("SubstrateResponse", () => {
     expect(sbResponse.requestId).toBeNull();
   });
 
-  test(".requestId present when present in response", () => {
+  test(".requestId present when present in request", () => {
     // When there is no request-id present in the response headers.
-    const request = new Request("http://127.0.0.1");
-    const response = new Response(null, {
-      headers: { "cf-ray": "REQUEST_ID" },
+    const request = new Request("http://127.0.0.1", {
+      headers: { "x-substrate-request-id": "REQUEST_ID" },
     });
+    const response = new Response();
     const responseJSON = {};
     const sbResponse = new SubstrateResponse(request, response, responseJSON);
 

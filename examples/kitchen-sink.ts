@@ -19,11 +19,8 @@ import {
   StableDiffusionXLIPAdapter,
   StableDiffusionXLControlNet,
   FillMask,
-  BigLaMa,
   UpscaleImage,
-  RealESRGAN,
   RemoveBackground,
-  DISISNet,
   SegmentUnderPoint,
   SegmentAnything,
   TranscribeMedia,
@@ -45,7 +42,7 @@ import {
   Mixtral8x7BInstruct,
   Llama3Instruct8B,
   Llama3Instruct70B,
-  RunCode,
+  RunPython,
 } from "substrate";
 
 const urls = {
@@ -474,29 +471,6 @@ const examples = [
     envs: ALL_ENVS,
   },
   {
-    // FIXME: it looks like this should work for v1, but doesn't yet
-    node: new DISISNet({
-      image_uri: "https://media.substrate.run/docs-seurat.jpg",
-      store: "hosted",
-    }),
-    envs: [STAGING_V0, PRODUCTION_V1],
-  },
-  {
-    node: new BigLaMa({
-      image_uri: "https://media.substrate.run/docs-seurat.jpg",
-      mask_image_uri: "https://media.substrate.run/spiral-logo.jpeg",
-      // store: "hosted", // FIXME: not working yet
-    }),
-    envs: [STAGING_V1, PRODUCTION_V1],
-  },
-  {
-    node: new RealESRGAN({
-      image_uri: "https://media.substrate.run/docs-seurat.jpg",
-      // store: "hosted", // FIXME: not working yet
-    }),
-    envs: [STAGING_V1, PRODUCTION_V1],
-  },
-  {
     node: new SegmentAnything({
       image_uri: "https://media.substrate.run/docs-vg-bedroom.jpg",
       point_prompts: [
@@ -535,10 +509,12 @@ const examples = [
     envs: [STAGING_V1, PRODUCTION_V1],
   },
   {
-    node: new RunCode({
-      language: "python",
-      code: `import sys; print(f"hello {sys.argv[1]}")`,
-      args: ["substrate"],
+    node: new RunPython({
+      code: "import numpy as np; print(SB_IN['foo']); SB_OUT['result']=np.sum([1,2]).item()",
+      input: {
+        foo: "bar",
+      },
+      pip_install: ["numpy"],
     }),
     envs: [STAGING_V1, PRODUCTION_V1],
   },

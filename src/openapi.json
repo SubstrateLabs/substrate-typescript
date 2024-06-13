@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Substrate API",
-    "version": "2024-04-18",
+    "version": "2024-05-30",
     "contact": {
       "email": "support@substrate.run"
     },
@@ -28,57 +28,89 @@
           "message": {
             "type": "string",
             "description": "A message providing more details about the error."
-          },
-          "request_id": {
-            "type": "string",
-            "description": "A unique identifier for the request."
           }
         },
         "required": ["type", "message"]
       },
-      "RunCodeIn": {
-        "title": "RunCodeIn",
+      "ExperimentalIn": {
+        "title": "ExperimentalIn",
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Identifier.",
+            "x-loggable": true
+          },
+          "args": {
+            "type": "object",
+            "description": "Arguments.",
+            "additionalProperties": true,
+            "x-loggable": true
+          },
+          "timeout": {
+            "type": "integer",
+            "description": "Timeout in seconds.",
+            "default": 60,
+            "x-loggable": true
+          }
+        },
+        "required": ["name", "args"]
+      },
+      "ExperimentalOut": {
+        "title": "ExperimentalOut",
+        "type": "object",
+        "properties": {
+          "output": {
+            "type": "object",
+            "description": "Response.",
+            "additionalProperties": true
+          }
+        },
+        "required": ["output"]
+      },
+      "RunPythonIn": {
+        "title": "RunPythonIn",
         "type": "object",
         "properties": {
           "code": {
             "type": "string",
-            "description": "Code to execute."
+            "description": "Python code to execute. In your code, access values from the `input` parameter using the `SB_IN` variable. Update the `SB_OUT` variable with results you want returned in `output`."
           },
-          "args": {
-            "description": "List of command line arguments.",
+          "input": {
+            "type": "object",
+            "description": "Input to your code, accessible using the preloaded `SB_IN` variable.",
+            "additionalProperties": true
+          },
+          "pip_install": {
+            "description": "Python packages to install. You must import them in your code.",
             "type": "array",
             "items": {
               "type": "string"
-            }
-          },
-          "language": {
-            "type": "string",
-            "enum": ["python", "typescript", "javascript"],
-            "description": "Interpreter to use.",
-            "default": "python"
+            },
+            "x-loggable": true
           }
         },
         "required": ["code"]
       },
-      "RunCodeOut": {
-        "title": "RunCodeOut",
+      "RunPythonOut": {
+        "title": "RunPythonOut",
         "type": "object",
         "properties": {
-          "output": {
+          "stdout": {
             "type": "string",
-            "description": "Contents of `stdout` after executing the code."
+            "description": "Everything printed to stdout while running your code."
           },
-          "json_output": {
+          "output": {
             "type": "object",
-            "description": "`output` as parsed JSON. Print serialized json to `stdout` to receive JSON.",
+            "description": "Contents of the `SB_OUT` variable after running your code.",
             "additionalProperties": true
           },
-          "error": {
+          "stderr": {
             "type": "string",
-            "description": "Contents of `stderr` after executing the code."
+            "description": "Contents of stderr if your code did not run successfully."
           }
         },
-        "required": ["json_output"]
+        "required": ["stdout", "output", "stderr"]
       },
       "GenerateTextIn": {
         "title": "GenerateTextIn",
@@ -94,11 +126,13 @@
             "minimum": 0,
             "maximum": 1,
             "default": 0.4,
-            "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic."
+            "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.",
+            "x-loggable": true
           },
           "max_tokens": {
             "type": "integer",
-            "description": "Maximum number of tokens to generate."
+            "description": "Maximum number of tokens to generate.",
+            "x-loggable": true
           },
           "node": {
             "type": "string",
@@ -109,7 +143,8 @@
               "Llama3Instruct70B"
             ],
             "description": "Selected node.",
-            "default": "Mistral7BInstruct"
+            "default": "Mistral7BInstruct",
+            "x-loggable": true
           }
         },
         "required": ["prompt"]
@@ -144,17 +179,24 @@
             "minimum": 0,
             "maximum": 1,
             "default": 0.4,
-            "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic."
+            "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.",
+            "x-loggable": true
           },
           "max_tokens": {
             "type": "integer",
-            "description": "Maximum number of tokens to generate."
+            "description": "Maximum number of tokens to generate.",
+            "x-loggable": true
           },
           "node": {
             "type": "string",
-            "enum": ["Mistral7BInstruct", "Mixtral8x7BInstruct"],
+            "enum": [
+              "Mistral7BInstruct",
+              "Mixtral8x7BInstruct",
+              "Llama3Instruct8B"
+            ],
             "description": "Selected node.",
-            "default": "Mistral7BInstruct"
+            "default": "Mistral7BInstruct",
+            "x-loggable": true
           }
         },
         "required": ["prompt", "json_schema"]
@@ -167,9 +209,13 @@
             "type": "object",
             "description": "JSON response.",
             "additionalProperties": true
+          },
+          "text": {
+            "type": "string",
+            "description": "If the model output could not be parsed to JSON, this is the raw text output."
           }
         },
-        "required": ["json_object"]
+        "required": []
       },
       "MultiGenerateTextIn": {
         "title": "MultiGenerateTextIn",
@@ -184,7 +230,8 @@
             "description": "Number of choices to generate.",
             "minimum": 1,
             "maximum": 8,
-            "default": 1
+            "default": 1,
+            "x-loggable": true
           },
           "temperature": {
             "type": "number",
@@ -192,11 +239,13 @@
             "minimum": 0,
             "maximum": 1,
             "default": 0.4,
-            "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic."
+            "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.",
+            "x-loggable": true
           },
           "max_tokens": {
             "type": "integer",
-            "description": "Maximum number of tokens to generate."
+            "description": "Maximum number of tokens to generate.",
+            "x-loggable": true
           },
           "node": {
             "type": "string",
@@ -243,17 +292,13 @@
             "minimum": 0,
             "maximum": 1,
             "default": 0.4,
-            "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic."
+            "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.",
+            "x-loggable": true
           },
           "max_tokens": {
             "type": "integer",
-            "description": "Maximum number of tokens to generate."
-          },
-          "node": {
-            "type": "string",
-            "enum": ["Mistral7BInstruct"],
-            "description": "Selected node.",
-            "default": "Mistral7BInstruct"
+            "description": "Maximum number of tokens to generate.",
+            "x-loggable": true
           }
         },
         "required": ["prompts"]
@@ -290,7 +335,8 @@
             "description": "Number of choices to generate.",
             "minimum": 1,
             "maximum": 8,
-            "default": 2
+            "default": 2,
+            "x-loggable": true
           },
           "temperature": {
             "type": "number",
@@ -298,17 +344,24 @@
             "minimum": 0,
             "maximum": 1,
             "default": 0.4,
-            "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic."
+            "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.",
+            "x-loggable": true
           },
           "max_tokens": {
             "type": "integer",
-            "description": "Maximum number of tokens to generate."
+            "description": "Maximum number of tokens to generate.",
+            "x-loggable": true
           },
           "node": {
             "type": "string",
-            "enum": ["Mistral7BInstruct", "Mixtral8x7BInstruct"],
+            "enum": [
+              "Mistral7BInstruct",
+              "Mixtral8x7BInstruct",
+              "Llama3Instruct8B"
+            ],
             "description": "Selected node.",
-            "default": "Mistral7BInstruct"
+            "default": "Mistral7BInstruct",
+            "x-loggable": true
           }
         },
         "required": ["prompt", "num_choices", "json_schema"]
@@ -331,6 +384,13 @@
         "title": "BatchGenerateJSONIn",
         "type": "object",
         "properties": {
+          "node": {
+            "type": "string",
+            "enum": ["Mistral7BInstruct", "Llama3Instruct8B"],
+            "description": "Selected node.",
+            "default": "Mistral7BInstruct",
+            "x-loggable": true
+          },
           "prompts": {
             "description": "Batch input prompts.",
             "type": "array",
@@ -349,17 +409,13 @@
             "minimum": 0,
             "maximum": 1,
             "default": 0.4,
-            "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic."
+            "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.",
+            "x-loggable": true
           },
           "max_tokens": {
             "type": "integer",
-            "description": "Maximum number of tokens to generate."
-          },
-          "node": {
-            "type": "string",
-            "enum": ["Mistral7BInstruct"],
-            "description": "Selected node.",
-            "default": "Mistral7BInstruct"
+            "description": "Maximum number of tokens to generate.",
+            "x-loggable": true
           }
         },
         "required": ["prompts", "json_schema"]
@@ -391,7 +447,8 @@
             "description": "Number of choices to generate.",
             "minimum": 1,
             "maximum": 8,
-            "default": 1
+            "default": 1,
+            "x-loggable": true
           },
           "json_schema": {
             "type": "object",
@@ -403,11 +460,13 @@
             "format": "float",
             "minimum": 0,
             "maximum": 1,
-            "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic."
+            "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.",
+            "x-loggable": true
           },
           "max_tokens": {
             "type": "integer",
-            "description": "Maximum number of tokens to generate."
+            "description": "Maximum number of tokens to generate.",
+            "x-loggable": true
           }
         },
         "required": ["prompt"]
@@ -454,7 +513,8 @@
             "description": "Number of choices to generate.",
             "minimum": 1,
             "maximum": 8,
-            "default": 1
+            "default": 1,
+            "x-loggable": true
           },
           "json_schema": {
             "type": "object",
@@ -466,11 +526,13 @@
             "format": "float",
             "minimum": 0,
             "maximum": 1,
-            "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic."
+            "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.",
+            "x-loggable": true
           },
           "max_tokens": {
             "type": "integer",
-            "description": "Maximum number of tokens to generate."
+            "description": "Maximum number of tokens to generate.",
+            "x-loggable": true
           }
         },
         "required": ["prompt"]
@@ -517,18 +579,26 @@
             "description": "Number of choices to generate.",
             "minimum": 1,
             "maximum": 8,
-            "default": 1
+            "default": 1,
+            "x-loggable": true
           },
           "temperature": {
             "type": "number",
             "format": "float",
             "minimum": 0,
             "maximum": 1,
-            "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic."
+            "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.",
+            "x-loggable": true
           },
           "max_tokens": {
             "type": "integer",
-            "description": "Maximum number of tokens to generate."
+            "description": "Maximum number of tokens to generate.",
+            "x-loggable": true
+          },
+          "json_schema": {
+            "type": "object",
+            "description": "JSON schema to guide response.",
+            "additionalProperties": true
           }
         },
         "required": ["prompt"]
@@ -540,6 +610,11 @@
           "text": {
             "type": "string",
             "description": "Text response."
+          },
+          "json_object": {
+            "type": "object",
+            "description": "JSON response, if `json_schema` was provided.",
+            "additionalProperties": true
           }
         }
       },
@@ -570,18 +645,21 @@
             "description": "Number of choices to generate.",
             "minimum": 1,
             "maximum": 8,
-            "default": 1
+            "default": 1,
+            "x-loggable": true
           },
           "temperature": {
             "type": "number",
             "format": "float",
             "minimum": 0,
             "maximum": 1,
-            "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic."
+            "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.",
+            "x-loggable": true
           },
           "max_tokens": {
             "type": "integer",
-            "description": "Maximum number of tokens to generate."
+            "description": "Maximum number of tokens to generate.",
+            "x-loggable": true
           }
         },
         "required": ["prompt"]
@@ -628,13 +706,8 @@
           "max_tokens": {
             "type": "integer",
             "description": "Maximum number of tokens to generate.",
-            "default": 800
-          },
-          "node": {
-            "type": "string",
-            "enum": ["Firellava13B"],
-            "description": "Selected node.",
-            "default": "Firellava13B"
+            "default": 800,
+            "x-loggable": true
           }
         },
         "required": ["prompt", "image_uris"]
@@ -668,7 +741,8 @@
           "max_tokens": {
             "type": "integer",
             "description": "Maximum number of tokens to generate.",
-            "default": 800
+            "default": 800,
+            "x-loggable": true
           }
         },
         "required": ["prompt", "image_uris"]
@@ -695,12 +769,6 @@
           "store": {
             "type": "string",
             "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string."
-          },
-          "node": {
-            "type": "string",
-            "enum": ["StableDiffusionXL"],
-            "description": "Selected node.",
-            "default": "StableDiffusionXL"
           }
         },
         "required": ["prompt"]
@@ -729,17 +797,12 @@
             "description": "Number of images to generate.",
             "minimum": 1,
             "default": 2,
-            "maximum": 8
+            "maximum": 8,
+            "x-loggable": true
           },
           "store": {
             "type": "string",
             "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string."
-          },
-          "node": {
-            "type": "string",
-            "enum": ["StableDiffusionXL"],
-            "description": "Selected node.",
-            "default": "StableDiffusionXL"
           }
         },
         "required": ["prompt", "num_images"]
@@ -775,14 +838,16 @@
             "description": "Number of diffusion steps.",
             "default": 30,
             "minimum": 0,
-            "maximum": 150
+            "maximum": 150,
+            "x-loggable": true
           },
           "num_images": {
             "type": "integer",
             "description": "Number of images to generate.",
             "minimum": 1,
             "default": 1,
-            "maximum": 8
+            "maximum": 8,
+            "x-loggable": true
           },
           "store": {
             "type": "string",
@@ -793,21 +858,24 @@
             "description": "Height of output image, in pixels.",
             "minimum": 256,
             "maximum": 1536,
-            "default": 1024
+            "default": 1024,
+            "x-loggable": true
           },
           "width": {
             "type": "integer",
             "description": "Width of output image, in pixels.",
             "minimum": 256,
             "maximum": 1536,
-            "default": 1024
+            "default": 1024,
+            "x-loggable": true
           },
           "seeds": {
             "type": "array",
             "items": {
               "type": "integer"
             },
-            "description": "Seeds for deterministic generation. Default is a random seed."
+            "description": "Seeds for deterministic generation. Default is a random seed.",
+            "x-loggable": true
           },
           "guidance_scale": {
             "type": "number",
@@ -815,7 +883,8 @@
             "description": "Higher values adhere to the text prompt more strongly, typically at the expense of image quality.",
             "minimum": 0,
             "default": 7,
-            "maximum": 30
+            "maximum": 30,
+            "x-loggable": true
           }
         },
         "required": ["prompt", "num_images"]
@@ -866,7 +935,8 @@
             "description": "Number of images to generate.",
             "default": 1,
             "minimum": 1,
-            "maximum": 8
+            "maximum": 8,
+            "x-loggable": true
           },
           "store": {
             "type": "string",
@@ -877,21 +947,24 @@
             "description": "Height of output image, in pixels.",
             "minimum": 256,
             "maximum": 1536,
-            "default": 1024
+            "default": 1024,
+            "x-loggable": true
           },
           "width": {
             "type": "integer",
             "description": "Width of output image, in pixels.",
             "minimum": 256,
             "maximum": 1536,
-            "default": 1024
+            "default": 1024,
+            "x-loggable": true
           },
           "seeds": {
             "type": "array",
             "items": {
               "type": "integer"
             },
-            "description": "Seeds for deterministic generation. Default is a random seed."
+            "description": "Seeds for deterministic generation. Default is a random seed.",
+            "x-loggable": true
           }
         },
         "required": ["prompt"]
@@ -927,7 +1000,8 @@
             "description": "Number of images to generate.",
             "default": 1,
             "minimum": 1,
-            "maximum": 8
+            "maximum": 8,
+            "x-loggable": true
           },
           "ip_adapter_scale": {
             "type": "number",
@@ -935,7 +1009,8 @@
             "description": "Controls the influence of the image prompt on the generated output.",
             "minimum": 0,
             "maximum": 1,
-            "default": 0.5
+            "default": 0.5,
+            "x-loggable": true
           },
           "negative_prompt": {
             "type": "string",
@@ -950,24 +1025,27 @@
             "description": "Width of output image, in pixels.",
             "minimum": 640,
             "maximum": 1536,
-            "default": 1024
+            "default": 1024,
+            "x-loggable": true
           },
           "height": {
             "type": "integer",
             "description": "Height of output image, in pixels.",
             "minimum": 640,
             "maximum": 1536,
-            "default": 1024
+            "default": 1024,
+            "x-loggable": true
           },
           "seeds": {
             "description": "Random noise seeds. Default is random seeds for each generation.",
             "type": "array",
             "items": {
               "type": "integer"
-            }
+            },
+            "x-loggable": true
           }
         },
-        "required": ["prompt", "num_images"]
+        "required": ["prompt", "image_prompt_uri", "num_images"]
       },
       "StableDiffusionXLIPAdapterOut": {
         "title": "StableDiffusionXLIPAdapterOut",
@@ -994,7 +1072,8 @@
           "control_method": {
             "type": "string",
             "enum": ["edge", "depth", "illusion"],
-            "description": "Strategy to control generation using the input image."
+            "description": "Strategy to control generation using the input image.",
+            "x-loggable": true
           },
           "prompt": {
             "type": "string",
@@ -1005,12 +1084,14 @@
             "description": "Number of images to generate.",
             "default": 1,
             "minimum": 1,
-            "maximum": 8
+            "maximum": 8,
+            "x-loggable": true
           },
           "output_resolution": {
             "type": "integer",
             "description": "Resolution of the output image, in pixels.",
-            "default": 1024
+            "default": 1024,
+            "x-loggable": true
           },
           "negative_prompt": {
             "type": "string",
@@ -1026,14 +1107,16 @@
             "description": "Controls the influence of the input image on the generated output.",
             "minimum": 0,
             "maximum": 1,
-            "default": 0.5
+            "default": 0.5,
+            "x-loggable": true
           },
           "seeds": {
             "description": "Random noise seeds. Default is random seeds for each generation.",
             "type": "array",
             "items": {
               "type": "integer"
-            }
+            },
+            "x-loggable": true
           }
         },
         "required": ["image_uri", "control_method", "prompt", "num_images"]
@@ -1071,12 +1154,6 @@
           "store": {
             "type": "string",
             "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string."
-          },
-          "node": {
-            "type": "string",
-            "enum": ["StableDiffusionXLInpaint"],
-            "description": "Selected node.",
-            "default": "StableDiffusionXLInpaint"
           }
         },
         "required": ["image_uri", "prompt"]
@@ -1113,17 +1190,12 @@
             "description": "Number of images to generate.",
             "minimum": 1,
             "default": 2,
-            "maximum": 8
+            "maximum": 8,
+            "x-loggable": true
           },
           "store": {
             "type": "string",
             "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string."
-          },
-          "node": {
-            "type": "string",
-            "enum": ["StableDiffusionXLInpaint"],
-            "description": "Selected node.",
-            "default": "StableDiffusionXLInpaint"
           }
         },
         "required": ["image_uri", "prompt", "num_images"]
@@ -1163,12 +1235,14 @@
             "description": "Number of images to generate.",
             "default": 1,
             "minimum": 1,
-            "maximum": 8
+            "maximum": 8,
+            "x-loggable": true
           },
           "output_resolution": {
             "type": "integer",
             "description": "Resolution of the output image, in pixels.",
-            "default": 1024
+            "default": 1024,
+            "x-loggable": true
           },
           "negative_prompt": {
             "type": "string",
@@ -1184,14 +1258,16 @@
             "description": "Controls the strength of the generation process.",
             "minimum": 0,
             "maximum": 1,
-            "default": 0.8
+            "default": 0.8,
+            "x-loggable": true
           },
           "seeds": {
             "description": "Random noise seeds. Default is random seeds for each generation.",
             "type": "array",
             "items": {
               "type": "integer"
-            }
+            },
+            "x-loggable": true
           }
         },
         "required": ["image_uri", "prompt", "num_images"]
@@ -1267,12 +1343,6 @@
           "store": {
             "type": "string",
             "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string."
-          },
-          "node": {
-            "type": "string",
-            "enum": ["BigLaMa"],
-            "description": "Selected node.",
-            "default": "BigLaMa"
           }
         },
         "required": ["image_uri", "mask_image_uri"]
@@ -1333,17 +1403,12 @@
           },
           "background_color": {
             "type": "string",
-            "description": "Hex value background color. Transparent if unset."
+            "description": "Hex value background color. Transparent if unset.",
+            "x-loggable": true
           },
           "store": {
             "type": "string",
             "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string."
-          },
-          "node": {
-            "type": "string",
-            "enum": ["DISISNet"],
-            "description": "Selected node.",
-            "default": "DISISNet"
           }
         },
         "required": ["image_uri"]
@@ -1396,12 +1461,6 @@
           "store": {
             "type": "string",
             "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string."
-          },
-          "node": {
-            "type": "string",
-            "enum": ["RealESRGAN"],
-            "description": "Selected node.",
-            "default": "RealESRGAN"
           }
         },
         "required": ["image_uri"]
@@ -1454,17 +1513,12 @@
           "point": {
             "description": "Point prompt.",
             "type": "object",
-            "$ref": "#/components/schemas/Point"
+            "$ref": "#/components/schemas/Point",
+            "x-loggable": true
           },
           "store": {
             "type": "string",
             "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string."
-          },
-          "node": {
-            "type": "string",
-            "enum": ["SegmentAnything"],
-            "description": "Selected node.",
-            "default": "SegmentAnything"
           }
         },
         "required": ["image_uri", "point"]
@@ -1493,14 +1547,16 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Point"
-            }
+            },
+            "x-loggable": true
           },
           "box_prompts": {
             "description": "Box prompts, to detect a segment within the bounding box. One of `point_prompts` or `box_prompts` must be set.",
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/BoundingBox"
-            }
+            },
+            "x-loggable": true
           },
           "store": {
             "type": "string",
@@ -1535,27 +1591,32 @@
           "language": {
             "type": "string",
             "default": "en",
-            "description": "Language of input audio in [ISO-639-1](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes) format."
+            "description": "Language of input audio in [ISO-639-1](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes) format.",
+            "x-loggable": true
           },
           "segment": {
             "type": "boolean",
             "default": false,
-            "description": "Segment the text into sentences with approximate timestamps."
+            "description": "Segment the text into sentences with approximate timestamps.",
+            "x-loggable": true
           },
           "align": {
             "type": "boolean",
             "default": false,
-            "description": "Align transcription to produce more accurate sentence-level timestamps and word-level timestamps. An array of word segments will be included in each sentence segment."
+            "description": "Align transcription to produce more accurate sentence-level timestamps and word-level timestamps. An array of word segments will be included in each sentence segment.",
+            "x-loggable": true
           },
           "diarize": {
             "type": "boolean",
             "default": false,
-            "description": "Identify speakers for each segment. Speaker IDs will be included in each segment."
+            "description": "Identify speakers for each segment. Speaker IDs will be included in each segment.",
+            "x-loggable": true
           },
           "suggest_chapters": {
             "type": "boolean",
             "default": false,
-            "description": "Suggest automatic chapter markers."
+            "description": "Suggest automatic chapter markers.",
+            "x-loggable": true
           }
         },
         "required": ["audio_uri"]
@@ -1669,12 +1730,6 @@
           "store": {
             "type": "string",
             "description": "Use \"hosted\" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the audio data will be returned as a base64-encoded string."
-          },
-          "node": {
-            "type": "string",
-            "enum": ["XTTSV2"],
-            "description": "Selected node.",
-            "default": "XTTSV2"
           }
         },
         "required": ["text"]
@@ -1705,7 +1760,8 @@
           "language": {
             "type": "string",
             "default": "en",
-            "description": "Language of input text. Supported languages: `en, de, fr, es, it, pt, pl, zh, ar, cs, ru, nl, tr, hu, ko`."
+            "description": "Language of input text. Supported languages: `en, de, fr, es, it, pt, pl, zh, ar, cs, ru, nl, tr, hu, ko`.",
+            "x-loggable": true
           },
           "store": {
             "type": "string",
@@ -1739,7 +1795,8 @@
           },
           "doc_id": {
             "type": "string",
-            "description": "Vector store document ID."
+            "description": "Vector store document ID.",
+            "x-loggable": true
           },
           "metadata": {
             "type": "object",
@@ -1763,7 +1820,7 @@
           },
           "metadata": {
             "type": "object",
-            "description": "Metadata that can be used to query the vector store. Ignored if `store` is unset.",
+            "description": "Metadata that can be used to query the vector store. Ignored if `collection_name` is unset.",
             "additionalProperties": true
           },
           "embedded_metadata_keys": {
@@ -1781,7 +1838,8 @@
             "type": "string",
             "enum": ["jina-v2", "clip"],
             "description": "Selected embedding model.",
-            "default": "jina-v2"
+            "default": "jina-v2",
+            "x-loggable": true
           }
         },
         "required": ["text"]
@@ -1808,12 +1866,12 @@
           },
           "metadata": {
             "type": "object",
-            "description": "Metadata that can be used to query the vector store. Ignored if `store` is unset.",
+            "description": "Metadata that can be used to query the vector store. Ignored if `collection_name` is unset.",
             "additionalProperties": true
           },
           "doc_id": {
             "type": "string",
-            "description": "Vector store document ID. Ignored if `store` is unset."
+            "description": "Vector store document ID. Ignored if `collection_name` is unset."
           }
         },
         "required": ["text"]
@@ -1844,7 +1902,8 @@
             "type": "string",
             "enum": ["jina-v2", "clip"],
             "description": "Selected embedding model.",
-            "default": "jina-v2"
+            "default": "jina-v2",
+            "x-loggable": true
           }
         },
         "required": ["items"]
@@ -1916,13 +1975,15 @@
           },
           "doc_id": {
             "type": "string",
-            "description": "Vector store document ID. Ignored if `store` is unset."
+            "description": "Vector store document ID. Ignored if `collection_name` is unset.",
+            "x-loggable": true
           },
           "model": {
             "type": "string",
             "enum": ["clip"],
             "description": "Selected embedding model.",
-            "default": "clip"
+            "default": "clip",
+            "x-loggable": true
           }
         },
         "required": ["image_uri"]
@@ -1949,7 +2010,7 @@
           },
           "doc_id": {
             "type": "string",
-            "description": "Vector store document ID. Ignored if `store` is unset."
+            "description": "Vector store document ID. Ignored if `collection_name` is unset."
           }
         },
         "required": ["image_uri"]
@@ -1968,12 +2029,12 @@
           },
           "metadata": {
             "type": "object",
-            "description": "Metadata that can be used to query the vector store. Ignored if `store` is unset.",
+            "description": "Metadata that can be used to query the vector store. Ignored if `collection_name` is unset.",
             "additionalProperties": true
           },
           "doc_id": {
             "type": "string",
-            "description": "Vector store document ID. Ignored if `store` is unset."
+            "description": "Vector store document ID. Ignored if `collection_name` is unset."
           }
         },
         "required": []
@@ -1997,7 +2058,8 @@
             "type": "string",
             "enum": ["clip"],
             "description": "Selected embedding model.",
-            "default": "clip"
+            "default": "clip",
+            "x-loggable": true
           }
         },
         "required": ["items"]
@@ -2068,27 +2130,31 @@
           "model": {
             "type": "string",
             "description": "Selected embedding model.",
-            "enum": ["jina-v2", "clip"]
+            "enum": ["jina-v2", "clip"],
+            "x-loggable": true
           },
           "m": {
             "type": "integer",
             "minimum": 1,
             "maximum": 64,
             "default": 16,
-            "description": "The max number of connections per layer for the index."
+            "description": "The max number of connections per layer for the index.",
+            "x-loggable": true
           },
           "ef_construction": {
             "type": "integer",
             "minimum": 1,
             "maximum": 128,
             "description": "The size of the dynamic candidate list for constructing the index graph.",
-            "default": 64
+            "default": 64,
+            "x-loggable": true
           },
           "metric": {
             "type": "string",
             "enum": ["cosine", "l2", "inner"],
             "default": "inner",
-            "description": "The distance metric to construct the index with."
+            "description": "The distance metric to construct the index with.",
+            "x-loggable": true
           }
         },
         "required": ["collection_name", "model"]
@@ -2166,7 +2232,8 @@
           "model": {
             "type": "string",
             "description": "Selected embedding model.",
-            "enum": ["jina-v2", "clip"]
+            "enum": ["jina-v2", "clip"],
+            "x-loggable": true
           }
         },
         "required": ["collection_name", "model"]
@@ -2223,7 +2290,8 @@
           "model": {
             "type": "string",
             "description": "Selected embedding model.",
-            "enum": ["jina-v2", "clip"]
+            "enum": ["jina-v2", "clip"],
+            "x-loggable": true
           },
           "ids": {
             "type": "array",
@@ -2231,7 +2299,7 @@
             "items": {
               "type": "string"
             },
-            "maxItems": 100
+            "x-loggable": true
           }
         },
         "required": ["collection_name", "model", "ids"]
@@ -2307,15 +2375,15 @@
           "model": {
             "type": "string",
             "description": "Selected embedding model.",
-            "enum": ["jina-v2", "clip"]
+            "enum": ["jina-v2", "clip"],
+            "x-loggable": true
           },
           "vectors": {
             "type": "array",
             "description": "Vectors to upsert.",
             "items": {
               "$ref": "#/components/schemas/UpdateVectorParams"
-            },
-            "maxItems": 100
+            }
           }
         },
         "required": ["collection_name", "model", "vectors"]
@@ -2331,7 +2399,8 @@
           "model": {
             "type": "string",
             "description": "Selected embedding model.",
-            "enum": ["jina-v2", "clip"]
+            "enum": ["jina-v2", "clip"],
+            "x-loggable": true
           },
           "ids": {
             "type": "array",
@@ -2339,7 +2408,7 @@
             "items": {
               "type": "string"
             },
-            "maxItems": 100
+            "x-loggable": true
           }
         },
         "required": ["collection_name", "model", "ids"]
@@ -2355,7 +2424,8 @@
           "model": {
             "type": "string",
             "description": "Selected embedding model.",
-            "enum": ["jina-v2", "clip"]
+            "enum": ["jina-v2", "clip"],
+            "x-loggable": true
           },
           "query_strings": {
             "type": "array",
@@ -2387,31 +2457,36 @@
             "description": "Document IDs to use for the query.",
             "items": {
               "type": "string"
-            }
+            },
+            "x-loggable": true
           },
           "top_k": {
             "type": "integer",
             "minimum": 1,
             "maximum": 1000,
             "default": 10,
-            "description": "Number of results to return."
+            "description": "Number of results to return.",
+            "x-loggable": true
           },
           "ef_search": {
             "type": "integer",
             "minimum": 1,
             "maximum": 1000,
             "default": 40,
-            "description": "The size of the dynamic candidate list for searching the index graph."
+            "description": "The size of the dynamic candidate list for searching the index graph.",
+            "x-loggable": true
           },
           "include_values": {
             "type": "boolean",
             "default": false,
-            "description": "Include the values of the vectors in the response."
+            "description": "Include the values of the vectors in the response.",
+            "x-loggable": true
           },
           "include_metadata": {
             "type": "boolean",
             "default": false,
-            "description": "Include the metadata of the vectors in the response."
+            "description": "Include the metadata of the vectors in the response.",
+            "x-loggable": true
           },
           "filters": {
             "type": "object",
@@ -2427,12 +2502,14 @@
         "properties": {
           "id": {
             "type": "string",
-            "description": "Document ID."
+            "description": "Document ID.",
+            "x-loggable": true
           },
           "distance": {
             "type": "number",
             "format": "float",
-            "description": "Similarity score."
+            "description": "Similarity score.",
+            "x-loggable": true
           },
           "vector": {
             "type": "array",
@@ -2484,22 +2561,21 @@
     }
   },
   "paths": {
-    "/RunCode": {
+    "/Experimental": {
       "post": {
-        "summary": "RunCode",
-        "operationId": "RunCode",
-        "tags": ["category:utility", "backend:v1"],
-        "description": "Evaluate code using a code interpreter.",
+        "summary": "Experimental",
+        "operationId": "Experimental",
+        "tags": ["category:utility"],
+        "description": "Experimental node.",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RunCodeIn"
+                "$ref": "#/components/schemas/ExperimentalIn"
               },
               "example": {
-                "code": "import json\nimport sys\nprint(json.dumps({'foo':sys.argv[1]}))",
-                "args": ["bar"],
-                "language": "python"
+                "name": "some_name",
+                "args": { "foo": "bar" }
               }
             }
           }
@@ -2510,13 +2586,51 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RunCodeOut"
+                  "$ref": "#/components/schemas/ExperimentalOut"
                 },
                 "example": {
-                  "output": "{\"foo\": \"bar\"}\n",
-                  "json_output": {
-                    "foo": "bar"
-                  }
+                  "output": { "foo": "bar" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/RunPython": {
+      "post": {
+        "summary": "RunPython",
+        "operationId": "RunPython",
+        "tags": ["category:utility"],
+        "description": "Run code using a Python interpreter.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RunPythonIn"
+              },
+              "example": {
+                "code": "import numpy as np; print(SB_IN['foo']); SB_OUT['result']=np.sum([1,2]).item()",
+                "input": { "foo": "bar" },
+                "pip_install": ["numpy"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RunPythonOut"
+                },
+                "example": {
+                  "stdout": "bar",
+                  "output": {
+                    "result": 3
+                  },
+                  "stderr": ""
                 }
               }
             }
@@ -2528,7 +2642,7 @@
       "post": {
         "summary": "GenerateText",
         "operationId": "GenerateText",
-        "tags": ["category:language-generation", "backend:v1"],
+        "tags": ["category:language-generation"],
         "description": "Generate text using a language model.",
         "requestBody": {
           "content": {
@@ -2565,7 +2679,7 @@
       "post": {
         "summary": "MultiGenerateText",
         "operationId": "MultiGenerateText",
-        "tags": ["category:language-generation", "backend:v1"],
+        "tags": ["category:language-generation"],
         "description": "Generate multiple text choices using a language model.",
         "requestBody": {
           "content": {
@@ -2609,7 +2723,7 @@
       "post": {
         "summary": "BatchGenerateText",
         "operationId": "BatchGenerateText",
-        "tags": ["category:language-generation", "backend:v1"],
+        "tags": ["category:language-generation"],
         "description": "Generate text for multiple prompts in batch using a language model.",
         "requestBody": {
           "content": {
@@ -2652,7 +2766,7 @@
       "post": {
         "summary": "BatchGenerateJSON",
         "operationId": "BatchGenerateJSON",
-        "tags": ["category:language-generation", "backend:v1"],
+        "tags": ["category:language-generation"],
         "description": "Generate JSON for multiple prompts in batch using a language model.",
         "requestBody": {
           "content": {
@@ -2708,7 +2822,7 @@
       "post": {
         "summary": "GenerateJSON",
         "operationId": "GenerateJSON",
-        "tags": ["category:language-generation", "backend:v1"],
+        "tags": ["category:language-generation"],
         "description": "Generate JSON using a language model.",
         "requestBody": {
           "content": {
@@ -2758,7 +2872,7 @@
       "post": {
         "summary": "MultiGenerateJSON",
         "operationId": "MultiGenerateJSON",
-        "tags": ["category:language-generation", "backend:v1"],
+        "tags": ["category:language-generation"],
         "description": "Generate multiple JSON choices using a language model.",
         "requestBody": {
           "content": {
@@ -2816,7 +2930,7 @@
       "post": {
         "summary": "GenerateTextVision",
         "operationId": "GenerateTextVision",
-        "tags": ["category:language-generation", "backend:v1"],
+        "tags": ["category:language-generation"],
         "description": "Generate text with image input.",
         "requestBody": {
           "content": {
@@ -2855,11 +2969,7 @@
       "post": {
         "summary": "Mistral7BInstruct",
         "operationId": "Mistral7BInstruct",
-        "tags": [
-          "category:language-generation",
-          "backend:v1",
-          "type:low-level"
-        ],
+        "tags": ["category:language-generation", "type:low-level"],
         "description": "Generate text using [Mistral 7B Instruct](https://mistral.ai/news/announcing-mistral-7b).",
         "requestBody": {
           "content": {
@@ -2904,11 +3014,7 @@
       "post": {
         "summary": "Mixtral8x7BInstruct",
         "operationId": "Mixtral8x7BInstruct",
-        "tags": [
-          "category:language-generation",
-          "backend:v1",
-          "type:low-level"
-        ],
+        "tags": ["category:language-generation", "type:low-level"],
         "description": "Generate text using instruct-tuned [Mixtral 8x7B](https://mistral.ai/news/mixtral-of-experts/).",
         "requestBody": {
           "content": {
@@ -2953,11 +3059,7 @@
       "post": {
         "summary": "Llama3Instruct8B",
         "operationId": "Llama3Instruct8B",
-        "tags": [
-          "category:language-generation",
-          "backend:v1",
-          "type:low-level"
-        ],
+        "tags": ["category:language-generation", "type:low-level"],
         "description": "Generate text using instruct-tuned [Llama 3 8B](https://llama.meta.com/llama3/).",
         "requestBody": {
           "content": {
@@ -3002,11 +3104,7 @@
       "post": {
         "summary": "Llama3Instruct70B",
         "operationId": "Llama3Instruct70B",
-        "tags": [
-          "category:language-generation",
-          "backend:v1",
-          "type:low-level"
-        ],
+        "tags": ["category:language-generation", "type:low-level"],
         "description": "Generate text using instruct-tuned [Llama 3 70B](https://llama.meta.com/llama3/).",
         "requestBody": {
           "content": {
@@ -3051,11 +3149,7 @@
       "post": {
         "summary": "Firellava13B",
         "operationId": "Firellava13B",
-        "tags": [
-          "category:language-generation",
-          "backend:v1",
-          "type:low-level"
-        ],
+        "tags": ["category:language-generation", "type:low-level"],
         "description": "Generate text with image input using [FireLLaVA 13B](https://fireworks.ai/blog/firellava-the-first-commercially-permissive-oss-llava-model).",
         "requestBody": {
           "content": {
@@ -3094,7 +3188,7 @@
       "post": {
         "summary": "GenerateImage",
         "operationId": "GenerateImage",
-        "tags": ["category:image-generation", "backend:v0"],
+        "tags": ["category:image-generation"],
         "description": "Generate an image.",
         "requestBody": {
           "content": {
@@ -3130,7 +3224,7 @@
       "post": {
         "summary": "MultiGenerateImage",
         "operationId": "MultiGenerateImage",
-        "tags": ["category:image-generation", "backend:v0"],
+        "tags": ["category:image-generation"],
         "description": "Generate multiple images.",
         "requestBody": {
           "content": {
@@ -3140,8 +3234,8 @@
               },
               "example": {
                 "prompt": "hokusai futuristic supercell spiral cloud with glowing core over turbulent ocean",
-                "store": "hosted",
-                "num_images": 2
+                "num_images": 2,
+                "store": "hosted"
               }
             }
           }
@@ -3174,7 +3268,7 @@
       "post": {
         "summary": "GenerativeEditImage",
         "operationId": "GenerativeEditImage",
-        "tags": ["category:image-generation", "backend:v0"],
+        "tags": ["category:image-generation"],
         "description": "Edit an image using image generation.",
         "requestBody": {
           "content": {
@@ -3212,7 +3306,7 @@
       "post": {
         "summary": "MultiGenerativeEditImage",
         "operationId": "MultiGenerativeEditImage",
-        "tags": ["category:image-generation", "backend:v0"],
+        "tags": ["category:image-generation"],
         "description": "Edit multiple images using image generation.",
         "requestBody": {
           "content": {
@@ -3258,7 +3352,7 @@
       "post": {
         "summary": "StableDiffusionXL",
         "operationId": "StableDiffusionXL",
-        "tags": ["category:image-generation", "backend:v0", "type:low-level"],
+        "tags": ["category:image-generation", "type:low-level"],
         "description": "Generate an image using [Stable Diffusion XL](https://arxiv.org/abs/2307.01952).",
         "requestBody": {
           "content": {
@@ -3307,7 +3401,7 @@
       "post": {
         "summary": "StableDiffusionXLLightning",
         "operationId": "StableDiffusionXLLightning",
-        "tags": ["category:image-generation", "backend:v0", "type:low-level"],
+        "tags": ["category:image-generation", "type:low-level"],
         "description": "Generate an image using [Stable Diffusion XL Lightning](https://arxiv.org/abs/2402.13929).",
         "requestBody": {
           "content": {
@@ -3318,9 +3412,9 @@
               "example": {
                 "prompt": "hokusai futuristic supercell spiral cloud with glowing core over turbulent ocean",
                 "negative_prompt": "night, moon",
-                "store": "hosted",
                 "num_images": 2,
-                "seeds": [3306990332671669418, 13641924104177017164]
+                "seeds": [3306990332671669418, 13641924104177017164],
+                "store": "hosted"
               }
             }
           }
@@ -3355,7 +3449,7 @@
       "post": {
         "summary": "StableDiffusionXLInpaint",
         "operationId": "StableDiffusionXLInpaint",
-        "tags": ["category:image-generation", "backend:v0", "type:low-level"],
+        "tags": ["category:image-generation", "type:low-level"],
         "description": "Edit an image using [Stable Diffusion XL](https://arxiv.org/abs/2307.01952). Supports inpainting (edit part of the image with a mask) and image-to-image (edit the full image).",
         "requestBody": {
           "content": {
@@ -3406,7 +3500,7 @@
       "post": {
         "summary": "StableDiffusionXLControlNet",
         "operationId": "StableDiffusionXLControlNet",
-        "tags": ["category:image-generation", "type:low-level", "backend:v0"],
+        "tags": ["category:image-generation"],
         "description": "Generate an image with generation structured by an input image, using Stable Diffusion XL with [ControlNet](https://arxiv.org/abs/2302.05543).",
         "requestBody": {
           "content": {
@@ -3456,7 +3550,7 @@
       "post": {
         "summary": "StableDiffusionXLIPAdapter",
         "operationId": "StableDiffusionXLIPAdapter",
-        "tags": ["category:image-generation", "type:low-level", "backend:v0"],
+        "tags": ["category:image-generation", "type:low-level"],
         "description": "Generate an image with an image prompt, using Stable Diffusion XL with [IP-Adapter](https://arxiv.org/abs/2308.06721).",
         "requestBody": {
           "content": {
@@ -3506,7 +3600,7 @@
       "post": {
         "summary": "TranscribeMedia",
         "operationId": "TranscribeMedia",
-        "tags": ["category:audio", "backend:v0"],
+        "tags": ["category:audio"],
         "description": "Transcribe speech in an audio or video file.",
         "requestBody": {
           "content": {
@@ -3614,7 +3708,7 @@
       "post": {
         "summary": "XTTSV2",
         "operationId": "XTTSV2",
-        "tags": ["category:audio", "type:low-level", "backend:v1"],
+        "tags": ["category:audio", "type:low-level"],
         "description": "Generate speech from text using [XTTS v2](https://docs.coqui.ai/en/latest/models/xtts.html).",
         "requestBody": {
           "content": {
@@ -3651,7 +3745,7 @@
       "post": {
         "summary": "RemoveBackground",
         "operationId": "RemoveBackground",
-        "tags": ["category:image-utility", "backend:v1"],
+        "tags": ["category:image-utility"],
         "description": "Remove the background from an image, with the option to return the foreground as a mask.",
         "requestBody": {
           "content": {
@@ -3660,10 +3754,8 @@
                 "$ref": "#/components/schemas/RemoveBackgroundIn"
               },
               "example": {
-                "image_uri": "https://guides.substrate.run/hokusai.jpeg",
-                "store": "hosted",
-                "background_color": "#E16E77",
-                "return_mask": false
+                "image_uri": "https://media.substrate.run/apple-forest.jpeg",
+                "store": "hosted"
               }
             }
           }
@@ -3689,7 +3781,7 @@
       "post": {
         "summary": "FillMask",
         "operationId": "FillMask",
-        "tags": ["category:image-utility", "backend:v1"],
+        "tags": ["category:image-utility"],
         "description": "Fill (inpaint) part of an image, e.g. to 'remove' an object.",
         "requestBody": {
           "content": {
@@ -3698,8 +3790,8 @@
                 "$ref": "#/components/schemas/FillMaskIn"
               },
               "example": {
-                "image_uri": "https://media.substrate.run/docs-seurat.jpg",
-                "mask_image_uri": "https://media.substrate.run/spiral-logo.jpeg",
+                "image_uri": "https://media.substrate.run/apple-forest.jpeg",
+                "mask_image_uri": "https://media.substrate.run/apple-forest-mask.jpeg",
                 "store": "hosted"
               }
             }
@@ -3726,7 +3818,7 @@
       "post": {
         "summary": "UpscaleImage",
         "operationId": "UpscaleImage",
-        "tags": ["category:image-utility", "backend:v1"],
+        "tags": ["category:image-utility"],
         "description": "Upscale an image.",
         "requestBody": {
           "content": {
@@ -3762,7 +3854,7 @@
       "post": {
         "summary": "SegmentUnderPoint",
         "operationId": "SegmentUnderPoint",
-        "tags": ["category:image-utility", "backend:v1"],
+        "tags": ["category:image-utility"],
         "description": "Segment an image under a point and return the segment.",
         "requestBody": {
           "content": {
@@ -3798,120 +3890,11 @@
         }
       }
     },
-    "/DISISNet": {
-      "post": {
-        "summary": "DISISNet",
-        "operationId": "DISISNet",
-        "tags": ["category:image-utility", "backend:v1"],
-        "description": "Segment image foreground using [DIS IS-Net](https://github.com/xuebinqin/DIS).",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/DISISNetIn"
-              },
-              "example": {
-                "image_uri": "https://guides.substrate.run/hokusai.jpeg",
-                "store": "hosted"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DISISNetOut"
-                },
-                "example": {
-                  "image_uri": "https://assets.substrate.run/84848484.jpg"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/BigLaMa": {
-      "post": {
-        "summary": "BigLaMa",
-        "operationId": "BigLaMa",
-        "tags": ["category:image-utility", "type:low-level", "backend:v1"],
-        "description": "Inpaint a mask using [LaMa](https://github.com/advimman/lama).",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/BigLaMaIn"
-              },
-              "example": {
-                "image_uri": "https://media.substrate.run/docs-seurat.jpg",
-                "mask_image_uri": "https://media.substrate.run/spiral-logo.jpeg",
-                "store": "hosted"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BigLaMaOut"
-                },
-                "example": {
-                  "image_uri": "https://assets.substrate.run/84848484.jpg"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/RealESRGAN": {
-      "post": {
-        "summary": "RealESRGAN",
-        "operationId": "RealESRGAN",
-        "tags": ["category:image-utility", "type:low-level", "backend:v1"],
-        "description": "Upscale an image using [RealESRGAN](https://github.com/xinntao/Real-ESRGAN).",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RealESRGANIn"
-              },
-              "example": {
-                "image_uri": "https://media.substrate.run/docs-seurat.jpg",
-                "store": "hosted"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RealESRGANOut"
-                },
-                "example": {
-                  "image_uri": "https://assets.substrate.run/84848484.jpg"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/SegmentAnything": {
       "post": {
         "summary": "SegmentAnything",
         "operationId": "SegmentAnything",
-        "tags": ["category:image-utility", "type:low-level", "backend:v1"],
+        "tags": ["category:image-utility", "type:low-level"],
         "description": "Segment an image using [SegmentAnything](https://github.com/facebookresearch/segment-anything).",
         "requestBody": {
           "content": {
@@ -3953,7 +3936,7 @@
       "post": {
         "summary": "EmbedText",
         "operationId": "EmbedText",
-        "tags": ["category:embedding", "backend:v1"],
+        "tags": ["category:embedding"],
         "description": "Generate embedding for a text document.",
         "requestBody": {
           "content": {
@@ -4005,7 +3988,7 @@
       "post": {
         "summary": "MultiEmbedText",
         "operationId": "MultiEmbedText",
-        "tags": ["category:embedding", "backend:v1"],
+        "tags": ["category:embedding"],
         "description": "Generate embeddings for multiple text documents.",
         "requestBody": {
           "content": {
@@ -4081,7 +4064,7 @@
       "post": {
         "summary": "EmbedImage",
         "operationId": "EmbedImage",
-        "tags": ["category:embedding", "backend:v1"],
+        "tags": ["category:embedding"],
         "description": "Generate embedding for an image.",
         "requestBody": {
           "content": {
@@ -4123,7 +4106,7 @@
       "post": {
         "summary": "MultiEmbedImage",
         "operationId": "MultiEmbedImage",
-        "tags": ["category:embedding", "backend:v1"],
+        "tags": ["category:embedding"],
         "description": "Generate embeddings for multiple images.",
         "requestBody": {
           "content": {
@@ -4181,7 +4164,7 @@
       "post": {
         "summary": "JinaV2",
         "operationId": "JinaV2",
-        "tags": ["category:embedding", "type:low-level", "backend:v1"],
+        "tags": ["category:embedding", "type:low-level"],
         "description": "Generate embeddings for multiple text documents using [Jina Embeddings 2](https://arxiv.org/abs/2310.19923).",
         "requestBody": {
           "content": {
@@ -4256,7 +4239,7 @@
       "post": {
         "summary": "CLIP",
         "operationId": "CLIP",
-        "tags": ["category:embedding", "type:low-level", "backend:v1"],
+        "tags": ["category:embedding", "type:low-level"],
         "description": "Generate embeddings for text or images using [CLIP](https://openai.com/research/clip).",
         "requestBody": {
           "content": {
@@ -4312,7 +4295,7 @@
     },
     "/CreateVectorStore": {
       "post": {
-        "tags": ["category:vector-store", "backend:v1"],
+        "tags": ["category:vector-store"],
         "summary": "CreateVectorStore",
         "operationId": "CreateVectorStore",
         "description": "Create a vector store for storing and querying embeddings.",
@@ -4352,7 +4335,7 @@
     },
     "/ListVectorStores": {
       "post": {
-        "tags": ["category:vector-store", "backend:v1"],
+        "tags": ["category:vector-store"],
         "summary": "ListVectorStores",
         "operationId": "ListVectorStores",
         "description": "List all vector stores.",
@@ -4400,7 +4383,7 @@
     },
     "/DeleteVectorStore": {
       "post": {
-        "tags": ["category:vector-store", "backend:v1"],
+        "tags": ["category:vector-store"],
         "summary": "DeleteVectorStore",
         "operationId": "DeleteVectorStore",
         "description": "Delete a vector store.",
@@ -4437,7 +4420,7 @@
     },
     "/QueryVectorStore": {
       "post": {
-        "tags": ["category:vector-store", "backend:v1"],
+        "tags": ["category:vector-store"],
         "summary": "QueryVectorStore",
         "operationId": "QueryVectorStore",
         "description": "Query a vector store for similar vectors.",
@@ -4502,7 +4485,7 @@
     },
     "/FetchVectors": {
       "post": {
-        "tags": ["category:vector-store", "backend:v1"],
+        "tags": ["category:vector-store"],
         "summary": "FetchVectors",
         "operationId": "FetchVectors",
         "description": "Fetch vectors from a vector store.",
@@ -4549,7 +4532,7 @@
     },
     "/UpdateVectors": {
       "post": {
-        "tags": ["category:vector-store", "backend:v1"],
+        "tags": ["category:vector-store"],
         "summary": "UpdateVectors",
         "operationId": "UpdateVectors",
         "description": "Update vectors in a vector store.",
@@ -4593,7 +4576,7 @@
     },
     "/DeleteVectors": {
       "post": {
-        "tags": ["category:vector-store", "backend:v1"],
+        "tags": ["category:vector-store"],
         "summary": "DeleteVectors",
         "operationId": "DeleteVectors",
         "description": "Delete vectors in a vector store.",

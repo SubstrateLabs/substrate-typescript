@@ -16,7 +16,7 @@ export class SubstrateResponse {
   }
 
   get requestId() {
-    return this.apiResponse.headers.get("cf-ray");
+    return this.apiRequest.headers.get("x-substrate-request-id");
   }
 
   /**
