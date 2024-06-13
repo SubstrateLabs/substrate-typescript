@@ -1,7 +1,7 @@
 /**
  * 𐃏 Substrate
  * @generated file
- * 20240530.20240531
+ * 20240612.20240613
  */
 
 import * as OpenAPI from "substrate/OpenAPI";
@@ -45,7 +45,7 @@ type FutureExpandAny<T> = T extends (infer U)[][]
 
 export class ExperimentalInArgs extends FutureAnyObject {}
 export class ExperimentalOutOutput extends FutureAnyObject {}
-export class RunPythonInInput extends FutureAnyObject {}
+export class RunPythonInKwargs extends FutureAnyObject {}
 /** Python packages to install. You must import them in your code. */
 export class RunPythonInPipInstall extends FutureArray {
   /** Returns `FutureString` at given index. */
@@ -58,7 +58,18 @@ export class RunPythonInPipInstall extends FutureArray {
   }
 }
 export class RunPythonInPipInstallItem extends FutureString {}
-export class RunPythonOutOutput extends FutureAnyObject {}
+/** Image prompts. */
+export class GenerateTextInImageUris extends FutureArray {
+  /** Returns `FutureString` at given index. */
+  override at(index: number) {
+    return new FutureString(this._directive.next(index));
+  }
+  /** Returns the result for `GenerateTextInImageUris` once it's node has been run. */
+  protected override async result(): Promise<FutureString[]> {
+    return super.result() as Promise<FutureString[]>;
+  }
+}
+export class GenerateTextInImageUrisItem extends FutureString {}
 export class GenerateJSONInJsonSchema extends FutureAnyObject {}
 export class GenerateJSONOutJsonObject extends FutureAnyObject {}
 /** Response choices. */
@@ -182,18 +193,6 @@ export class Llama3Instruct70BOutChoices extends FutureArray {
   }
 }
 /** Image prompts. */
-export class GenerateTextVisionInImageUris extends FutureArray {
-  /** Returns `FutureString` at given index. */
-  override at(index: number) {
-    return new FutureString(this._directive.next(index));
-  }
-  /** Returns the result for `GenerateTextVisionInImageUris` once it's node has been run. */
-  protected override async result(): Promise<FutureString[]> {
-    return super.result() as Promise<FutureString[]>;
-  }
-}
-export class GenerateTextVisionInImageUrisItem extends FutureString {}
-/** Image prompts. */
 export class Firellava13BInImageUris extends FutureArray {
   /** Returns `FutureString` at given index. */
   override at(index: number) {
@@ -309,14 +308,14 @@ export class StableDiffusionXLControlNetOutOutputs extends FutureArray {
   }
 }
 /** Generated images. */
-export class MultiGenerativeEditImageOutOutputs extends FutureArray {
-  /** Returns `GenerativeEditImageOut` at given index. */
+export class MultiInpaintImageOutOutputs extends FutureArray {
+  /** Returns `InpaintImageOut` at given index. */
   override at(index: number) {
-    return new GenerativeEditImageOut(this._directive.next(index));
+    return new InpaintImageOut(this._directive.next(index));
   }
-  /** Returns the result for `MultiGenerativeEditImageOutOutputs` once it's node has been run. */
-  protected override async result(): Promise<GenerativeEditImageOut[]> {
-    return super.result() as Promise<GenerativeEditImageOut[]>;
+  /** Returns the result for `MultiInpaintImageOutOutputs` once it's node has been run. */
+  protected override async result(): Promise<InpaintImageOut[]> {
+    return super.result() as Promise<InpaintImageOut[]>;
   }
 }
 /** Random noise seeds. Default is random seeds for each generation. */
@@ -376,23 +375,23 @@ export class TranscribedSegmentWords extends FutureArray {
   }
 }
 /** Transcribed segments, if `segment` is enabled. */
-export class TranscribeMediaOutSegments extends FutureArray {
+export class TranscribeSpeechOutSegments extends FutureArray {
   /** Returns `TranscribedSegment` at given index. */
   override at(index: number) {
     return new TranscribedSegment(this._directive.next(index));
   }
-  /** Returns the result for `TranscribeMediaOutSegments` once it's node has been run. */
+  /** Returns the result for `TranscribeSpeechOutSegments` once it's node has been run. */
   protected override async result(): Promise<TranscribedSegment[]> {
     return super.result() as Promise<TranscribedSegment[]>;
   }
 }
 /** Chapter markers, if `suggest_chapters` is enabled. */
-export class TranscribeMediaOutChapters extends FutureArray {
+export class TranscribeSpeechOutChapters extends FutureArray {
   /** Returns `ChapterMarker` at given index. */
   override at(index: number) {
     return new ChapterMarker(this._directive.next(index));
   }
-  /** Returns the result for `TranscribeMediaOutChapters` once it's node has been run. */
+  /** Returns the result for `TranscribeSpeechOutChapters` once it's node has been run. */
   protected override async result(): Promise<ChapterMarker[]> {
     return super.result() as Promise<ChapterMarker[]>;
   }
@@ -551,13 +550,13 @@ export class CLIPOutEmbeddings extends FutureArray {
 }
 /** List of vector stores. */
 export class ListVectorStoresOutItems extends FutureArray {
-  /** Returns `CreateVectorStoreOut` at given index. */
+  /** Returns `FindOrCreateVectorStoreOut` at given index. */
   override at(index: number) {
-    return new CreateVectorStoreOut(this._directive.next(index));
+    return new FindOrCreateVectorStoreOut(this._directive.next(index));
   }
   /** Returns the result for `ListVectorStoresOutItems` once it's node has been run. */
-  protected override async result(): Promise<CreateVectorStoreOut[]> {
-    return super.result() as Promise<CreateVectorStoreOut[]>;
+  protected override async result(): Promise<FindOrCreateVectorStoreOut[]> {
+    return super.result() as Promise<FindOrCreateVectorStoreOut[]>;
   }
 }
 /** Embedding vector. */
@@ -773,13 +772,17 @@ export class ExperimentalOut extends FutureObject {
 }
 /** RunPythonIn */
 export class RunPythonIn extends FutureObject {
-  /** Python code to execute. In your code, access values from the `input` parameter using the `SB_IN` variable. Update the `SB_OUT` variable with results you want returned in `output`. */
-  get code() {
-    return new FutureString(this._directive.next("code"));
+  /** (Optional) Pickled function. */
+  get pkl_function() {
+    return new FutureString(this._directive.next("pkl_function"));
   }
-  /** (Optional) Input to your code, accessible using the preloaded `SB_IN` variable. */
-  get input() {
-    return new FutureAnyObject(this._directive.next("input"));
+  /** Keyword arguments to your function. */
+  get kwargs() {
+    return new FutureAnyObject(this._directive.next("kwargs"));
+  }
+  /** (Optional) Python version. */
+  get python_version() {
+    return new FutureString(this._directive.next("python_version"));
   }
 
   /** (Optional) Python packages to install. You must import them in your code. */
@@ -793,13 +796,17 @@ export class RunPythonIn extends FutureObject {
 }
 /** RunPythonOut */
 export class RunPythonOut extends FutureObject {
+  /** (Optional) Return value of your function. */
+  get output() {
+    return new (this._directive.next("output"))();
+  }
+  /** (Optional) Pickled return value. */
+  get pkl_output() {
+    return new FutureString(this._directive.next("pkl_output"));
+  }
   /** Everything printed to stdout while running your code. */
   get stdout() {
     return new FutureString(this._directive.next("stdout"));
-  }
-  /** Contents of the `SB_OUT` variable after running your code. */
-  get output() {
-    return new FutureAnyObject(this._directive.next("output"));
   }
   /** Contents of stderr if your code did not run successfully. */
   get stderr() {
@@ -816,6 +823,11 @@ export class GenerateTextIn extends FutureObject {
   get prompt() {
     return new FutureString(this._directive.next("prompt"));
   }
+
+  /** (Optional) Image prompts. */
+  get image_uris() {
+    return new GenerateTextInImageUris(this._directive.next("image_uris"));
+  }
   /** (Optional) Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic. */
   get temperature() {
     return new FutureNumber(this._directive.next("temperature"));
@@ -824,9 +836,9 @@ export class GenerateTextIn extends FutureObject {
   get max_tokens() {
     return new FutureNumber(this._directive.next("max_tokens"));
   }
-  /** (Optional) Selected node. */
-  get node() {
-    return new FutureString(this._directive.next("node"));
+  /** (Optional) Selected model. `Firellava13B` is automatically selected when `image_uris` is provided. */
+  get model() {
+    return new FutureString(this._directive.next("model"));
   }
   /** returns the result for `GenerateTextIn` once it's node has been run. */
   protected override async result(): Promise<GenerateTextIn> {
@@ -862,9 +874,9 @@ export class GenerateJSONIn extends FutureObject {
   get max_tokens() {
     return new FutureNumber(this._directive.next("max_tokens"));
   }
-  /** (Optional) Selected node. */
-  get node() {
-    return new FutureString(this._directive.next("node"));
+  /** (Optional) Selected model. */
+  get model() {
+    return new FutureString(this._directive.next("model"));
   }
   /** returns the result for `GenerateJSONIn` once it's node has been run. */
   protected override async result(): Promise<GenerateJSONIn> {
@@ -904,9 +916,9 @@ export class MultiGenerateTextIn extends FutureObject {
   get max_tokens() {
     return new FutureNumber(this._directive.next("max_tokens"));
   }
-  /** (Optional) Selected node. */
-  get node() {
-    return new FutureString(this._directive.next("node"));
+  /** (Optional) Selected model. */
+  get model() {
+    return new FutureString(this._directive.next("model"));
   }
   /** returns the result for `MultiGenerateTextIn` once it's node has been run. */
   protected override async result(): Promise<MultiGenerateTextIn> {
@@ -937,6 +949,10 @@ export class BatchGenerateTextIn extends FutureObject {
   /** (Optional) Maximum number of tokens to generate. */
   get max_tokens() {
     return new FutureNumber(this._directive.next("max_tokens"));
+  }
+  /** (Optional) Selected model. */
+  get model() {
+    return new FutureString(this._directive.next("model"));
   }
   /** returns the result for `BatchGenerateTextIn` once it's node has been run. */
   protected override async result(): Promise<BatchGenerateTextIn> {
@@ -976,9 +992,9 @@ export class MultiGenerateJSONIn extends FutureObject {
   get max_tokens() {
     return new FutureNumber(this._directive.next("max_tokens"));
   }
-  /** (Optional) Selected node. */
-  get node() {
-    return new FutureString(this._directive.next("node"));
+  /** (Optional) Selected model. */
+  get model() {
+    return new FutureString(this._directive.next("model"));
   }
   /** returns the result for `MultiGenerateJSONIn` once it's node has been run. */
   protected override async result(): Promise<MultiGenerateJSONIn> {
@@ -998,11 +1014,6 @@ export class MultiGenerateJSONOut extends FutureObject {
 }
 /** BatchGenerateJSONIn */
 export class BatchGenerateJSONIn extends FutureObject {
-  /** (Optional) Selected node. */
-  get node() {
-    return new FutureString(this._directive.next("node"));
-  }
-
   /** Batch input prompts. */
   get prompts() {
     return new BatchGenerateJSONInPrompts(this._directive.next("prompts"));
@@ -1018,6 +1029,10 @@ export class BatchGenerateJSONIn extends FutureObject {
   /** (Optional) Maximum number of tokens to generate. */
   get max_tokens() {
     return new FutureNumber(this._directive.next("max_tokens"));
+  }
+  /** (Optional) Selected model. */
+  get model() {
+    return new FutureString(this._directive.next("model"));
   }
   /** returns the result for `BatchGenerateJSONIn` once it's node has been run. */
   protected override async result(): Promise<BatchGenerateJSONIn> {
@@ -1041,6 +1056,10 @@ export class Mistral7BInstructIn extends FutureObject {
   get prompt() {
     return new FutureString(this._directive.next("prompt"));
   }
+  /** (Optional) System prompt. */
+  get system_prompt() {
+    return new FutureString(this._directive.next("system_prompt"));
+  }
   /** (Optional) Number of choices to generate. */
   get num_choices() {
     return new FutureNumber(this._directive.next("num_choices"));
@@ -1049,9 +1068,25 @@ export class Mistral7BInstructIn extends FutureObject {
   get json_schema() {
     return new FutureAnyObject(this._directive.next("json_schema"));
   }
-  /** (Optional) Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic. */
+  /** (Optional) Higher values make the output more random, lower values make the output more deterministic. */
   get temperature() {
     return new FutureNumber(this._directive.next("temperature"));
+  }
+  /** (Optional) Higher values decrease the likelihood of repeating previous tokens. */
+  get frequency_penalty() {
+    return new FutureNumber(this._directive.next("frequency_penalty"));
+  }
+  /** (Optional) Higher values decrease the likelihood of repeated sequences. */
+  get repetition_penalty() {
+    return new FutureNumber(this._directive.next("repetition_penalty"));
+  }
+  /** (Optional) Higher values increase the likelihood of new topics appearing. */
+  get presence_penalty() {
+    return new FutureNumber(this._directive.next("presence_penalty"));
+  }
+  /** (Optional) Probability below which less likely tokens are filtered out. */
+  get top_p() {
+    return new FutureNumber(this._directive.next("top_p"));
   }
   /** (Optional) Maximum number of tokens to generate. */
   get max_tokens() {
@@ -1094,6 +1129,10 @@ export class Mixtral8x7BInstructIn extends FutureObject {
   get prompt() {
     return new FutureString(this._directive.next("prompt"));
   }
+  /** (Optional) System prompt. */
+  get system_prompt() {
+    return new FutureString(this._directive.next("system_prompt"));
+  }
   /** (Optional) Number of choices to generate. */
   get num_choices() {
     return new FutureNumber(this._directive.next("num_choices"));
@@ -1102,9 +1141,25 @@ export class Mixtral8x7BInstructIn extends FutureObject {
   get json_schema() {
     return new FutureAnyObject(this._directive.next("json_schema"));
   }
-  /** (Optional) Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic. */
+  /** (Optional) Higher values make the output more random, lower values make the output more deterministic. */
   get temperature() {
     return new FutureNumber(this._directive.next("temperature"));
+  }
+  /** (Optional) Higher values decrease the likelihood of repeating previous tokens. */
+  get frequency_penalty() {
+    return new FutureNumber(this._directive.next("frequency_penalty"));
+  }
+  /** (Optional) Higher values decrease the likelihood of repeated sequences. */
+  get repetition_penalty() {
+    return new FutureNumber(this._directive.next("repetition_penalty"));
+  }
+  /** (Optional) Higher values increase the likelihood of new topics appearing. */
+  get presence_penalty() {
+    return new FutureNumber(this._directive.next("presence_penalty"));
+  }
+  /** (Optional) Probability below which less likely tokens are filtered out. */
+  get top_p() {
+    return new FutureNumber(this._directive.next("top_p"));
   }
   /** (Optional) Maximum number of tokens to generate. */
   get max_tokens() {
@@ -1147,13 +1202,33 @@ export class Llama3Instruct8BIn extends FutureObject {
   get prompt() {
     return new FutureString(this._directive.next("prompt"));
   }
+  /** (Optional) System prompt. */
+  get system_prompt() {
+    return new FutureString(this._directive.next("system_prompt"));
+  }
   /** (Optional) Number of choices to generate. */
   get num_choices() {
     return new FutureNumber(this._directive.next("num_choices"));
   }
-  /** (Optional) Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic. */
+  /** (Optional) Higher values make the output more random, lower values make the output more deterministic. */
   get temperature() {
     return new FutureNumber(this._directive.next("temperature"));
+  }
+  /** (Optional) Higher values decrease the likelihood of repeating previous tokens. */
+  get frequency_penalty() {
+    return new FutureNumber(this._directive.next("frequency_penalty"));
+  }
+  /** (Optional) Higher values decrease the likelihood of repeated sequences. */
+  get repetition_penalty() {
+    return new FutureNumber(this._directive.next("repetition_penalty"));
+  }
+  /** (Optional) Higher values increase the likelihood of new topics appearing. */
+  get presence_penalty() {
+    return new FutureNumber(this._directive.next("presence_penalty"));
+  }
+  /** (Optional) Probability below which less likely tokens are filtered out. */
+  get top_p() {
+    return new FutureNumber(this._directive.next("top_p"));
   }
   /** (Optional) Maximum number of tokens to generate. */
   get max_tokens() {
@@ -1200,13 +1275,33 @@ export class Llama3Instruct70BIn extends FutureObject {
   get prompt() {
     return new FutureString(this._directive.next("prompt"));
   }
+  /** (Optional) System prompt. */
+  get system_prompt() {
+    return new FutureString(this._directive.next("system_prompt"));
+  }
   /** (Optional) Number of choices to generate. */
   get num_choices() {
     return new FutureNumber(this._directive.next("num_choices"));
   }
-  /** (Optional) Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic. */
+  /** (Optional) Higher values make the output more random, lower values make the output more deterministic. */
   get temperature() {
     return new FutureNumber(this._directive.next("temperature"));
+  }
+  /** (Optional) Higher values decrease the likelihood of repeating previous tokens. */
+  get frequency_penalty() {
+    return new FutureNumber(this._directive.next("frequency_penalty"));
+  }
+  /** (Optional) Higher values decrease the likelihood of repeated sequences. */
+  get repetition_penalty() {
+    return new FutureNumber(this._directive.next("repetition_penalty"));
+  }
+  /** (Optional) Higher values increase the likelihood of new topics appearing. */
+  get presence_penalty() {
+    return new FutureNumber(this._directive.next("presence_penalty"));
+  }
+  /** (Optional) Probability below which less likely tokens are filtered out. */
+  get top_p() {
+    return new FutureNumber(this._directive.next("top_p"));
   }
   /** (Optional) Maximum number of tokens to generate. */
   get max_tokens() {
@@ -1237,39 +1332,6 @@ export class Llama3Instruct70BOut extends FutureObject {
   /** returns the result for `Llama3Instruct70BOut` once it's node has been run. */
   protected override async result(): Promise<Llama3Instruct70BOut> {
     return super.result() as Promise<Llama3Instruct70BOut>;
-  }
-}
-/** GenerateTextVisionIn */
-export class GenerateTextVisionIn extends FutureObject {
-  /** Text prompt. */
-  get prompt() {
-    return new FutureString(this._directive.next("prompt"));
-  }
-
-  /** Image prompts. */
-  get image_uris() {
-    return new GenerateTextVisionInImageUris(
-      this._directive.next("image_uris"),
-    );
-  }
-  /** (Optional) Maximum number of tokens to generate. */
-  get max_tokens() {
-    return new FutureNumber(this._directive.next("max_tokens"));
-  }
-  /** returns the result for `GenerateTextVisionIn` once it's node has been run. */
-  protected override async result(): Promise<GenerateTextVisionIn> {
-    return super.result() as Promise<GenerateTextVisionIn>;
-  }
-}
-/** GenerateTextVisionOut */
-export class GenerateTextVisionOut extends FutureObject {
-  /** Text response. */
-  get text() {
-    return new FutureString(this._directive.next("text"));
-  }
-  /** returns the result for `GenerateTextVisionOut` once it's node has been run. */
-  protected override async result(): Promise<GenerateTextVisionOut> {
-    return super.result() as Promise<GenerateTextVisionOut>;
   }
 }
 /** Firellava13BIn */
@@ -1569,6 +1631,10 @@ export class StableDiffusionXLControlNetIn extends FutureObject {
   get conditioning_scale() {
     return new FutureNumber(this._directive.next("conditioning_scale"));
   }
+  /** (Optional) Controls how much to transform the input image. */
+  get strength() {
+    return new FutureNumber(this._directive.next("strength"));
+  }
 
   /** (Optional) Random noise seeds. Default is random seeds for each generation. */
   get seeds() {
@@ -1594,8 +1660,8 @@ export class StableDiffusionXLControlNetOut extends FutureObject {
     return super.result() as Promise<StableDiffusionXLControlNetOut>;
   }
 }
-/** GenerativeEditImageIn */
-export class GenerativeEditImageIn extends FutureObject {
+/** InpaintImageIn */
+export class InpaintImageIn extends FutureObject {
   /** Original image. */
   get image_uri() {
     return new FutureString(this._directive.next("image_uri"));
@@ -1612,24 +1678,24 @@ export class GenerativeEditImageIn extends FutureObject {
   get store() {
     return new FutureString(this._directive.next("store"));
   }
-  /** returns the result for `GenerativeEditImageIn` once it's node has been run. */
-  protected override async result(): Promise<GenerativeEditImageIn> {
-    return super.result() as Promise<GenerativeEditImageIn>;
+  /** returns the result for `InpaintImageIn` once it's node has been run. */
+  protected override async result(): Promise<InpaintImageIn> {
+    return super.result() as Promise<InpaintImageIn>;
   }
 }
-/** GenerativeEditImageOut */
-export class GenerativeEditImageOut extends FutureObject {
+/** InpaintImageOut */
+export class InpaintImageOut extends FutureObject {
   /** Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
   get image_uri() {
     return new FutureString(this._directive.next("image_uri"));
   }
-  /** returns the result for `GenerativeEditImageOut` once it's node has been run. */
-  protected override async result(): Promise<GenerativeEditImageOut> {
-    return super.result() as Promise<GenerativeEditImageOut>;
+  /** returns the result for `InpaintImageOut` once it's node has been run. */
+  protected override async result(): Promise<InpaintImageOut> {
+    return super.result() as Promise<InpaintImageOut>;
   }
 }
-/** MultiGenerativeEditImageIn */
-export class MultiGenerativeEditImageIn extends FutureObject {
+/** MultiInpaintImageIn */
+export class MultiInpaintImageIn extends FutureObject {
   /** Original image. */
   get image_uri() {
     return new FutureString(this._directive.next("image_uri"));
@@ -1650,22 +1716,20 @@ export class MultiGenerativeEditImageIn extends FutureObject {
   get store() {
     return new FutureString(this._directive.next("store"));
   }
-  /** returns the result for `MultiGenerativeEditImageIn` once it's node has been run. */
-  protected override async result(): Promise<MultiGenerativeEditImageIn> {
-    return super.result() as Promise<MultiGenerativeEditImageIn>;
+  /** returns the result for `MultiInpaintImageIn` once it's node has been run. */
+  protected override async result(): Promise<MultiInpaintImageIn> {
+    return super.result() as Promise<MultiInpaintImageIn>;
   }
 }
-/** MultiGenerativeEditImageOut */
-export class MultiGenerativeEditImageOut extends FutureObject {
+/** MultiInpaintImageOut */
+export class MultiInpaintImageOut extends FutureObject {
   /** Generated images. */
   get outputs() {
-    return new MultiGenerativeEditImageOutOutputs(
-      this._directive.next("outputs"),
-    );
+    return new MultiInpaintImageOutOutputs(this._directive.next("outputs"));
   }
-  /** returns the result for `MultiGenerativeEditImageOut` once it's node has been run. */
-  protected override async result(): Promise<MultiGenerativeEditImageOut> {
-    return super.result() as Promise<MultiGenerativeEditImageOut>;
+  /** returns the result for `MultiInpaintImageOut` once it's node has been run. */
+  protected override async result(): Promise<MultiInpaintImageOut> {
+    return super.result() as Promise<MultiInpaintImageOut>;
   }
 }
 /** StableDiffusionXLInpaintIn */
@@ -1763,8 +1827,8 @@ export class Point extends FutureObject {
     return super.result() as Promise<Point>;
   }
 }
-/** FillMaskIn */
-export class FillMaskIn extends FutureObject {
+/** EraseImageIn */
+export class EraseImageIn extends FutureObject {
   /** Input image. */
   get image_uri() {
     return new FutureString(this._directive.next("image_uri"));
@@ -1777,20 +1841,20 @@ export class FillMaskIn extends FutureObject {
   get store() {
     return new FutureString(this._directive.next("store"));
   }
-  /** returns the result for `FillMaskIn` once it's node has been run. */
-  protected override async result(): Promise<FillMaskIn> {
-    return super.result() as Promise<FillMaskIn>;
+  /** returns the result for `EraseImageIn` once it's node has been run. */
+  protected override async result(): Promise<EraseImageIn> {
+    return super.result() as Promise<EraseImageIn>;
   }
 }
-/** FillMaskOut */
-export class FillMaskOut extends FutureObject {
+/** EraseImageOut */
+export class EraseImageOut extends FutureObject {
   /** Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
   get image_uri() {
     return new FutureString(this._directive.next("image_uri"));
   }
-  /** returns the result for `FillMaskOut` once it's node has been run. */
-  protected override async result(): Promise<FillMaskOut> {
-    return super.result() as Promise<FillMaskOut>;
+  /** returns the result for `EraseImageOut` once it's node has been run. */
+  protected override async result(): Promise<EraseImageOut> {
+    return super.result() as Promise<EraseImageOut>;
   }
 }
 /** BigLaMaIn */
@@ -1885,9 +1949,17 @@ export class DISISNetOut extends FutureObject {
 }
 /** UpscaleImageIn */
 export class UpscaleImageIn extends FutureObject {
+  /** (Optional) Prompt to guide model on the content of image to upscale. */
+  get prompt() {
+    return new FutureString(this._directive.next("prompt"));
+  }
   /** Input image. */
   get image_uri() {
     return new FutureString(this._directive.next("image_uri"));
+  }
+  /** (Optional) Resolution of the output image, in pixels. */
+  get output_resolution() {
+    return new FutureNumber(this._directive.next("output_resolution"));
   }
   /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
   get store() {
@@ -1907,32 +1979,6 @@ export class UpscaleImageOut extends FutureObject {
   /** returns the result for `UpscaleImageOut` once it's node has been run. */
   protected override async result(): Promise<UpscaleImageOut> {
     return super.result() as Promise<UpscaleImageOut>;
-  }
-}
-/** RealESRGANIn */
-export class RealESRGANIn extends FutureObject {
-  /** Input image. */
-  get image_uri() {
-    return new FutureString(this._directive.next("image_uri"));
-  }
-  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
-  get store() {
-    return new FutureString(this._directive.next("store"));
-  }
-  /** returns the result for `RealESRGANIn` once it's node has been run. */
-  protected override async result(): Promise<RealESRGANIn> {
-    return super.result() as Promise<RealESRGANIn>;
-  }
-}
-/** RealESRGANOut */
-export class RealESRGANOut extends FutureObject {
-  /** Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-  get image_uri() {
-    return new FutureString(this._directive.next("image_uri"));
-  }
-  /** returns the result for `RealESRGANOut` once it's node has been run. */
-  protected override async result(): Promise<RealESRGANOut> {
-    return super.result() as Promise<RealESRGANOut>;
   }
 }
 /** SegmentUnderPointIn */
@@ -2003,8 +2049,8 @@ export class SegmentAnythingOut extends FutureObject {
     return super.result() as Promise<SegmentAnythingOut>;
   }
 }
-/** TranscribeMediaIn */
-export class TranscribeMediaIn extends FutureObject {
+/** TranscribeSpeechIn */
+export class TranscribeSpeechIn extends FutureObject {
   /** Input audio. */
   get audio_uri() {
     return new FutureString(this._directive.next("audio_uri"));
@@ -2033,9 +2079,9 @@ export class TranscribeMediaIn extends FutureObject {
   get suggest_chapters() {
     return new FutureBoolean(this._directive.next("suggest_chapters"));
   }
-  /** returns the result for `TranscribeMediaIn` once it's node has been run. */
-  protected override async result(): Promise<TranscribeMediaIn> {
-    return super.result() as Promise<TranscribeMediaIn>;
+  /** returns the result for `TranscribeSpeechIn` once it's node has been run. */
+  protected override async result(): Promise<TranscribeSpeechIn> {
+    return super.result() as Promise<TranscribeSpeechIn>;
   }
 }
 /** TranscribedWord */
@@ -2104,8 +2150,8 @@ export class ChapterMarker extends FutureObject {
     return super.result() as Promise<ChapterMarker>;
   }
 }
-/** TranscribeMediaOut */
-export class TranscribeMediaOut extends FutureObject {
+/** TranscribeSpeechOut */
+export class TranscribeSpeechOut extends FutureObject {
   /** Transcribed text. */
   get text() {
     return new FutureString(this._directive.next("text"));
@@ -2113,16 +2159,16 @@ export class TranscribeMediaOut extends FutureObject {
 
   /** (Optional) Transcribed segments, if `segment` is enabled. */
   get segments() {
-    return new TranscribeMediaOutSegments(this._directive.next("segments"));
+    return new TranscribeSpeechOutSegments(this._directive.next("segments"));
   }
 
   /** (Optional) Chapter markers, if `suggest_chapters` is enabled. */
   get chapters() {
-    return new TranscribeMediaOutChapters(this._directive.next("chapters"));
+    return new TranscribeSpeechOutChapters(this._directive.next("chapters"));
   }
-  /** returns the result for `TranscribeMediaOut` once it's node has been run. */
-  protected override async result(): Promise<TranscribeMediaOut> {
-    return super.result() as Promise<TranscribeMediaOut>;
+  /** returns the result for `TranscribeSpeechOut` once it's node has been run. */
+  protected override async result(): Promise<TranscribeSpeechOut> {
+    return super.result() as Promise<TranscribeSpeechOut>;
   }
 }
 /** GenerateSpeechIn */
@@ -2473,8 +2519,8 @@ export class CLIPOut extends FutureObject {
     return super.result() as Promise<CLIPOut>;
   }
 }
-/** CreateVectorStoreIn */
-export class CreateVectorStoreIn extends FutureObject {
+/** FindOrCreateVectorStoreIn */
+export class FindOrCreateVectorStoreIn extends FutureObject {
   /** Vector store name. */
   get collection_name() {
     return new FutureString(this._directive.next("collection_name"));
@@ -2483,25 +2529,13 @@ export class CreateVectorStoreIn extends FutureObject {
   get model() {
     return new FutureString(this._directive.next("model"));
   }
-  /** (Optional) The max number of connections per layer for the index. */
-  get m() {
-    return new FutureNumber(this._directive.next("m"));
-  }
-  /** (Optional) The size of the dynamic candidate list for constructing the index graph. */
-  get ef_construction() {
-    return new FutureNumber(this._directive.next("ef_construction"));
-  }
-  /** (Optional) The distance metric to construct the index with. */
-  get metric() {
-    return new FutureString(this._directive.next("metric"));
-  }
-  /** returns the result for `CreateVectorStoreIn` once it's node has been run. */
-  protected override async result(): Promise<CreateVectorStoreIn> {
-    return super.result() as Promise<CreateVectorStoreIn>;
+  /** returns the result for `FindOrCreateVectorStoreIn` once it's node has been run. */
+  protected override async result(): Promise<FindOrCreateVectorStoreIn> {
+    return super.result() as Promise<FindOrCreateVectorStoreIn>;
   }
 }
-/** CreateVectorStoreOut */
-export class CreateVectorStoreOut extends FutureObject {
+/** FindOrCreateVectorStoreOut */
+export class FindOrCreateVectorStoreOut extends FutureObject {
   /** Vector store name. */
   get collection_name() {
     return new FutureString(this._directive.next("collection_name"));
@@ -2510,21 +2544,9 @@ export class CreateVectorStoreOut extends FutureObject {
   get model() {
     return new FutureString(this._directive.next("model"));
   }
-  /** The max number of connections per layer for the index. */
-  get m() {
-    return new FutureNumber(this._directive.next("m"));
-  }
-  /** The size of the dynamic candidate list for constructing the index graph. */
-  get ef_construction() {
-    return new FutureNumber(this._directive.next("ef_construction"));
-  }
-  /** The distance metric to construct the index with. */
-  get metric() {
-    return new FutureString(this._directive.next("metric"));
-  }
-  /** returns the result for `CreateVectorStoreOut` once it's node has been run. */
-  protected override async result(): Promise<CreateVectorStoreOut> {
-    return super.result() as Promise<CreateVectorStoreOut>;
+  /** returns the result for `FindOrCreateVectorStoreOut` once it's node has been run. */
+  protected override async result(): Promise<FindOrCreateVectorStoreOut> {
+    return super.result() as Promise<FindOrCreateVectorStoreOut>;
   }
 }
 /** ListVectorStoresIn */
@@ -2882,72 +2904,6 @@ export class Experimental extends Node {
     return super.output() as OpenAPI.components["schemas"]["ExperimentalOut"];
   }
 }
-export namespace RunPython {
-  /**
-   * RunPython Input
-   * https://www.substrate.run/nodes#RunPython
-   */
-  export type Input = FutureExpandAny<
-    OpenAPI.components["schemas"]["RunPythonIn"]
-  >;
-
-  /**
-   * RunPython Output
-   * https://www.substrate.run/nodes#RunPython
-   */
-  export type Output = OpenAPI.components["schemas"]["RunPythonOut"];
-}
-
-/**
- * Run code using a Python interpreter.
- *
- * https://www.substrate.run/nodes#RunPython
- */
-export class RunPython extends Node {
-  /**
-   * Input arguments: `code`, `input` (optional), `pip_install` (optional)
-   *
-   * Output fields: `stdout`, `output`, `stderr`
-   *
-   * https://www.substrate.run/nodes#RunPython
-   */
-  constructor(
-    args: FutureExpandAny<OpenAPI.components["schemas"]["RunPythonIn"]>,
-    options?: Options,
-  ) {
-    super(args, options);
-  }
-
-  /**
-   * Retrieve this node's output from a response.
-   *
-   * Output fields: `stdout`, `output`, `stderr`
-   *
-   * https://www.substrate.run/nodes#RunPython
-   */
-  protected override async result(): Promise<
-    OpenAPI.components["schemas"]["RunPythonOut"] | undefined
-  > {
-    return Promise.resolve(
-      this._response ? this._response.get(this) : undefined,
-    ) as Promise<OpenAPI.components["schemas"]["RunPythonOut"] | undefined>;
-  }
-
-  /**
-   * Future reference to this node's output.
-   *
-   * Output fields: `stdout`, `output`, `stderr`
-   *
-   * https://www.substrate.run/nodes#RunPython
-   */
-  override get future(): RunPythonOut {
-    return new RunPythonOut(new Trace([], this));
-  }
-
-  protected override output(): OpenAPI.components["schemas"]["RunPythonOut"] {
-    return super.output() as OpenAPI.components["schemas"]["RunPythonOut"];
-  }
-}
 export namespace GenerateText {
   /**
    * GenerateText Input
@@ -2971,7 +2927,7 @@ export namespace GenerateText {
  */
 export class GenerateText extends Node {
   /**
-   * Input arguments: `prompt`, `temperature` (optional), `max_tokens` (optional), `node` (optional)
+   * Input arguments: `prompt`, `image_uris` (optional), `temperature` (optional), `max_tokens` (optional), `model` (optional)
    *
    * Output fields: `text`
    *
@@ -3037,7 +2993,7 @@ export namespace MultiGenerateText {
  */
 export class MultiGenerateText extends Node {
   /**
-   * Input arguments: `prompt`, `num_choices`, `temperature` (optional), `max_tokens` (optional), `node` (optional)
+   * Input arguments: `prompt`, `num_choices`, `temperature` (optional), `max_tokens` (optional), `model` (optional)
    *
    * Output fields: `choices`
    *
@@ -3105,7 +3061,7 @@ export namespace BatchGenerateText {
  */
 export class BatchGenerateText extends Node {
   /**
-   * Input arguments: `prompts`, `temperature` (optional), `max_tokens` (optional)
+   * Input arguments: `prompts`, `temperature` (optional), `max_tokens` (optional), `model` (optional)
    *
    * Output fields: `outputs`
    *
@@ -3173,7 +3129,7 @@ export namespace BatchGenerateJSON {
  */
 export class BatchGenerateJSON extends Node {
   /**
-   * Input arguments: `node` (optional), `prompts`, `json_schema`, `temperature` (optional), `max_tokens` (optional)
+   * Input arguments: `prompts`, `json_schema`, `temperature` (optional), `max_tokens` (optional), `model` (optional)
    *
    * Output fields: `outputs`
    *
@@ -3241,7 +3197,7 @@ export namespace GenerateJSON {
  */
 export class GenerateJSON extends Node {
   /**
-   * Input arguments: `prompt`, `json_schema`, `temperature` (optional), `max_tokens` (optional), `node` (optional)
+   * Input arguments: `prompt`, `json_schema`, `temperature` (optional), `max_tokens` (optional), `model` (optional)
    *
    * Output fields: `json_object` (optional), `text` (optional)
    *
@@ -3307,7 +3263,7 @@ export namespace MultiGenerateJSON {
  */
 export class MultiGenerateJSON extends Node {
   /**
-   * Input arguments: `prompt`, `json_schema`, `num_choices`, `temperature` (optional), `max_tokens` (optional), `node` (optional)
+   * Input arguments: `prompt`, `json_schema`, `num_choices`, `temperature` (optional), `max_tokens` (optional), `model` (optional)
    *
    * Output fields: `choices`
    *
@@ -3352,76 +3308,6 @@ export class MultiGenerateJSON extends Node {
     return super.output() as OpenAPI.components["schemas"]["MultiGenerateJSONOut"];
   }
 }
-export namespace GenerateTextVision {
-  /**
-   * GenerateTextVision Input
-   * https://www.substrate.run/nodes#GenerateTextVision
-   */
-  export type Input = FutureExpandAny<
-    OpenAPI.components["schemas"]["GenerateTextVisionIn"]
-  >;
-
-  /**
-   * GenerateTextVision Output
-   * https://www.substrate.run/nodes#GenerateTextVision
-   */
-  export type Output = OpenAPI.components["schemas"]["GenerateTextVisionOut"];
-}
-
-/**
- * Generate text with image input.
- *
- * https://www.substrate.run/nodes#GenerateTextVision
- */
-export class GenerateTextVision extends Node {
-  /**
-   * Input arguments: `prompt`, `image_uris`, `max_tokens` (optional)
-   *
-   * Output fields: `text`
-   *
-   * https://www.substrate.run/nodes#GenerateTextVision
-   */
-  constructor(
-    args: FutureExpandAny<
-      OpenAPI.components["schemas"]["GenerateTextVisionIn"]
-    >,
-    options?: Options,
-  ) {
-    super(args, options);
-  }
-
-  /**
-   * Retrieve this node's output from a response.
-   *
-   * Output fields: `text`
-   *
-   * https://www.substrate.run/nodes#GenerateTextVision
-   */
-  protected override async result(): Promise<
-    OpenAPI.components["schemas"]["GenerateTextVisionOut"] | undefined
-  > {
-    return Promise.resolve(
-      this._response ? this._response.get(this) : undefined,
-    ) as Promise<
-      OpenAPI.components["schemas"]["GenerateTextVisionOut"] | undefined
-    >;
-  }
-
-  /**
-   * Future reference to this node's output.
-   *
-   * Output fields: `text`
-   *
-   * https://www.substrate.run/nodes#GenerateTextVision
-   */
-  override get future(): GenerateTextVisionOut {
-    return new GenerateTextVisionOut(new Trace([], this));
-  }
-
-  protected override output(): OpenAPI.components["schemas"]["GenerateTextVisionOut"] {
-    return super.output() as OpenAPI.components["schemas"]["GenerateTextVisionOut"];
-  }
-}
 export namespace Mistral7BInstruct {
   /**
    * Mistral7BInstruct Input
@@ -3445,7 +3331,7 @@ export namespace Mistral7BInstruct {
  */
 export class Mistral7BInstruct extends Node {
   /**
-   * Input arguments: `prompt`, `num_choices` (optional), `json_schema` (optional), `temperature` (optional), `max_tokens` (optional)
+   * Input arguments: `prompt`, `system_prompt` (optional), `num_choices` (optional), `json_schema` (optional), `temperature` (optional), `frequency_penalty` (optional), `repetition_penalty` (optional), `presence_penalty` (optional), `top_p` (optional), `max_tokens` (optional)
    *
    * Output fields: `choices`
    *
@@ -3513,7 +3399,7 @@ export namespace Mixtral8x7BInstruct {
  */
 export class Mixtral8x7BInstruct extends Node {
   /**
-   * Input arguments: `prompt`, `num_choices` (optional), `json_schema` (optional), `temperature` (optional), `max_tokens` (optional)
+   * Input arguments: `prompt`, `system_prompt` (optional), `num_choices` (optional), `json_schema` (optional), `temperature` (optional), `frequency_penalty` (optional), `repetition_penalty` (optional), `presence_penalty` (optional), `top_p` (optional), `max_tokens` (optional)
    *
    * Output fields: `choices`
    *
@@ -3583,7 +3469,7 @@ export namespace Llama3Instruct8B {
  */
 export class Llama3Instruct8B extends Node {
   /**
-   * Input arguments: `prompt`, `num_choices` (optional), `temperature` (optional), `max_tokens` (optional), `json_schema` (optional)
+   * Input arguments: `prompt`, `system_prompt` (optional), `num_choices` (optional), `temperature` (optional), `frequency_penalty` (optional), `repetition_penalty` (optional), `presence_penalty` (optional), `top_p` (optional), `max_tokens` (optional), `json_schema` (optional)
    *
    * Output fields: `choices`
    *
@@ -3651,7 +3537,7 @@ export namespace Llama3Instruct70B {
  */
 export class Llama3Instruct70B extends Node {
   /**
-   * Input arguments: `prompt`, `num_choices` (optional), `temperature` (optional), `max_tokens` (optional)
+   * Input arguments: `prompt`, `system_prompt` (optional), `num_choices` (optional), `temperature` (optional), `frequency_penalty` (optional), `repetition_penalty` (optional), `presence_penalty` (optional), `top_p` (optional), `max_tokens` (optional)
    *
    * Output fields: `choices`
    *
@@ -3898,39 +3784,37 @@ export class MultiGenerateImage extends Node {
     return super.output() as OpenAPI.components["schemas"]["MultiGenerateImageOut"];
   }
 }
-export namespace GenerativeEditImage {
+export namespace InpaintImage {
   /**
-   * GenerativeEditImage Input
-   * https://www.substrate.run/nodes#GenerativeEditImage
+   * InpaintImage Input
+   * https://www.substrate.run/nodes#InpaintImage
    */
   export type Input = FutureExpandAny<
-    OpenAPI.components["schemas"]["GenerativeEditImageIn"]
+    OpenAPI.components["schemas"]["InpaintImageIn"]
   >;
 
   /**
-   * GenerativeEditImage Output
-   * https://www.substrate.run/nodes#GenerativeEditImage
+   * InpaintImage Output
+   * https://www.substrate.run/nodes#InpaintImage
    */
-  export type Output = OpenAPI.components["schemas"]["GenerativeEditImageOut"];
+  export type Output = OpenAPI.components["schemas"]["InpaintImageOut"];
 }
 
 /**
- * Edit an image using image generation.
+ * Edit an image using image generation inside part of the image or the full image.
  *
- * https://www.substrate.run/nodes#GenerativeEditImage
+ * https://www.substrate.run/nodes#InpaintImage
  */
-export class GenerativeEditImage extends Node {
+export class InpaintImage extends Node {
   /**
    * Input arguments: `image_uri`, `prompt`, `mask_image_uri` (optional), `store` (optional)
    *
    * Output fields: `image_uri`
    *
-   * https://www.substrate.run/nodes#GenerativeEditImage
+   * https://www.substrate.run/nodes#InpaintImage
    */
   constructor(
-    args: FutureExpandAny<
-      OpenAPI.components["schemas"]["GenerativeEditImageIn"]
-    >,
+    args: FutureExpandAny<OpenAPI.components["schemas"]["InpaintImageIn"]>,
     options?: Options,
   ) {
     super(args, options);
@@ -3941,16 +3825,14 @@ export class GenerativeEditImage extends Node {
    *
    * Output fields: `image_uri`
    *
-   * https://www.substrate.run/nodes#GenerativeEditImage
+   * https://www.substrate.run/nodes#InpaintImage
    */
   protected override async result(): Promise<
-    OpenAPI.components["schemas"]["GenerativeEditImageOut"] | undefined
+    OpenAPI.components["schemas"]["InpaintImageOut"] | undefined
   > {
     return Promise.resolve(
       this._response ? this._response.get(this) : undefined,
-    ) as Promise<
-      OpenAPI.components["schemas"]["GenerativeEditImageOut"] | undefined
-    >;
+    ) as Promise<OpenAPI.components["schemas"]["InpaintImageOut"] | undefined>;
   }
 
   /**
@@ -3958,50 +3840,47 @@ export class GenerativeEditImage extends Node {
    *
    * Output fields: `image_uri`
    *
-   * https://www.substrate.run/nodes#GenerativeEditImage
+   * https://www.substrate.run/nodes#InpaintImage
    */
-  override get future(): GenerativeEditImageOut {
-    return new GenerativeEditImageOut(new Trace([], this));
+  override get future(): InpaintImageOut {
+    return new InpaintImageOut(new Trace([], this));
   }
 
-  protected override output(): OpenAPI.components["schemas"]["GenerativeEditImageOut"] {
-    return super.output() as OpenAPI.components["schemas"]["GenerativeEditImageOut"];
+  protected override output(): OpenAPI.components["schemas"]["InpaintImageOut"] {
+    return super.output() as OpenAPI.components["schemas"]["InpaintImageOut"];
   }
 }
-export namespace MultiGenerativeEditImage {
+export namespace MultiInpaintImage {
   /**
-   * MultiGenerativeEditImage Input
-   * https://www.substrate.run/nodes#MultiGenerativeEditImage
+   * MultiInpaintImage Input
+   * https://www.substrate.run/nodes#MultiInpaintImage
    */
   export type Input = FutureExpandAny<
-    OpenAPI.components["schemas"]["MultiGenerativeEditImageIn"]
+    OpenAPI.components["schemas"]["MultiInpaintImageIn"]
   >;
 
   /**
-   * MultiGenerativeEditImage Output
-   * https://www.substrate.run/nodes#MultiGenerativeEditImage
+   * MultiInpaintImage Output
+   * https://www.substrate.run/nodes#MultiInpaintImage
    */
-  export type Output =
-    OpenAPI.components["schemas"]["MultiGenerativeEditImageOut"];
+  export type Output = OpenAPI.components["schemas"]["MultiInpaintImageOut"];
 }
 
 /**
  * Edit multiple images using image generation.
  *
- * https://www.substrate.run/nodes#MultiGenerativeEditImage
+ * https://www.substrate.run/nodes#MultiInpaintImage
  */
-export class MultiGenerativeEditImage extends Node {
+export class MultiInpaintImage extends Node {
   /**
    * Input arguments: `image_uri`, `prompt`, `mask_image_uri` (optional), `num_images`, `store` (optional)
    *
    * Output fields: `outputs`
    *
-   * https://www.substrate.run/nodes#MultiGenerativeEditImage
+   * https://www.substrate.run/nodes#MultiInpaintImage
    */
   constructor(
-    args: FutureExpandAny<
-      OpenAPI.components["schemas"]["MultiGenerativeEditImageIn"]
-    >,
+    args: FutureExpandAny<OpenAPI.components["schemas"]["MultiInpaintImageIn"]>,
     options?: Options,
   ) {
     super(args, options);
@@ -4012,15 +3891,15 @@ export class MultiGenerativeEditImage extends Node {
    *
    * Output fields: `outputs`
    *
-   * https://www.substrate.run/nodes#MultiGenerativeEditImage
+   * https://www.substrate.run/nodes#MultiInpaintImage
    */
   protected override async result(): Promise<
-    OpenAPI.components["schemas"]["MultiGenerativeEditImageOut"] | undefined
+    OpenAPI.components["schemas"]["MultiInpaintImageOut"] | undefined
   > {
     return Promise.resolve(
       this._response ? this._response.get(this) : undefined,
     ) as Promise<
-      OpenAPI.components["schemas"]["MultiGenerativeEditImageOut"] | undefined
+      OpenAPI.components["schemas"]["MultiInpaintImageOut"] | undefined
     >;
   }
 
@@ -4029,82 +3908,14 @@ export class MultiGenerativeEditImage extends Node {
    *
    * Output fields: `outputs`
    *
-   * https://www.substrate.run/nodes#MultiGenerativeEditImage
+   * https://www.substrate.run/nodes#MultiInpaintImage
    */
-  override get future(): MultiGenerativeEditImageOut {
-    return new MultiGenerativeEditImageOut(new Trace([], this));
+  override get future(): MultiInpaintImageOut {
+    return new MultiInpaintImageOut(new Trace([], this));
   }
 
-  protected override output(): OpenAPI.components["schemas"]["MultiGenerativeEditImageOut"] {
-    return super.output() as OpenAPI.components["schemas"]["MultiGenerativeEditImageOut"];
-  }
-}
-export namespace StableDiffusionXL {
-  /**
-   * StableDiffusionXL Input
-   * https://www.substrate.run/nodes#StableDiffusionXL
-   */
-  export type Input = FutureExpandAny<
-    OpenAPI.components["schemas"]["StableDiffusionXLIn"]
-  >;
-
-  /**
-   * StableDiffusionXL Output
-   * https://www.substrate.run/nodes#StableDiffusionXL
-   */
-  export type Output = OpenAPI.components["schemas"]["StableDiffusionXLOut"];
-}
-
-/**
- * Generate an image using [Stable Diffusion XL](https://arxiv.org/abs/2307.01952).
- *
- * https://www.substrate.run/nodes#StableDiffusionXL
- */
-export class StableDiffusionXL extends Node {
-  /**
-   * Input arguments: `prompt`, `negative_prompt` (optional), `steps` (optional), `num_images`, `store` (optional), `height` (optional), `width` (optional), `seeds` (optional), `guidance_scale` (optional)
-   *
-   * Output fields: `outputs`
-   *
-   * https://www.substrate.run/nodes#StableDiffusionXL
-   */
-  constructor(
-    args: FutureExpandAny<OpenAPI.components["schemas"]["StableDiffusionXLIn"]>,
-    options?: Options,
-  ) {
-    super(args, options);
-  }
-
-  /**
-   * Retrieve this node's output from a response.
-   *
-   * Output fields: `outputs`
-   *
-   * https://www.substrate.run/nodes#StableDiffusionXL
-   */
-  protected override async result(): Promise<
-    OpenAPI.components["schemas"]["StableDiffusionXLOut"] | undefined
-  > {
-    return Promise.resolve(
-      this._response ? this._response.get(this) : undefined,
-    ) as Promise<
-      OpenAPI.components["schemas"]["StableDiffusionXLOut"] | undefined
-    >;
-  }
-
-  /**
-   * Future reference to this node's output.
-   *
-   * Output fields: `outputs`
-   *
-   * https://www.substrate.run/nodes#StableDiffusionXL
-   */
-  override get future(): StableDiffusionXLOut {
-    return new StableDiffusionXLOut(new Trace([], this));
-  }
-
-  protected override output(): OpenAPI.components["schemas"]["StableDiffusionXLOut"] {
-    return super.output() as OpenAPI.components["schemas"]["StableDiffusionXLOut"];
+  protected override output(): OpenAPI.components["schemas"]["MultiInpaintImageOut"] {
+    return super.output() as OpenAPI.components["schemas"]["MultiInpaintImageOut"];
   }
 }
 export namespace StableDiffusionXLLightning {
@@ -4273,7 +4084,7 @@ export namespace StableDiffusionXLControlNet {
  */
 export class StableDiffusionXLControlNet extends Node {
   /**
-   * Input arguments: `image_uri`, `control_method`, `prompt`, `num_images`, `output_resolution` (optional), `negative_prompt` (optional), `store` (optional), `conditioning_scale` (optional), `seeds` (optional)
+   * Input arguments: `image_uri`, `control_method`, `prompt`, `num_images`, `output_resolution` (optional), `negative_prompt` (optional), `store` (optional), `conditioning_scale` (optional), `strength` (optional), `seeds` (optional)
    *
    * Output fields: `outputs`
    *
@@ -4321,108 +4132,37 @@ export class StableDiffusionXLControlNet extends Node {
     return super.output() as OpenAPI.components["schemas"]["StableDiffusionXLControlNetOut"];
   }
 }
-export namespace StableDiffusionXLIPAdapter {
+export namespace TranscribeSpeech {
   /**
-   * StableDiffusionXLIPAdapter Input
-   * https://www.substrate.run/nodes#StableDiffusionXLIPAdapter
+   * TranscribeSpeech Input
+   * https://www.substrate.run/nodes#TranscribeSpeech
    */
   export type Input = FutureExpandAny<
-    OpenAPI.components["schemas"]["StableDiffusionXLIPAdapterIn"]
+    OpenAPI.components["schemas"]["TranscribeSpeechIn"]
   >;
 
   /**
-   * StableDiffusionXLIPAdapter Output
-   * https://www.substrate.run/nodes#StableDiffusionXLIPAdapter
+   * TranscribeSpeech Output
+   * https://www.substrate.run/nodes#TranscribeSpeech
    */
-  export type Output =
-    OpenAPI.components["schemas"]["StableDiffusionXLIPAdapterOut"];
-}
-
-/**
- * Generate an image with an image prompt, using Stable Diffusion XL with [IP-Adapter](https://arxiv.org/abs/2308.06721).
- *
- * https://www.substrate.run/nodes#StableDiffusionXLIPAdapter
- */
-export class StableDiffusionXLIPAdapter extends Node {
-  /**
-   * Input arguments: `prompt`, `image_prompt_uri`, `num_images`, `ip_adapter_scale` (optional), `negative_prompt` (optional), `store` (optional), `width` (optional), `height` (optional), `seeds` (optional)
-   *
-   * Output fields: `outputs`
-   *
-   * https://www.substrate.run/nodes#StableDiffusionXLIPAdapter
-   */
-  constructor(
-    args: FutureExpandAny<
-      OpenAPI.components["schemas"]["StableDiffusionXLIPAdapterIn"]
-    >,
-    options?: Options,
-  ) {
-    super(args, options);
-  }
-
-  /**
-   * Retrieve this node's output from a response.
-   *
-   * Output fields: `outputs`
-   *
-   * https://www.substrate.run/nodes#StableDiffusionXLIPAdapter
-   */
-  protected override async result(): Promise<
-    OpenAPI.components["schemas"]["StableDiffusionXLIPAdapterOut"] | undefined
-  > {
-    return Promise.resolve(
-      this._response ? this._response.get(this) : undefined,
-    ) as Promise<
-      OpenAPI.components["schemas"]["StableDiffusionXLIPAdapterOut"] | undefined
-    >;
-  }
-
-  /**
-   * Future reference to this node's output.
-   *
-   * Output fields: `outputs`
-   *
-   * https://www.substrate.run/nodes#StableDiffusionXLIPAdapter
-   */
-  override get future(): StableDiffusionXLIPAdapterOut {
-    return new StableDiffusionXLIPAdapterOut(new Trace([], this));
-  }
-
-  protected override output(): OpenAPI.components["schemas"]["StableDiffusionXLIPAdapterOut"] {
-    return super.output() as OpenAPI.components["schemas"]["StableDiffusionXLIPAdapterOut"];
-  }
-}
-export namespace TranscribeMedia {
-  /**
-   * TranscribeMedia Input
-   * https://www.substrate.run/nodes#TranscribeMedia
-   */
-  export type Input = FutureExpandAny<
-    OpenAPI.components["schemas"]["TranscribeMediaIn"]
-  >;
-
-  /**
-   * TranscribeMedia Output
-   * https://www.substrate.run/nodes#TranscribeMedia
-   */
-  export type Output = OpenAPI.components["schemas"]["TranscribeMediaOut"];
+  export type Output = OpenAPI.components["schemas"]["TranscribeSpeechOut"];
 }
 
 /**
  * Transcribe speech in an audio or video file.
  *
- * https://www.substrate.run/nodes#TranscribeMedia
+ * https://www.substrate.run/nodes#TranscribeSpeech
  */
-export class TranscribeMedia extends Node {
+export class TranscribeSpeech extends Node {
   /**
    * Input arguments: `audio_uri`, `prompt` (optional), `language` (optional), `segment` (optional), `align` (optional), `diarize` (optional), `suggest_chapters` (optional)
    *
    * Output fields: `text`, `segments` (optional), `chapters` (optional)
    *
-   * https://www.substrate.run/nodes#TranscribeMedia
+   * https://www.substrate.run/nodes#TranscribeSpeech
    */
   constructor(
-    args: FutureExpandAny<OpenAPI.components["schemas"]["TranscribeMediaIn"]>,
+    args: FutureExpandAny<OpenAPI.components["schemas"]["TranscribeSpeechIn"]>,
     options?: Options,
   ) {
     super(args, options);
@@ -4433,15 +4173,15 @@ export class TranscribeMedia extends Node {
    *
    * Output fields: `text`, `segments` (optional), `chapters` (optional)
    *
-   * https://www.substrate.run/nodes#TranscribeMedia
+   * https://www.substrate.run/nodes#TranscribeSpeech
    */
   protected override async result(): Promise<
-    OpenAPI.components["schemas"]["TranscribeMediaOut"] | undefined
+    OpenAPI.components["schemas"]["TranscribeSpeechOut"] | undefined
   > {
     return Promise.resolve(
       this._response ? this._response.get(this) : undefined,
     ) as Promise<
-      OpenAPI.components["schemas"]["TranscribeMediaOut"] | undefined
+      OpenAPI.components["schemas"]["TranscribeSpeechOut"] | undefined
     >;
   }
 
@@ -4450,14 +4190,14 @@ export class TranscribeMedia extends Node {
    *
    * Output fields: `text`, `segments` (optional), `chapters` (optional)
    *
-   * https://www.substrate.run/nodes#TranscribeMedia
+   * https://www.substrate.run/nodes#TranscribeSpeech
    */
-  override get future(): TranscribeMediaOut {
-    return new TranscribeMediaOut(new Trace([], this));
+  override get future(): TranscribeSpeechOut {
+    return new TranscribeSpeechOut(new Trace([], this));
   }
 
-  protected override output(): OpenAPI.components["schemas"]["TranscribeMediaOut"] {
-    return super.output() as OpenAPI.components["schemas"]["TranscribeMediaOut"];
+  protected override output(): OpenAPI.components["schemas"]["TranscribeSpeechOut"] {
+    return super.output() as OpenAPI.components["schemas"]["TranscribeSpeechOut"];
   }
 }
 export namespace GenerateSpeech {
@@ -4528,72 +4268,6 @@ export class GenerateSpeech extends Node {
     return super.output() as OpenAPI.components["schemas"]["GenerateSpeechOut"];
   }
 }
-export namespace XTTSV2 {
-  /**
-   * XTTSV2 Input
-   * https://www.substrate.run/nodes#XTTSV2
-   */
-  export type Input = FutureExpandAny<
-    OpenAPI.components["schemas"]["XTTSV2In"]
-  >;
-
-  /**
-   * XTTSV2 Output
-   * https://www.substrate.run/nodes#XTTSV2
-   */
-  export type Output = OpenAPI.components["schemas"]["XTTSV2Out"];
-}
-
-/**
- * Generate speech from text using [XTTS v2](https://docs.coqui.ai/en/latest/models/xtts.html).
- *
- * https://www.substrate.run/nodes#XTTSV2
- */
-export class XTTSV2 extends Node {
-  /**
-   * Input arguments: `text`, `audio_uri` (optional), `language` (optional), `store` (optional)
-   *
-   * Output fields: `audio_uri`
-   *
-   * https://www.substrate.run/nodes#XTTSV2
-   */
-  constructor(
-    args: FutureExpandAny<OpenAPI.components["schemas"]["XTTSV2In"]>,
-    options?: Options,
-  ) {
-    super(args, options);
-  }
-
-  /**
-   * Retrieve this node's output from a response.
-   *
-   * Output fields: `audio_uri`
-   *
-   * https://www.substrate.run/nodes#XTTSV2
-   */
-  protected override async result(): Promise<
-    OpenAPI.components["schemas"]["XTTSV2Out"] | undefined
-  > {
-    return Promise.resolve(
-      this._response ? this._response.get(this) : undefined,
-    ) as Promise<OpenAPI.components["schemas"]["XTTSV2Out"] | undefined>;
-  }
-
-  /**
-   * Future reference to this node's output.
-   *
-   * Output fields: `audio_uri`
-   *
-   * https://www.substrate.run/nodes#XTTSV2
-   */
-  override get future(): XTTSV2Out {
-    return new XTTSV2Out(new Trace([], this));
-  }
-
-  protected override output(): OpenAPI.components["schemas"]["XTTSV2Out"] {
-    return super.output() as OpenAPI.components["schemas"]["XTTSV2Out"];
-  }
-}
 export namespace RemoveBackground {
   /**
    * RemoveBackground Input
@@ -4611,7 +4285,7 @@ export namespace RemoveBackground {
 }
 
 /**
- * Remove the background from an image, with the option to return the foreground as a mask.
+ * Remove the background from an image and return the foreground segment as a cut-out or a mask.
  *
  * https://www.substrate.run/nodes#RemoveBackground
  */
@@ -4662,37 +4336,37 @@ export class RemoveBackground extends Node {
     return super.output() as OpenAPI.components["schemas"]["RemoveBackgroundOut"];
   }
 }
-export namespace FillMask {
+export namespace EraseImage {
   /**
-   * FillMask Input
-   * https://www.substrate.run/nodes#FillMask
+   * EraseImage Input
+   * https://www.substrate.run/nodes#EraseImage
    */
   export type Input = FutureExpandAny<
-    OpenAPI.components["schemas"]["FillMaskIn"]
+    OpenAPI.components["schemas"]["EraseImageIn"]
   >;
 
   /**
-   * FillMask Output
-   * https://www.substrate.run/nodes#FillMask
+   * EraseImage Output
+   * https://www.substrate.run/nodes#EraseImage
    */
-  export type Output = OpenAPI.components["schemas"]["FillMaskOut"];
+  export type Output = OpenAPI.components["schemas"]["EraseImageOut"];
 }
 
 /**
- * Fill (inpaint) part of an image, e.g. to 'remove' an object.
+ * Erase the masked part of an image, e.g. to 'remove' an object.
  *
- * https://www.substrate.run/nodes#FillMask
+ * https://www.substrate.run/nodes#EraseImage
  */
-export class FillMask extends Node {
+export class EraseImage extends Node {
   /**
    * Input arguments: `image_uri`, `mask_image_uri`, `store` (optional)
    *
    * Output fields: `image_uri`
    *
-   * https://www.substrate.run/nodes#FillMask
+   * https://www.substrate.run/nodes#EraseImage
    */
   constructor(
-    args: FutureExpandAny<OpenAPI.components["schemas"]["FillMaskIn"]>,
+    args: FutureExpandAny<OpenAPI.components["schemas"]["EraseImageIn"]>,
     options?: Options,
   ) {
     super(args, options);
@@ -4703,14 +4377,14 @@ export class FillMask extends Node {
    *
    * Output fields: `image_uri`
    *
-   * https://www.substrate.run/nodes#FillMask
+   * https://www.substrate.run/nodes#EraseImage
    */
   protected override async result(): Promise<
-    OpenAPI.components["schemas"]["FillMaskOut"] | undefined
+    OpenAPI.components["schemas"]["EraseImageOut"] | undefined
   > {
     return Promise.resolve(
       this._response ? this._response.get(this) : undefined,
-    ) as Promise<OpenAPI.components["schemas"]["FillMaskOut"] | undefined>;
+    ) as Promise<OpenAPI.components["schemas"]["EraseImageOut"] | undefined>;
   }
 
   /**
@@ -4718,14 +4392,14 @@ export class FillMask extends Node {
    *
    * Output fields: `image_uri`
    *
-   * https://www.substrate.run/nodes#FillMask
+   * https://www.substrate.run/nodes#EraseImage
    */
-  override get future(): FillMaskOut {
-    return new FillMaskOut(new Trace([], this));
+  override get future(): EraseImageOut {
+    return new EraseImageOut(new Trace([], this));
   }
 
-  protected override output(): OpenAPI.components["schemas"]["FillMaskOut"] {
-    return super.output() as OpenAPI.components["schemas"]["FillMaskOut"];
+  protected override output(): OpenAPI.components["schemas"]["EraseImageOut"] {
+    return super.output() as OpenAPI.components["schemas"]["EraseImageOut"];
   }
 }
 export namespace UpscaleImage {
@@ -4745,13 +4419,13 @@ export namespace UpscaleImage {
 }
 
 /**
- * Upscale an image.
+ * Upscale an image using image generation.
  *
  * https://www.substrate.run/nodes#UpscaleImage
  */
 export class UpscaleImage extends Node {
   /**
-   * Input arguments: `image_uri`, `store` (optional)
+   * Input arguments: `prompt` (optional), `image_uri`, `output_resolution` (optional), `store` (optional)
    *
    * Output fields: `image_uri`
    *
@@ -5328,37 +5002,40 @@ export class CLIP extends Node {
     return super.output() as OpenAPI.components["schemas"]["CLIPOut"];
   }
 }
-export namespace CreateVectorStore {
+export namespace FindOrCreateVectorStore {
   /**
-   * CreateVectorStore Input
-   * https://www.substrate.run/nodes#CreateVectorStore
+   * FindOrCreateVectorStore Input
+   * https://www.substrate.run/nodes#FindOrCreateVectorStore
    */
   export type Input = FutureExpandAny<
-    OpenAPI.components["schemas"]["CreateVectorStoreIn"]
+    OpenAPI.components["schemas"]["FindOrCreateVectorStoreIn"]
   >;
 
   /**
-   * CreateVectorStore Output
-   * https://www.substrate.run/nodes#CreateVectorStore
+   * FindOrCreateVectorStore Output
+   * https://www.substrate.run/nodes#FindOrCreateVectorStore
    */
-  export type Output = OpenAPI.components["schemas"]["CreateVectorStoreOut"];
+  export type Output =
+    OpenAPI.components["schemas"]["FindOrCreateVectorStoreOut"];
 }
 
 /**
- * Create a vector store for storing and querying embeddings.
+ * Find a vector store matching the given collection name, or create a new vector store.
  *
- * https://www.substrate.run/nodes#CreateVectorStore
+ * https://www.substrate.run/nodes#FindOrCreateVectorStore
  */
-export class CreateVectorStore extends Node {
+export class FindOrCreateVectorStore extends Node {
   /**
-   * Input arguments: `collection_name`, `model`, `m` (optional), `ef_construction` (optional), `metric` (optional)
+   * Input arguments: `collection_name`, `model`
    *
-   * Output fields: `collection_name`, `model`, `m`, `ef_construction`, `metric`
+   * Output fields: `collection_name`, `model`
    *
-   * https://www.substrate.run/nodes#CreateVectorStore
+   * https://www.substrate.run/nodes#FindOrCreateVectorStore
    */
   constructor(
-    args: FutureExpandAny<OpenAPI.components["schemas"]["CreateVectorStoreIn"]>,
+    args: FutureExpandAny<
+      OpenAPI.components["schemas"]["FindOrCreateVectorStoreIn"]
+    >,
     options?: Options,
   ) {
     super(args, options);
@@ -5367,33 +5044,33 @@ export class CreateVectorStore extends Node {
   /**
    * Retrieve this node's output from a response.
    *
-   * Output fields: `collection_name`, `model`, `m`, `ef_construction`, `metric`
+   * Output fields: `collection_name`, `model`
    *
-   * https://www.substrate.run/nodes#CreateVectorStore
+   * https://www.substrate.run/nodes#FindOrCreateVectorStore
    */
   protected override async result(): Promise<
-    OpenAPI.components["schemas"]["CreateVectorStoreOut"] | undefined
+    OpenAPI.components["schemas"]["FindOrCreateVectorStoreOut"] | undefined
   > {
     return Promise.resolve(
       this._response ? this._response.get(this) : undefined,
     ) as Promise<
-      OpenAPI.components["schemas"]["CreateVectorStoreOut"] | undefined
+      OpenAPI.components["schemas"]["FindOrCreateVectorStoreOut"] | undefined
     >;
   }
 
   /**
    * Future reference to this node's output.
    *
-   * Output fields: `collection_name`, `model`, `m`, `ef_construction`, `metric`
+   * Output fields: `collection_name`, `model`
    *
-   * https://www.substrate.run/nodes#CreateVectorStore
+   * https://www.substrate.run/nodes#FindOrCreateVectorStore
    */
-  override get future(): CreateVectorStoreOut {
-    return new CreateVectorStoreOut(new Trace([], this));
+  override get future(): FindOrCreateVectorStoreOut {
+    return new FindOrCreateVectorStoreOut(new Trace([], this));
   }
 
-  protected override output(): OpenAPI.components["schemas"]["CreateVectorStoreOut"] {
-    return super.output() as OpenAPI.components["schemas"]["CreateVectorStoreOut"];
+  protected override output(): OpenAPI.components["schemas"]["FindOrCreateVectorStoreOut"] {
+    return super.output() as OpenAPI.components["schemas"]["FindOrCreateVectorStoreOut"];
   }
 }
 export namespace ListVectorStores {
@@ -5800,14 +5477,12 @@ export class DeleteVectors extends Node {
 }
 export type AnyNode =
   | Experimental
-  | RunPython
   | GenerateText
   | MultiGenerateText
   | BatchGenerateText
   | BatchGenerateJSON
   | GenerateJSON
   | MultiGenerateJSON
-  | GenerateTextVision
   | Mistral7BInstruct
   | Mixtral8x7BInstruct
   | Llama3Instruct8B
@@ -5815,18 +5490,15 @@ export type AnyNode =
   | Firellava13B
   | GenerateImage
   | MultiGenerateImage
-  | GenerativeEditImage
-  | MultiGenerativeEditImage
-  | StableDiffusionXL
+  | InpaintImage
+  | MultiInpaintImage
   | StableDiffusionXLLightning
   | StableDiffusionXLInpaint
   | StableDiffusionXLControlNet
-  | StableDiffusionXLIPAdapter
-  | TranscribeMedia
+  | TranscribeSpeech
   | GenerateSpeech
-  | XTTSV2
   | RemoveBackground
-  | FillMask
+  | EraseImage
   | UpscaleImage
   | SegmentUnderPoint
   | SegmentAnything
@@ -5836,7 +5508,7 @@ export type AnyNode =
   | MultiEmbedImage
   | JinaV2
   | CLIP
-  | CreateVectorStore
+  | FindOrCreateVectorStore
   | ListVectorStores
   | DeleteVectorStore
   | QueryVectorStore
@@ -5846,90 +5518,80 @@ export type AnyNode =
 
 export type NodeOutput<T> = T extends Experimental
   ? OpenAPI.components["schemas"]["ExperimentalOut"]
-  : T extends RunPython
-    ? OpenAPI.components["schemas"]["RunPythonOut"]
-    : T extends GenerateText
-      ? OpenAPI.components["schemas"]["GenerateTextOut"]
-      : T extends MultiGenerateText
-        ? OpenAPI.components["schemas"]["MultiGenerateTextOut"]
-        : T extends BatchGenerateText
-          ? OpenAPI.components["schemas"]["BatchGenerateTextOut"]
-          : T extends BatchGenerateJSON
-            ? OpenAPI.components["schemas"]["BatchGenerateJSONOut"]
-            : T extends GenerateJSON
-              ? OpenAPI.components["schemas"]["GenerateJSONOut"]
-              : T extends MultiGenerateJSON
-                ? OpenAPI.components["schemas"]["MultiGenerateJSONOut"]
-                : T extends GenerateTextVision
-                  ? OpenAPI.components["schemas"]["GenerateTextVisionOut"]
-                  : T extends Mistral7BInstruct
-                    ? OpenAPI.components["schemas"]["Mistral7BInstructOut"]
-                    : T extends Mixtral8x7BInstruct
-                      ? OpenAPI.components["schemas"]["Mixtral8x7BInstructOut"]
-                      : T extends Llama3Instruct8B
-                        ? OpenAPI.components["schemas"]["Llama3Instruct8BOut"]
-                        : T extends Llama3Instruct70B
-                          ? OpenAPI.components["schemas"]["Llama3Instruct70BOut"]
-                          : T extends Firellava13B
-                            ? OpenAPI.components["schemas"]["Firellava13BOut"]
-                            : T extends GenerateImage
-                              ? OpenAPI.components["schemas"]["GenerateImageOut"]
-                              : T extends MultiGenerateImage
-                                ? OpenAPI.components["schemas"]["MultiGenerateImageOut"]
-                                : T extends GenerativeEditImage
-                                  ? OpenAPI.components["schemas"]["GenerativeEditImageOut"]
-                                  : T extends MultiGenerativeEditImage
-                                    ? OpenAPI.components["schemas"]["MultiGenerativeEditImageOut"]
-                                    : T extends StableDiffusionXL
-                                      ? OpenAPI.components["schemas"]["StableDiffusionXLOut"]
-                                      : T extends StableDiffusionXLLightning
-                                        ? OpenAPI.components["schemas"]["StableDiffusionXLLightningOut"]
-                                        : T extends StableDiffusionXLInpaint
-                                          ? OpenAPI.components["schemas"]["StableDiffusionXLInpaintOut"]
-                                          : T extends StableDiffusionXLControlNet
-                                            ? OpenAPI.components["schemas"]["StableDiffusionXLControlNetOut"]
-                                            : T extends StableDiffusionXLIPAdapter
-                                              ? OpenAPI.components["schemas"]["StableDiffusionXLIPAdapterOut"]
-                                              : T extends TranscribeMedia
-                                                ? OpenAPI.components["schemas"]["TranscribeMediaOut"]
-                                                : T extends GenerateSpeech
-                                                  ? OpenAPI.components["schemas"]["GenerateSpeechOut"]
-                                                  : T extends XTTSV2
-                                                    ? OpenAPI.components["schemas"]["XTTSV2Out"]
-                                                    : T extends RemoveBackground
-                                                      ? OpenAPI.components["schemas"]["RemoveBackgroundOut"]
-                                                      : T extends FillMask
-                                                        ? OpenAPI.components["schemas"]["FillMaskOut"]
-                                                        : T extends UpscaleImage
-                                                          ? OpenAPI.components["schemas"]["UpscaleImageOut"]
-                                                          : T extends SegmentUnderPoint
-                                                            ? OpenAPI.components["schemas"]["SegmentUnderPointOut"]
-                                                            : T extends SegmentAnything
-                                                              ? OpenAPI.components["schemas"]["SegmentAnythingOut"]
-                                                              : T extends EmbedText
-                                                                ? OpenAPI.components["schemas"]["EmbedTextOut"]
-                                                                : T extends MultiEmbedText
-                                                                  ? OpenAPI.components["schemas"]["MultiEmbedTextOut"]
-                                                                  : T extends EmbedImage
-                                                                    ? OpenAPI.components["schemas"]["EmbedImageOut"]
-                                                                    : T extends MultiEmbedImage
-                                                                      ? OpenAPI.components["schemas"]["MultiEmbedImageOut"]
-                                                                      : T extends JinaV2
-                                                                        ? OpenAPI.components["schemas"]["JinaV2Out"]
-                                                                        : T extends CLIP
-                                                                          ? OpenAPI.components["schemas"]["CLIPOut"]
-                                                                          : T extends CreateVectorStore
-                                                                            ? OpenAPI.components["schemas"]["CreateVectorStoreOut"]
-                                                                            : T extends ListVectorStores
-                                                                              ? OpenAPI.components["schemas"]["ListVectorStoresOut"]
-                                                                              : T extends DeleteVectorStore
-                                                                                ? OpenAPI.components["schemas"]["DeleteVectorStoreOut"]
-                                                                                : T extends QueryVectorStore
-                                                                                  ? OpenAPI.components["schemas"]["QueryVectorStoreOut"]
-                                                                                  : T extends FetchVectors
-                                                                                    ? OpenAPI.components["schemas"]["FetchVectorsOut"]
-                                                                                    : T extends UpdateVectors
-                                                                                      ? OpenAPI.components["schemas"]["UpdateVectorsOut"]
-                                                                                      : T extends DeleteVectors
-                                                                                        ? OpenAPI.components["schemas"]["DeleteVectorsOut"]
-                                                                                        : never;
+  : T extends GenerateText
+    ? OpenAPI.components["schemas"]["GenerateTextOut"]
+    : T extends MultiGenerateText
+      ? OpenAPI.components["schemas"]["MultiGenerateTextOut"]
+      : T extends BatchGenerateText
+        ? OpenAPI.components["schemas"]["BatchGenerateTextOut"]
+        : T extends BatchGenerateJSON
+          ? OpenAPI.components["schemas"]["BatchGenerateJSONOut"]
+          : T extends GenerateJSON
+            ? OpenAPI.components["schemas"]["GenerateJSONOut"]
+            : T extends MultiGenerateJSON
+              ? OpenAPI.components["schemas"]["MultiGenerateJSONOut"]
+              : T extends Mistral7BInstruct
+                ? OpenAPI.components["schemas"]["Mistral7BInstructOut"]
+                : T extends Mixtral8x7BInstruct
+                  ? OpenAPI.components["schemas"]["Mixtral8x7BInstructOut"]
+                  : T extends Llama3Instruct8B
+                    ? OpenAPI.components["schemas"]["Llama3Instruct8BOut"]
+                    : T extends Llama3Instruct70B
+                      ? OpenAPI.components["schemas"]["Llama3Instruct70BOut"]
+                      : T extends Firellava13B
+                        ? OpenAPI.components["schemas"]["Firellava13BOut"]
+                        : T extends GenerateImage
+                          ? OpenAPI.components["schemas"]["GenerateImageOut"]
+                          : T extends MultiGenerateImage
+                            ? OpenAPI.components["schemas"]["MultiGenerateImageOut"]
+                            : T extends InpaintImage
+                              ? OpenAPI.components["schemas"]["InpaintImageOut"]
+                              : T extends MultiInpaintImage
+                                ? OpenAPI.components["schemas"]["MultiInpaintImageOut"]
+                                : T extends StableDiffusionXLLightning
+                                  ? OpenAPI.components["schemas"]["StableDiffusionXLLightningOut"]
+                                  : T extends StableDiffusionXLInpaint
+                                    ? OpenAPI.components["schemas"]["StableDiffusionXLInpaintOut"]
+                                    : T extends StableDiffusionXLControlNet
+                                      ? OpenAPI.components["schemas"]["StableDiffusionXLControlNetOut"]
+                                      : T extends TranscribeSpeech
+                                        ? OpenAPI.components["schemas"]["TranscribeSpeechOut"]
+                                        : T extends GenerateSpeech
+                                          ? OpenAPI.components["schemas"]["GenerateSpeechOut"]
+                                          : T extends RemoveBackground
+                                            ? OpenAPI.components["schemas"]["RemoveBackgroundOut"]
+                                            : T extends EraseImage
+                                              ? OpenAPI.components["schemas"]["EraseImageOut"]
+                                              : T extends UpscaleImage
+                                                ? OpenAPI.components["schemas"]["UpscaleImageOut"]
+                                                : T extends SegmentUnderPoint
+                                                  ? OpenAPI.components["schemas"]["SegmentUnderPointOut"]
+                                                  : T extends SegmentAnything
+                                                    ? OpenAPI.components["schemas"]["SegmentAnythingOut"]
+                                                    : T extends EmbedText
+                                                      ? OpenAPI.components["schemas"]["EmbedTextOut"]
+                                                      : T extends MultiEmbedText
+                                                        ? OpenAPI.components["schemas"]["MultiEmbedTextOut"]
+                                                        : T extends EmbedImage
+                                                          ? OpenAPI.components["schemas"]["EmbedImageOut"]
+                                                          : T extends MultiEmbedImage
+                                                            ? OpenAPI.components["schemas"]["MultiEmbedImageOut"]
+                                                            : T extends JinaV2
+                                                              ? OpenAPI.components["schemas"]["JinaV2Out"]
+                                                              : T extends CLIP
+                                                                ? OpenAPI.components["schemas"]["CLIPOut"]
+                                                                : T extends FindOrCreateVectorStore
+                                                                  ? OpenAPI.components["schemas"]["FindOrCreateVectorStoreOut"]
+                                                                  : T extends ListVectorStores
+                                                                    ? OpenAPI.components["schemas"]["ListVectorStoresOut"]
+                                                                    : T extends DeleteVectorStore
+                                                                      ? OpenAPI.components["schemas"]["DeleteVectorStoreOut"]
+                                                                      : T extends QueryVectorStore
+                                                                        ? OpenAPI.components["schemas"]["QueryVectorStoreOut"]
+                                                                        : T extends FetchVectors
+                                                                          ? OpenAPI.components["schemas"]["FetchVectorsOut"]
+                                                                          : T extends UpdateVectors
+                                                                            ? OpenAPI.components["schemas"]["UpdateVectorsOut"]
+                                                                            : T extends DeleteVectors
+                                                                              ? OpenAPI.components["schemas"]["DeleteVectorsOut"]
+                                                                              : never;

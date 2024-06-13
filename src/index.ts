@@ -1,20 +1,18 @@
 /**
  * 𐃏 Substrate TypeScript SDK
  * @generated file
- * 20240530.20240531
+ * 20240612.20240613
  */
 
 export { SubstrateError } from "substrate/Error";
 export {
   Experimental,
-  RunPython,
   GenerateText,
   MultiGenerateText,
   BatchGenerateText,
   BatchGenerateJSON,
   GenerateJSON,
   MultiGenerateJSON,
-  GenerateTextVision,
   Mistral7BInstruct,
   Mixtral8x7BInstruct,
   Llama3Instruct8B,
@@ -22,18 +20,15 @@ export {
   Firellava13B,
   GenerateImage,
   MultiGenerateImage,
-  GenerativeEditImage,
-  MultiGenerativeEditImage,
-  StableDiffusionXL,
+  InpaintImage,
+  MultiInpaintImage,
   StableDiffusionXLLightning,
   StableDiffusionXLInpaint,
   StableDiffusionXLControlNet,
-  StableDiffusionXLIPAdapter,
-  TranscribeMedia,
+  TranscribeSpeech,
   GenerateSpeech,
-  XTTSV2,
   RemoveBackground,
-  FillMask,
+  EraseImage,
   UpscaleImage,
   SegmentUnderPoint,
   SegmentAnything,
@@ -43,7 +38,7 @@ export {
   MultiEmbedImage,
   JinaV2,
   CLIP,
-  CreateVectorStore,
+  FindOrCreateVectorStore,
   ListVectorStores,
   DeleteVectorStore,
   QueryVectorStore,
