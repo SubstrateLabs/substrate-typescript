@@ -2,6 +2,7 @@ import { SubstrateError, RequestTimeoutError } from "substrate/Error";
 import { VERSION } from "substrate/version";
 import OpenAPIjson from "substrate/openapi.json";
 import { SubstrateResponse } from "substrate/SubstrateResponse";
+import { SubstrateStreamingResponse } from "substrate/SubstrateStreamingResponse";
 import { Node } from "substrate/Node";
 import { getPlatformProperties } from "substrate/Platform";
 import { deflate } from "pako";
@@ -84,6 +85,14 @@ export class Substrate {
   }
 
   /**
+   *  Stream the given nodes.
+   */
+  async stream(...nodes: Node[]): Promise<SubstrateStreamingResponse> {
+    const serialized = Substrate.serialize(...nodes);
+    return this.streamSerialized(serialized);
+  }
+
+  /**
    *  Run the given nodes, serialized using `Substrate.serialize`.
    *
    *  @throws {SubstrateError} when the server response is an error.
@@ -122,6 +131,44 @@ export class Substrate {
           `Request failed: ${apiResponse.status} ${apiResponse.statusText}`,
         );
       }
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        if (err.name === "AbortError") {
+          throw new RequestTimeoutError(
+            `Request timed out after ${this.timeout}ms`,
+          );
+          // TODO: We could propagate timeout errors to nodes too, but I'm
+          // not sure yet what might be easier for the user to manage.
+        }
+      }
+      throw err;
+    } finally {
+      clearTimeout(timeout);
+    }
+  }
+
+  /**
+   *  Stream the given nodes, serialized using `Substrate.serialize`.
+   */
+  async streamSerialized(serialized: any, endpoint: string = "/compose") {
+    const url = this.baseUrl + endpoint;
+    const req = { dag: serialized };
+    const abortController = new AbortController();
+    const { signal } = abortController;
+    const timeout = setTimeout(() => abortController.abort(), this.timeout);
+    const requestOptions = this.requestOptions(req, signal);
+
+    // Add Streaming Headers
+    requestOptions.headers.set("Accept", "text/event-stream");
+    requestOptions.headers.set("X-Substrate-Streaming", "1");
+
+    try {
+      const request = new Request(url, requestOptions);
+      const response = await fetch(request);
+      return await SubstrateStreamingResponse.fromRequestReponse(
+        request,
+        response,
+      );
     } catch (err: unknown) {
       if (err instanceof Error) {
         if (err.name === "AbortError") {
@@ -207,7 +254,7 @@ export class Substrate {
 
     // User-Provided
     for (const [name, value] of Object.entries(this.additionalHeaders)) {
-      headers.append(name, value);
+      headers.set(name, value);
     }
 
     return headers;
