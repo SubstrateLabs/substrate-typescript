@@ -31,9 +31,6 @@ make generate
 # in SubstrateLabs/substrate-typescript: copy the generated files
 make sync-codegen
 
-# format the code
-make format-fix
-
 # ensure the package builds
 make build
 ```
