@@ -45,19 +45,6 @@ type FutureExpandAny<T> = T extends (infer U)[][]
 
 export class ExperimentalInArgs extends FutureAnyObject {}
 export class ExperimentalOutOutput extends FutureAnyObject {}
-export class RunPythonInKwargs extends FutureAnyObject {}
-/** Python packages to install. You must import them in your code. */
-export class RunPythonInPipInstall extends FutureArray {
-  /** Returns `FutureString` at given index. */
-  override at(index: number) {
-    return new FutureString(this._directive.next(index));
-  }
-  /** Returns the result for `RunPythonInPipInstall` once it's node has been run. */
-  protected override async result(): Promise<FutureString[]> {
-    return super.result() as Promise<FutureString[]>;
-  }
-}
-export class RunPythonInPipInstallItem extends FutureString {}
 /** Image prompts. */
 export class GenerateTextInImageUris extends FutureArray {
   /** Returns `FutureString` at given index. */
@@ -768,53 +755,6 @@ export class ExperimentalOut extends FutureObject {
   /** returns the result for `ExperimentalOut` once it's node has been run. */
   protected override async result(): Promise<ExperimentalOut> {
     return super.result() as Promise<ExperimentalOut>;
-  }
-}
-/** RunPythonIn */
-export class RunPythonIn extends FutureObject {
-  /** (Optional) Pickled function. */
-  get pkl_function() {
-    return new FutureString(this._directive.next("pkl_function"));
-  }
-  /** Keyword arguments to your function. */
-  get kwargs() {
-    return new FutureAnyObject(this._directive.next("kwargs"));
-  }
-  /** (Optional) Python version. */
-  get python_version() {
-    return new FutureString(this._directive.next("python_version"));
-  }
-
-  /** (Optional) Python packages to install. You must import them in your code. */
-  get pip_install() {
-    return new RunPythonInPipInstall(this._directive.next("pip_install"));
-  }
-  /** returns the result for `RunPythonIn` once it's node has been run. */
-  protected override async result(): Promise<RunPythonIn> {
-    return super.result() as Promise<RunPythonIn>;
-  }
-}
-/** RunPythonOut */
-export class RunPythonOut extends FutureObject {
-  /** (Optional) Return value of your function. */
-  get output() {
-    return new (this._directive.next("output"))();
-  }
-  /** (Optional) Pickled return value. */
-  get pkl_output() {
-    return new FutureString(this._directive.next("pkl_output"));
-  }
-  /** Everything printed to stdout while running your code. */
-  get stdout() {
-    return new FutureString(this._directive.next("stdout"));
-  }
-  /** Contents of stderr if your code did not run successfully. */
-  get stderr() {
-    return new FutureString(this._directive.next("stderr"));
-  }
-  /** returns the result for `RunPythonOut` once it's node has been run. */
-  protected override async result(): Promise<RunPythonOut> {
-    return super.result() as Promise<RunPythonOut>;
   }
 }
 /** GenerateTextIn */
