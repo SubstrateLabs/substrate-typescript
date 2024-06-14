@@ -158,7 +158,6 @@ that we'd like to publish.
 
 1. Preview the "pack" (tarball we publish to npm): `make publish-preview`
 2. Publish to NPM & push tag to GitHub: `make publish`
-3. Create new Release on GitHub (using the web UI). Add release notes, mentions, etc.
 
 **Non-Production Releases**
 
