@@ -121,6 +121,8 @@ After making changes, you should:
 - Make sure to bump the `SDK_VERSION` in the `bin/update-version.ts` script
 - Then run `make update-version` to ensure the `package.json` and `src/version.ts` are set correctly.
 
+**NOTE:** If the API version (the date string) has changed, you should reset the minor and patch version to `0.0`.
+
 **NOTE:** The `make update-version` task will run after every `make sync-codegen` too!
 
 ## CI & Git Hooks
