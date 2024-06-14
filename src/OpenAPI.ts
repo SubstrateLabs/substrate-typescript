@@ -60,13 +60,6 @@ export interface paths {
      */
     post: operations["MultiGenerateJSON"];
   };
-  "/GenerateTextVision": {
-    /**
-     * GenerateTextVision
-     * @description Generate text with image input.
-     */
-    post: operations["GenerateTextVision"];
-  };
   "/Mistral7BInstruct": {
     /**
      * Mistral7BInstruct
@@ -116,26 +109,19 @@ export interface paths {
      */
     post: operations["MultiGenerateImage"];
   };
-  "/GenerativeEditImage": {
+  "/InpaintImage": {
     /**
-     * GenerativeEditImage
-     * @description Edit an image using image generation.
+     * InpaintImage
+     * @description Edit an image using image generation inside part of the image or the full image.
      */
-    post: operations["GenerativeEditImage"];
+    post: operations["InpaintImage"];
   };
-  "/MultiGenerativeEditImage": {
+  "/MultiInpaintImage": {
     /**
-     * MultiGenerativeEditImage
+     * MultiInpaintImage
      * @description Edit multiple images using image generation.
      */
-    post: operations["MultiGenerativeEditImage"];
-  };
-  "/StableDiffusionXL": {
-    /**
-     * StableDiffusionXL
-     * @description Generate an image using [Stable Diffusion XL](https://arxiv.org/abs/2307.01952).
-     */
-    post: operations["StableDiffusionXL"];
+    post: operations["MultiInpaintImage"];
   };
   "/StableDiffusionXLLightning": {
     /**
@@ -158,19 +144,12 @@ export interface paths {
      */
     post: operations["StableDiffusionXLControlNet"];
   };
-  "/StableDiffusionXLIPAdapter": {
+  "/TranscribeSpeech": {
     /**
-     * StableDiffusionXLIPAdapter
-     * @description Generate an image with an image prompt, using Stable Diffusion XL with [IP-Adapter](https://arxiv.org/abs/2308.06721).
-     */
-    post: operations["StableDiffusionXLIPAdapter"];
-  };
-  "/TranscribeMedia": {
-    /**
-     * TranscribeMedia
+     * TranscribeSpeech
      * @description Transcribe speech in an audio or video file.
      */
-    post: operations["TranscribeMedia"];
+    post: operations["TranscribeSpeech"];
   };
   "/GenerateSpeech": {
     /**
@@ -179,31 +158,24 @@ export interface paths {
      */
     post: operations["GenerateSpeech"];
   };
-  "/XTTSV2": {
-    /**
-     * XTTSV2
-     * @description Generate speech from text using [XTTS v2](https://docs.coqui.ai/en/latest/models/xtts.html).
-     */
-    post: operations["XTTSV2"];
-  };
   "/RemoveBackground": {
     /**
      * RemoveBackground
-     * @description Remove the background from an image, with the option to return the foreground as a mask.
+     * @description Remove the background from an image and return the foreground segment as a cut-out or a mask.
      */
     post: operations["RemoveBackground"];
   };
-  "/FillMask": {
+  "/EraseImage": {
     /**
-     * FillMask
-     * @description Fill (inpaint) part of an image, e.g. to 'remove' an object.
+     * EraseImage
+     * @description Erase the masked part of an image, e.g. to 'remove' an object.
      */
-    post: operations["FillMask"];
+    post: operations["EraseImage"];
   };
   "/UpscaleImage": {
     /**
      * UpscaleImage
-     * @description Upscale an image.
+     * @description Upscale an image using image generation.
      */
     post: operations["UpscaleImage"];
   };
@@ -263,12 +235,12 @@ export interface paths {
      */
     post: operations["CLIP"];
   };
-  "/CreateVectorStore": {
+  "/FindOrCreateVectorStore": {
     /**
-     * CreateVectorStore
-     * @description Create a vector store for storing and querying embeddings.
+     * FindOrCreateVectorStore
+     * @description Find a vector store matching the given collection name, or create a new vector store.
      */
-    post: operations["CreateVectorStore"];
+    post: operations["FindOrCreateVectorStore"];
   };
   "/ListVectorStores": {
     /**
@@ -351,23 +323,25 @@ export interface components {
     };
     /** RunPythonIn */
     RunPythonIn: {
-      /** @description Python code to execute. In your code, access values from the `input` parameter using the `SB_IN` variable. Update the `SB_OUT` variable with results you want returned in `output`. */
-      code: string;
-      /** @description Input to your code, accessible using the preloaded `SB_IN` variable. */
-      input?: {
+      /** @description Pickled function. */
+      pkl_function?: string;
+      /** @description Keyword arguments to your function. */
+      kwargs: {
         [key: string]: unknown;
       };
+      /** @description Python version. */
+      python_version?: string;
       /** @description Python packages to install. You must import them in your code. */
       pip_install?: string[];
     };
     /** RunPythonOut */
     RunPythonOut: {
+      /** @description Return value of your function. */
+      output?: unknown;
+      /** @description Pickled return value. */
+      pkl_output?: string;
       /** @description Everything printed to stdout while running your code. */
       stdout: string;
-      /** @description Contents of the `SB_OUT` variable after running your code. */
-      output: {
-        [key: string]: unknown;
-      };
       /** @description Contents of stderr if your code did not run successfully. */
       stderr: string;
     };
@@ -375,6 +349,8 @@ export interface components {
     GenerateTextIn: {
       /** @description Input prompt. */
       prompt: string;
+      /** @description Image prompts. */
+      image_uris?: string[];
       /**
        * Format: float
        * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
@@ -384,15 +360,16 @@ export interface components {
       /** @description Maximum number of tokens to generate. */
       max_tokens?: number;
       /**
-       * @description Selected node.
-       * @default Mistral7BInstruct
+       * @description Selected model. `Firellava13B` is automatically selected when `image_uris` is provided.
+       * @default Llama3Instruct8B
        * @enum {string}
        */
-      node?:
+      model?:
         | "Mistral7BInstruct"
         | "Mixtral8x7BInstruct"
         | "Llama3Instruct8B"
-        | "Llama3Instruct70B";
+        | "Llama3Instruct70B"
+        | "Firellava13B";
     };
     /** GenerateTextOut */
     GenerateTextOut: {
@@ -416,11 +393,11 @@ export interface components {
       /** @description Maximum number of tokens to generate. */
       max_tokens?: number;
       /**
-       * @description Selected node.
-       * @default Mistral7BInstruct
+       * @description Selected model.
+       * @default Llama3Instruct8B
        * @enum {string}
        */
-      node?: "Mistral7BInstruct" | "Mixtral8x7BInstruct" | "Llama3Instruct8B";
+      model?: "Mistral7BInstruct" | "Mixtral8x7BInstruct" | "Llama3Instruct8B";
     };
     /** GenerateJSONOut */
     GenerateJSONOut: {
@@ -449,11 +426,11 @@ export interface components {
       /** @description Maximum number of tokens to generate. */
       max_tokens?: number;
       /**
-       * @description Selected node.
-       * @default Mistral7BInstruct
+       * @description Selected model.
+       * @default Llama3Instruct8B
        * @enum {string}
        */
-      node?:
+      model?:
         | "Mistral7BInstruct"
         | "Mixtral8x7BInstruct"
         | "Llama3Instruct8B"
@@ -479,6 +456,12 @@ export interface components {
       temperature?: number;
       /** @description Maximum number of tokens to generate. */
       max_tokens?: number;
+      /**
+       * @description Selected model.
+       * @default Llama3Instruct8B
+       * @enum {string}
+       */
+      model?: "Mistral7BInstruct" | "Llama3Instruct8B";
     };
     /** BatchGenerateTextOut */
     BatchGenerateTextOut: {
@@ -510,11 +493,11 @@ export interface components {
       /** @description Maximum number of tokens to generate. */
       max_tokens?: number;
       /**
-       * @description Selected node.
-       * @default Mistral7BInstruct
+       * @description Selected model.
+       * @default Llama3Instruct8B
        * @enum {string}
        */
-      node?: "Mistral7BInstruct" | "Mixtral8x7BInstruct" | "Llama3Instruct8B";
+      model?: "Mistral7BInstruct" | "Mixtral8x7BInstruct" | "Llama3Instruct8B";
     };
     /** MultiGenerateJSONOut */
     MultiGenerateJSONOut: {
@@ -530,12 +513,6 @@ export interface components {
     };
     /** BatchGenerateJSONIn */
     BatchGenerateJSONIn: {
-      /**
-       * @description Selected node.
-       * @default Mistral7BInstruct
-       * @enum {string}
-       */
-      node?: "Mistral7BInstruct" | "Llama3Instruct8B";
       /** @description Batch input prompts. */
       prompts: string[];
       /** @description JSON schema to guide `json_object` response. */
@@ -550,6 +527,12 @@ export interface components {
       temperature?: number;
       /** @description Maximum number of tokens to generate. */
       max_tokens?: number;
+      /**
+       * @description Selected model.
+       * @default Llama3Instruct8B
+       * @enum {string}
+       */
+      model?: "Mistral7BInstruct" | "Llama3Instruct8B";
     };
     /** BatchGenerateJSONOut */
     BatchGenerateJSONOut: {
@@ -567,6 +550,8 @@ export interface components {
     Mistral7BInstructIn: {
       /** @description Input prompt. */
       prompt: string;
+      /** @description System prompt. */
+      system_prompt?: string;
       /**
        * @description Number of choices to generate.
        * @default 1
@@ -578,9 +563,33 @@ export interface components {
       };
       /**
        * Format: float
-       * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
+       * @description Higher values make the output more random, lower values make the output more deterministic.
        */
       temperature?: number;
+      /**
+       * Format: float
+       * @description Higher values decrease the likelihood of repeating previous tokens.
+       * @default 0
+       */
+      frequency_penalty?: number;
+      /**
+       * Format: float
+       * @description Higher values decrease the likelihood of repeated sequences.
+       * @default 1
+       */
+      repetition_penalty?: number;
+      /**
+       * Format: float
+       * @description Higher values increase the likelihood of new topics appearing.
+       * @default 1.1
+       */
+      presence_penalty?: number;
+      /**
+       * Format: float
+       * @description Probability below which less likely tokens are filtered out.
+       * @default 0.95
+       */
+      top_p?: number;
       /** @description Maximum number of tokens to generate. */
       max_tokens?: number;
     };
@@ -609,6 +618,8 @@ export interface components {
     Mixtral8x7BInstructIn: {
       /** @description Input prompt. */
       prompt: string;
+      /** @description System prompt. */
+      system_prompt?: string;
       /**
        * @description Number of choices to generate.
        * @default 1
@@ -620,9 +631,33 @@ export interface components {
       };
       /**
        * Format: float
-       * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
+       * @description Higher values make the output more random, lower values make the output more deterministic.
        */
       temperature?: number;
+      /**
+       * Format: float
+       * @description Higher values decrease the likelihood of repeating previous tokens.
+       * @default 0
+       */
+      frequency_penalty?: number;
+      /**
+       * Format: float
+       * @description Higher values decrease the likelihood of repeated sequences.
+       * @default 1
+       */
+      repetition_penalty?: number;
+      /**
+       * Format: float
+       * @description Higher values increase the likelihood of new topics appearing.
+       * @default 1.1
+       */
+      presence_penalty?: number;
+      /**
+       * Format: float
+       * @description Probability below which less likely tokens are filtered out.
+       * @default 0.95
+       */
+      top_p?: number;
       /** @description Maximum number of tokens to generate. */
       max_tokens?: number;
     };
@@ -651,6 +686,8 @@ export interface components {
     Llama3Instruct8BIn: {
       /** @description Input prompt. */
       prompt: string;
+      /** @description System prompt. */
+      system_prompt?: string;
       /**
        * @description Number of choices to generate.
        * @default 1
@@ -658,9 +695,33 @@ export interface components {
       num_choices?: number;
       /**
        * Format: float
-       * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
+       * @description Higher values make the output more random, lower values make the output more deterministic.
        */
       temperature?: number;
+      /**
+       * Format: float
+       * @description Higher values decrease the likelihood of repeating previous tokens.
+       * @default 0
+       */
+      frequency_penalty?: number;
+      /**
+       * Format: float
+       * @description Higher values decrease the likelihood of repeated sequences.
+       * @default 1
+       */
+      repetition_penalty?: number;
+      /**
+       * Format: float
+       * @description Higher values increase the likelihood of new topics appearing.
+       * @default 1.1
+       */
+      presence_penalty?: number;
+      /**
+       * Format: float
+       * @description Probability below which less likely tokens are filtered out.
+       * @default 0.95
+       */
+      top_p?: number;
       /** @description Maximum number of tokens to generate. */
       max_tokens?: number;
       /** @description JSON schema to guide response. */
@@ -693,6 +754,8 @@ export interface components {
     Llama3Instruct70BIn: {
       /** @description Input prompt. */
       prompt: string;
+      /** @description System prompt. */
+      system_prompt?: string;
       /**
        * @description Number of choices to generate.
        * @default 1
@@ -700,9 +763,33 @@ export interface components {
       num_choices?: number;
       /**
        * Format: float
-       * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
+       * @description Higher values make the output more random, lower values make the output more deterministic.
        */
       temperature?: number;
+      /**
+       * Format: float
+       * @description Higher values decrease the likelihood of repeating previous tokens.
+       * @default 0
+       */
+      frequency_penalty?: number;
+      /**
+       * Format: float
+       * @description Higher values decrease the likelihood of repeated sequences.
+       * @default 1
+       */
+      repetition_penalty?: number;
+      /**
+       * Format: float
+       * @description Higher values increase the likelihood of new topics appearing.
+       * @default 1.1
+       */
+      presence_penalty?: number;
+      /**
+       * Format: float
+       * @description Probability below which less likely tokens are filtered out.
+       * @default 0.95
+       */
+      top_p?: number;
       /** @description Maximum number of tokens to generate. */
       max_tokens?: number;
     };
@@ -719,33 +806,13 @@ export interface components {
         text?: string;
       }[];
     };
-    /** GenerateTextVisionIn */
-    GenerateTextVisionIn: {
-      /** @description Text prompt. */
-      prompt: string;
-      /** @description Image prompts. */
-      image_uris: string[];
-      /**
-       * @description Maximum number of tokens to generate.
-       * @default 800
-       */
-      max_tokens?: number;
-    };
-    /** GenerateTextVisionOut */
-    GenerateTextVisionOut: {
-      /** @description Text response. */
-      text: string;
-    };
     /** Firellava13BIn */
     Firellava13BIn: {
       /** @description Text prompt. */
       prompt: string;
       /** @description Image prompts. */
       image_uris: string[];
-      /**
-       * @description Maximum number of tokens to generate.
-       * @default 800
-       */
+      /** @description Maximum number of tokens to generate. */
       max_tokens?: number;
     };
     /** Firellava13BOut */
@@ -927,7 +994,7 @@ export interface components {
        * @description Strategy to control generation using the input image.
        * @enum {string}
        */
-      control_method: "edge" | "depth" | "illusion";
+      control_method: "edge" | "depth" | "illusion" | "tile";
       /** @description Text prompt. */
       prompt: string;
       /**
@@ -950,6 +1017,12 @@ export interface components {
        * @default 0.5
        */
       conditioning_scale?: number;
+      /**
+       * Format: float
+       * @description Controls how much to transform the input image.
+       * @default 0.5
+       */
+      strength?: number;
       /** @description Random noise seeds. Default is random seeds for each generation. */
       seeds?: number[];
     };
@@ -963,8 +1036,8 @@ export interface components {
         seed: number;
       }[];
     };
-    /** GenerativeEditImageIn */
-    GenerativeEditImageIn: {
+    /** InpaintImageIn */
+    InpaintImageIn: {
       /** @description Original image. */
       image_uri: string;
       /** @description Text prompt. */
@@ -974,13 +1047,13 @@ export interface components {
       /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
     };
-    /** GenerativeEditImageOut */
-    GenerativeEditImageOut: {
+    /** InpaintImageOut */
+    InpaintImageOut: {
       /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
       image_uri: string;
     };
-    /** MultiGenerativeEditImageIn */
-    MultiGenerativeEditImageIn: {
+    /** MultiInpaintImageIn */
+    MultiInpaintImageIn: {
       /** @description Original image. */
       image_uri: string;
       /** @description Text prompt. */
@@ -995,8 +1068,8 @@ export interface components {
       /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
     };
-    /** MultiGenerativeEditImageOut */
-    MultiGenerativeEditImageOut: {
+    /** MultiInpaintImageOut */
+    MultiInpaintImageOut: {
       /** @description Generated images. */
       outputs: {
         /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
@@ -1074,8 +1147,8 @@ export interface components {
       /** @description Y position. */
       y: number;
     };
-    /** FillMaskIn */
-    FillMaskIn: {
+    /** EraseImageIn */
+    EraseImageIn: {
       /** @description Input image. */
       image_uri: string;
       /** @description Mask image that controls which pixels are inpainted. */
@@ -1083,8 +1156,8 @@ export interface components {
       /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
     };
-    /** FillMaskOut */
-    FillMaskOut: {
+    /** EraseImageOut */
+    EraseImageOut: {
       /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
       image_uri: string;
     };
@@ -1135,25 +1208,20 @@ export interface components {
     };
     /** UpscaleImageIn */
     UpscaleImageIn: {
+      /** @description Prompt to guide model on the content of image to upscale. */
+      prompt?: string;
       /** @description Input image. */
       image_uri: string;
+      /**
+       * @description Resolution of the output image, in pixels.
+       * @default 1024
+       */
+      output_resolution?: number;
       /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
     };
     /** UpscaleImageOut */
     UpscaleImageOut: {
-      /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-      image_uri: string;
-    };
-    /** RealESRGANIn */
-    RealESRGANIn: {
-      /** @description Input image. */
-      image_uri: string;
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
-      store?: string;
-    };
-    /** RealESRGANOut */
-    RealESRGANOut: {
       /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
       image_uri: string;
     };
@@ -1218,8 +1286,8 @@ export interface components {
       /** @description Detected segments in 'mask image' format. Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
       mask_image_uri: string;
     };
-    /** TranscribeMediaIn */
-    TranscribeMediaIn: {
+    /** TranscribeSpeechIn */
+    TranscribeSpeechIn: {
       /** @description Input audio. */
       audio_uri: string;
       /** @description Prompt to guide model on the content and context of input audio. */
@@ -1311,8 +1379,8 @@ export interface components {
        */
       start: number;
     };
-    /** TranscribeMediaOut */
-    TranscribeMediaOut: {
+    /** TranscribeSpeechOut */
+    TranscribeSpeechOut: {
       /** @description Transcribed text. */
       text: string;
       /** @description Transcribed segments, if `segment` is enabled. */
@@ -1633,8 +1701,8 @@ export interface components {
         };
       }[];
     };
-    /** CreateVectorStoreIn */
-    CreateVectorStoreIn: {
+    /** FindOrCreateVectorStoreIn */
+    FindOrCreateVectorStoreIn: {
       /** @description Vector store name. */
       collection_name: string;
       /**
@@ -1642,25 +1710,9 @@ export interface components {
        * @enum {string}
        */
       model: "jina-v2" | "clip";
-      /**
-       * @description The max number of connections per layer for the index.
-       * @default 16
-       */
-      m?: number;
-      /**
-       * @description The size of the dynamic candidate list for constructing the index graph.
-       * @default 64
-       */
-      ef_construction?: number;
-      /**
-       * @description The distance metric to construct the index with.
-       * @default inner
-       * @enum {string}
-       */
-      metric?: "cosine" | "l2" | "inner";
     };
-    /** CreateVectorStoreOut */
-    CreateVectorStoreOut: {
+    /** FindOrCreateVectorStoreOut */
+    FindOrCreateVectorStoreOut: {
       /** @description Vector store name. */
       collection_name: string;
       /**
@@ -1668,22 +1720,6 @@ export interface components {
        * @enum {string}
        */
       model: "jina-v2" | "clip";
-      /**
-       * @description The max number of connections per layer for the index.
-       * @default 16
-       */
-      m: number;
-      /**
-       * @description The size of the dynamic candidate list for constructing the index graph.
-       * @default 64
-       */
-      ef_construction: number;
-      /**
-       * @description The distance metric to construct the index with.
-       * @default inner
-       * @enum {string}
-       */
-      metric: "cosine" | "l2" | "inner";
     };
     /** ListVectorStoresIn */
     ListVectorStoresIn: Record<string, never>;
@@ -1698,22 +1734,6 @@ export interface components {
          * @enum {string}
          */
         model: "jina-v2" | "clip";
-        /**
-         * @description The max number of connections per layer for the index.
-         * @default 16
-         */
-        m: number;
-        /**
-         * @description The size of the dynamic candidate list for constructing the index graph.
-         * @default 64
-         */
-        ef_construction: number;
-        /**
-         * @description The distance metric to construct the index with.
-         * @default inner
-         * @enum {string}
-         */
-        metric: "cosine" | "l2" | "inner";
       }[];
     };
     /** DeleteVectorStoreIn */
@@ -1913,11 +1933,6 @@ export interface components {
        * @enum {string}
        */
       model?: "jina-v2" | "clip";
-      /**
-       * @description The distance metric used for the query.
-       * @enum {string}
-       */
-      metric?: "cosine" | "l2" | "inner";
     };
   };
   responses: never;
@@ -1985,22 +2000,22 @@ export interface operations {
       content: {
         /**
          * @example {
-         *   "code": "import numpy as np; print(SB_IN['foo']); SB_OUT['result']=np.sum([1,2]).item()",
-         *   "input": {
-         *     "foo": "bar"
-         *   },
+         *   "pkl_function": "g2UjA5fX2t3ZGVmYXVsdHNfX5ROjAxfX2RlZmF1bHRzX1+UTowKX19tb2R1bGVfX5SMCF9fbWFpbl9flIwHX19kb2NfX5ROjAtfX2Nsb3N1cmVfX5ROjBdfY2xvdWRwaWNrbGVfc3VibW9kdWxlc5RdlIwLX19nbG9iYWxzX1+UfZR1hpSGUjAu",
+         *   "kwargs": {},
          *   "pip_install": [
          *     "numpy"
          *   ]
          * }
          */
         "application/json": {
-          /** @description Python code to execute. In your code, access values from the `input` parameter using the `SB_IN` variable. Update the `SB_OUT` variable with results you want returned in `output`. */
-          code: string;
-          /** @description Input to your code, accessible using the preloaded `SB_IN` variable. */
-          input?: {
+          /** @description Pickled function. */
+          pkl_function?: string;
+          /** @description Keyword arguments to your function. */
+          kwargs: {
             [key: string]: unknown;
           };
+          /** @description Python version. */
+          python_version?: string;
           /** @description Python packages to install. You must import them in your code. */
           pip_install?: string[];
         };
@@ -2011,12 +2026,12 @@ export interface operations {
       200: {
         content: {
           "application/json": {
+            /** @description Return value of your function. */
+            output?: unknown;
+            /** @description Pickled return value. */
+            pkl_output?: string;
             /** @description Everything printed to stdout while running your code. */
             stdout: string;
-            /** @description Contents of the `SB_OUT` variable after running your code. */
-            output: {
-              [key: string]: unknown;
-            };
             /** @description Contents of stderr if your code did not run successfully. */
             stderr: string;
           };
@@ -2041,6 +2056,8 @@ export interface operations {
         "application/json": {
           /** @description Input prompt. */
           prompt: string;
+          /** @description Image prompts. */
+          image_uris?: string[];
           /**
            * Format: float
            * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
@@ -2050,15 +2067,16 @@ export interface operations {
           /** @description Maximum number of tokens to generate. */
           max_tokens?: number;
           /**
-           * @description Selected node.
-           * @default Mistral7BInstruct
+           * @description Selected model. `Firellava13B` is automatically selected when `image_uris` is provided.
+           * @default Llama3Instruct8B
            * @enum {string}
            */
-          node?:
+          model?:
             | "Mistral7BInstruct"
             | "Mixtral8x7BInstruct"
             | "Llama3Instruct8B"
-            | "Llama3Instruct70B";
+            | "Llama3Instruct70B"
+            | "Firellava13B";
         };
       };
     };
@@ -2105,11 +2123,11 @@ export interface operations {
           /** @description Maximum number of tokens to generate. */
           max_tokens?: number;
           /**
-           * @description Selected node.
-           * @default Mistral7BInstruct
+           * @description Selected model.
+           * @default Llama3Instruct8B
            * @enum {string}
            */
-          node?:
+          model?:
             | "Mistral7BInstruct"
             | "Mixtral8x7BInstruct"
             | "Llama3Instruct8B"
@@ -2159,6 +2177,12 @@ export interface operations {
           temperature?: number;
           /** @description Maximum number of tokens to generate. */
           max_tokens?: number;
+          /**
+           * @description Selected model.
+           * @default Llama3Instruct8B
+           * @enum {string}
+           */
+          model?: "Mistral7BInstruct" | "Llama3Instruct8B";
         };
       };
     };
@@ -2207,12 +2231,6 @@ export interface operations {
          * }
          */
         "application/json": {
-          /**
-           * @description Selected node.
-           * @default Mistral7BInstruct
-           * @enum {string}
-           */
-          node?: "Mistral7BInstruct" | "Llama3Instruct8B";
           /** @description Batch input prompts. */
           prompts: string[];
           /** @description JSON schema to guide `json_object` response. */
@@ -2227,6 +2245,12 @@ export interface operations {
           temperature?: number;
           /** @description Maximum number of tokens to generate. */
           max_tokens?: number;
+          /**
+           * @description Selected model.
+           * @default Llama3Instruct8B
+           * @enum {string}
+           */
+          model?: "Mistral7BInstruct" | "Llama3Instruct8B";
         };
       };
     };
@@ -2292,11 +2316,11 @@ export interface operations {
           /** @description Maximum number of tokens to generate. */
           max_tokens?: number;
           /**
-           * @description Selected node.
-           * @default Mistral7BInstruct
+           * @description Selected model.
+           * @default Llama3Instruct8B
            * @enum {string}
            */
-          node?:
+          model?:
             | "Mistral7BInstruct"
             | "Mixtral8x7BInstruct"
             | "Llama3Instruct8B";
@@ -2368,11 +2392,11 @@ export interface operations {
           /** @description Maximum number of tokens to generate. */
           max_tokens?: number;
           /**
-           * @description Selected node.
-           * @default Mistral7BInstruct
+           * @description Selected model.
+           * @default Llama3Instruct8B
            * @enum {string}
            */
-          node?:
+          model?:
             | "Mistral7BInstruct"
             | "Mixtral8x7BInstruct"
             | "Llama3Instruct8B";
@@ -2399,47 +2423,6 @@ export interface operations {
     };
   };
   /**
-   * GenerateTextVision
-   * @description Generate text with image input.
-   */
-  GenerateTextVision: {
-    requestBody?: {
-      content: {
-        /**
-         * @example {
-         *   "prompt": "what are these paintings of and who made them?",
-         *   "image_uris": [
-         *     "https://media.substrate.run/docs-fuji-red.jpg",
-         *     "https://media.substrate.run/docs-fuji-blue.jpg"
-         *   ]
-         * }
-         */
-        "application/json": {
-          /** @description Text prompt. */
-          prompt: string;
-          /** @description Image prompts. */
-          image_uris: string[];
-          /**
-           * @description Maximum number of tokens to generate.
-           * @default 800
-           */
-          max_tokens?: number;
-        };
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": {
-            /** @description Text response. */
-            text: string;
-          };
-        };
-      };
-    };
-  };
-  /**
    * Mistral7BInstruct
    * @description Generate text using [Mistral 7B Instruct](https://mistral.ai/news/announcing-mistral-7b).
    */
@@ -2457,6 +2440,8 @@ export interface operations {
         "application/json": {
           /** @description Input prompt. */
           prompt: string;
+          /** @description System prompt. */
+          system_prompt?: string;
           /**
            * @description Number of choices to generate.
            * @default 1
@@ -2468,9 +2453,33 @@ export interface operations {
           };
           /**
            * Format: float
-           * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
+           * @description Higher values make the output more random, lower values make the output more deterministic.
            */
           temperature?: number;
+          /**
+           * Format: float
+           * @description Higher values decrease the likelihood of repeating previous tokens.
+           * @default 0
+           */
+          frequency_penalty?: number;
+          /**
+           * Format: float
+           * @description Higher values decrease the likelihood of repeated sequences.
+           * @default 1
+           */
+          repetition_penalty?: number;
+          /**
+           * Format: float
+           * @description Higher values increase the likelihood of new topics appearing.
+           * @default 1.1
+           */
+          presence_penalty?: number;
+          /**
+           * Format: float
+           * @description Probability below which less likely tokens are filtered out.
+           * @default 0.95
+           */
+          top_p?: number;
           /** @description Maximum number of tokens to generate. */
           max_tokens?: number;
         };
@@ -2513,6 +2522,8 @@ export interface operations {
         "application/json": {
           /** @description Input prompt. */
           prompt: string;
+          /** @description System prompt. */
+          system_prompt?: string;
           /**
            * @description Number of choices to generate.
            * @default 1
@@ -2524,9 +2535,33 @@ export interface operations {
           };
           /**
            * Format: float
-           * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
+           * @description Higher values make the output more random, lower values make the output more deterministic.
            */
           temperature?: number;
+          /**
+           * Format: float
+           * @description Higher values decrease the likelihood of repeating previous tokens.
+           * @default 0
+           */
+          frequency_penalty?: number;
+          /**
+           * Format: float
+           * @description Higher values decrease the likelihood of repeated sequences.
+           * @default 1
+           */
+          repetition_penalty?: number;
+          /**
+           * Format: float
+           * @description Higher values increase the likelihood of new topics appearing.
+           * @default 1.1
+           */
+          presence_penalty?: number;
+          /**
+           * Format: float
+           * @description Probability below which less likely tokens are filtered out.
+           * @default 0.95
+           */
+          top_p?: number;
           /** @description Maximum number of tokens to generate. */
           max_tokens?: number;
         };
@@ -2569,6 +2604,8 @@ export interface operations {
         "application/json": {
           /** @description Input prompt. */
           prompt: string;
+          /** @description System prompt. */
+          system_prompt?: string;
           /**
            * @description Number of choices to generate.
            * @default 1
@@ -2576,9 +2613,33 @@ export interface operations {
           num_choices?: number;
           /**
            * Format: float
-           * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
+           * @description Higher values make the output more random, lower values make the output more deterministic.
            */
           temperature?: number;
+          /**
+           * Format: float
+           * @description Higher values decrease the likelihood of repeating previous tokens.
+           * @default 0
+           */
+          frequency_penalty?: number;
+          /**
+           * Format: float
+           * @description Higher values decrease the likelihood of repeated sequences.
+           * @default 1
+           */
+          repetition_penalty?: number;
+          /**
+           * Format: float
+           * @description Higher values increase the likelihood of new topics appearing.
+           * @default 1.1
+           */
+          presence_penalty?: number;
+          /**
+           * Format: float
+           * @description Probability below which less likely tokens are filtered out.
+           * @default 0.95
+           */
+          top_p?: number;
           /** @description Maximum number of tokens to generate. */
           max_tokens?: number;
           /** @description JSON schema to guide response. */
@@ -2625,6 +2686,8 @@ export interface operations {
         "application/json": {
           /** @description Input prompt. */
           prompt: string;
+          /** @description System prompt. */
+          system_prompt?: string;
           /**
            * @description Number of choices to generate.
            * @default 1
@@ -2632,9 +2695,33 @@ export interface operations {
           num_choices?: number;
           /**
            * Format: float
-           * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
+           * @description Higher values make the output more random, lower values make the output more deterministic.
            */
           temperature?: number;
+          /**
+           * Format: float
+           * @description Higher values decrease the likelihood of repeating previous tokens.
+           * @default 0
+           */
+          frequency_penalty?: number;
+          /**
+           * Format: float
+           * @description Higher values decrease the likelihood of repeated sequences.
+           * @default 1
+           */
+          repetition_penalty?: number;
+          /**
+           * Format: float
+           * @description Higher values increase the likelihood of new topics appearing.
+           * @default 1.1
+           */
+          presence_penalty?: number;
+          /**
+           * Format: float
+           * @description Probability below which less likely tokens are filtered out.
+           * @default 0.95
+           */
+          top_p?: number;
           /** @description Maximum number of tokens to generate. */
           max_tokens?: number;
         };
@@ -2676,10 +2763,7 @@ export interface operations {
           prompt: string;
           /** @description Image prompts. */
           image_uris: string[];
-          /**
-           * @description Maximum number of tokens to generate.
-           * @default 800
-           */
+          /** @description Maximum number of tokens to generate. */
           max_tokens?: number;
         };
       };
@@ -2772,10 +2856,10 @@ export interface operations {
     };
   };
   /**
-   * GenerativeEditImage
-   * @description Edit an image using image generation.
+   * InpaintImage
+   * @description Edit an image using image generation inside part of the image or the full image.
    */
-  GenerativeEditImage: {
+  InpaintImage: {
     requestBody?: {
       content: {
         /**
@@ -2811,10 +2895,10 @@ export interface operations {
     };
   };
   /**
-   * MultiGenerativeEditImage
+   * MultiInpaintImage
    * @description Edit multiple images using image generation.
    */
-  MultiGenerativeEditImage: {
+  MultiInpaintImage: {
     requestBody?: {
       content: {
         /**
@@ -2852,81 +2936,6 @@ export interface operations {
             outputs: {
               /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
               image_uri: string;
-            }[];
-          };
-        };
-      };
-    };
-  };
-  /**
-   * StableDiffusionXL
-   * @description Generate an image using [Stable Diffusion XL](https://arxiv.org/abs/2307.01952).
-   */
-  StableDiffusionXL: {
-    requestBody?: {
-      content: {
-        /**
-         * @example {
-         *   "prompt": "hokusai futuristic supercell spiral cloud with glowing core over turbulent ocean",
-         *   "negative_prompt": "night, moon",
-         *   "store": "hosted",
-         *   "guidance_scale": 7,
-         *   "num_images": 2,
-         *   "seeds": [
-         *     3306990332671669000,
-         *     13641924104177017000
-         *   ]
-         * }
-         */
-        "application/json": {
-          /** @description Text prompt. */
-          prompt: string;
-          /** @description Negative input prompt. */
-          negative_prompt?: string;
-          /**
-           * @description Number of diffusion steps.
-           * @default 30
-           */
-          steps?: number;
-          /**
-           * @description Number of images to generate.
-           * @default 1
-           */
-          num_images: number;
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
-          store?: string;
-          /**
-           * @description Height of output image, in pixels.
-           * @default 1024
-           */
-          height?: number;
-          /**
-           * @description Width of output image, in pixels.
-           * @default 1024
-           */
-          width?: number;
-          /** @description Seeds for deterministic generation. Default is a random seed. */
-          seeds?: number[];
-          /**
-           * Format: float
-           * @description Higher values adhere to the text prompt more strongly, typically at the expense of image quality.
-           * @default 7
-           */
-          guidance_scale?: number;
-        };
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": {
-            /** @description Generated images. */
-            outputs: {
-              /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-              image_uri: string;
-              /** @description The random noise seed used for generation. */
-              seed: number;
             }[];
           };
         };
@@ -3079,7 +3088,8 @@ export interface operations {
          *   "image_uri": "https://media.substrate.run/spiral-logo.jpeg",
          *   "prompt": "the futuristic solarpunk city of atlantis at sunset, cinematic bokeh HD",
          *   "control_method": "illusion",
-         *   "conditioning_scale": 0.5,
+         *   "conditioning_scale": 1,
+         *   "strength": 1,
          *   "store": "hosted",
          *   "num_images": 2,
          *   "seeds": [
@@ -3095,7 +3105,7 @@ export interface operations {
            * @description Strategy to control generation using the input image.
            * @enum {string}
            */
-          control_method: "edge" | "depth" | "illusion";
+          control_method: "edge" | "depth" | "illusion" | "tile";
           /** @description Text prompt. */
           prompt: string;
           /**
@@ -3118,79 +3128,12 @@ export interface operations {
            * @default 0.5
            */
           conditioning_scale?: number;
-          /** @description Random noise seeds. Default is random seeds for each generation. */
-          seeds?: number[];
-        };
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": {
-            /** @description Generated images. */
-            outputs: {
-              /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
-              image_uri: string;
-              /** @description The random noise seed used for generation. */
-              seed: number;
-            }[];
-          };
-        };
-      };
-    };
-  };
-  /**
-   * StableDiffusionXLIPAdapter
-   * @description Generate an image with an image prompt, using Stable Diffusion XL with [IP-Adapter](https://arxiv.org/abs/2308.06721).
-   */
-  StableDiffusionXLIPAdapter: {
-    requestBody?: {
-      content: {
-        /**
-         * @example {
-         *   "prompt": "woodblock wave at sunset",
-         *   "negative_prompt": "low quality, low resolution",
-         *   "image_prompt_uri": "https://guides.substrate.run/hokusai.jpeg",
-         *   "store": "hosted",
-         *   "num_images": 2,
-         *   "ip_adapter_scale": 0.9,
-         *   "seeds": [
-         *     6565750906821528000,
-         *     9762512681041689000
-         *   ]
-         * }
-         */
-        "application/json": {
-          /** @description Text prompt. */
-          prompt: string;
-          /** @description Image prompt. */
-          image_prompt_uri: string;
-          /**
-           * @description Number of images to generate.
-           * @default 1
-           */
-          num_images: number;
           /**
            * Format: float
-           * @description Controls the influence of the image prompt on the generated output.
+           * @description Controls how much to transform the input image.
            * @default 0.5
            */
-          ip_adapter_scale?: number;
-          /** @description Negative input prompt. */
-          negative_prompt?: string;
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
-          store?: string;
-          /**
-           * @description Width of output image, in pixels.
-           * @default 1024
-           */
-          width?: number;
-          /**
-           * @description Height of output image, in pixels.
-           * @default 1024
-           */
-          height?: number;
+          strength?: number;
           /** @description Random noise seeds. Default is random seeds for each generation. */
           seeds?: number[];
         };
@@ -3214,10 +3157,10 @@ export interface operations {
     };
   };
   /**
-   * TranscribeMedia
+   * TranscribeSpeech
    * @description Transcribe speech in an audio or video file.
    */
-  TranscribeMedia: {
+  TranscribeSpeech: {
     requestBody?: {
       content: {
         /**
@@ -3353,49 +3296,8 @@ export interface operations {
     };
   };
   /**
-   * XTTSV2
-   * @description Generate speech from text using [XTTS v2](https://docs.coqui.ai/en/latest/models/xtts.html).
-   */
-  XTTSV2: {
-    requestBody?: {
-      content: {
-        /**
-         * @example {
-         *   "text": "Substrate: an underlying substance or layer.",
-         *   "audio_uri": "https://media.substrate.run/docs-speaker.wav",
-         *   "store": "hosted"
-         * }
-         */
-        "application/json": {
-          /** @description Input text. */
-          text: string;
-          /** @description Reference audio used to synthesize the speaker. If unset, a default speaker voice will be used. */
-          audio_uri?: string;
-          /**
-           * @description Language of input text. Supported languages: `en, de, fr, es, it, pt, pl, zh, ar, cs, ru, nl, tr, hu, ko`.
-           * @default en
-           */
-          language?: string;
-          /** @description Use "hosted" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the audio data will be returned as a base64-encoded string. */
-          store?: string;
-        };
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": {
-            /** @description Base 64-encoded WAV audio bytes, or a hosted audio url if `store` is provided. */
-            audio_uri: string;
-          };
-        };
-      };
-    };
-  };
-  /**
    * RemoveBackground
-   * @description Remove the background from an image, with the option to return the foreground as a mask.
+   * @description Remove the background from an image and return the foreground segment as a cut-out or a mask.
    */
   RemoveBackground: {
     requestBody?: {
@@ -3434,10 +3336,10 @@ export interface operations {
     };
   };
   /**
-   * FillMask
-   * @description Fill (inpaint) part of an image, e.g. to 'remove' an object.
+   * EraseImage
+   * @description Erase the masked part of an image, e.g. to 'remove' an object.
    */
-  FillMask: {
+  EraseImage: {
     requestBody?: {
       content: {
         /**
@@ -3471,20 +3373,28 @@ export interface operations {
   };
   /**
    * UpscaleImage
-   * @description Upscale an image.
+   * @description Upscale an image using image generation.
    */
   UpscaleImage: {
     requestBody?: {
       content: {
         /**
          * @example {
-         *   "image_uri": "https://media.substrate.run/docs-seurat.jpg",
+         *   "prompt": "high resolution detailed spiral shell",
+         *   "image_uri": "https://media.substrate.run/docs-shell-emoji.jpg",
          *   "store": "hosted"
          * }
          */
         "application/json": {
+          /** @description Prompt to guide model on the content of image to upscale. */
+          prompt?: string;
           /** @description Input image. */
           image_uri: string;
+          /**
+           * @description Resolution of the output image, in pixels.
+           * @default 1024
+           */
+          output_resolution?: number;
           /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
         };
@@ -3996,10 +3906,10 @@ export interface operations {
     };
   };
   /**
-   * CreateVectorStore
-   * @description Create a vector store for storing and querying embeddings.
+   * FindOrCreateVectorStore
+   * @description Find a vector store matching the given collection name, or create a new vector store.
    */
-  CreateVectorStore: {
+  FindOrCreateVectorStore: {
     requestBody?: {
       content: {
         /**
@@ -4016,22 +3926,6 @@ export interface operations {
            * @enum {string}
            */
           model: "jina-v2" | "clip";
-          /**
-           * @description The max number of connections per layer for the index.
-           * @default 16
-           */
-          m?: number;
-          /**
-           * @description The size of the dynamic candidate list for constructing the index graph.
-           * @default 64
-           */
-          ef_construction?: number;
-          /**
-           * @description The distance metric to construct the index with.
-           * @default inner
-           * @enum {string}
-           */
-          metric?: "cosine" | "l2" | "inner";
         };
       };
     };
@@ -4047,22 +3941,6 @@ export interface operations {
              * @enum {string}
              */
             model: "jina-v2" | "clip";
-            /**
-             * @description The max number of connections per layer for the index.
-             * @default 16
-             */
-            m: number;
-            /**
-             * @description The size of the dynamic candidate list for constructing the index graph.
-             * @default 64
-             */
-            ef_construction: number;
-            /**
-             * @description The distance metric to construct the index with.
-             * @default inner
-             * @enum {string}
-             */
-            metric: "cosine" | "l2" | "inner";
           };
         };
       };
@@ -4093,22 +3971,6 @@ export interface operations {
                * @enum {string}
                */
               model: "jina-v2" | "clip";
-              /**
-               * @description The max number of connections per layer for the index.
-               * @default 16
-               */
-              m: number;
-              /**
-               * @description The size of the dynamic candidate list for constructing the index graph.
-               * @default 64
-               */
-              ef_construction: number;
-              /**
-               * @description The distance metric to construct the index with.
-               * @default inner
-               * @enum {string}
-               */
-              metric: "cosine" | "l2" | "inner";
             }[];
           };
         };
@@ -4246,11 +4108,6 @@ export interface operations {
              * @enum {string}
              */
             model?: "jina-v2" | "clip";
-            /**
-             * @description The distance metric used for the query.
-             * @enum {string}
-             */
-            metric?: "cosine" | "l2" | "inner";
           };
         };
       };

@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Substrate API",
-    "version": "2024-05-30",
+    "version": "2024-06-12",
     "contact": {
       "email": "support@substrate.run"
     },
@@ -72,14 +72,21 @@
         "title": "RunPythonIn",
         "type": "object",
         "properties": {
-          "code": {
+          "pkl_function": {
             "type": "string",
-            "description": "Python code to execute. In your code, access values from the `input` parameter using the `SB_IN` variable. Update the `SB_OUT` variable with results you want returned in `output`."
+            "description": "Pickled function.",
+            "x-loggable": true
           },
-          "input": {
+          "kwargs": {
             "type": "object",
-            "description": "Input to your code, accessible using the preloaded `SB_IN` variable.",
-            "additionalProperties": true
+            "description": "Keyword arguments to your function.",
+            "additionalProperties": true,
+            "x-loggable": true
+          },
+          "python_version": {
+            "type": "string",
+            "description": "Python version.",
+            "x-loggable": true
           },
           "pip_install": {
             "description": "Python packages to install. You must import them in your code.",
@@ -90,27 +97,29 @@
             "x-loggable": true
           }
         },
-        "required": ["code"]
+        "required": ["kwargs"]
       },
       "RunPythonOut": {
         "title": "RunPythonOut",
         "type": "object",
         "properties": {
+          "output": {
+            "description": "Return value of your function."
+          },
+          "pkl_output": {
+            "type": "string",
+            "description": "Pickled return value."
+          },
           "stdout": {
             "type": "string",
             "description": "Everything printed to stdout while running your code."
-          },
-          "output": {
-            "type": "object",
-            "description": "Contents of the `SB_OUT` variable after running your code.",
-            "additionalProperties": true
           },
           "stderr": {
             "type": "string",
             "description": "Contents of stderr if your code did not run successfully."
           }
         },
-        "required": ["stdout", "output", "stderr"]
+        "required": ["stdout", "stderr"]
       },
       "GenerateTextIn": {
         "title": "GenerateTextIn",
@@ -119,6 +128,13 @@
           "prompt": {
             "type": "string",
             "description": "Input prompt."
+          },
+          "image_uris": {
+            "description": "Image prompts.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           },
           "temperature": {
             "type": "number",
@@ -134,16 +150,17 @@
             "description": "Maximum number of tokens to generate.",
             "x-loggable": true
           },
-          "node": {
+          "model": {
             "type": "string",
             "enum": [
               "Mistral7BInstruct",
               "Mixtral8x7BInstruct",
               "Llama3Instruct8B",
-              "Llama3Instruct70B"
+              "Llama3Instruct70B",
+              "Firellava13B"
             ],
-            "description": "Selected node.",
-            "default": "Mistral7BInstruct",
+            "description": "Selected model. `Firellava13B` is automatically selected when `image_uris` is provided.",
+            "default": "Llama3Instruct8B",
             "x-loggable": true
           }
         },
@@ -187,15 +204,15 @@
             "description": "Maximum number of tokens to generate.",
             "x-loggable": true
           },
-          "node": {
+          "model": {
             "type": "string",
             "enum": [
               "Mistral7BInstruct",
               "Mixtral8x7BInstruct",
               "Llama3Instruct8B"
             ],
-            "description": "Selected node.",
-            "default": "Mistral7BInstruct",
+            "description": "Selected model.",
+            "default": "Llama3Instruct8B",
             "x-loggable": true
           }
         },
@@ -247,7 +264,7 @@
             "description": "Maximum number of tokens to generate.",
             "x-loggable": true
           },
-          "node": {
+          "model": {
             "type": "string",
             "enum": [
               "Mistral7BInstruct",
@@ -255,8 +272,8 @@
               "Llama3Instruct8B",
               "Llama3Instruct70B"
             ],
-            "description": "Selected node.",
-            "default": "Mistral7BInstruct"
+            "description": "Selected model.",
+            "default": "Llama3Instruct8B"
           }
         },
         "required": ["prompt", "num_choices"]
@@ -298,6 +315,13 @@
           "max_tokens": {
             "type": "integer",
             "description": "Maximum number of tokens to generate.",
+            "x-loggable": true
+          },
+          "model": {
+            "type": "string",
+            "enum": ["Mistral7BInstruct", "Llama3Instruct8B"],
+            "description": "Selected model.",
+            "default": "Llama3Instruct8B",
             "x-loggable": true
           }
         },
@@ -352,15 +376,15 @@
             "description": "Maximum number of tokens to generate.",
             "x-loggable": true
           },
-          "node": {
+          "model": {
             "type": "string",
             "enum": [
               "Mistral7BInstruct",
               "Mixtral8x7BInstruct",
               "Llama3Instruct8B"
             ],
-            "description": "Selected node.",
-            "default": "Mistral7BInstruct",
+            "description": "Selected model.",
+            "default": "Llama3Instruct8B",
             "x-loggable": true
           }
         },
@@ -384,13 +408,6 @@
         "title": "BatchGenerateJSONIn",
         "type": "object",
         "properties": {
-          "node": {
-            "type": "string",
-            "enum": ["Mistral7BInstruct", "Llama3Instruct8B"],
-            "description": "Selected node.",
-            "default": "Mistral7BInstruct",
-            "x-loggable": true
-          },
           "prompts": {
             "description": "Batch input prompts.",
             "type": "array",
@@ -415,6 +432,13 @@
           "max_tokens": {
             "type": "integer",
             "description": "Maximum number of tokens to generate.",
+            "x-loggable": true
+          },
+          "model": {
+            "type": "string",
+            "enum": ["Mistral7BInstruct", "Llama3Instruct8B"],
+            "description": "Selected model.",
+            "default": "Llama3Instruct8B",
             "x-loggable": true
           }
         },
@@ -442,6 +466,10 @@
             "type": "string",
             "description": "Input prompt."
           },
+          "system_prompt": {
+            "type": "string",
+            "description": "System prompt."
+          },
           "num_choices": {
             "type": "integer",
             "description": "Number of choices to generate.",
@@ -460,7 +488,43 @@
             "format": "float",
             "minimum": 0,
             "maximum": 1,
-            "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.",
+            "description": "Higher values make the output more random, lower values make the output more deterministic.",
+            "x-loggable": true
+          },
+          "frequency_penalty": {
+            "type": "number",
+            "format": "float",
+            "minimum": -2.0,
+            "maximum": 2.0,
+            "default": 0.0,
+            "description": "Higher values decrease the likelihood of repeating previous tokens.",
+            "x-loggable": true
+          },
+          "repetition_penalty": {
+            "type": "number",
+            "format": "float",
+            "minimum": -2.0,
+            "maximum": 2.0,
+            "default": 1.0,
+            "description": "Higher values decrease the likelihood of repeated sequences.",
+            "x-loggable": true
+          },
+          "presence_penalty": {
+            "type": "number",
+            "format": "float",
+            "minimum": -2.0,
+            "maximum": 2.0,
+            "default": 1.1,
+            "description": "Higher values increase the likelihood of new topics appearing.",
+            "x-loggable": true
+          },
+          "top_p": {
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "maximum": 1.0,
+            "default": 0.95,
+            "description": "Probability below which less likely tokens are filtered out.",
             "x-loggable": true
           },
           "max_tokens": {
@@ -508,6 +572,10 @@
             "type": "string",
             "description": "Input prompt."
           },
+          "system_prompt": {
+            "type": "string",
+            "description": "System prompt."
+          },
           "num_choices": {
             "type": "integer",
             "description": "Number of choices to generate.",
@@ -526,7 +594,43 @@
             "format": "float",
             "minimum": 0,
             "maximum": 1,
-            "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.",
+            "description": "Higher values make the output more random, lower values make the output more deterministic.",
+            "x-loggable": true
+          },
+          "frequency_penalty": {
+            "type": "number",
+            "format": "float",
+            "minimum": -2.0,
+            "maximum": 2.0,
+            "default": 0.0,
+            "description": "Higher values decrease the likelihood of repeating previous tokens.",
+            "x-loggable": true
+          },
+          "repetition_penalty": {
+            "type": "number",
+            "format": "float",
+            "minimum": -2.0,
+            "maximum": 2.0,
+            "default": 1.0,
+            "description": "Higher values decrease the likelihood of repeated sequences.",
+            "x-loggable": true
+          },
+          "presence_penalty": {
+            "type": "number",
+            "format": "float",
+            "minimum": -2.0,
+            "maximum": 2.0,
+            "default": 1.1,
+            "description": "Higher values increase the likelihood of new topics appearing.",
+            "x-loggable": true
+          },
+          "top_p": {
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "maximum": 1.0,
+            "default": 0.95,
+            "description": "Probability below which less likely tokens are filtered out.",
             "x-loggable": true
           },
           "max_tokens": {
@@ -574,6 +678,10 @@
             "type": "string",
             "description": "Input prompt."
           },
+          "system_prompt": {
+            "type": "string",
+            "description": "System prompt."
+          },
           "num_choices": {
             "type": "integer",
             "description": "Number of choices to generate.",
@@ -587,7 +695,43 @@
             "format": "float",
             "minimum": 0,
             "maximum": 1,
-            "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.",
+            "description": "Higher values make the output more random, lower values make the output more deterministic.",
+            "x-loggable": true
+          },
+          "frequency_penalty": {
+            "type": "number",
+            "format": "float",
+            "minimum": -2.0,
+            "maximum": 2.0,
+            "default": 0.0,
+            "description": "Higher values decrease the likelihood of repeating previous tokens.",
+            "x-loggable": true
+          },
+          "repetition_penalty": {
+            "type": "number",
+            "format": "float",
+            "minimum": -2.0,
+            "maximum": 2.0,
+            "default": 1.0,
+            "description": "Higher values decrease the likelihood of repeated sequences.",
+            "x-loggable": true
+          },
+          "presence_penalty": {
+            "type": "number",
+            "format": "float",
+            "minimum": -2.0,
+            "maximum": 2.0,
+            "default": 1.1,
+            "description": "Higher values increase the likelihood of new topics appearing.",
+            "x-loggable": true
+          },
+          "top_p": {
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "maximum": 1.0,
+            "default": 0.95,
+            "description": "Probability below which less likely tokens are filtered out.",
             "x-loggable": true
           },
           "max_tokens": {
@@ -640,6 +784,10 @@
             "type": "string",
             "description": "Input prompt."
           },
+          "system_prompt": {
+            "type": "string",
+            "description": "System prompt."
+          },
           "num_choices": {
             "type": "integer",
             "description": "Number of choices to generate.",
@@ -653,7 +801,43 @@
             "format": "float",
             "minimum": 0,
             "maximum": 1,
-            "description": "Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.",
+            "description": "Higher values make the output more random, lower values make the output more deterministic.",
+            "x-loggable": true
+          },
+          "frequency_penalty": {
+            "type": "number",
+            "format": "float",
+            "minimum": -2.0,
+            "maximum": 2.0,
+            "default": 0.0,
+            "description": "Higher values decrease the likelihood of repeating previous tokens.",
+            "x-loggable": true
+          },
+          "repetition_penalty": {
+            "type": "number",
+            "format": "float",
+            "minimum": -2.0,
+            "maximum": 2.0,
+            "default": 1.0,
+            "description": "Higher values decrease the likelihood of repeated sequences.",
+            "x-loggable": true
+          },
+          "presence_penalty": {
+            "type": "number",
+            "format": "float",
+            "minimum": -2.0,
+            "maximum": 2.0,
+            "default": 1.1,
+            "description": "Higher values increase the likelihood of new topics appearing.",
+            "x-loggable": true
+          },
+          "top_p": {
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "maximum": 1.0,
+            "default": 0.95,
+            "description": "Probability below which less likely tokens are filtered out.",
             "x-loggable": true
           },
           "max_tokens": {
@@ -688,41 +872,6 @@
         },
         "required": ["choices"]
       },
-      "GenerateTextVisionIn": {
-        "title": "GenerateTextVisionIn",
-        "type": "object",
-        "properties": {
-          "prompt": {
-            "type": "string",
-            "description": "Text prompt."
-          },
-          "image_uris": {
-            "description": "Image prompts.",
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "max_tokens": {
-            "type": "integer",
-            "description": "Maximum number of tokens to generate.",
-            "default": 800,
-            "x-loggable": true
-          }
-        },
-        "required": ["prompt", "image_uris"]
-      },
-      "GenerateTextVisionOut": {
-        "title": "GenerateTextVisionOut",
-        "type": "object",
-        "properties": {
-          "text": {
-            "type": "string",
-            "description": "Text response."
-          }
-        },
-        "required": ["text"]
-      },
       "Firellava13BIn": {
         "title": "Firellava13BIn",
         "type": "object",
@@ -741,7 +890,6 @@
           "max_tokens": {
             "type": "integer",
             "description": "Maximum number of tokens to generate.",
-            "default": 800,
             "x-loggable": true
           }
         },
@@ -1071,7 +1219,7 @@
           },
           "control_method": {
             "type": "string",
-            "enum": ["edge", "depth", "illusion"],
+            "enum": ["edge", "depth", "illusion", "tile"],
             "description": "Strategy to control generation using the input image.",
             "x-loggable": true
           },
@@ -1091,6 +1239,8 @@
             "type": "integer",
             "description": "Resolution of the output image, in pixels.",
             "default": 1024,
+            "minimum": 512,
+            "maximum": 2048,
             "x-loggable": true
           },
           "negative_prompt": {
@@ -1105,6 +1255,15 @@
             "type": "number",
             "format": "float",
             "description": "Controls the influence of the input image on the generated output.",
+            "minimum": 0,
+            "maximum": 1,
+            "default": 0.5,
+            "x-loggable": true
+          },
+          "strength": {
+            "type": "number",
+            "format": "float",
+            "description": "Controls how much to transform the input image.",
             "minimum": 0,
             "maximum": 1,
             "default": 0.5,
@@ -1135,8 +1294,8 @@
         },
         "required": ["outputs"]
       },
-      "GenerativeEditImageIn": {
-        "title": "GenerativeEditImageIn",
+      "InpaintImageIn": {
+        "title": "InpaintImageIn",
         "type": "object",
         "properties": {
           "image_uri": {
@@ -1158,8 +1317,8 @@
         },
         "required": ["image_uri", "prompt"]
       },
-      "GenerativeEditImageOut": {
-        "title": "GenerativeEditImageOut",
+      "InpaintImageOut": {
+        "title": "InpaintImageOut",
         "type": "object",
         "properties": {
           "image_uri": {
@@ -1169,8 +1328,8 @@
         },
         "required": ["image_uri"]
       },
-      "MultiGenerativeEditImageIn": {
-        "title": "MultiGenerativeEditImageIn",
+      "MultiInpaintImageIn": {
+        "title": "MultiInpaintImageIn",
         "type": "object",
         "properties": {
           "image_uri": {
@@ -1200,15 +1359,15 @@
         },
         "required": ["image_uri", "prompt", "num_images"]
       },
-      "MultiGenerativeEditImageOut": {
-        "title": "MultiGenerativeEditImageOut",
+      "MultiInpaintImageOut": {
+        "title": "MultiInpaintImageOut",
         "type": "object",
         "properties": {
           "outputs": {
             "type": "array",
             "description": "Generated images.",
             "items": {
-              "$ref": "#/components/schemas/GenerativeEditImageOut"
+              "$ref": "#/components/schemas/InpaintImageOut"
             }
           }
         },
@@ -1242,6 +1401,8 @@
             "type": "integer",
             "description": "Resolution of the output image, in pixels.",
             "default": 1024,
+            "minimum": 512,
+            "maximum": 2048,
             "x-loggable": true
           },
           "negative_prompt": {
@@ -1328,8 +1489,8 @@
         },
         "required": ["x", "y"]
       },
-      "FillMaskIn": {
-        "title": "FillMaskIn",
+      "EraseImageIn": {
+        "title": "EraseImageIn",
         "type": "object",
         "properties": {
           "image_uri": {
@@ -1347,8 +1508,8 @@
         },
         "required": ["image_uri", "mask_image_uri"]
       },
-      "FillMaskOut": {
-        "title": "FillMaskOut",
+      "EraseImageOut": {
+        "title": "EraseImageOut",
         "type": "object",
         "properties": {
           "image_uri": {
@@ -1454,9 +1615,21 @@
         "title": "UpscaleImageIn",
         "type": "object",
         "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "Prompt to guide model on the content of image to upscale."
+          },
           "image_uri": {
             "type": "string",
             "description": "Input image."
+          },
+          "output_resolution": {
+            "type": "integer",
+            "description": "Resolution of the output image, in pixels.",
+            "default": 1024,
+            "minimum": 512,
+            "maximum": 2048,
+            "x-loggable": true
           },
           "store": {
             "type": "string",
@@ -1467,32 +1640,6 @@
       },
       "UpscaleImageOut": {
         "title": "UpscaleImageOut",
-        "type": "object",
-        "properties": {
-          "image_uri": {
-            "type": "string",
-            "description": "Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided."
-          }
-        },
-        "required": ["image_uri"]
-      },
-      "RealESRGANIn": {
-        "title": "RealESRGANIn",
-        "type": "object",
-        "properties": {
-          "image_uri": {
-            "type": "string",
-            "description": "Input image."
-          },
-          "store": {
-            "type": "string",
-            "description": "Use \"hosted\" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string."
-          }
-        },
-        "required": ["image_uri"]
-      },
-      "RealESRGANOut": {
-        "title": "RealESRGANOut",
         "type": "object",
         "properties": {
           "image_uri": {
@@ -1576,8 +1723,8 @@
         },
         "required": ["mask_image_uri"]
       },
-      "TranscribeMediaIn": {
-        "title": "TranscribeMediaIn",
+      "TranscribeSpeechIn": {
+        "title": "TranscribeSpeechIn",
         "type": "object",
         "properties": {
           "audio_uri": {
@@ -1694,8 +1841,8 @@
         },
         "required": ["title", "start"]
       },
-      "TranscribeMediaOut": {
-        "title": "TranscribeMediaOut",
+      "TranscribeSpeechOut": {
+        "title": "TranscribeSpeechOut",
         "type": "object",
         "properties": {
           "text": {
@@ -2117,8 +2264,8 @@
         },
         "required": ["embeddings"]
       },
-      "CreateVectorStoreIn": {
-        "title": "CreateVectorStoreIn",
+      "FindOrCreateVectorStoreIn": {
+        "title": "FindOrCreateVectorStoreIn",
         "type": "object",
         "properties": {
           "collection_name": {
@@ -2132,35 +2279,12 @@
             "description": "Selected embedding model.",
             "enum": ["jina-v2", "clip"],
             "x-loggable": true
-          },
-          "m": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 64,
-            "default": 16,
-            "description": "The max number of connections per layer for the index.",
-            "x-loggable": true
-          },
-          "ef_construction": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 128,
-            "description": "The size of the dynamic candidate list for constructing the index graph.",
-            "default": 64,
-            "x-loggable": true
-          },
-          "metric": {
-            "type": "string",
-            "enum": ["cosine", "l2", "inner"],
-            "default": "inner",
-            "description": "The distance metric to construct the index with.",
-            "x-loggable": true
           }
         },
         "required": ["collection_name", "model"]
       },
-      "CreateVectorStoreOut": {
-        "title": "CreateVectorStoreOut",
+      "FindOrCreateVectorStoreOut": {
+        "title": "FindOrCreateVectorStoreOut",
         "type": "object",
         "properties": {
           "collection_name": {
@@ -2173,35 +2297,9 @@
             "type": "string",
             "description": "Selected embedding model.",
             "enum": ["jina-v2", "clip"]
-          },
-          "m": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 64,
-            "default": 16,
-            "description": "The max number of connections per layer for the index."
-          },
-          "ef_construction": {
-            "type": "integer",
-            "minimum": 1,
-            "maximum": 128,
-            "description": "The size of the dynamic candidate list for constructing the index graph.",
-            "default": 64
-          },
-          "metric": {
-            "type": "string",
-            "enum": ["cosine", "l2", "inner"],
-            "default": "inner",
-            "description": "The distance metric to construct the index with."
           }
         },
-        "required": [
-          "collection_name",
-          "model",
-          "m",
-          "ef_construction",
-          "metric"
-        ]
+        "required": ["collection_name", "model"]
       },
       "ListVectorStoresIn": {
         "title": "ListVectorStoresIn",
@@ -2216,7 +2314,7 @@
             "type": "array",
             "description": "List of vector stores.",
             "items": {
-              "$ref": "#/components/schemas/CreateVectorStoreOut"
+              "$ref": "#/components/schemas/FindOrCreateVectorStoreOut"
             }
           }
         }
@@ -2549,11 +2647,6 @@
             "type": "string",
             "description": "Selected embedding model.",
             "enum": ["jina-v2", "clip"]
-          },
-          "metric": {
-            "type": "string",
-            "enum": ["cosine", "l2", "inner"],
-            "description": "The distance metric used for the query."
           }
         },
         "required": ["results"]
@@ -2610,8 +2703,8 @@
                 "$ref": "#/components/schemas/RunPythonIn"
               },
               "example": {
-                "code": "import numpy as np; print(SB_IN['foo']); SB_OUT['result']=np.sum([1,2]).item()",
-                "input": { "foo": "bar" },
+                "pkl_function": "g2UjA5fX2t3ZGVmYXVsdHNfX5ROjAxfX2RlZmF1bHRzX1+UTowKX19tb2R1bGVfX5SMCF9fbWFpbl9flIwHX19kb2NfX5ROjAtfX2Nsb3N1cmVfX5ROjBdfY2xvdWRwaWNrbGVfc3VibW9kdWxlc5RdlIwLX19nbG9iYWxzX1+UfZR1hpSGUjAu",
+                "kwargs": {},
                 "pip_install": ["numpy"]
               }
             }
@@ -2626,10 +2719,7 @@
                   "$ref": "#/components/schemas/RunPythonOut"
                 },
                 "example": {
-                  "stdout": "bar",
-                  "output": {
-                    "result": 3
-                  },
+                  "stdout": "foo\n",
                   "stderr": ""
                 }
               }
@@ -2642,7 +2732,7 @@
       "post": {
         "summary": "GenerateText",
         "operationId": "GenerateText",
-        "tags": ["category:language-generation"],
+        "tags": ["category:language"],
         "description": "Generate text using a language model.",
         "requestBody": {
           "content": {
@@ -2679,7 +2769,7 @@
       "post": {
         "summary": "MultiGenerateText",
         "operationId": "MultiGenerateText",
-        "tags": ["category:language-generation"],
+        "tags": ["category:language"],
         "description": "Generate multiple text choices using a language model.",
         "requestBody": {
           "content": {
@@ -2723,7 +2813,7 @@
       "post": {
         "summary": "BatchGenerateText",
         "operationId": "BatchGenerateText",
-        "tags": ["category:language-generation"],
+        "tags": ["category:language"],
         "description": "Generate text for multiple prompts in batch using a language model.",
         "requestBody": {
           "content": {
@@ -2766,7 +2856,7 @@
       "post": {
         "summary": "BatchGenerateJSON",
         "operationId": "BatchGenerateJSON",
-        "tags": ["category:language-generation"],
+        "tags": ["category:language"],
         "description": "Generate JSON for multiple prompts in batch using a language model.",
         "requestBody": {
           "content": {
@@ -2822,7 +2912,7 @@
       "post": {
         "summary": "GenerateJSON",
         "operationId": "GenerateJSON",
-        "tags": ["category:language-generation"],
+        "tags": ["category:language"],
         "description": "Generate JSON using a language model.",
         "requestBody": {
           "content": {
@@ -2872,7 +2962,7 @@
       "post": {
         "summary": "MultiGenerateJSON",
         "operationId": "MultiGenerateJSON",
-        "tags": ["category:language-generation"],
+        "tags": ["category:language"],
         "description": "Generate multiple JSON choices using a language model.",
         "requestBody": {
           "content": {
@@ -2926,50 +3016,11 @@
         }
       }
     },
-    "/GenerateTextVision": {
-      "post": {
-        "summary": "GenerateTextVision",
-        "operationId": "GenerateTextVision",
-        "tags": ["category:language-generation"],
-        "description": "Generate text with image input.",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GenerateTextVisionIn"
-              },
-              "example": {
-                "prompt": "what are these paintings of and who made them?",
-                "image_uris": [
-                  "https://media.substrate.run/docs-fuji-red.jpg",
-                  "https://media.substrate.run/docs-fuji-blue.jpg"
-                ]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GenerateTextVisionOut"
-                },
-                "example": {
-                  "text": "The artist who created these paintings is Hokusai Katsushika, a renowned Japanese artist known for his woodblock prints and paintings."
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/Mistral7BInstruct": {
       "post": {
         "summary": "Mistral7BInstruct",
         "operationId": "Mistral7BInstruct",
-        "tags": ["category:language-generation", "type:low-level"],
+        "tags": ["category:language", "type:low-level"],
         "description": "Generate text using [Mistral 7B Instruct](https://mistral.ai/news/announcing-mistral-7b).",
         "requestBody": {
           "content": {
@@ -3014,7 +3065,7 @@
       "post": {
         "summary": "Mixtral8x7BInstruct",
         "operationId": "Mixtral8x7BInstruct",
-        "tags": ["category:language-generation", "type:low-level"],
+        "tags": ["category:language", "type:low-level"],
         "description": "Generate text using instruct-tuned [Mixtral 8x7B](https://mistral.ai/news/mixtral-of-experts/).",
         "requestBody": {
           "content": {
@@ -3059,7 +3110,7 @@
       "post": {
         "summary": "Llama3Instruct8B",
         "operationId": "Llama3Instruct8B",
-        "tags": ["category:language-generation", "type:low-level"],
+        "tags": ["category:language", "type:low-level"],
         "description": "Generate text using instruct-tuned [Llama 3 8B](https://llama.meta.com/llama3/).",
         "requestBody": {
           "content": {
@@ -3104,7 +3155,7 @@
       "post": {
         "summary": "Llama3Instruct70B",
         "operationId": "Llama3Instruct70B",
-        "tags": ["category:language-generation", "type:low-level"],
+        "tags": ["category:language", "type:low-level"],
         "description": "Generate text using instruct-tuned [Llama 3 70B](https://llama.meta.com/llama3/).",
         "requestBody": {
           "content": {
@@ -3149,7 +3200,7 @@
       "post": {
         "summary": "Firellava13B",
         "operationId": "Firellava13B",
-        "tags": ["category:language-generation", "type:low-level"],
+        "tags": ["category:language", "type:low-level"],
         "description": "Generate text with image input using [FireLLaVA 13B](https://fireworks.ai/blog/firellava-the-first-commercially-permissive-oss-llava-model).",
         "requestBody": {
           "content": {
@@ -3188,7 +3239,7 @@
       "post": {
         "summary": "GenerateImage",
         "operationId": "GenerateImage",
-        "tags": ["category:image-generation"],
+        "tags": ["category:image"],
         "description": "Generate an image.",
         "requestBody": {
           "content": {
@@ -3224,7 +3275,7 @@
       "post": {
         "summary": "MultiGenerateImage",
         "operationId": "MultiGenerateImage",
-        "tags": ["category:image-generation"],
+        "tags": ["category:image"],
         "description": "Generate multiple images.",
         "requestBody": {
           "content": {
@@ -3264,17 +3315,17 @@
         }
       }
     },
-    "/GenerativeEditImage": {
+    "/InpaintImage": {
       "post": {
-        "summary": "GenerativeEditImage",
-        "operationId": "GenerativeEditImage",
-        "tags": ["category:image-generation"],
-        "description": "Edit an image using image generation.",
+        "summary": "InpaintImage",
+        "operationId": "InpaintImage",
+        "tags": ["category:image"],
+        "description": "Edit an image using image generation inside part of the image or the full image.",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/GenerativeEditImageIn"
+                "$ref": "#/components/schemas/InpaintImageIn"
               },
               "example": {
                 "image_uri": "https://media.substrate.run/docs-klimt-park.jpg",
@@ -3291,7 +3342,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GenerativeEditImageOut"
+                  "$ref": "#/components/schemas/InpaintImageOut"
                 },
                 "example": {
                   "image_uri": "https://assets.substrate.run/84848484.jpg"
@@ -3302,17 +3353,17 @@
         }
       }
     },
-    "/MultiGenerativeEditImage": {
+    "/MultiInpaintImage": {
       "post": {
-        "summary": "MultiGenerativeEditImage",
-        "operationId": "MultiGenerativeEditImage",
-        "tags": ["category:image-generation"],
+        "summary": "MultiInpaintImage",
+        "operationId": "MultiInpaintImage",
+        "tags": ["category:image"],
         "description": "Edit multiple images using image generation.",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/MultiGenerativeEditImageIn"
+                "$ref": "#/components/schemas/MultiInpaintImageIn"
               },
               "example": {
                 "image_uri": "https://media.substrate.run/docs-klimt-park.jpg",
@@ -3330,7 +3381,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/MultiGenerativeEditImageOut"
+                  "$ref": "#/components/schemas/MultiInpaintImageOut"
                 },
                 "example": {
                   "outputs": [
@@ -3348,60 +3399,11 @@
         }
       }
     },
-    "/StableDiffusionXL": {
-      "post": {
-        "summary": "StableDiffusionXL",
-        "operationId": "StableDiffusionXL",
-        "tags": ["category:image-generation", "type:low-level"],
-        "description": "Generate an image using [Stable Diffusion XL](https://arxiv.org/abs/2307.01952).",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/StableDiffusionXLIn"
-              },
-              "example": {
-                "prompt": "hokusai futuristic supercell spiral cloud with glowing core over turbulent ocean",
-                "negative_prompt": "night, moon",
-                "store": "hosted",
-                "guidance_scale": 7,
-                "num_images": 2,
-                "seeds": [3306990332671669418, 13641924104177017164]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/StableDiffusionXLOut"
-                },
-                "example": {
-                  "outputs": [
-                    {
-                      "image_uri": "https://assets.substrate.run/84848484.jpg",
-                      "seed": 3306990332671669418
-                    },
-                    {
-                      "image_uri": "https://assets.substrate.run/48484848.jpg",
-                      "seed": 13641924104177017164
-                    }
-                  ]
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/StableDiffusionXLLightning": {
       "post": {
         "summary": "StableDiffusionXLLightning",
         "operationId": "StableDiffusionXLLightning",
-        "tags": ["category:image-generation", "type:low-level"],
+        "tags": ["category:image", "type:low-level"],
         "description": "Generate an image using [Stable Diffusion XL Lightning](https://arxiv.org/abs/2402.13929).",
         "requestBody": {
           "content": {
@@ -3449,7 +3451,7 @@
       "post": {
         "summary": "StableDiffusionXLInpaint",
         "operationId": "StableDiffusionXLInpaint",
-        "tags": ["category:image-generation", "type:low-level"],
+        "tags": ["category:image", "type:low-level"],
         "description": "Edit an image using [Stable Diffusion XL](https://arxiv.org/abs/2307.01952). Supports inpainting (edit part of the image with a mask) and image-to-image (edit the full image).",
         "requestBody": {
           "content": {
@@ -3500,7 +3502,7 @@
       "post": {
         "summary": "StableDiffusionXLControlNet",
         "operationId": "StableDiffusionXLControlNet",
-        "tags": ["category:image-generation"],
+        "tags": ["category:image"],
         "description": "Generate an image with generation structured by an input image, using Stable Diffusion XL with [ControlNet](https://arxiv.org/abs/2302.05543).",
         "requestBody": {
           "content": {
@@ -3512,7 +3514,8 @@
                 "image_uri": "https://media.substrate.run/spiral-logo.jpeg",
                 "prompt": "the futuristic solarpunk city of atlantis at sunset, cinematic bokeh HD",
                 "control_method": "illusion",
-                "conditioning_scale": 0.5,
+                "conditioning_scale": 1.0,
+                "strength": 1.0,
                 "store": "hosted",
                 "num_images": 2,
                 "seeds": [16072680593433107326, 17203982922585031095]
@@ -3546,67 +3549,17 @@
         }
       }
     },
-    "/StableDiffusionXLIPAdapter": {
+    "/TranscribeSpeech": {
       "post": {
-        "summary": "StableDiffusionXLIPAdapter",
-        "operationId": "StableDiffusionXLIPAdapter",
-        "tags": ["category:image-generation", "type:low-level"],
-        "description": "Generate an image with an image prompt, using Stable Diffusion XL with [IP-Adapter](https://arxiv.org/abs/2308.06721).",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/StableDiffusionXLIPAdapterIn"
-              },
-              "example": {
-                "prompt": "woodblock wave at sunset",
-                "negative_prompt": "low quality, low resolution",
-                "image_prompt_uri": "https://guides.substrate.run/hokusai.jpeg",
-                "store": "hosted",
-                "num_images": 2,
-                "ip_adapter_scale": 0.9,
-                "seeds": [6565750906821527600, 9762512681041688800]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/StableDiffusionXLIPAdapterOut"
-                },
-                "example": {
-                  "outputs": [
-                    {
-                      "image_uri": "https://assets.substrate.run/84848484.jpg",
-                      "seed": 6565750906821527600
-                    },
-                    {
-                      "image_uri": "https://assets.substrate.run/48484848.jpg",
-                      "seed": 9762512681041688800
-                    }
-                  ]
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/TranscribeMedia": {
-      "post": {
-        "summary": "TranscribeMedia",
-        "operationId": "TranscribeMedia",
+        "summary": "TranscribeSpeech",
+        "operationId": "TranscribeSpeech",
         "tags": ["category:audio"],
         "description": "Transcribe speech in an audio or video file.",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/TranscribeMediaIn"
+                "$ref": "#/components/schemas/TranscribeSpeechIn"
               },
               "example": {
                 "audio_uri": "https://media.substrate.run/dfw-clip.m4a",
@@ -3625,7 +3578,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/TranscribeMediaOut"
+                  "$ref": "#/components/schemas/TranscribeSpeechOut"
                 },
                 "example": {
                   "text": "language like that, the wounded inner child, the inner pain, is part of a kind of pop psychological movement in the United States that is a sort of popular Freudianism that ...",
@@ -3704,49 +3657,12 @@
         }
       }
     },
-    "/XTTSV2": {
-      "post": {
-        "summary": "XTTSV2",
-        "operationId": "XTTSV2",
-        "tags": ["category:audio", "type:low-level"],
-        "description": "Generate speech from text using [XTTS v2](https://docs.coqui.ai/en/latest/models/xtts.html).",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/XTTSV2In"
-              },
-              "example": {
-                "text": "Substrate: an underlying substance or layer.",
-                "audio_uri": "https://media.substrate.run/docs-speaker.wav",
-                "store": "hosted"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/XTTSV2Out"
-                },
-                "example": {
-                  "audio_uri": "https://assets.substrate.run/84848484.wav"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/RemoveBackground": {
       "post": {
         "summary": "RemoveBackground",
         "operationId": "RemoveBackground",
-        "tags": ["category:image-utility"],
-        "description": "Remove the background from an image, with the option to return the foreground as a mask.",
+        "tags": ["category:segmentation"],
+        "description": "Remove the background from an image and return the foreground segment as a cut-out or a mask.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -3777,17 +3693,17 @@
         }
       }
     },
-    "/FillMask": {
+    "/EraseImage": {
       "post": {
-        "summary": "FillMask",
-        "operationId": "FillMask",
-        "tags": ["category:image-utility"],
-        "description": "Fill (inpaint) part of an image, e.g. to 'remove' an object.",
+        "summary": "EraseImage",
+        "operationId": "EraseImage",
+        "tags": ["category:image"],
+        "description": "Erase the masked part of an image, e.g. to 'remove' an object.",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/FillMaskIn"
+                "$ref": "#/components/schemas/EraseImageIn"
               },
               "example": {
                 "image_uri": "https://media.substrate.run/apple-forest.jpeg",
@@ -3803,7 +3719,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/FillMaskOut"
+                  "$ref": "#/components/schemas/EraseImageOut"
                 },
                 "example": {
                   "image_uri": "https://assets.substrate.run/84848484.jpg"
@@ -3818,8 +3734,8 @@
       "post": {
         "summary": "UpscaleImage",
         "operationId": "UpscaleImage",
-        "tags": ["category:image-utility"],
-        "description": "Upscale an image.",
+        "tags": ["category:image"],
+        "description": "Upscale an image using image generation.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -3827,7 +3743,8 @@
                 "$ref": "#/components/schemas/UpscaleImageIn"
               },
               "example": {
-                "image_uri": "https://media.substrate.run/docs-seurat.jpg",
+                "prompt": "high resolution detailed spiral shell",
+                "image_uri": "https://media.substrate.run/docs-shell-emoji.jpg",
                 "store": "hosted"
               }
             }
@@ -3854,7 +3771,7 @@
       "post": {
         "summary": "SegmentUnderPoint",
         "operationId": "SegmentUnderPoint",
-        "tags": ["category:image-utility"],
+        "tags": ["category:segmentation"],
         "description": "Segment an image under a point and return the segment.",
         "requestBody": {
           "content": {
@@ -3894,7 +3811,7 @@
       "post": {
         "summary": "SegmentAnything",
         "operationId": "SegmentAnything",
-        "tags": ["category:image-utility", "type:low-level"],
+        "tags": ["category:segmentation", "type:low-level"],
         "description": "Segment an image using [SegmentAnything](https://github.com/facebookresearch/segment-anything).",
         "requestBody": {
           "content": {
@@ -4293,17 +4210,17 @@
         }
       }
     },
-    "/CreateVectorStore": {
+    "/FindOrCreateVectorStore": {
       "post": {
         "tags": ["category:vector-store"],
-        "summary": "CreateVectorStore",
-        "operationId": "CreateVectorStore",
-        "description": "Create a vector store for storing and querying embeddings.",
+        "summary": "FindOrCreateVectorStore",
+        "operationId": "FindOrCreateVectorStore",
+        "description": "Find a vector store matching the given collection name, or create a new vector store.",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateVectorStoreIn"
+                "$ref": "#/components/schemas/FindOrCreateVectorStoreIn"
               },
               "example": {
                 "collection_name": "smoke_tests",
@@ -4318,14 +4235,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CreateVectorStoreOut"
+                  "$ref": "#/components/schemas/FindOrCreateVectorStoreOut"
                 },
                 "example": {
                   "collection_name": "smoke_tests",
-                  "model": "jina-v2",
-                  "m": 16,
-                  "ef_construction": 64,
-                  "metric": "inner"
+                  "model": "jina-v2"
                 }
               }
             }
@@ -4361,17 +4275,11 @@
                   "items": [
                     {
                       "collection_name": "comments",
-                      "model": "jina-v2",
-                      "m": 16,
-                      "ef_construction": 64,
-                      "metric": "inner"
+                      "model": "jina-v2"
                     },
                     {
                       "collection_name": "images",
-                      "model": "jina-v2",
-                      "m": 16,
-                      "ef_construction": 64,
-                      "metric": "inner"
+                      "model": "jina-v2"
                     }
                   ]
                 }
@@ -4474,8 +4382,7 @@
                     ]
                   ],
                   "collection_name": "comments",
-                  "model": "jina-v2",
-                  "metric": "inner"
+                  "model": "jina-v2"
                 }
               }
             }

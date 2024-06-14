@@ -25,6 +25,7 @@ update-version: ensure
 sync-codegen: ensure
 	bin/sync-codegen.ts
 	make update-version
+	make format-fix
 
 .PHONY: format-check
 format-check: ensure

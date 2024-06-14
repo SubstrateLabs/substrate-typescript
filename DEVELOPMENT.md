@@ -31,9 +31,6 @@ make generate
 # in SubstrateLabs/substrate-typescript: copy the generated files
 make sync-codegen
 
-# format the code
-make format-fix
-
 # ensure the package builds
 make build
 ```
@@ -124,6 +121,8 @@ After making changes, you should:
 - Make sure to bump the `SDK_VERSION` in the `bin/update-version.ts` script
 - Then run `make update-version` to ensure the `package.json` and `src/version.ts` are set correctly.
 
+**NOTE:** If the API version (the date string) has changed, you should reset the minor and patch version to `0.0`.
+
 **NOTE:** The `make update-version` task will run after every `make sync-codegen` too!
 
 ## CI & Git Hooks
@@ -159,7 +158,6 @@ that we'd like to publish.
 
 1. Preview the "pack" (tarball we publish to npm): `make publish-preview`
 2. Publish to NPM & push tag to GitHub: `make publish`
-3. Create new Release on GitHub (using the web UI). Add release notes, mentions, etc.
 
 **Non-Production Releases**
 
