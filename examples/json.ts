@@ -1,13 +1,13 @@
 #!/usr/bin/env -S npx ts-node --transpileOnly
 
-import { Substrate, GenerateJSON, GenerateText, sb } from "substrate";
+import { Substrate, ComputeJSON, ComputeText, sb } from "substrate";
 
 async function main() {
   const SUBSTRATE_API_KEY = process.env["SUBSTRATE_API_KEY"];
 
   const substrate = new Substrate({ apiKey: SUBSTRATE_API_KEY });
 
-  const author = new GenerateJSON({
+  const author = new ComputeJSON({
     prompt: "Who wrote Don Quixote?",
     json_schema: {
       type: "object",
@@ -29,7 +29,7 @@ async function main() {
   const name = author.future.json_object.get("name");
   const bio = author.future.json_object.get("bio");
 
-  const report = new GenerateText({
+  const report = new ComputeText({
     prompt: sb.interpolate`Write a short summary about ${name} and make sure to use the following bio: ${bio}`,
   });
 
