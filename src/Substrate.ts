@@ -4,6 +4,7 @@ import OpenAPIjson from "substrate/openapi.json";
 import { SubstrateResponse } from "substrate/SubstrateResponse";
 import { SubstrateStreamingResponse } from "substrate/SubstrateStreamingResponse";
 import { Node } from "substrate/Node";
+import { Future } from "substrate/Future";
 import { getPlatformProperties } from "substrate/Platform";
 import { deflate } from "pako";
 import { randomString } from "substrate/idGenerator";
@@ -181,12 +182,23 @@ export class Substrate {
    *  Transform an array of nodes into JSON for the Substrate API
    */
   static serialize(...nodes: Node[]): any {
-    const ns = nodes.map((n) => n.toJSON());
-    const futures = new Set(ns.flatMap((sn) => sn.futures));
+    const allNodes = new Set<Node>();
+    const allFutures = new Set<Future<any>>();
+
+    for (let node of nodes) {
+      // @ts-ignore: .references() is protected
+      const refs = node.references();
+      for (let n of refs.nodes) {
+        allNodes.add(n);
+      }
+      for (let f of refs.futures) {
+        allFutures.add(f);
+      }
+    }
 
     return {
-      nodes: ns.map((sn) => sn.node),
-      futures: Array.from(futures),
+      nodes: Array.from(allNodes).map((node) => node.toJSON()),
+      futures: Array.from(allFutures).map((future) => future.toJSON()),
       edges: [], // @deprecated
       initial_args: {}, // @deprecated
     };

@@ -20,16 +20,28 @@ describe("Node", () => {
     const n = new FooNode({ prompt: d });
 
     expect(n.toJSON()).toEqual({
-      node: {
-        id: n.id,
-        node: "FooNode",
-        _should_output_globally: true,
-        args: {
-          // @ts-expect-error (accessing protected property)
-          prompt: d.toPlaceholder(),
-        },
+      id: n.id,
+      node: "FooNode",
+      _should_output_globally: true,
+      args: {
+        // @ts-expect-error (accessing protected property)
+        prompt: d.toPlaceholder(),
       },
-      futures: [d.toJSON(), c.toJSON(), a.toJSON(), b.toJSON()],
     });
+  });
+
+  test(".references", () => {
+    const a = new FooNode({ x: "x" });
+    const f1 = a.future.get("x");
+    const f2 = a.future.get("y");
+    const b = new FooNode({ x: f1, z: f2 });
+    const f3 = b.future.get("x");
+    const c = new FooNode({ x: f3 });
+
+    // @ts-ignore (protected)
+    const { nodes, futures } = c.references();
+
+    expect(nodes).toEqual(new Set([a, b, c]));
+    expect(futures).toEqual(new Set([f1, f2, f3]));
   });
 });

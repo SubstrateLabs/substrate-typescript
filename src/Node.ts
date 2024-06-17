@@ -78,47 +78,84 @@ export abstract class Node {
   }
 
   toJSON() {
-    // When we serialize a node we're also going to be extracting
-    // all the Future values that are referenced by the Args and
-    // replacing them with placeholders in addition to translating
-    // all of this to JSON.
-    const futures = new Set();
-
-    const traverse = (obj: any): any => {
+    const withPlaceholders = (obj: any): any => {
       if (Array.isArray(obj)) {
-        return obj.map((item) => traverse(item));
+        return obj.map((item) => withPlaceholders(item));
       }
 
       if (obj instanceof Future) {
-        futures.add(obj);
-        // @ts-expect-error (accessing protected method referencedFutures)
-        obj.referencedFutures().forEach((rf: any) => futures.add(rf));
         // @ts-expect-error (accessing protected method toPlaceholder)
         return obj.toPlaceholder();
       }
 
       if (typeof obj === "object") {
         return Object.keys(obj).reduce((acc: any, k: any) => {
-          acc[k] = traverse(obj[k]);
+          acc[k] = withPlaceholders(obj[k]);
           return acc;
         }, {});
       }
 
       return obj;
     };
-    const args = traverse(this.args);
 
-    // TODO: should we also return nodes this node depends on here?
-    // eg. returning { nodes: Node[], futures[] }
-    // the rationale for doing this is that
     return {
-      node: {
-        id: this.id,
-        node: this.node,
-        args,
-        _should_output_globally: !this.hide,
-      },
-      futures: Array.from(futures).map((f: any) => f.toJSON()),
+      id: this.id,
+      node: this.node,
+      args: withPlaceholders(this.args),
+      _should_output_globally: !this.hide,
     };
+  }
+
+  /**
+   * @private
+   * For this node, return all the Futures and other Nodes it has a reference to.
+   */
+  protected references() {
+    const nodes = new Set<Node>();
+    const futures = new Set<Future<any>>();
+
+    nodes.add(this);
+
+    const collectFutures = (obj: any) => {
+      if (Array.isArray(obj)) {
+        for (let item of obj) {
+          collectFutures(item);
+        }
+      }
+
+      if (obj instanceof Future) {
+        futures.add(obj);
+
+        // @ts-expect-error (accessing protected method referencedFutures)
+        for (let future of obj.referencedFutures()) {
+          futures.add(future);
+        }
+        return;
+      }
+
+      if (typeof obj === "object") {
+        for (let key of Object.keys(obj)) {
+          collectFutures(obj[key]);
+        }
+      }
+    };
+    collectFutures(this.args);
+
+    for (let future of futures) {
+      // @ts-ignore protected access
+      let directive = future._directive;
+      if (directive instanceof Trace) {
+        // @ts-ignore protected access
+        const references = directive.originNode.references();
+        for (let node of references.nodes) {
+          nodes.add(node);
+        }
+        for (let future of references.futures) {
+          futures.add(future);
+        }
+      }
+    }
+
+    return { nodes, futures };
   }
 }
