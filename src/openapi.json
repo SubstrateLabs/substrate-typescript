@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Substrate API",
-    "version": "2024-06-12",
+    "version": "2024-06-17",
     "contact": {
       "email": "support@substrate.run"
     },
@@ -121,8 +121,8 @@
         },
         "required": ["stdout", "stderr"]
       },
-      "GenerateTextIn": {
-        "title": "GenerateTextIn",
+      "ComputeTextIn": {
+        "title": "ComputeTextIn",
         "type": "object",
         "properties": {
           "prompt": {
@@ -166,8 +166,8 @@
         },
         "required": ["prompt"]
       },
-      "GenerateTextOut": {
-        "title": "GenerateTextOut",
+      "ComputeTextOut": {
+        "title": "ComputeTextOut",
         "type": "object",
         "properties": {
           "text": {
@@ -177,8 +177,8 @@
         },
         "required": ["text"]
       },
-      "GenerateJSONIn": {
-        "title": "GenerateJSONIn",
+      "ComputeJSONIn": {
+        "title": "ComputeJSONIn",
         "type": "object",
         "properties": {
           "prompt": {
@@ -218,8 +218,8 @@
         },
         "required": ["prompt", "json_schema"]
       },
-      "GenerateJSONOut": {
-        "title": "GenerateJSONOut",
+      "ComputeJSONOut": {
+        "title": "ComputeJSONOut",
         "type": "object",
         "properties": {
           "json_object": {
@@ -234,8 +234,8 @@
         },
         "required": []
       },
-      "MultiGenerateTextIn": {
-        "title": "MultiGenerateTextIn",
+      "MultiComputeTextIn": {
+        "title": "MultiComputeTextIn",
         "type": "object",
         "properties": {
           "prompt": {
@@ -278,22 +278,22 @@
         },
         "required": ["prompt", "num_choices"]
       },
-      "MultiGenerateTextOut": {
-        "title": "MultiGenerateTextOut",
+      "MultiComputeTextOut": {
+        "title": "MultiComputeTextOut",
         "type": "object",
         "properties": {
           "choices": {
             "type": "array",
             "description": "Response choices.",
             "items": {
-              "$ref": "#/components/schemas/GenerateTextOut"
+              "$ref": "#/components/schemas/ComputeTextOut"
             }
           }
         },
         "required": ["choices"]
       },
-      "BatchGenerateTextIn": {
-        "title": "BatchGenerateTextIn",
+      "BatchComputeTextIn": {
+        "title": "BatchComputeTextIn",
         "type": "object",
         "properties": {
           "prompts": {
@@ -327,22 +327,22 @@
         },
         "required": ["prompts"]
       },
-      "BatchGenerateTextOut": {
-        "title": "BatchGenerateTextOut",
+      "BatchComputeTextOut": {
+        "title": "BatchComputeTextOut",
         "type": "object",
         "properties": {
           "outputs": {
             "type": "array",
             "description": "Batch outputs.",
             "items": {
-              "$ref": "#/components/schemas/GenerateTextOut"
+              "$ref": "#/components/schemas/ComputeTextOut"
             }
           }
         },
         "required": ["outputs"]
       },
-      "MultiGenerateJSONIn": {
-        "title": "MultiGenerateJSONIn",
+      "MultiComputeJSONIn": {
+        "title": "MultiComputeJSONIn",
         "type": "object",
         "properties": {
           "prompt": {
@@ -390,22 +390,22 @@
         },
         "required": ["prompt", "num_choices", "json_schema"]
       },
-      "MultiGenerateJSONOut": {
-        "title": "MultiGenerateJSONOut",
+      "MultiComputeJSONOut": {
+        "title": "MultiComputeJSONOut",
         "type": "object",
         "properties": {
           "choices": {
             "type": "array",
             "description": "Response choices.",
             "items": {
-              "$ref": "#/components/schemas/GenerateJSONOut"
+              "$ref": "#/components/schemas/ComputeJSONOut"
             }
           }
         },
         "required": ["choices"]
       },
-      "BatchGenerateJSONIn": {
-        "title": "BatchGenerateJSONIn",
+      "BatchComputeJSONIn": {
+        "title": "BatchComputeJSONIn",
         "type": "object",
         "properties": {
           "prompts": {
@@ -444,15 +444,15 @@
         },
         "required": ["prompts", "json_schema"]
       },
-      "BatchGenerateJSONOut": {
-        "title": "BatchGenerateJSONOut",
+      "BatchComputeJSONOut": {
+        "title": "BatchComputeJSONOut",
         "type": "object",
         "properties": {
           "outputs": {
             "type": "array",
             "description": "Batch outputs.",
             "items": {
-              "$ref": "#/components/schemas/GenerateJSONOut"
+              "$ref": "#/components/schemas/ComputeJSONOut"
             }
           }
         },
@@ -2728,17 +2728,17 @@
         }
       }
     },
-    "/GenerateText": {
+    "/ComputeText": {
       "post": {
-        "summary": "GenerateText",
-        "operationId": "GenerateText",
+        "summary": "ComputeText",
+        "operationId": "ComputeText",
         "tags": ["category:language"],
-        "description": "Generate text using a language model.",
+        "description": "Compute text using a language model.",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/GenerateTextIn"
+                "$ref": "#/components/schemas/ComputeTextIn"
               },
               "example": {
                 "prompt": "Who is Don Quixote?",
@@ -2754,7 +2754,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GenerateTextOut"
+                  "$ref": "#/components/schemas/ComputeTextOut"
                 },
                 "example": {
                   "text": "Don Quixote is a fictional character in the novel of the same name by Miguel de Cervantes."
@@ -2765,17 +2765,17 @@
         }
       }
     },
-    "/MultiGenerateText": {
+    "/MultiComputeText": {
       "post": {
-        "summary": "MultiGenerateText",
-        "operationId": "MultiGenerateText",
+        "summary": "MultiComputeText",
+        "operationId": "MultiComputeText",
         "tags": ["category:language"],
         "description": "Generate multiple text choices using a language model.",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/MultiGenerateTextIn"
+                "$ref": "#/components/schemas/MultiComputeTextIn"
               },
               "example": {
                 "prompt": "Who is Don Quixote?",
@@ -2791,7 +2791,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/MultiGenerateTextOut"
+                  "$ref": "#/components/schemas/MultiComputeTextOut"
                 },
                 "example": {
                   "choices": [
@@ -2809,17 +2809,17 @@
         }
       }
     },
-    "/BatchGenerateText": {
+    "/BatchComputeText": {
       "post": {
-        "summary": "BatchGenerateText",
-        "operationId": "BatchGenerateText",
+        "summary": "BatchComputeText",
+        "operationId": "BatchComputeText",
         "tags": ["category:language"],
-        "description": "Generate text for multiple prompts in batch using a language model.",
+        "description": "Compute text for multiple prompts in batch using a language model.",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/BatchGenerateTextIn"
+                "$ref": "#/components/schemas/BatchComputeTextIn"
               },
               "example": {
                 "prompts": ["Who is Don Quixote?", "Who is Sancho Panza?"],
@@ -2834,7 +2834,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BatchGenerateTextOut"
+                  "$ref": "#/components/schemas/BatchComputeTextOut"
                 },
                 "example": {
                   "outputs": [
@@ -2852,17 +2852,17 @@
         }
       }
     },
-    "/BatchGenerateJSON": {
+    "/BatchComputeJSON": {
       "post": {
-        "summary": "BatchGenerateJSON",
-        "operationId": "BatchGenerateJSON",
+        "summary": "BatchComputeJSON",
+        "operationId": "BatchComputeJSON",
         "tags": ["category:language"],
-        "description": "Generate JSON for multiple prompts in batch using a language model.",
+        "description": "Compute JSON for multiple prompts in batch using a language model.",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/BatchGenerateJSONIn"
+                "$ref": "#/components/schemas/BatchComputeJSONIn"
               },
               "example": {
                 "prompts": ["Who is Don Quixote?", "Who is Sancho Panza?"],
@@ -2890,7 +2890,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BatchGenerateJSONOut"
+                  "$ref": "#/components/schemas/BatchComputeJSONOut"
                 },
                 "example": {
                   "outputs": [
@@ -2908,17 +2908,17 @@
         }
       }
     },
-    "/GenerateJSON": {
+    "/ComputeJSON": {
       "post": {
-        "summary": "GenerateJSON",
-        "operationId": "GenerateJSON",
+        "summary": "ComputeJSON",
+        "operationId": "ComputeJSON",
         "tags": ["category:language"],
-        "description": "Generate JSON using a language model.",
+        "description": "Compute JSON using a language model.",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/GenerateJSONIn"
+                "$ref": "#/components/schemas/ComputeJSONIn"
               },
               "example": {
                 "prompt": "Who wrote Don Quixote?",
@@ -2947,7 +2947,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GenerateJSONOut"
+                  "$ref": "#/components/schemas/ComputeJSONOut"
                 },
                 "example": {
                   "json_object": {}
@@ -2958,17 +2958,17 @@
         }
       }
     },
-    "/MultiGenerateJSON": {
+    "/MultiComputeJSON": {
       "post": {
-        "summary": "MultiGenerateJSON",
-        "operationId": "MultiGenerateJSON",
+        "summary": "MultiComputeJSON",
+        "operationId": "MultiComputeJSON",
         "tags": ["category:language"],
-        "description": "Generate multiple JSON choices using a language model.",
+        "description": "Compute multiple JSON choices using a language model.",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/MultiGenerateJSONIn"
+                "$ref": "#/components/schemas/MultiComputeJSONIn"
               },
               "example": {
                 "prompt": "Who wrote Don Quixote?",
@@ -2998,7 +2998,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/MultiGenerateJSONOut"
+                  "$ref": "#/components/schemas/MultiComputeJSONOut"
                 },
                 "example": {
                   "choices": [
@@ -3021,7 +3021,7 @@
         "summary": "Mistral7BInstruct",
         "operationId": "Mistral7BInstruct",
         "tags": ["category:language", "type:low-level"],
-        "description": "Generate text using [Mistral 7B Instruct](https://mistral.ai/news/announcing-mistral-7b).",
+        "description": "Compute text using [Mistral 7B Instruct](https://mistral.ai/news/announcing-mistral-7b).",
         "requestBody": {
           "content": {
             "application/json": {
@@ -3066,7 +3066,7 @@
         "summary": "Mixtral8x7BInstruct",
         "operationId": "Mixtral8x7BInstruct",
         "tags": ["category:language", "type:low-level"],
-        "description": "Generate text using instruct-tuned [Mixtral 8x7B](https://mistral.ai/news/mixtral-of-experts/).",
+        "description": "Compute text using instruct-tuned [Mixtral 8x7B](https://mistral.ai/news/mixtral-of-experts/).",
         "requestBody": {
           "content": {
             "application/json": {
@@ -3111,7 +3111,7 @@
         "summary": "Llama3Instruct8B",
         "operationId": "Llama3Instruct8B",
         "tags": ["category:language", "type:low-level"],
-        "description": "Generate text using instruct-tuned [Llama 3 8B](https://llama.meta.com/llama3/).",
+        "description": "Compute text using instruct-tuned [Llama 3 8B](https://llama.meta.com/llama3/).",
         "requestBody": {
           "content": {
             "application/json": {
@@ -3156,7 +3156,7 @@
         "summary": "Llama3Instruct70B",
         "operationId": "Llama3Instruct70B",
         "tags": ["category:language", "type:low-level"],
-        "description": "Generate text using instruct-tuned [Llama 3 70B](https://llama.meta.com/llama3/).",
+        "description": "Compute text using instruct-tuned [Llama 3 70B](https://llama.meta.com/llama3/).",
         "requestBody": {
           "content": {
             "application/json": {
@@ -3201,7 +3201,7 @@
         "summary": "Firellava13B",
         "operationId": "Firellava13B",
         "tags": ["category:language", "type:low-level"],
-        "description": "Generate text with image input using [FireLLaVA 13B](https://fireworks.ai/blog/firellava-the-first-commercially-permissive-oss-llava-model).",
+        "description": "Compute text with image input using [FireLLaVA 13B](https://fireworks.ai/blog/firellava-the-first-commercially-permissive-oss-llava-model).",
         "requestBody": {
           "content": {
             "application/json": {
@@ -3415,7 +3415,7 @@
                 "prompt": "hokusai futuristic supercell spiral cloud with glowing core over turbulent ocean",
                 "negative_prompt": "night, moon",
                 "num_images": 2,
-                "seeds": [3306990332671669418, 13641924104177017164],
+                "seeds": [330699, 136464],
                 "store": "hosted"
               }
             }
@@ -3433,11 +3433,11 @@
                   "outputs": [
                     {
                       "image_uri": "https://assets.substrate.run/84848484.jpg",
-                      "seed": 3306990332671669418
+                      "seed": 330418
                     },
                     {
                       "image_uri": "https://assets.substrate.run/48484848.jpg",
-                      "seed": 13641924104177017164
+                      "seed": 1364164
                     }
                   ]
                 }
@@ -3467,7 +3467,7 @@
                 "strength": 0.8,
                 "num_images": 2,
                 "store": "hosted",
-                "seeds": [16072680593433107326, 17203982922585031095]
+                "seeds": [1607280, 1720395]
               }
             }
           }
@@ -3484,11 +3484,11 @@
                   "outputs": [
                     {
                       "image_uri": "https://assets.substrate.run/84848484.jpg",
-                      "seed": 16072680593433107326
+                      "seed": 1607326
                     },
                     {
                       "image_uri": "https://assets.substrate.run/48484848.jpg",
-                      "seed": 17203982922585031095
+                      "seed": 1720398
                     }
                   ]
                 }
@@ -3518,7 +3518,7 @@
                 "strength": 1.0,
                 "store": "hosted",
                 "num_images": 2,
-                "seeds": [16072680593433107326, 17203982922585031095]
+                "seeds": [1607226, 1720395]
               }
             }
           }
@@ -3535,11 +3535,11 @@
                   "outputs": [
                     {
                       "image_uri": "https://assets.substrate.run/84848484.jpg",
-                      "seed": 16072680593433107326
+                      "seed": 1607266
                     },
                     {
                       "image_uri": "https://assets.substrate.run/48484848.jpg",
-                      "seed": 17203982922585031095
+                      "seed": 1720398
                     }
                   ]
                 }

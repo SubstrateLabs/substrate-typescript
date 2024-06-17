@@ -1,7 +1,7 @@
 /**
  * 𐃏 Substrate
  * @generated file
- * 20240612.20240613
+ * 20240617.20240617
  */
 
 import * as OpenAPI from "substrate/OpenAPI";
@@ -46,87 +46,87 @@ type FutureExpandAny<T> = T extends (infer U)[][]
 export class ExperimentalInArgs extends FutureAnyObject {}
 export class ExperimentalOutOutput extends FutureAnyObject {}
 /** Image prompts. */
-export class GenerateTextInImageUris extends FutureArray {
+export class ComputeTextInImageUris extends FutureArray {
   /** Returns `FutureString` at given index. */
   override at(index: number) {
     return new FutureString(this._directive.next(index));
   }
-  /** Returns the result for `GenerateTextInImageUris` once it's node has been run. */
+  /** Returns the result for `ComputeTextInImageUris` once it's node has been run. */
   protected override async result(): Promise<FutureString[]> {
     return super.result() as Promise<FutureString[]>;
   }
 }
-export class GenerateTextInImageUrisItem extends FutureString {}
-export class GenerateJSONInJsonSchema extends FutureAnyObject {}
-export class GenerateJSONOutJsonObject extends FutureAnyObject {}
+export class ComputeTextInImageUrisItem extends FutureString {}
+export class ComputeJSONInJsonSchema extends FutureAnyObject {}
+export class ComputeJSONOutJsonObject extends FutureAnyObject {}
 /** Response choices. */
-export class MultiGenerateTextOutChoices extends FutureArray {
-  /** Returns `GenerateTextOut` at given index. */
+export class MultiComputeTextOutChoices extends FutureArray {
+  /** Returns `ComputeTextOut` at given index. */
   override at(index: number) {
-    return new GenerateTextOut(this._directive.next(index));
+    return new ComputeTextOut(this._directive.next(index));
   }
-  /** Returns the result for `MultiGenerateTextOutChoices` once it's node has been run. */
-  protected override async result(): Promise<GenerateTextOut[]> {
-    return super.result() as Promise<GenerateTextOut[]>;
+  /** Returns the result for `MultiComputeTextOutChoices` once it's node has been run. */
+  protected override async result(): Promise<ComputeTextOut[]> {
+    return super.result() as Promise<ComputeTextOut[]>;
   }
 }
 /** Batch input prompts. */
-export class BatchGenerateTextInPrompts extends FutureArray {
+export class BatchComputeTextInPrompts extends FutureArray {
   /** Returns `FutureString` at given index. */
   override at(index: number) {
     return new FutureString(this._directive.next(index));
   }
-  /** Returns the result for `BatchGenerateTextInPrompts` once it's node has been run. */
+  /** Returns the result for `BatchComputeTextInPrompts` once it's node has been run. */
   protected override async result(): Promise<FutureString[]> {
     return super.result() as Promise<FutureString[]>;
   }
 }
-export class BatchGenerateTextInPromptsItem extends FutureString {}
+export class BatchComputeTextInPromptsItem extends FutureString {}
 /** Batch outputs. */
-export class BatchGenerateTextOutOutputs extends FutureArray {
-  /** Returns `GenerateTextOut` at given index. */
+export class BatchComputeTextOutOutputs extends FutureArray {
+  /** Returns `ComputeTextOut` at given index. */
   override at(index: number) {
-    return new GenerateTextOut(this._directive.next(index));
+    return new ComputeTextOut(this._directive.next(index));
   }
-  /** Returns the result for `BatchGenerateTextOutOutputs` once it's node has been run. */
-  protected override async result(): Promise<GenerateTextOut[]> {
-    return super.result() as Promise<GenerateTextOut[]>;
+  /** Returns the result for `BatchComputeTextOutOutputs` once it's node has been run. */
+  protected override async result(): Promise<ComputeTextOut[]> {
+    return super.result() as Promise<ComputeTextOut[]>;
   }
 }
-export class MultiGenerateJSONInJsonSchema extends FutureAnyObject {}
+export class MultiComputeJSONInJsonSchema extends FutureAnyObject {}
 /** Response choices. */
-export class MultiGenerateJSONOutChoices extends FutureArray {
-  /** Returns `GenerateJSONOut` at given index. */
+export class MultiComputeJSONOutChoices extends FutureArray {
+  /** Returns `ComputeJSONOut` at given index. */
   override at(index: number) {
-    return new GenerateJSONOut(this._directive.next(index));
+    return new ComputeJSONOut(this._directive.next(index));
   }
-  /** Returns the result for `MultiGenerateJSONOutChoices` once it's node has been run. */
-  protected override async result(): Promise<GenerateJSONOut[]> {
-    return super.result() as Promise<GenerateJSONOut[]>;
+  /** Returns the result for `MultiComputeJSONOutChoices` once it's node has been run. */
+  protected override async result(): Promise<ComputeJSONOut[]> {
+    return super.result() as Promise<ComputeJSONOut[]>;
   }
 }
 /** Batch input prompts. */
-export class BatchGenerateJSONInPrompts extends FutureArray {
+export class BatchComputeJSONInPrompts extends FutureArray {
   /** Returns `FutureString` at given index. */
   override at(index: number) {
     return new FutureString(this._directive.next(index));
   }
-  /** Returns the result for `BatchGenerateJSONInPrompts` once it's node has been run. */
+  /** Returns the result for `BatchComputeJSONInPrompts` once it's node has been run. */
   protected override async result(): Promise<FutureString[]> {
     return super.result() as Promise<FutureString[]>;
   }
 }
-export class BatchGenerateJSONInPromptsItem extends FutureString {}
-export class BatchGenerateJSONInJsonSchema extends FutureAnyObject {}
+export class BatchComputeJSONInPromptsItem extends FutureString {}
+export class BatchComputeJSONInJsonSchema extends FutureAnyObject {}
 /** Batch outputs. */
-export class BatchGenerateJSONOutOutputs extends FutureArray {
-  /** Returns `GenerateJSONOut` at given index. */
+export class BatchComputeJSONOutOutputs extends FutureArray {
+  /** Returns `ComputeJSONOut` at given index. */
   override at(index: number) {
-    return new GenerateJSONOut(this._directive.next(index));
+    return new ComputeJSONOut(this._directive.next(index));
   }
-  /** Returns the result for `BatchGenerateJSONOutOutputs` once it's node has been run. */
-  protected override async result(): Promise<GenerateJSONOut[]> {
-    return super.result() as Promise<GenerateJSONOut[]>;
+  /** Returns the result for `BatchComputeJSONOutOutputs` once it's node has been run. */
+  protected override async result(): Promise<ComputeJSONOut[]> {
+    return super.result() as Promise<ComputeJSONOut[]>;
   }
 }
 export class Mistral7BInstructInJsonSchema extends FutureAnyObject {}
@@ -757,8 +757,8 @@ export class ExperimentalOut extends FutureObject {
     return super.result() as Promise<ExperimentalOut>;
   }
 }
-/** GenerateTextIn */
-export class GenerateTextIn extends FutureObject {
+/** ComputeTextIn */
+export class ComputeTextIn extends FutureObject {
   /** Input prompt. */
   get prompt() {
     return new FutureString(this._directive.next("prompt"));
@@ -766,7 +766,7 @@ export class GenerateTextIn extends FutureObject {
 
   /** (Optional) Image prompts. */
   get image_uris() {
-    return new GenerateTextInImageUris(this._directive.next("image_uris"));
+    return new ComputeTextInImageUris(this._directive.next("image_uris"));
   }
   /** (Optional) Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic. */
   get temperature() {
@@ -780,24 +780,24 @@ export class GenerateTextIn extends FutureObject {
   get model() {
     return new FutureString(this._directive.next("model"));
   }
-  /** returns the result for `GenerateTextIn` once it's node has been run. */
-  protected override async result(): Promise<GenerateTextIn> {
-    return super.result() as Promise<GenerateTextIn>;
+  /** returns the result for `ComputeTextIn` once it's node has been run. */
+  protected override async result(): Promise<ComputeTextIn> {
+    return super.result() as Promise<ComputeTextIn>;
   }
 }
-/** GenerateTextOut */
-export class GenerateTextOut extends FutureObject {
+/** ComputeTextOut */
+export class ComputeTextOut extends FutureObject {
   /** Text response. */
   get text() {
     return new FutureString(this._directive.next("text"));
   }
-  /** returns the result for `GenerateTextOut` once it's node has been run. */
-  protected override async result(): Promise<GenerateTextOut> {
-    return super.result() as Promise<GenerateTextOut>;
+  /** returns the result for `ComputeTextOut` once it's node has been run. */
+  protected override async result(): Promise<ComputeTextOut> {
+    return super.result() as Promise<ComputeTextOut>;
   }
 }
-/** GenerateJSONIn */
-export class GenerateJSONIn extends FutureObject {
+/** ComputeJSONIn */
+export class ComputeJSONIn extends FutureObject {
   /** Input prompt. */
   get prompt() {
     return new FutureString(this._directive.next("prompt"));
@@ -818,13 +818,13 @@ export class GenerateJSONIn extends FutureObject {
   get model() {
     return new FutureString(this._directive.next("model"));
   }
-  /** returns the result for `GenerateJSONIn` once it's node has been run. */
-  protected override async result(): Promise<GenerateJSONIn> {
-    return super.result() as Promise<GenerateJSONIn>;
+  /** returns the result for `ComputeJSONIn` once it's node has been run. */
+  protected override async result(): Promise<ComputeJSONIn> {
+    return super.result() as Promise<ComputeJSONIn>;
   }
 }
-/** GenerateJSONOut */
-export class GenerateJSONOut extends FutureObject {
+/** ComputeJSONOut */
+export class ComputeJSONOut extends FutureObject {
   /** JSON response. */
   get json_object() {
     return new FutureAnyObject(this._directive.next("json_object"));
@@ -833,13 +833,13 @@ export class GenerateJSONOut extends FutureObject {
   get text() {
     return new FutureString(this._directive.next("text"));
   }
-  /** returns the result for `GenerateJSONOut` once it's node has been run. */
-  protected override async result(): Promise<GenerateJSONOut> {
-    return super.result() as Promise<GenerateJSONOut>;
+  /** returns the result for `ComputeJSONOut` once it's node has been run. */
+  protected override async result(): Promise<ComputeJSONOut> {
+    return super.result() as Promise<ComputeJSONOut>;
   }
 }
-/** MultiGenerateTextIn */
-export class MultiGenerateTextIn extends FutureObject {
+/** MultiComputeTextIn */
+export class MultiComputeTextIn extends FutureObject {
   /** Input prompt. */
   get prompt() {
     return new FutureString(this._directive.next("prompt"));
@@ -860,27 +860,27 @@ export class MultiGenerateTextIn extends FutureObject {
   get model() {
     return new FutureString(this._directive.next("model"));
   }
-  /** returns the result for `MultiGenerateTextIn` once it's node has been run. */
-  protected override async result(): Promise<MultiGenerateTextIn> {
-    return super.result() as Promise<MultiGenerateTextIn>;
+  /** returns the result for `MultiComputeTextIn` once it's node has been run. */
+  protected override async result(): Promise<MultiComputeTextIn> {
+    return super.result() as Promise<MultiComputeTextIn>;
   }
 }
-/** MultiGenerateTextOut */
-export class MultiGenerateTextOut extends FutureObject {
+/** MultiComputeTextOut */
+export class MultiComputeTextOut extends FutureObject {
   /** Response choices. */
   get choices() {
-    return new MultiGenerateTextOutChoices(this._directive.next("choices"));
+    return new MultiComputeTextOutChoices(this._directive.next("choices"));
   }
-  /** returns the result for `MultiGenerateTextOut` once it's node has been run. */
-  protected override async result(): Promise<MultiGenerateTextOut> {
-    return super.result() as Promise<MultiGenerateTextOut>;
+  /** returns the result for `MultiComputeTextOut` once it's node has been run. */
+  protected override async result(): Promise<MultiComputeTextOut> {
+    return super.result() as Promise<MultiComputeTextOut>;
   }
 }
-/** BatchGenerateTextIn */
-export class BatchGenerateTextIn extends FutureObject {
+/** BatchComputeTextIn */
+export class BatchComputeTextIn extends FutureObject {
   /** Batch input prompts. */
   get prompts() {
-    return new BatchGenerateTextInPrompts(this._directive.next("prompts"));
+    return new BatchComputeTextInPrompts(this._directive.next("prompts"));
   }
   /** (Optional) Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic. */
   get temperature() {
@@ -894,24 +894,24 @@ export class BatchGenerateTextIn extends FutureObject {
   get model() {
     return new FutureString(this._directive.next("model"));
   }
-  /** returns the result for `BatchGenerateTextIn` once it's node has been run. */
-  protected override async result(): Promise<BatchGenerateTextIn> {
-    return super.result() as Promise<BatchGenerateTextIn>;
+  /** returns the result for `BatchComputeTextIn` once it's node has been run. */
+  protected override async result(): Promise<BatchComputeTextIn> {
+    return super.result() as Promise<BatchComputeTextIn>;
   }
 }
-/** BatchGenerateTextOut */
-export class BatchGenerateTextOut extends FutureObject {
+/** BatchComputeTextOut */
+export class BatchComputeTextOut extends FutureObject {
   /** Batch outputs. */
   get outputs() {
-    return new BatchGenerateTextOutOutputs(this._directive.next("outputs"));
+    return new BatchComputeTextOutOutputs(this._directive.next("outputs"));
   }
-  /** returns the result for `BatchGenerateTextOut` once it's node has been run. */
-  protected override async result(): Promise<BatchGenerateTextOut> {
-    return super.result() as Promise<BatchGenerateTextOut>;
+  /** returns the result for `BatchComputeTextOut` once it's node has been run. */
+  protected override async result(): Promise<BatchComputeTextOut> {
+    return super.result() as Promise<BatchComputeTextOut>;
   }
 }
-/** MultiGenerateJSONIn */
-export class MultiGenerateJSONIn extends FutureObject {
+/** MultiComputeJSONIn */
+export class MultiComputeJSONIn extends FutureObject {
   /** Input prompt. */
   get prompt() {
     return new FutureString(this._directive.next("prompt"));
@@ -936,27 +936,27 @@ export class MultiGenerateJSONIn extends FutureObject {
   get model() {
     return new FutureString(this._directive.next("model"));
   }
-  /** returns the result for `MultiGenerateJSONIn` once it's node has been run. */
-  protected override async result(): Promise<MultiGenerateJSONIn> {
-    return super.result() as Promise<MultiGenerateJSONIn>;
+  /** returns the result for `MultiComputeJSONIn` once it's node has been run. */
+  protected override async result(): Promise<MultiComputeJSONIn> {
+    return super.result() as Promise<MultiComputeJSONIn>;
   }
 }
-/** MultiGenerateJSONOut */
-export class MultiGenerateJSONOut extends FutureObject {
+/** MultiComputeJSONOut */
+export class MultiComputeJSONOut extends FutureObject {
   /** Response choices. */
   get choices() {
-    return new MultiGenerateJSONOutChoices(this._directive.next("choices"));
+    return new MultiComputeJSONOutChoices(this._directive.next("choices"));
   }
-  /** returns the result for `MultiGenerateJSONOut` once it's node has been run. */
-  protected override async result(): Promise<MultiGenerateJSONOut> {
-    return super.result() as Promise<MultiGenerateJSONOut>;
+  /** returns the result for `MultiComputeJSONOut` once it's node has been run. */
+  protected override async result(): Promise<MultiComputeJSONOut> {
+    return super.result() as Promise<MultiComputeJSONOut>;
   }
 }
-/** BatchGenerateJSONIn */
-export class BatchGenerateJSONIn extends FutureObject {
+/** BatchComputeJSONIn */
+export class BatchComputeJSONIn extends FutureObject {
   /** Batch input prompts. */
   get prompts() {
-    return new BatchGenerateJSONInPrompts(this._directive.next("prompts"));
+    return new BatchComputeJSONInPrompts(this._directive.next("prompts"));
   }
   /** JSON schema to guide `json_object` response. */
   get json_schema() {
@@ -974,20 +974,20 @@ export class BatchGenerateJSONIn extends FutureObject {
   get model() {
     return new FutureString(this._directive.next("model"));
   }
-  /** returns the result for `BatchGenerateJSONIn` once it's node has been run. */
-  protected override async result(): Promise<BatchGenerateJSONIn> {
-    return super.result() as Promise<BatchGenerateJSONIn>;
+  /** returns the result for `BatchComputeJSONIn` once it's node has been run. */
+  protected override async result(): Promise<BatchComputeJSONIn> {
+    return super.result() as Promise<BatchComputeJSONIn>;
   }
 }
-/** BatchGenerateJSONOut */
-export class BatchGenerateJSONOut extends FutureObject {
+/** BatchComputeJSONOut */
+export class BatchComputeJSONOut extends FutureObject {
   /** Batch outputs. */
   get outputs() {
-    return new BatchGenerateJSONOutOutputs(this._directive.next("outputs"));
+    return new BatchComputeJSONOutOutputs(this._directive.next("outputs"));
   }
-  /** returns the result for `BatchGenerateJSONOut` once it's node has been run. */
-  protected override async result(): Promise<BatchGenerateJSONOut> {
-    return super.result() as Promise<BatchGenerateJSONOut>;
+  /** returns the result for `BatchComputeJSONOut` once it's node has been run. */
+  protected override async result(): Promise<BatchComputeJSONOut> {
+    return super.result() as Promise<BatchComputeJSONOut>;
   }
 }
 /** Mistral7BInstructIn */
@@ -2840,37 +2840,37 @@ export class Experimental extends Node {
     return super.output() as OpenAPI.components["schemas"]["ExperimentalOut"];
   }
 }
-export namespace GenerateText {
+export namespace ComputeText {
   /**
-   * GenerateText Input
-   * https://www.substrate.run/nodes#GenerateText
+   * ComputeText Input
+   * https://www.substrate.run/nodes#ComputeText
    */
   export type Input = FutureExpandAny<
-    OpenAPI.components["schemas"]["GenerateTextIn"]
+    OpenAPI.components["schemas"]["ComputeTextIn"]
   >;
 
   /**
-   * GenerateText Output
-   * https://www.substrate.run/nodes#GenerateText
+   * ComputeText Output
+   * https://www.substrate.run/nodes#ComputeText
    */
-  export type Output = OpenAPI.components["schemas"]["GenerateTextOut"];
+  export type Output = OpenAPI.components["schemas"]["ComputeTextOut"];
 }
 
 /**
- * Generate text using a language model.
+ * Compute text using a language model.
  *
- * https://www.substrate.run/nodes#GenerateText
+ * https://www.substrate.run/nodes#ComputeText
  */
-export class GenerateText extends Node {
+export class ComputeText extends Node {
   /**
    * Input arguments: `prompt`, `image_uris` (optional), `temperature` (optional), `max_tokens` (optional), `model` (optional)
    *
    * Output fields: `text`
    *
-   * https://www.substrate.run/nodes#GenerateText
+   * https://www.substrate.run/nodes#ComputeText
    */
   constructor(
-    args: FutureExpandAny<OpenAPI.components["schemas"]["GenerateTextIn"]>,
+    args: FutureExpandAny<OpenAPI.components["schemas"]["ComputeTextIn"]>,
     options?: Options,
   ) {
     super(args, options);
@@ -2881,14 +2881,14 @@ export class GenerateText extends Node {
    *
    * Output fields: `text`
    *
-   * https://www.substrate.run/nodes#GenerateText
+   * https://www.substrate.run/nodes#ComputeText
    */
   protected override async result(): Promise<
-    OpenAPI.components["schemas"]["GenerateTextOut"] | undefined
+    OpenAPI.components["schemas"]["ComputeTextOut"] | undefined
   > {
     return Promise.resolve(
       this._response ? this._response.get(this) : undefined,
-    ) as Promise<OpenAPI.components["schemas"]["GenerateTextOut"] | undefined>;
+    ) as Promise<OpenAPI.components["schemas"]["ComputeTextOut"] | undefined>;
   }
 
   /**
@@ -2896,47 +2896,47 @@ export class GenerateText extends Node {
    *
    * Output fields: `text`
    *
-   * https://www.substrate.run/nodes#GenerateText
+   * https://www.substrate.run/nodes#ComputeText
    */
-  override get future(): GenerateTextOut {
-    return new GenerateTextOut(new Trace([], this));
+  override get future(): ComputeTextOut {
+    return new ComputeTextOut(new Trace([], this));
   }
 
-  protected override output(): OpenAPI.components["schemas"]["GenerateTextOut"] {
-    return super.output() as OpenAPI.components["schemas"]["GenerateTextOut"];
+  protected override output(): OpenAPI.components["schemas"]["ComputeTextOut"] {
+    return super.output() as OpenAPI.components["schemas"]["ComputeTextOut"];
   }
 }
-export namespace MultiGenerateText {
+export namespace MultiComputeText {
   /**
-   * MultiGenerateText Input
-   * https://www.substrate.run/nodes#MultiGenerateText
+   * MultiComputeText Input
+   * https://www.substrate.run/nodes#MultiComputeText
    */
   export type Input = FutureExpandAny<
-    OpenAPI.components["schemas"]["MultiGenerateTextIn"]
+    OpenAPI.components["schemas"]["MultiComputeTextIn"]
   >;
 
   /**
-   * MultiGenerateText Output
-   * https://www.substrate.run/nodes#MultiGenerateText
+   * MultiComputeText Output
+   * https://www.substrate.run/nodes#MultiComputeText
    */
-  export type Output = OpenAPI.components["schemas"]["MultiGenerateTextOut"];
+  export type Output = OpenAPI.components["schemas"]["MultiComputeTextOut"];
 }
 
 /**
  * Generate multiple text choices using a language model.
  *
- * https://www.substrate.run/nodes#MultiGenerateText
+ * https://www.substrate.run/nodes#MultiComputeText
  */
-export class MultiGenerateText extends Node {
+export class MultiComputeText extends Node {
   /**
    * Input arguments: `prompt`, `num_choices`, `temperature` (optional), `max_tokens` (optional), `model` (optional)
    *
    * Output fields: `choices`
    *
-   * https://www.substrate.run/nodes#MultiGenerateText
+   * https://www.substrate.run/nodes#MultiComputeText
    */
   constructor(
-    args: FutureExpandAny<OpenAPI.components["schemas"]["MultiGenerateTextIn"]>,
+    args: FutureExpandAny<OpenAPI.components["schemas"]["MultiComputeTextIn"]>,
     options?: Options,
   ) {
     super(args, options);
@@ -2947,15 +2947,15 @@ export class MultiGenerateText extends Node {
    *
    * Output fields: `choices`
    *
-   * https://www.substrate.run/nodes#MultiGenerateText
+   * https://www.substrate.run/nodes#MultiComputeText
    */
   protected override async result(): Promise<
-    OpenAPI.components["schemas"]["MultiGenerateTextOut"] | undefined
+    OpenAPI.components["schemas"]["MultiComputeTextOut"] | undefined
   > {
     return Promise.resolve(
       this._response ? this._response.get(this) : undefined,
     ) as Promise<
-      OpenAPI.components["schemas"]["MultiGenerateTextOut"] | undefined
+      OpenAPI.components["schemas"]["MultiComputeTextOut"] | undefined
     >;
   }
 
@@ -2964,47 +2964,47 @@ export class MultiGenerateText extends Node {
    *
    * Output fields: `choices`
    *
-   * https://www.substrate.run/nodes#MultiGenerateText
+   * https://www.substrate.run/nodes#MultiComputeText
    */
-  override get future(): MultiGenerateTextOut {
-    return new MultiGenerateTextOut(new Trace([], this));
+  override get future(): MultiComputeTextOut {
+    return new MultiComputeTextOut(new Trace([], this));
   }
 
-  protected override output(): OpenAPI.components["schemas"]["MultiGenerateTextOut"] {
-    return super.output() as OpenAPI.components["schemas"]["MultiGenerateTextOut"];
+  protected override output(): OpenAPI.components["schemas"]["MultiComputeTextOut"] {
+    return super.output() as OpenAPI.components["schemas"]["MultiComputeTextOut"];
   }
 }
-export namespace BatchGenerateText {
+export namespace BatchComputeText {
   /**
-   * BatchGenerateText Input
-   * https://www.substrate.run/nodes#BatchGenerateText
+   * BatchComputeText Input
+   * https://www.substrate.run/nodes#BatchComputeText
    */
   export type Input = FutureExpandAny<
-    OpenAPI.components["schemas"]["BatchGenerateTextIn"]
+    OpenAPI.components["schemas"]["BatchComputeTextIn"]
   >;
 
   /**
-   * BatchGenerateText Output
-   * https://www.substrate.run/nodes#BatchGenerateText
+   * BatchComputeText Output
+   * https://www.substrate.run/nodes#BatchComputeText
    */
-  export type Output = OpenAPI.components["schemas"]["BatchGenerateTextOut"];
+  export type Output = OpenAPI.components["schemas"]["BatchComputeTextOut"];
 }
 
 /**
- * Generate text for multiple prompts in batch using a language model.
+ * Compute text for multiple prompts in batch using a language model.
  *
- * https://www.substrate.run/nodes#BatchGenerateText
+ * https://www.substrate.run/nodes#BatchComputeText
  */
-export class BatchGenerateText extends Node {
+export class BatchComputeText extends Node {
   /**
    * Input arguments: `prompts`, `temperature` (optional), `max_tokens` (optional), `model` (optional)
    *
    * Output fields: `outputs`
    *
-   * https://www.substrate.run/nodes#BatchGenerateText
+   * https://www.substrate.run/nodes#BatchComputeText
    */
   constructor(
-    args: FutureExpandAny<OpenAPI.components["schemas"]["BatchGenerateTextIn"]>,
+    args: FutureExpandAny<OpenAPI.components["schemas"]["BatchComputeTextIn"]>,
     options?: Options,
   ) {
     super(args, options);
@@ -3015,15 +3015,15 @@ export class BatchGenerateText extends Node {
    *
    * Output fields: `outputs`
    *
-   * https://www.substrate.run/nodes#BatchGenerateText
+   * https://www.substrate.run/nodes#BatchComputeText
    */
   protected override async result(): Promise<
-    OpenAPI.components["schemas"]["BatchGenerateTextOut"] | undefined
+    OpenAPI.components["schemas"]["BatchComputeTextOut"] | undefined
   > {
     return Promise.resolve(
       this._response ? this._response.get(this) : undefined,
     ) as Promise<
-      OpenAPI.components["schemas"]["BatchGenerateTextOut"] | undefined
+      OpenAPI.components["schemas"]["BatchComputeTextOut"] | undefined
     >;
   }
 
@@ -3032,47 +3032,47 @@ export class BatchGenerateText extends Node {
    *
    * Output fields: `outputs`
    *
-   * https://www.substrate.run/nodes#BatchGenerateText
+   * https://www.substrate.run/nodes#BatchComputeText
    */
-  override get future(): BatchGenerateTextOut {
-    return new BatchGenerateTextOut(new Trace([], this));
+  override get future(): BatchComputeTextOut {
+    return new BatchComputeTextOut(new Trace([], this));
   }
 
-  protected override output(): OpenAPI.components["schemas"]["BatchGenerateTextOut"] {
-    return super.output() as OpenAPI.components["schemas"]["BatchGenerateTextOut"];
+  protected override output(): OpenAPI.components["schemas"]["BatchComputeTextOut"] {
+    return super.output() as OpenAPI.components["schemas"]["BatchComputeTextOut"];
   }
 }
-export namespace BatchGenerateJSON {
+export namespace BatchComputeJSON {
   /**
-   * BatchGenerateJSON Input
-   * https://www.substrate.run/nodes#BatchGenerateJSON
+   * BatchComputeJSON Input
+   * https://www.substrate.run/nodes#BatchComputeJSON
    */
   export type Input = FutureExpandAny<
-    OpenAPI.components["schemas"]["BatchGenerateJSONIn"]
+    OpenAPI.components["schemas"]["BatchComputeJSONIn"]
   >;
 
   /**
-   * BatchGenerateJSON Output
-   * https://www.substrate.run/nodes#BatchGenerateJSON
+   * BatchComputeJSON Output
+   * https://www.substrate.run/nodes#BatchComputeJSON
    */
-  export type Output = OpenAPI.components["schemas"]["BatchGenerateJSONOut"];
+  export type Output = OpenAPI.components["schemas"]["BatchComputeJSONOut"];
 }
 
 /**
- * Generate JSON for multiple prompts in batch using a language model.
+ * Compute JSON for multiple prompts in batch using a language model.
  *
- * https://www.substrate.run/nodes#BatchGenerateJSON
+ * https://www.substrate.run/nodes#BatchComputeJSON
  */
-export class BatchGenerateJSON extends Node {
+export class BatchComputeJSON extends Node {
   /**
    * Input arguments: `prompts`, `json_schema`, `temperature` (optional), `max_tokens` (optional), `model` (optional)
    *
    * Output fields: `outputs`
    *
-   * https://www.substrate.run/nodes#BatchGenerateJSON
+   * https://www.substrate.run/nodes#BatchComputeJSON
    */
   constructor(
-    args: FutureExpandAny<OpenAPI.components["schemas"]["BatchGenerateJSONIn"]>,
+    args: FutureExpandAny<OpenAPI.components["schemas"]["BatchComputeJSONIn"]>,
     options?: Options,
   ) {
     super(args, options);
@@ -3083,15 +3083,15 @@ export class BatchGenerateJSON extends Node {
    *
    * Output fields: `outputs`
    *
-   * https://www.substrate.run/nodes#BatchGenerateJSON
+   * https://www.substrate.run/nodes#BatchComputeJSON
    */
   protected override async result(): Promise<
-    OpenAPI.components["schemas"]["BatchGenerateJSONOut"] | undefined
+    OpenAPI.components["schemas"]["BatchComputeJSONOut"] | undefined
   > {
     return Promise.resolve(
       this._response ? this._response.get(this) : undefined,
     ) as Promise<
-      OpenAPI.components["schemas"]["BatchGenerateJSONOut"] | undefined
+      OpenAPI.components["schemas"]["BatchComputeJSONOut"] | undefined
     >;
   }
 
@@ -3100,47 +3100,47 @@ export class BatchGenerateJSON extends Node {
    *
    * Output fields: `outputs`
    *
-   * https://www.substrate.run/nodes#BatchGenerateJSON
+   * https://www.substrate.run/nodes#BatchComputeJSON
    */
-  override get future(): BatchGenerateJSONOut {
-    return new BatchGenerateJSONOut(new Trace([], this));
+  override get future(): BatchComputeJSONOut {
+    return new BatchComputeJSONOut(new Trace([], this));
   }
 
-  protected override output(): OpenAPI.components["schemas"]["BatchGenerateJSONOut"] {
-    return super.output() as OpenAPI.components["schemas"]["BatchGenerateJSONOut"];
+  protected override output(): OpenAPI.components["schemas"]["BatchComputeJSONOut"] {
+    return super.output() as OpenAPI.components["schemas"]["BatchComputeJSONOut"];
   }
 }
-export namespace GenerateJSON {
+export namespace ComputeJSON {
   /**
-   * GenerateJSON Input
-   * https://www.substrate.run/nodes#GenerateJSON
+   * ComputeJSON Input
+   * https://www.substrate.run/nodes#ComputeJSON
    */
   export type Input = FutureExpandAny<
-    OpenAPI.components["schemas"]["GenerateJSONIn"]
+    OpenAPI.components["schemas"]["ComputeJSONIn"]
   >;
 
   /**
-   * GenerateJSON Output
-   * https://www.substrate.run/nodes#GenerateJSON
+   * ComputeJSON Output
+   * https://www.substrate.run/nodes#ComputeJSON
    */
-  export type Output = OpenAPI.components["schemas"]["GenerateJSONOut"];
+  export type Output = OpenAPI.components["schemas"]["ComputeJSONOut"];
 }
 
 /**
- * Generate JSON using a language model.
+ * Compute JSON using a language model.
  *
- * https://www.substrate.run/nodes#GenerateJSON
+ * https://www.substrate.run/nodes#ComputeJSON
  */
-export class GenerateJSON extends Node {
+export class ComputeJSON extends Node {
   /**
    * Input arguments: `prompt`, `json_schema`, `temperature` (optional), `max_tokens` (optional), `model` (optional)
    *
    * Output fields: `json_object` (optional), `text` (optional)
    *
-   * https://www.substrate.run/nodes#GenerateJSON
+   * https://www.substrate.run/nodes#ComputeJSON
    */
   constructor(
-    args: FutureExpandAny<OpenAPI.components["schemas"]["GenerateJSONIn"]>,
+    args: FutureExpandAny<OpenAPI.components["schemas"]["ComputeJSONIn"]>,
     options?: Options,
   ) {
     super(args, options);
@@ -3151,14 +3151,14 @@ export class GenerateJSON extends Node {
    *
    * Output fields: `json_object` (optional), `text` (optional)
    *
-   * https://www.substrate.run/nodes#GenerateJSON
+   * https://www.substrate.run/nodes#ComputeJSON
    */
   protected override async result(): Promise<
-    OpenAPI.components["schemas"]["GenerateJSONOut"] | undefined
+    OpenAPI.components["schemas"]["ComputeJSONOut"] | undefined
   > {
     return Promise.resolve(
       this._response ? this._response.get(this) : undefined,
-    ) as Promise<OpenAPI.components["schemas"]["GenerateJSONOut"] | undefined>;
+    ) as Promise<OpenAPI.components["schemas"]["ComputeJSONOut"] | undefined>;
   }
 
   /**
@@ -3166,47 +3166,47 @@ export class GenerateJSON extends Node {
    *
    * Output fields: `json_object` (optional), `text` (optional)
    *
-   * https://www.substrate.run/nodes#GenerateJSON
+   * https://www.substrate.run/nodes#ComputeJSON
    */
-  override get future(): GenerateJSONOut {
-    return new GenerateJSONOut(new Trace([], this));
+  override get future(): ComputeJSONOut {
+    return new ComputeJSONOut(new Trace([], this));
   }
 
-  protected override output(): OpenAPI.components["schemas"]["GenerateJSONOut"] {
-    return super.output() as OpenAPI.components["schemas"]["GenerateJSONOut"];
+  protected override output(): OpenAPI.components["schemas"]["ComputeJSONOut"] {
+    return super.output() as OpenAPI.components["schemas"]["ComputeJSONOut"];
   }
 }
-export namespace MultiGenerateJSON {
+export namespace MultiComputeJSON {
   /**
-   * MultiGenerateJSON Input
-   * https://www.substrate.run/nodes#MultiGenerateJSON
+   * MultiComputeJSON Input
+   * https://www.substrate.run/nodes#MultiComputeJSON
    */
   export type Input = FutureExpandAny<
-    OpenAPI.components["schemas"]["MultiGenerateJSONIn"]
+    OpenAPI.components["schemas"]["MultiComputeJSONIn"]
   >;
 
   /**
-   * MultiGenerateJSON Output
-   * https://www.substrate.run/nodes#MultiGenerateJSON
+   * MultiComputeJSON Output
+   * https://www.substrate.run/nodes#MultiComputeJSON
    */
-  export type Output = OpenAPI.components["schemas"]["MultiGenerateJSONOut"];
+  export type Output = OpenAPI.components["schemas"]["MultiComputeJSONOut"];
 }
 
 /**
- * Generate multiple JSON choices using a language model.
+ * Compute multiple JSON choices using a language model.
  *
- * https://www.substrate.run/nodes#MultiGenerateJSON
+ * https://www.substrate.run/nodes#MultiComputeJSON
  */
-export class MultiGenerateJSON extends Node {
+export class MultiComputeJSON extends Node {
   /**
    * Input arguments: `prompt`, `json_schema`, `num_choices`, `temperature` (optional), `max_tokens` (optional), `model` (optional)
    *
    * Output fields: `choices`
    *
-   * https://www.substrate.run/nodes#MultiGenerateJSON
+   * https://www.substrate.run/nodes#MultiComputeJSON
    */
   constructor(
-    args: FutureExpandAny<OpenAPI.components["schemas"]["MultiGenerateJSONIn"]>,
+    args: FutureExpandAny<OpenAPI.components["schemas"]["MultiComputeJSONIn"]>,
     options?: Options,
   ) {
     super(args, options);
@@ -3217,15 +3217,15 @@ export class MultiGenerateJSON extends Node {
    *
    * Output fields: `choices`
    *
-   * https://www.substrate.run/nodes#MultiGenerateJSON
+   * https://www.substrate.run/nodes#MultiComputeJSON
    */
   protected override async result(): Promise<
-    OpenAPI.components["schemas"]["MultiGenerateJSONOut"] | undefined
+    OpenAPI.components["schemas"]["MultiComputeJSONOut"] | undefined
   > {
     return Promise.resolve(
       this._response ? this._response.get(this) : undefined,
     ) as Promise<
-      OpenAPI.components["schemas"]["MultiGenerateJSONOut"] | undefined
+      OpenAPI.components["schemas"]["MultiComputeJSONOut"] | undefined
     >;
   }
 
@@ -3234,14 +3234,14 @@ export class MultiGenerateJSON extends Node {
    *
    * Output fields: `choices`
    *
-   * https://www.substrate.run/nodes#MultiGenerateJSON
+   * https://www.substrate.run/nodes#MultiComputeJSON
    */
-  override get future(): MultiGenerateJSONOut {
-    return new MultiGenerateJSONOut(new Trace([], this));
+  override get future(): MultiComputeJSONOut {
+    return new MultiComputeJSONOut(new Trace([], this));
   }
 
-  protected override output(): OpenAPI.components["schemas"]["MultiGenerateJSONOut"] {
-    return super.output() as OpenAPI.components["schemas"]["MultiGenerateJSONOut"];
+  protected override output(): OpenAPI.components["schemas"]["MultiComputeJSONOut"] {
+    return super.output() as OpenAPI.components["schemas"]["MultiComputeJSONOut"];
   }
 }
 export namespace Mistral7BInstruct {
@@ -3261,7 +3261,7 @@ export namespace Mistral7BInstruct {
 }
 
 /**
- * Generate text using [Mistral 7B Instruct](https://mistral.ai/news/announcing-mistral-7b).
+ * Compute text using [Mistral 7B Instruct](https://mistral.ai/news/announcing-mistral-7b).
  *
  * https://www.substrate.run/nodes#Mistral7BInstruct
  */
@@ -3329,7 +3329,7 @@ export namespace Mixtral8x7BInstruct {
 }
 
 /**
- * Generate text using instruct-tuned [Mixtral 8x7B](https://mistral.ai/news/mixtral-of-experts/).
+ * Compute text using instruct-tuned [Mixtral 8x7B](https://mistral.ai/news/mixtral-of-experts/).
  *
  * https://www.substrate.run/nodes#Mixtral8x7BInstruct
  */
@@ -3399,7 +3399,7 @@ export namespace Llama3Instruct8B {
 }
 
 /**
- * Generate text using instruct-tuned [Llama 3 8B](https://llama.meta.com/llama3/).
+ * Compute text using instruct-tuned [Llama 3 8B](https://llama.meta.com/llama3/).
  *
  * https://www.substrate.run/nodes#Llama3Instruct8B
  */
@@ -3467,7 +3467,7 @@ export namespace Llama3Instruct70B {
 }
 
 /**
- * Generate text using instruct-tuned [Llama 3 70B](https://llama.meta.com/llama3/).
+ * Compute text using instruct-tuned [Llama 3 70B](https://llama.meta.com/llama3/).
  *
  * https://www.substrate.run/nodes#Llama3Instruct70B
  */
@@ -3535,7 +3535,7 @@ export namespace Firellava13B {
 }
 
 /**
- * Generate text with image input using [FireLLaVA 13B](https://fireworks.ai/blog/firellava-the-first-commercially-permissive-oss-llava-model).
+ * Compute text with image input using [FireLLaVA 13B](https://fireworks.ai/blog/firellava-the-first-commercially-permissive-oss-llava-model).
  *
  * https://www.substrate.run/nodes#Firellava13B
  */
@@ -5413,12 +5413,12 @@ export class DeleteVectors extends Node {
 }
 export type AnyNode =
   | Experimental
-  | GenerateText
-  | MultiGenerateText
-  | BatchGenerateText
-  | BatchGenerateJSON
-  | GenerateJSON
-  | MultiGenerateJSON
+  | ComputeText
+  | MultiComputeText
+  | BatchComputeText
+  | BatchComputeJSON
+  | ComputeJSON
+  | MultiComputeJSON
   | Mistral7BInstruct
   | Mixtral8x7BInstruct
   | Llama3Instruct8B
@@ -5454,18 +5454,18 @@ export type AnyNode =
 
 export type NodeOutput<T> = T extends Experimental
   ? OpenAPI.components["schemas"]["ExperimentalOut"]
-  : T extends GenerateText
-    ? OpenAPI.components["schemas"]["GenerateTextOut"]
-    : T extends MultiGenerateText
-      ? OpenAPI.components["schemas"]["MultiGenerateTextOut"]
-      : T extends BatchGenerateText
-        ? OpenAPI.components["schemas"]["BatchGenerateTextOut"]
-        : T extends BatchGenerateJSON
-          ? OpenAPI.components["schemas"]["BatchGenerateJSONOut"]
-          : T extends GenerateJSON
-            ? OpenAPI.components["schemas"]["GenerateJSONOut"]
-            : T extends MultiGenerateJSON
-              ? OpenAPI.components["schemas"]["MultiGenerateJSONOut"]
+  : T extends ComputeText
+    ? OpenAPI.components["schemas"]["ComputeTextOut"]
+    : T extends MultiComputeText
+      ? OpenAPI.components["schemas"]["MultiComputeTextOut"]
+      : T extends BatchComputeText
+        ? OpenAPI.components["schemas"]["BatchComputeTextOut"]
+        : T extends BatchComputeJSON
+          ? OpenAPI.components["schemas"]["BatchComputeJSONOut"]
+          : T extends ComputeJSON
+            ? OpenAPI.components["schemas"]["ComputeJSONOut"]
+            : T extends MultiComputeJSON
+              ? OpenAPI.components["schemas"]["MultiComputeJSONOut"]
               : T extends Mistral7BInstruct
                 ? OpenAPI.components["schemas"]["Mistral7BInstructOut"]
                 : T extends Mixtral8x7BInstruct
