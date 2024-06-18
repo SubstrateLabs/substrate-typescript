@@ -11,9 +11,18 @@ async function main() {
     { prompt: "tell me about windmills", max_tokens: 10 },
     { id: "a" },
   );
-  const b = new GenerateText({ prompt: a.future.text, max_tokens: 10 }, { id: "b" });
-  const c = new GenerateText({ prompt: b.future.text, max_tokens: 10 }, { id: "c" });
-  const d = new GenerateText({ prompt: c.future.text, max_tokens: 10 }, { id: "d" });
+  const b = new GenerateText(
+    { prompt: a.future.text, max_tokens: 10 },
+    { id: "b" },
+  );
+  const c = new GenerateText(
+    { prompt: b.future.text, max_tokens: 10 },
+    { id: "c" },
+  );
+  const d = new GenerateText(
+    { prompt: c.future.text, max_tokens: 10 },
+    { id: "d" },
+  );
 
   // Because the `c` is the the final node in the graph we can find nodes it depends
   // on through the relationships created via the input arguments.
