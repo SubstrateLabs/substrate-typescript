@@ -120,8 +120,9 @@ export class Substrate {
 
         return res;
       } else {
+        const requestId = request.headers.get("x-substrate-request-id");
         throw new SubstrateError(
-          `Request failed: ${apiResponse.status} ${apiResponse.statusText}`,
+          `[Request failed] status=${apiResponse.status} statusText=${apiResponse.statusText} requestId=${requestId}`,
         );
       }
     } catch (err: unknown) {

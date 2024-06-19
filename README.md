@@ -4,6 +4,8 @@
 
 The Substrate TypeScript SDK is the recommended way to interact with the Substrate API from server-side TypeScript or JavaScript.
 
+<img src="https://guides.substrate.run/unified-diagram.svg"/>
+
 ## Documentation
 
 If you're just getting started, head to [guides.substrate.run](https://guides.substrate.run/).
@@ -44,10 +46,10 @@ const summary = new GenerateText({
 });
 ```
 
-Run the graph chaining `story` → `summary`. This is a simple example, but you can easily build arbitrarily complex branching workflows.
+Run the graph chaining `story` → `summary` by passing the terminal node to `substrate.run`.
 
 ```typescript
-const response = await substrate.run(story, summary);
+const response = await substrate.run(summary);
 ```
 
 Get the output of the summary node by passing it to `response.get`.

@@ -16,7 +16,7 @@ async function main() {
 
   // Because the `c` is the the final node in the graph we can find nodes it depends
   // on through the relationships created via the input arguments.
-  const res = await substrate.run(c);
+  const res = await substrate.run(d);
   console.log(res.json);
 }
 main();
