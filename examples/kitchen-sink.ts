@@ -269,7 +269,8 @@ const examples = [
     store: "hosted",
   }),
   new UpscaleImage({
-    image_uri: "https://media.substrate.run/docs-seurat.jpg",
+    prompt: "high resolution detailed spiral shell",
+    image_uri: "https://media.substrate.run/docs-shell-emoji.jpg",
     store: "hosted",
   }),
   new SegmentUnderPoint({

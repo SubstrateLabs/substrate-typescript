@@ -5,10 +5,7 @@ import { Substrate, ComputeText, sb } from "substrate";
 async function main() {
   const SUBSTRATE_API_KEY = process.env["SUBSTRATE_API_KEY"];
 
-  const substrate = new Substrate({
-    apiKey: SUBSTRATE_API_KEY,
-    baseUrl: "https://api-staging.substrate.run",
-  });
+  const substrate = new Substrate({ apiKey: SUBSTRATE_API_KEY });
 
   const concise =
     "(just give me the number, no punctuation, no empty spaces, no other text)";

@@ -5,10 +5,7 @@ import { Substrate, ComputeText, sb, ComputeJSON } from "substrate";
 async function main() {
   const SUBSTRATE_API_KEY = process.env["SUBSTRATE_API_KEY"];
 
-  const substrate = new Substrate({
-    apiKey: SUBSTRATE_API_KEY,
-    baseUrl: "https://api.substrate.run",
-  });
+  const substrate = new Substrate({ apiKey: SUBSTRATE_API_KEY });
 
   const a = new ComputeJSON({
     prompt: "Give me an African capital city and its approximate population.",
