@@ -5,7 +5,7 @@ import { execSync } from "node:child_process";
 
 // NOTE: Merged with API version to produce the full SDK version string
 // https://docs.substrate.run/versioning
-const SDK_VERSION = "1.0.0";
+const SDK_VERSION = "1.0.1";
 
 const ok = (message: string) => console.log("\x1b[32m✓\x1b[0m", message);
 
