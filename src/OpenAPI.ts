@@ -18,80 +18,80 @@ export interface paths {
      */
     post: operations["RunPython"];
   };
-  "/GenerateText": {
+  "/ComputeText": {
     /**
-     * GenerateText
-     * @description Generate text using a language model.
+     * ComputeText
+     * @description Compute text using a language model.
      */
-    post: operations["GenerateText"];
+    post: operations["ComputeText"];
   };
-  "/MultiGenerateText": {
+  "/MultiComputeText": {
     /**
-     * MultiGenerateText
+     * MultiComputeText
      * @description Generate multiple text choices using a language model.
      */
-    post: operations["MultiGenerateText"];
+    post: operations["MultiComputeText"];
   };
-  "/BatchGenerateText": {
+  "/BatchComputeText": {
     /**
-     * BatchGenerateText
-     * @description Generate text for multiple prompts in batch using a language model.
+     * BatchComputeText
+     * @description Compute text for multiple prompts in batch using a language model.
      */
-    post: operations["BatchGenerateText"];
+    post: operations["BatchComputeText"];
   };
-  "/BatchGenerateJSON": {
+  "/BatchComputeJSON": {
     /**
-     * BatchGenerateJSON
-     * @description Generate JSON for multiple prompts in batch using a language model.
+     * BatchComputeJSON
+     * @description Compute JSON for multiple prompts in batch using a language model.
      */
-    post: operations["BatchGenerateJSON"];
+    post: operations["BatchComputeJSON"];
   };
-  "/GenerateJSON": {
+  "/ComputeJSON": {
     /**
-     * GenerateJSON
-     * @description Generate JSON using a language model.
+     * ComputeJSON
+     * @description Compute JSON using a language model.
      */
-    post: operations["GenerateJSON"];
+    post: operations["ComputeJSON"];
   };
-  "/MultiGenerateJSON": {
+  "/MultiComputeJSON": {
     /**
-     * MultiGenerateJSON
-     * @description Generate multiple JSON choices using a language model.
+     * MultiComputeJSON
+     * @description Compute multiple JSON choices using a language model.
      */
-    post: operations["MultiGenerateJSON"];
+    post: operations["MultiComputeJSON"];
   };
   "/Mistral7BInstruct": {
     /**
      * Mistral7BInstruct
-     * @description Generate text using [Mistral 7B Instruct](https://mistral.ai/news/announcing-mistral-7b).
+     * @description Compute text using [Mistral 7B Instruct](https://mistral.ai/news/announcing-mistral-7b).
      */
     post: operations["Mistral7BInstruct"];
   };
   "/Mixtral8x7BInstruct": {
     /**
      * Mixtral8x7BInstruct
-     * @description Generate text using instruct-tuned [Mixtral 8x7B](https://mistral.ai/news/mixtral-of-experts/).
+     * @description Compute text using instruct-tuned [Mixtral 8x7B](https://mistral.ai/news/mixtral-of-experts/).
      */
     post: operations["Mixtral8x7BInstruct"];
   };
   "/Llama3Instruct8B": {
     /**
      * Llama3Instruct8B
-     * @description Generate text using instruct-tuned [Llama 3 8B](https://llama.meta.com/llama3/).
+     * @description Compute text using instruct-tuned [Llama 3 8B](https://llama.meta.com/llama3/).
      */
     post: operations["Llama3Instruct8B"];
   };
   "/Llama3Instruct70B": {
     /**
      * Llama3Instruct70B
-     * @description Generate text using instruct-tuned [Llama 3 70B](https://llama.meta.com/llama3/).
+     * @description Compute text using instruct-tuned [Llama 3 70B](https://llama.meta.com/llama3/).
      */
     post: operations["Llama3Instruct70B"];
   };
   "/Firellava13B": {
     /**
      * Firellava13B
-     * @description Generate text with image input using [FireLLaVA 13B](https://fireworks.ai/blog/firellava-the-first-commercially-permissive-oss-llava-model).
+     * @description Compute text with image input using [FireLLaVA 13B](https://fireworks.ai/blog/firellava-the-first-commercially-permissive-oss-llava-model).
      */
     post: operations["Firellava13B"];
   };
@@ -168,7 +168,7 @@ export interface paths {
   "/EraseImage": {
     /**
      * EraseImage
-     * @description Erase the masked part of an image, e.g. to 'remove' an object.
+     * @description Erase the masked part of an image, e.g. to remove an object by inpainting.
      */
     post: operations["EraseImage"];
   };
@@ -296,7 +296,7 @@ export interface components {
        * @description The type of error returned.
        * @enum {string}
        */
-      type: "api_error" | "invalid_request_error";
+      type: "api_error" | "invalid_request_error" | "dependency_error";
       /** @description A message providing more details about the error. */
       message: string;
     };
@@ -345,8 +345,8 @@ export interface components {
       /** @description Contents of stderr if your code did not run successfully. */
       stderr: string;
     };
-    /** GenerateTextIn */
-    GenerateTextIn: {
+    /** ComputeTextIn */
+    ComputeTextIn: {
       /** @description Input prompt. */
       prompt: string;
       /** @description Image prompts. */
@@ -371,13 +371,13 @@ export interface components {
         | "Llama3Instruct70B"
         | "Firellava13B";
     };
-    /** GenerateTextOut */
-    GenerateTextOut: {
+    /** ComputeTextOut */
+    ComputeTextOut: {
       /** @description Text response. */
       text: string;
     };
-    /** GenerateJSONIn */
-    GenerateJSONIn: {
+    /** ComputeJSONIn */
+    ComputeJSONIn: {
       /** @description Input prompt. */
       prompt: string;
       /** @description JSON schema to guide `json_object` response. */
@@ -399,8 +399,8 @@ export interface components {
        */
       model?: "Mistral7BInstruct" | "Mixtral8x7BInstruct" | "Llama3Instruct8B";
     };
-    /** GenerateJSONOut */
-    GenerateJSONOut: {
+    /** ComputeJSONOut */
+    ComputeJSONOut: {
       /** @description JSON response. */
       json_object?: {
         [key: string]: unknown;
@@ -408,8 +408,8 @@ export interface components {
       /** @description If the model output could not be parsed to JSON, this is the raw text output. */
       text?: string;
     };
-    /** MultiGenerateTextIn */
-    MultiGenerateTextIn: {
+    /** MultiComputeTextIn */
+    MultiComputeTextIn: {
       /** @description Input prompt. */
       prompt: string;
       /**
@@ -436,16 +436,16 @@ export interface components {
         | "Llama3Instruct8B"
         | "Llama3Instruct70B";
     };
-    /** MultiGenerateTextOut */
-    MultiGenerateTextOut: {
+    /** MultiComputeTextOut */
+    MultiComputeTextOut: {
       /** @description Response choices. */
       choices: {
         /** @description Text response. */
         text: string;
       }[];
     };
-    /** BatchGenerateTextIn */
-    BatchGenerateTextIn: {
+    /** BatchComputeTextIn */
+    BatchComputeTextIn: {
       /** @description Batch input prompts. */
       prompts: string[];
       /**
@@ -463,16 +463,16 @@ export interface components {
        */
       model?: "Mistral7BInstruct" | "Llama3Instruct8B";
     };
-    /** BatchGenerateTextOut */
-    BatchGenerateTextOut: {
+    /** BatchComputeTextOut */
+    BatchComputeTextOut: {
       /** @description Batch outputs. */
       outputs: {
         /** @description Text response. */
         text: string;
       }[];
     };
-    /** MultiGenerateJSONIn */
-    MultiGenerateJSONIn: {
+    /** MultiComputeJSONIn */
+    MultiComputeJSONIn: {
       /** @description Input prompt. */
       prompt: string;
       /** @description JSON schema to guide `json_object` response. */
@@ -499,8 +499,8 @@ export interface components {
        */
       model?: "Mistral7BInstruct" | "Mixtral8x7BInstruct" | "Llama3Instruct8B";
     };
-    /** MultiGenerateJSONOut */
-    MultiGenerateJSONOut: {
+    /** MultiComputeJSONOut */
+    MultiComputeJSONOut: {
       /** @description Response choices. */
       choices: {
         /** @description JSON response. */
@@ -511,8 +511,8 @@ export interface components {
         text?: string;
       }[];
     };
-    /** BatchGenerateJSONIn */
-    BatchGenerateJSONIn: {
+    /** BatchComputeJSONIn */
+    BatchComputeJSONIn: {
       /** @description Batch input prompts. */
       prompts: string[];
       /** @description JSON schema to guide `json_object` response. */
@@ -534,8 +534,8 @@ export interface components {
        */
       model?: "Mistral7BInstruct" | "Llama3Instruct8B";
     };
-    /** BatchGenerateJSONOut */
-    BatchGenerateJSONOut: {
+    /** BatchComputeJSONOut */
+    BatchComputeJSONOut: {
       /** @description Batch outputs. */
       outputs: {
         /** @description JSON response. */
@@ -2040,10 +2040,10 @@ export interface operations {
     };
   };
   /**
-   * GenerateText
-   * @description Generate text using a language model.
+   * ComputeText
+   * @description Compute text using a language model.
    */
-  GenerateText: {
+  ComputeText: {
     requestBody?: {
       content: {
         /**
@@ -2093,10 +2093,10 @@ export interface operations {
     };
   };
   /**
-   * MultiGenerateText
+   * MultiComputeText
    * @description Generate multiple text choices using a language model.
    */
-  MultiGenerateText: {
+  MultiComputeText: {
     requestBody?: {
       content: {
         /**
@@ -2151,10 +2151,10 @@ export interface operations {
     };
   };
   /**
-   * BatchGenerateText
-   * @description Generate text for multiple prompts in batch using a language model.
+   * BatchComputeText
+   * @description Compute text for multiple prompts in batch using a language model.
    */
-  BatchGenerateText: {
+  BatchComputeText: {
     requestBody?: {
       content: {
         /**
@@ -2202,10 +2202,10 @@ export interface operations {
     };
   };
   /**
-   * BatchGenerateJSON
-   * @description Generate JSON for multiple prompts in batch using a language model.
+   * BatchComputeJSON
+   * @description Compute JSON for multiple prompts in batch using a language model.
    */
-  BatchGenerateJSON: {
+  BatchComputeJSON: {
     requestBody?: {
       content: {
         /**
@@ -2274,10 +2274,10 @@ export interface operations {
     };
   };
   /**
-   * GenerateJSON
-   * @description Generate JSON using a language model.
+   * ComputeJSON
+   * @description Compute JSON using a language model.
    */
-  GenerateJSON: {
+  ComputeJSON: {
     requestBody?: {
       content: {
         /**
@@ -2344,10 +2344,10 @@ export interface operations {
     };
   };
   /**
-   * MultiGenerateJSON
-   * @description Generate multiple JSON choices using a language model.
+   * MultiComputeJSON
+   * @description Compute multiple JSON choices using a language model.
    */
-  MultiGenerateJSON: {
+  MultiComputeJSON: {
     requestBody?: {
       content: {
         /**
@@ -2424,7 +2424,7 @@ export interface operations {
   };
   /**
    * Mistral7BInstruct
-   * @description Generate text using [Mistral 7B Instruct](https://mistral.ai/news/announcing-mistral-7b).
+   * @description Compute text using [Mistral 7B Instruct](https://mistral.ai/news/announcing-mistral-7b).
    */
   Mistral7BInstruct: {
     requestBody?: {
@@ -2506,7 +2506,7 @@ export interface operations {
   };
   /**
    * Mixtral8x7BInstruct
-   * @description Generate text using instruct-tuned [Mixtral 8x7B](https://mistral.ai/news/mixtral-of-experts/).
+   * @description Compute text using instruct-tuned [Mixtral 8x7B](https://mistral.ai/news/mixtral-of-experts/).
    */
   Mixtral8x7BInstruct: {
     requestBody?: {
@@ -2588,7 +2588,7 @@ export interface operations {
   };
   /**
    * Llama3Instruct8B
-   * @description Generate text using instruct-tuned [Llama 3 8B](https://llama.meta.com/llama3/).
+   * @description Compute text using instruct-tuned [Llama 3 8B](https://llama.meta.com/llama3/).
    */
   Llama3Instruct8B: {
     requestBody?: {
@@ -2670,7 +2670,7 @@ export interface operations {
   };
   /**
    * Llama3Instruct70B
-   * @description Generate text using instruct-tuned [Llama 3 70B](https://llama.meta.com/llama3/).
+   * @description Compute text using instruct-tuned [Llama 3 70B](https://llama.meta.com/llama3/).
    */
   Llama3Instruct70B: {
     requestBody?: {
@@ -2744,7 +2744,7 @@ export interface operations {
   };
   /**
    * Firellava13B
-   * @description Generate text with image input using [FireLLaVA 13B](https://fireworks.ai/blog/firellava-the-first-commercially-permissive-oss-llava-model).
+   * @description Compute text with image input using [FireLLaVA 13B](https://fireworks.ai/blog/firellava-the-first-commercially-permissive-oss-llava-model).
    */
   Firellava13B: {
     requestBody?: {
@@ -2955,8 +2955,8 @@ export interface operations {
          *   "negative_prompt": "night, moon",
          *   "num_images": 2,
          *   "seeds": [
-         *     3306990332671669000,
-         *     13641924104177017000
+         *     330699,
+         *     136464
          *   ],
          *   "store": "hosted"
          * }
@@ -3022,8 +3022,8 @@ export interface operations {
          *   "num_images": 2,
          *   "store": "hosted",
          *   "seeds": [
-         *     16072680593433106000,
-         *     17203982922585030000
+         *     1607280,
+         *     1720395
          *   ]
          * }
          */
@@ -3093,8 +3093,8 @@ export interface operations {
          *   "store": "hosted",
          *   "num_images": 2,
          *   "seeds": [
-         *     16072680593433106000,
-         *     17203982922585030000
+         *     1607226,
+         *     1720395
          *   ]
          * }
          */
@@ -3337,7 +3337,7 @@ export interface operations {
   };
   /**
    * EraseImage
-   * @description Erase the masked part of an image, e.g. to 'remove' an object.
+   * @description Erase the masked part of an image, e.g. to remove an object by inpainting.
    */
   EraseImage: {
     requestBody?: {

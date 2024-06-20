@@ -1,18 +1,18 @@
 /**
  * 𐃏 Substrate TypeScript SDK
  * @generated file
- * 20240612.20240613
+ * 20240617.20240620
  */
 
 export { SubstrateError } from "substrate/Error";
 export {
   Experimental,
-  GenerateText,
-  MultiGenerateText,
-  BatchGenerateText,
-  BatchGenerateJSON,
-  GenerateJSON,
-  MultiGenerateJSON,
+  ComputeText,
+  MultiComputeText,
+  BatchComputeText,
+  BatchComputeJSON,
+  ComputeJSON,
+  MultiComputeJSON,
   Mistral7BInstruct,
   Mixtral8x7BInstruct,
   Llama3Instruct8B,
