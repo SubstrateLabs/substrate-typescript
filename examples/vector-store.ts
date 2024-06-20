@@ -5,7 +5,7 @@ import {
   QueryVectorStore,
   ListVectorStores,
   JinaV2,
-  CreateVectorStore,
+  FindOrCreateVectorStore,
   DeleteVectorStore,
   FetchVectors,
   UpdateVectors,
@@ -19,7 +19,7 @@ async function main() {
     baseUrl: "https://api-staging.substrate.run",
   });
 
-  const create = new CreateVectorStore({
+  const create = new FindOrCreateVectorStore({
     collection_name: "vibes",
     model: "jina-v2",
   });

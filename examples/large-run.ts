@@ -1,19 +1,16 @@
 #!/usr/bin/env -S npx ts-node --transpileOnly
 
-import { Substrate, GenerateText } from "substrate";
+import { Substrate, ComputeText } from "substrate";
 
 async function main() {
   const SUBSTRATE_API_KEY = process.env["SUBSTRATE_API_KEY"];
 
-  const substrate = new Substrate({
-    apiKey: SUBSTRATE_API_KEY,
-    baseUrl: "https://api-staging.substrate.run",
-  });
+  const substrate = new Substrate({ apiKey: SUBSTRATE_API_KEY });
 
   let nodes = [];
   let prompt: any = "once upon a time...";
   for (let i = 0; i < 50; i++) {
-    const node = new GenerateText({ prompt });
+    const node = new ComputeText({ prompt });
     nodes.push(node);
     prompt = node.future.text.concat(" and then");
   }

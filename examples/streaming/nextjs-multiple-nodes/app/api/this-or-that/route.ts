@@ -2,7 +2,7 @@
 
 import { z } from "zod";
 import zodToJsonSchema from "zod-to-json-schema";
-import { Substrate, GenerateJSON, sb } from "substrate";
+import { Substrate, ComputeJSON, sb } from "substrate";
 
 const SUBSTRATE_API_KEY = process.env["SUBSTRATE_API_KEY"]!;
 
@@ -16,7 +16,7 @@ function extractThisAndThat(inputText: string) {
     })
     .describe("Two items that are being compared");
 
-  return new GenerateJSON({
+  return new ComputeJSON({
     prompt: `
       === Instructions
       Examine the following input text and extract the two things that are being compared.
@@ -45,7 +45,7 @@ function voter(about: string, items: any) {
       "Your vote on which item you prefer and how strongly you feel about it",
     );
 
-  return new GenerateJSON(
+  return new ComputeJSON(
     {
       prompt: sb.interpolate`
       === About you

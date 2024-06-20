@@ -2,37 +2,32 @@
 
 import {
   Substrate,
-  GenerateText,
-  MultiGenerateText,
-  GenerateJSON,
-  MultiGenerateJSON,
-  GenerateTextVision,
+  ComputeText,
+  MultiComputeText,
+  ComputeJSON,
+  MultiComputeJSON,
   Mistral7BInstruct,
   Firellava13B,
   GenerateImage,
   MultiGenerateImage,
-  GenerativeEditImage,
-  MultiGenerativeEditImage,
-  StableDiffusionXL,
+  InpaintImage,
+  MultiInpaintImage,
   StableDiffusionXLLightning,
   StableDiffusionXLInpaint,
-  StableDiffusionXLIPAdapter,
-  StableDiffusionXLControlNet,
-  FillMask,
+  EraseImage,
   UpscaleImage,
   RemoveBackground,
   SegmentUnderPoint,
   SegmentAnything,
-  TranscribeMedia,
+  TranscribeSpeech,
   GenerateSpeech,
-  XTTSV2,
   EmbedText,
   MultiEmbedText,
   EmbedImage,
   MultiEmbedImage,
   JinaV2,
   CLIP,
-  CreateVectorStore,
+  FindOrCreateVectorStore,
   ListVectorStores,
   DeleteVectorStore,
   QueryVectorStore,
@@ -42,26 +37,11 @@ import {
   Mixtral8x7BInstruct,
   Llama3Instruct8B,
   Llama3Instruct70B,
-  RunPython,
 } from "substrate";
 
-const urls = {
-  staging: { name: "staging", value: "https://api-staging.substrate.run" },
-  production: { name: "production", value: "https://api.substrate.run" },
-};
-const backends = {
-  v0: { name: "v0", value: "v0" as const },
-  v1: { name: "v1", value: "v1" as const },
-};
-
-// Not all nodes are available in all backend+env combinations yet, so
-// in order to only test nodes that should be operational we can target
-// them specifically.
-const STAGING_V0 = { url: urls.staging, backend: backends.v0 };
-const STAGING_V1 = { url: urls.staging, backend: backends.v1 };
-const PRODUCTION_V0 = { url: urls.production, backend: backends.v0 };
-const PRODUCTION_V1 = { url: urls.production, backend: backends.v1 };
-const ALL_ENVS = [STAGING_V0, STAGING_V1, PRODUCTION_V0, PRODUCTION_V1];
+const STAGING = "https://api-staging.substrate.run";
+const PRODUCTION = "https://api.substrate.run";
+const ALL_ENVS = [STAGING, PRODUCTION];
 
 // Some state-changing interactions will create a store or modify it's contents
 // and some other calls require the store to exist to property work (eg embed to store).
@@ -70,454 +50,260 @@ const ALL_ENVS = [STAGING_V0, STAGING_V1, PRODUCTION_V0, PRODUCTION_V1];
 const VECTOR_STORE = "kitchen-sink";
 
 const examples = [
-  {
-    node: new CreateVectorStore({
-      collection_name: VECTOR_STORE,
-      model: "jina-v2",
-    }),
-    envs: [STAGING_V1, PRODUCTION_V1],
-  },
-  {
-    node: new GenerateText({
-      prompt: "Who is Don Quixote?",
-      temperature: 0.4,
-    }),
-    envs: ALL_ENVS,
-  },
-  {
-    node: new MultiGenerateText({
-      prompt: "Who is Don Quixote?",
-      num_choices: 2,
-      temperature: 0.4,
-    }),
-    envs: ALL_ENVS,
-  },
-  {
-    node: new GenerateJSON({
-      prompt: "Who is Don Quixote?",
-      json_schema: {
-        title: "Person",
-        type: "object",
-        properties: {
-          firstName: {
-            type: "string",
-            description: "The person's first name.",
-          },
-          lastName: {
-            type: "string",
-            description: "The person's last name.",
-          },
-          occupation: {
-            type: "string",
-            description: "The person's occupation.",
-          },
+  new FindOrCreateVectorStore({
+    collection_name: VECTOR_STORE,
+    model: "jina-v2",
+  }),
+  new ComputeText({
+    prompt: "Who is Don Quixote?",
+    temperature: 0.4,
+  }),
+  new MultiComputeText({
+    prompt: "Who is Don Quixote?",
+    num_choices: 2,
+    temperature: 0.4,
+  }),
+  new ComputeJSON({
+    prompt: "Who is Don Quixote?",
+    json_schema: {
+      title: "Person",
+      type: "object",
+      properties: {
+        firstName: {
+          type: "string",
+          description: "The person's first name.",
+        },
+        lastName: {
+          type: "string",
+          description: "The person's last name.",
+        },
+        occupation: {
+          type: "string",
+          description: "The person's occupation.",
         },
       },
-      temperature: 0.4,
-      max_tokens: 300,
-    }),
-    envs: ALL_ENVS,
-  },
-  {
-    node: new MultiGenerateJSON({
-      prompt: "Who is Don Quixote?",
-      json_schema: {
-        title: "Person",
-        type: "object",
-        properties: {
-          firstName: {
-            type: "string",
-            description: "The person's first name.",
-          },
-          lastName: {
-            type: "string",
-            description: "The person's last name.",
-          },
-          occupation: {
-            type: "string",
-            description: "The person's occupation.",
-          },
+    },
+    temperature: 0.4,
+    max_tokens: 300,
+  }),
+  new MultiComputeJSON({
+    prompt: "Who is Don Quixote?",
+    json_schema: {
+      title: "Person",
+      type: "object",
+      properties: {
+        firstName: {
+          type: "string",
+          description: "The person's first name.",
+        },
+        lastName: {
+          type: "string",
+          description: "The person's last name.",
+        },
+        occupation: {
+          type: "string",
+          description: "The person's occupation.",
         },
       },
-      num_choices: 2,
-      temperature: 0.4,
-      max_tokens: 100,
-    }),
-    envs: ALL_ENVS,
-  },
-  {
-    // NOTE: mainly supported on backend v1, but v0 works for legacy use
-    // NOTE: the input types are not the same between v0 and v1 and we want to keep it that way for legacy support
-    node: new GenerateTextVision({
-      prompt: "what are these paintings of and who made them?",
-      image_uris: [
-        "https://media.substrate.run/docs-fuji-red.jpg",
-        "https://media.substrate.run/docs-fuji-blue.jpg",
-      ],
-    }),
-    envs: [STAGING_V1, PRODUCTION_V1],
-  },
-  {
-    node: new Mistral7BInstruct({
-      prompt: "Who is Don Quixote?",
-      num_choices: 2,
-      temperature: 0.5,
-      max_tokens: 100,
-    }),
-    envs: [STAGING_V0, PRODUCTION_V0],
-  },
-  {
-    // NOTE: mainly supported on backend v1, but v0 works for legacy use (see next node)
-    // NOTE: the input types are not the same between v0 and v1.
-    // FIXME: there seems to be an issue with v0 now though, when using either the new or
-    //        the old params and the v0 node doesn't work with either.
-    node: new Firellava13B({
-      prompt: "what are these paintings of and who made them?",
-      image_uris: [
-        "https://media.substrate.run/docs-fuji-red.jpg",
-        "https://media.substrate.run/docs-fuji-blue.jpg",
-      ],
-    }),
-    envs: [STAGING_V1, PRODUCTION_V1],
-  },
-  {
-    // NOTE: only supported by v0
-    node: new GenerateImage({
-      prompt:
-        "hokusai futuristic supercell spiral cloud with glowing core over turbulent ocean",
-      store: "hosted",
-    }),
-    envs: [STAGING_V0, PRODUCTION_V0],
-  },
-  {
-    // NOTE: only supported by v0
-    node: new MultiGenerateImage({
-      prompt:
-        "hokusai futuristic supercell spiral cloud with glowing neon core over turbulent ocean",
-      store: "hosted",
-      num_images: 2,
-    }),
-    envs: [STAGING_V0, PRODUCTION_V0],
-  },
-  {
-    // NOTE: only supported by v0
-    node: new GenerativeEditImage({
-      image_uri: "https://media.substrate.run/docs-seurat.jpg",
-      mask_image_uri: "https://media.substrate.run/spiral-logo.jpeg",
-      prompt:
-        "detailed cyberpunk anime characters in a futuristic city park by a pond at night, neon lights, dark noir cinematic HD",
-      store: "hosted",
-    }),
-    envs: [STAGING_V0, PRODUCTION_V0],
-  },
-  {
-    // NOTE: only supported by v0
-    node: new MultiGenerativeEditImage({
-      image_uri: "https://media.substrate.run/docs-klimt-park.jpg",
-      mask_image_uri: "https://media.substrate.run/spiral-logo.jpeg",
-      prompt:
-        "large tropical colorful bright anime birds in a dark jungle full of vines, high resolution",
-      num_images: 2,
-      store: "hosted",
-    }),
-    envs: [STAGING_V0, PRODUCTION_V0],
-  },
-  {
-    // NOTE: only supported by v0
-    node: new StableDiffusionXL({
-      prompt:
-        "hokusai futuristic supercell spiral cloud with glowing core over turbulent ocean",
-      store: "hosted",
-      guidance_scale: 20,
-      num_images: 2,
-    }),
-    envs: [STAGING_V0, PRODUCTION_V0],
-  },
-  {
-    // NOTE: only supported by v0
-    node: new StableDiffusionXLLightning({
-      prompt:
-        "hokusai futuristic supercell spiral cloud with glowing core over turbulent ocean",
-      store: "hosted",
-      num_images: 2,
-    }),
-    envs: [STAGING_V0, PRODUCTION_V0],
-  },
-  {
-    // NOTE: only supported by v0
-    node: new StableDiffusionXLInpaint({
-      image_uri: "https://media.substrate.run/docs-klimt-park.jpg",
-      mask_image_uri: "https://media.substrate.run/spiral-logo.jpeg",
-      prompt:
-        "large tropical colorful bright anime birds in a dark jungle full of vines, high resolution",
-      num_images: 2,
-    }),
-    envs: [STAGING_V0, PRODUCTION_V0],
-  },
-  {
-    // FIXME: Running into the following error, this node does not seem operational yet
-    // error: cannot reshape tensor of 0 elements into shape [0, -1, 1, 512] because the unspecified dimension size -1 can be any value and is ambiguous
-    node: new StableDiffusionXLControlNet({
-      image_uri: "https://media.substrate.run/spiral-logo.jpeg",
-      prompt:
-        "the futuristic solarpunk city of atlantis at sunset, cinematic bokeh HD",
-      control_method: "illusion",
-      num_images: 2,
-      store: "hosted",
-    }),
-    envs: [],
-  },
-  {
-    // NOTE: only supported by v0
-    node: new StableDiffusionXLIPAdapter({
-      prompt:
-        "A blue and white painting of a large wave with a boat in the middle",
-      image_prompt_uri: "https://guides.substrate.run/hokusai.jpeg",
-      store: "hosted",
-      num_images: 2,
-    }),
-    envs: [STAGING_V0, PRODUCTION_V0],
-  },
-  {
-    // FIXME: As far as I can tell this is based on BigLama, which isn't yet operational
-    node: new FillMask({
-      image_uri: "https://media.substrate.run/docs-klimt-park.jpg",
-      mask_image_uri: "https://media.substrate.run/spiral-logo.jpeg",
-      store: "hosted",
-    }),
-    envs: [],
-  },
-  {
-    node: new EmbedText({
-      text: "Your text to embed",
-      collection_name: VECTOR_STORE,
-    }),
-    envs: ALL_ENVS,
-  },
-  {
-    node: new MultiEmbedText({
-      items: [
-        {
-          text: "Some text",
+    },
+    num_choices: 2,
+    temperature: 0.4,
+    max_tokens: 100,
+  }),
+  new Mistral7BInstruct({
+    prompt: "Who is Don Quixote?",
+    num_choices: 2,
+    temperature: 0.5,
+    max_tokens: 100,
+  }),
+  new Firellava13B({
+    prompt: "what are these paintings of and who made them?",
+    image_uris: [
+      "https://media.substrate.run/docs-fuji-red.jpg",
+      "https://media.substrate.run/docs-fuji-blue.jpg",
+    ],
+  }),
+  new GenerateImage({
+    prompt:
+      "hokusai futuristic supercell spiral cloud with glowing core over turbulent ocean",
+    store: "hosted",
+  }),
+  new MultiGenerateImage({
+    prompt:
+      "hokusai futuristic supercell spiral cloud with glowing neon core over turbulent ocean",
+    store: "hosted",
+    num_images: 2,
+  }),
+  new InpaintImage({
+    image_uri: "https://media.substrate.run/docs-seurat.jpg",
+    mask_image_uri: "https://media.substrate.run/spiral-logo.jpeg",
+    prompt:
+      "detailed cyberpunk anime characters in a futuristic city park by a pond at night, neon lights, dark noir cinematic HD",
+    store: "hosted",
+  }),
+  new MultiInpaintImage({
+    image_uri: "https://media.substrate.run/docs-klimt-park.jpg",
+    mask_image_uri: "https://media.substrate.run/spiral-logo.jpeg",
+    prompt:
+      "large tropical colorful bright anime birds in a dark jungle full of vines, high resolution",
+    num_images: 2,
+    store: "hosted",
+  }),
+  new StableDiffusionXLLightning({
+    prompt:
+      "hokusai futuristic supercell spiral cloud with glowing core over turbulent ocean",
+    store: "hosted",
+    num_images: 2,
+  }),
+  new StableDiffusionXLInpaint({
+    image_uri: "https://media.substrate.run/docs-klimt-park.jpg",
+    mask_image_uri: "https://media.substrate.run/spiral-logo.jpeg",
+    prompt:
+      "large tropical colorful bright anime birds in a dark jungle full of vines, high resolution",
+    num_images: 2,
+  }),
+  new EraseImage({
+    image_uri: "https://media.substrate.run/docs-klimt-park.jpg",
+    mask_image_uri: "https://media.substrate.run/spiral-logo.jpeg",
+    store: "hosted",
+  }),
+  new EmbedText({
+    text: "Your text to embed",
+    collection_name: VECTOR_STORE,
+  }),
+  new MultiEmbedText({
+    items: [
+      {
+        text: "Some text",
+      },
+      {
+        text: "Other text",
+      },
+    ],
+    collection_name: VECTOR_STORE,
+  }),
+  new EmbedImage({
+    image_uri: "https://media.substrate.run/docs-fuji-red.jpg",
+  }),
+  new MultiEmbedImage({
+    items: [
+      {
+        image_uri: "https://media.substrate.run/docs-fuji-red.jpg",
+      },
+      {
+        image_uri: "https://media.substrate.run/docs-fuji-blue.jpg",
+      },
+    ],
+    // store: VECTOR_STORE,
+  }),
+  new JinaV2({
+    items: [
+      {
+        text: "Some text",
+      },
+      {
+        text: "Other text",
+      },
+    ],
+    // store: VECTOR_STORE,
+  }),
+  new CLIP({
+    items: [
+      {
+        image_uri: "https://media.substrate.run/docs-fuji-red.jpg",
+      },
+      {
+        image_uri: "https://media.substrate.run/docs-fuji-blue.jpg",
+      },
+    ],
+  }),
+  new ListVectorStores({}),
+  new QueryVectorStore({
+    collection_name: VECTOR_STORE,
+    model: "jina-v2",
+    query_strings: ["first_comment_body", "second_comment_body"],
+  }),
+  new FetchVectors({
+    collection_name: VECTOR_STORE,
+    model: "jina-v2",
+    ids: ["bar", "baz"],
+  }),
+  new UpdateVectors({
+    collection_name: VECTOR_STORE,
+    model: "jina-v2",
+    vectors: [
+      {
+        id: "bar",
+        vector: [0.1, -1.5],
+        metadata: { title: "new_title" },
+      },
+      {
+        id: "baz",
+        vector: [-0.05, 1.01],
+        metadata: {
+          title: "title",
         },
-        {
-          text: "Other text",
-        },
-      ],
-      collection_name: VECTOR_STORE,
-    }),
-    envs: ALL_ENVS,
-  },
-  {
-    node: new EmbedImage({
-      image_uri: "https://media.substrate.run/docs-fuji-red.jpg",
-    }),
-    envs: ALL_ENVS,
-  },
-  {
-    // FIXME: This one works without the Vector Store. Presumably because the VectorStore only supports Jina and Embed Image relies on CLIP
-    node: new MultiEmbedImage({
-      items: [
-        {
-          image_uri: "https://media.substrate.run/docs-fuji-red.jpg",
-        },
-        {
-          image_uri: "https://media.substrate.run/docs-fuji-blue.jpg",
-        },
-      ],
-      // store: VECTOR_STORE,
-    }),
-    envs: ALL_ENVS,
-  },
-  {
-    // FIXME: This mostly works, but I'm running into issues using VectorStore here.
-    // It seems to only fail for me on staging v1 (maybe some state problem there?)
-    node: new JinaV2({
-      items: [
-        {
-          text: "Some text",
-        },
-        {
-          text: "Other text",
-        },
-      ],
-      // store: VECTOR_STORE,
-    }),
-    envs: ALL_ENVS,
-  },
-  {
-    node: new CLIP({
-      items: [
-        {
-          image_uri: "https://media.substrate.run/docs-fuji-red.jpg",
-        },
-        {
-          image_uri: "https://media.substrate.run/docs-fuji-blue.jpg",
-        },
-      ],
-    }),
-    envs: ALL_ENVS,
-  },
-  {
-    // NOTE: only supported by v1
-    node: new ListVectorStores({}),
-    envs: [STAGING_V1, PRODUCTION_V1],
-  },
-  {
-    // NOTE: only supported by v1
-    node: new QueryVectorStore({
-      collection_name: VECTOR_STORE,
-      model: "jina-v2",
-      query_strings: ["first_comment_body", "second_comment_body"],
-    }),
-    envs: [STAGING_V1, PRODUCTION_V1],
-  },
-  {
-    // NOTE: only supported by v1
-    node: new FetchVectors({
-      collection_name: VECTOR_STORE,
-      model: "jina-v2",
-      ids: ["bar", "baz"],
-    }),
-    envs: [STAGING_V1, PRODUCTION_V1],
-  },
-  {
-    // NOTE: only supported by v1
-    node: new UpdateVectors({
-      collection_name: VECTOR_STORE,
-      model: "jina-v2",
-      vectors: [
-        {
-          id: "bar",
-          vector: [0.1, -1.5],
-          metadata: { title: "new_title" },
-        },
-        {
-          id: "baz",
-          vector: [-0.05, 1.01],
-          metadata: {
-            title: "title",
-          },
-        },
-      ],
-    }),
-    envs: [STAGING_V1, PRODUCTION_V1],
-  },
-  {
-    // NOTE: only supported by v1
-    node: new DeleteVectors({
-      collection_name: VECTOR_STORE,
-      model: "jina-v2",
-      ids: ["bar", "baz"],
-    }),
-    envs: [STAGING_V1, PRODUCTION_V1],
-  },
-  {
-    // NOTE: only supported by v0
-    node: new TranscribeMedia({
-      audio_uri: "https://media.substrate.run/dfw-10m.mp3",
-      prompt:
-        "David Foster Wallace interviewed about US culture, and Infinite Jest",
-      segment: true,
-      align: true,
-      diarize: true,
-    }),
-    envs: [STAGING_V0, PRODUCTION_V0],
-  },
-  {
-    // FIXME: it looks like this should work in v0 and v1, but I'm seeing errors here from the server and haven't
-    // been able to track down any server side errors to understand what the problem is.
-    node: new GenerateSpeech({
-      text: "Substrate: an underlying substance or layer.",
-      store: "hosted",
-    }),
-    envs: [STAGING_V0, STAGING_V1],
-  },
-  {
-    // FIXME: it looks like this should work for v1, but doesn't yet
-    node: new XTTSV2({
-      text: "Substrate: an underlying substance or layer.",
-      audio_uri: "https://media.substrate.run/docs-speaker.wav",
-      store: "hosted",
-    }),
-    envs: [STAGING_V0, STAGING_V1],
-  },
-  {
-    // FIXME: it looks like this should work for v1, but doesn't yet
-    node: new RemoveBackground({
-      image_uri: "https://media.substrate.run/docs-seurat.jpg",
-      background_color: "002244",
-      store: "hosted",
-    }),
-    envs: [STAGING_V0, STAGING_V1],
-  },
-  {
-    // FIXME: it looks like this should work for v1, but doesn't yet
-    node: new UpscaleImage({
-      image_uri: "https://media.substrate.run/docs-seurat.jpg",
-      store: "hosted",
-    }),
-    envs: [STAGING_V0, STAGING_V1],
-  },
-  {
-    node: new SegmentUnderPoint({
-      image_uri: "https://media.substrate.run/docs-vg-bedroom.jpg",
-      point: {
+      },
+    ],
+  }),
+  new DeleteVectors({
+    collection_name: VECTOR_STORE,
+    model: "jina-v2",
+    ids: ["bar", "baz"],
+  }),
+  new TranscribeSpeech({
+    audio_uri: "https://media.substrate.run/dfw-10m.mp3",
+    prompt:
+      "David Foster Wallace interviewed about US culture, and Infinite Jest",
+    segment: true,
+    align: true,
+    diarize: true,
+  }),
+  new GenerateSpeech({
+    text: "Substrate: an underlying substance or layer.",
+    store: "hosted",
+  }),
+  new RemoveBackground({
+    image_uri: "https://media.substrate.run/docs-seurat.jpg",
+    background_color: "002244",
+    store: "hosted",
+  }),
+  new UpscaleImage({
+    prompt: "high resolution detailed spiral shell",
+    image_uri: "https://media.substrate.run/docs-shell-emoji.jpg",
+    store: "hosted",
+  }),
+  new SegmentUnderPoint({
+    image_uri: "https://media.substrate.run/docs-vg-bedroom.jpg",
+    point: {
+      x: 100,
+      y: 200,
+    },
+    store: "hosted",
+  }),
+  new SegmentAnything({
+    image_uri: "https://media.substrate.run/docs-vg-bedroom.jpg",
+    point_prompts: [
+      {
         x: 100,
         y: 200,
       },
-      store: "hosted",
-    }),
-    envs: ALL_ENVS,
-  },
-  {
-    node: new SegmentAnything({
-      image_uri: "https://media.substrate.run/docs-vg-bedroom.jpg",
-      point_prompts: [
-        {
-          x: 100,
-          y: 200,
-        },
-      ],
-      // store: "hosted", // FIXME: not working yet
-    }),
-    envs: ALL_ENVS,
-  },
-  {
-    node: new DeleteVectorStore({
-      collection_name: VECTOR_STORE,
-      model: "jina-v2",
-    }),
-    envs: [STAGING_V1, PRODUCTION_V1],
-  },
-  {
-    node: new Mixtral8x7BInstruct({
-      prompt: "what does quixotic mean?",
-    }),
-    envs: [STAGING_V1, PRODUCTION_V1],
-  },
-  {
-    node: new Llama3Instruct70B({
-      prompt: "what does quixotic mean?",
-    }),
-    envs: [STAGING_V1, PRODUCTION_V1],
-  },
-  {
-    node: new Llama3Instruct8B({
-      prompt: "what does quixotic mean?",
-    }),
-    envs: [STAGING_V1, PRODUCTION_V1],
-  },
-  {
-    node: new RunPython({
-      code: "import numpy as np; print(SB_IN['foo']); SB_OUT['result']=np.sum([1,2]).item()",
-      input: {
-        foo: "bar",
-      },
-      pip_install: ["numpy"],
-    }),
-    envs: [STAGING_V1, PRODUCTION_V1],
-  },
+    ],
+    // store: "hosted", // FIXME: not working yet
+  }),
+  new DeleteVectorStore({
+    collection_name: VECTOR_STORE,
+    model: "jina-v2",
+  }),
+  new Mixtral8x7BInstruct({
+    prompt: "what does quixotic mean?",
+  }),
+  new Llama3Instruct70B({
+    prompt: "what does quixotic mean?",
+  }),
+  new Llama3Instruct8B({
+    prompt: "what does quixotic mean?",
+  }),
 ];
 
 const noColor = process.argv.includes("--no-color");
@@ -555,23 +341,10 @@ const measure = async (fn: any): Promise<any> => {
 async function main() {
   const SUBSTRATE_API_KEY = process.env["SUBSTRATE_API_KEY"];
 
-  for (let { node, envs } of examples) {
-    // const except = []
-    // if (except.includes(node.node)) continue;
-
-    // const only = ["GenerateJSON"];
-    // if (!only.includes(node.node)) continue;
-
-    if (envs.length === 0) {
-      warn(node.node, "Not enabled for any env.");
-    }
-
-    for (let env of envs) {
-      const substrate = new Substrate({
-        apiKey: SUBSTRATE_API_KEY,
-        baseUrl: env.url.value,
-      });
-      const tag = `[${env.url.name}:${env.backend.value}]`;
+  for (let node of examples) {
+    for (let baseUrl of ALL_ENVS) {
+      const substrate = new Substrate({ apiKey: SUBSTRATE_API_KEY, baseUrl });
+      const tag = `[${baseUrl}]`;
 
       // NOTE: measure doesn't throw
       const res = await measure(substrate.run(node));
