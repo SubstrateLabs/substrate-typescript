@@ -1,6 +1,6 @@
 #!/usr/bin/env -S npx ts-node --transpileOnly
 
-import { Substrate, GenerateText, sb, GenerateJSON } from "substrate";
+import { Substrate, ComputeText, sb, ComputeJSON } from "substrate";
 
 async function main() {
   const SUBSTRATE_API_KEY = process.env["SUBSTRATE_API_KEY"];
@@ -10,7 +10,7 @@ async function main() {
     baseUrl: "https://api.substrate.run",
   });
 
-  const a = new GenerateJSON({
+  const a = new ComputeJSON({
     prompt: "Give me an African capital city and its approximate population.",
     json_schema: {
       type: "object",
@@ -23,7 +23,7 @@ async function main() {
     },
   });
 
-  const b = new GenerateText({
+  const b = new ComputeText({
     prompt: sb.concat(
       "give me the leader of the country: ",
       sb.jq<"string">(a.future.json_object, ".country"),

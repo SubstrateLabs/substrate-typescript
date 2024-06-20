@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const { Substrate, GenerateText } = require("substrate");
+const { Substrate, ComputeText } = require("substrate");
 
 async function main() {
   const SUBSTRATE_API_KEY = process.env["SUBSTRATE_API_KEY"];
@@ -10,10 +10,10 @@ async function main() {
     baseUrl: "https://api-staging.substrate.run",
   });
 
-  const a = new GenerateText({
+  const a = new ComputeText({
     prompt: "ask me a short trivia question in one sentence",
   });
-  const b = new GenerateText({ prompt: a.future.text });
+  const b = new ComputeText({ prompt: a.future.text });
 
   const res = await substrate.run(a, b);
 
