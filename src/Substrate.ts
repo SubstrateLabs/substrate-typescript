@@ -105,8 +105,9 @@ export class Substrate {
     const { signal } = abortController;
     const timeout = setTimeout(() => abortController.abort(), this.timeout);
 
+    const request = new Request(url, this.requestOptions(req, signal));
+    const requestId = request.headers.get("x-substrate-request-id");
     try {
-      const request = new Request(url, this.requestOptions(req, signal));
       const apiResponse = await fetch(request);
 
       if (apiResponse.ok) {
@@ -120,7 +121,6 @@ export class Substrate {
 
         return res;
       } else {
-        const requestId = request.headers.get("x-substrate-request-id");
         throw new SubstrateError(
           `[Request failed] status=${apiResponse.status} statusText=${apiResponse.statusText} requestId=${requestId}`,
         );
@@ -129,7 +129,7 @@ export class Substrate {
       if (err instanceof Error) {
         if (err.name === "AbortError") {
           throw new RequestTimeoutError(
-            `Request timed out after ${this.timeout}ms`,
+            `Request timed out after ${this.timeout}ms requestId=${requestId}`,
           );
           // TODO: We could propagate timeout errors to nodes too, but I'm
           // not sure yet what might be easier for the user to manage.
@@ -156,8 +156,9 @@ export class Substrate {
     requestOptions.headers.set("Accept", "text/event-stream");
     requestOptions.headers.set("X-Substrate-Streaming", "1");
 
+    const request = new Request(url, requestOptions);
+    const requestId = request.headers.get("x-substrate-request-id");
     try {
-      const request = new Request(url, requestOptions);
       const response = await fetch(request);
       return await SubstrateStreamingResponse.fromRequestReponse(
         request,
@@ -167,7 +168,7 @@ export class Substrate {
       if (err instanceof Error) {
         if (err.name === "AbortError") {
           throw new RequestTimeoutError(
-            `Request timed out after ${this.timeout}ms`,
+            `Request timed out after ${this.timeout}ms requestId=${requestId}`,
           );
           // TODO: We could propagate timeout errors to nodes too, but I'm
           // not sure yet what might be easier for the user to manage.
