@@ -178,7 +178,9 @@ describe("Future", () => {
       const i1 = FutureString.interpolate`hello ${world}, you look ${nice} today.`;
 
       // @ts-expect-error
-      expect(i1._result()).resolves.toEqual("hello world, you look nice today.");
+      expect(i1._result()).resolves.toEqual(
+        "hello world, you look nice today.",
+      );
 
       const f1 = FutureString.concat("texas", " ", "sun");
       const f2 = FutureString.concat("texas", " ", "moon");

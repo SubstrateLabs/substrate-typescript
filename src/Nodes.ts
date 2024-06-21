@@ -2862,6 +2862,7 @@ export class Experimental extends Node {
     options?: Options,
   ) {
     super(args, options);
+    this.node = "Experimental";
   }
 
   /**
@@ -2926,6 +2927,7 @@ export class Box extends Node {
     options?: Options,
   ) {
     super(args, options);
+    this.node = "Box";
   }
 
   /**
@@ -2990,6 +2992,7 @@ export class If extends Node {
     options?: Options,
   ) {
     super(args, options);
+    this.node = "LogicalIf";
   }
 
   /**
@@ -3056,6 +3059,7 @@ export class ComputeText extends Node {
     options?: Options,
   ) {
     super(args, options);
+    this.node = "ComputeText";
   }
 
   /**
@@ -3122,6 +3126,7 @@ export class MultiComputeText extends Node {
     options?: Options,
   ) {
     super(args, options);
+    this.node = "MultiComputeText";
   }
 
   /**
@@ -3190,6 +3195,7 @@ export class BatchComputeText extends Node {
     options?: Options,
   ) {
     super(args, options);
+    this.node = "BatchComputeText";
   }
 
   /**
@@ -3258,6 +3264,7 @@ export class BatchComputeJSON extends Node {
     options?: Options,
   ) {
     super(args, options);
+    this.node = "BatchComputeJSON";
   }
 
   /**
@@ -3326,6 +3333,7 @@ export class ComputeJSON extends Node {
     options?: Options,
   ) {
     super(args, options);
+    this.node = "ComputeJSON";
   }
 
   /**
@@ -3392,6 +3400,7 @@ export class MultiComputeJSON extends Node {
     options?: Options,
   ) {
     super(args, options);
+    this.node = "MultiComputeJSON";
   }
 
   /**
@@ -3460,6 +3469,7 @@ export class Mistral7BInstruct extends Node {
     options?: Options,
   ) {
     super(args, options);
+    this.node = "Mistral7BInstruct";
   }
 
   /**
@@ -3530,6 +3540,7 @@ export class Mixtral8x7BInstruct extends Node {
     options?: Options,
   ) {
     super(args, options);
+    this.node = "Mixtral8x7BInstruct";
   }
 
   /**
@@ -3598,6 +3609,7 @@ export class Llama3Instruct8B extends Node {
     options?: Options,
   ) {
     super(args, options);
+    this.node = "Llama3Instruct8B";
   }
 
   /**
@@ -3666,6 +3678,7 @@ export class Llama3Instruct70B extends Node {
     options?: Options,
   ) {
     super(args, options);
+    this.node = "Llama3Instruct70B";
   }
 
   /**
@@ -3734,6 +3747,7 @@ export class Firellava13B extends Node {
     options?: Options,
   ) {
     super(args, options);
+    this.node = "Firellava13B";
   }
 
   /**
@@ -3800,6 +3814,7 @@ export class GenerateImage extends Node {
     options?: Options,
   ) {
     super(args, options);
+    this.node = "GenerateImage";
   }
 
   /**
@@ -3868,6 +3883,7 @@ export class MultiGenerateImage extends Node {
     options?: Options,
   ) {
     super(args, options);
+    this.node = "MultiGenerateImage";
   }
 
   /**
@@ -3936,6 +3952,7 @@ export class InpaintImage extends Node {
     options?: Options,
   ) {
     super(args, options);
+    this.node = "InpaintImage";
   }
 
   /**
@@ -4002,6 +4019,7 @@ export class MultiInpaintImage extends Node {
     options?: Options,
   ) {
     super(args, options);
+    this.node = "MultiInpaintImage";
   }
 
   /**
@@ -4073,6 +4091,7 @@ export class StableDiffusionXLLightning extends Node {
     options?: Options,
   ) {
     super(args, options);
+    this.node = "StableDiffusionXLLightning";
   }
 
   /**
@@ -4144,6 +4163,7 @@ export class StableDiffusionXLInpaint extends Node {
     options?: Options,
   ) {
     super(args, options);
+    this.node = "StableDiffusionXLInpaint";
   }
 
   /**
@@ -4215,6 +4235,7 @@ export class StableDiffusionXLControlNet extends Node {
     options?: Options,
   ) {
     super(args, options);
+    this.node = "StableDiffusionXLControlNet";
   }
 
   /**
@@ -4284,6 +4305,7 @@ export class TranscribeSpeech extends Node {
     options?: Options,
   ) {
     super(args, options);
+    this.node = "TranscribeSpeech";
   }
 
   /**
@@ -4352,6 +4374,7 @@ export class GenerateSpeech extends Node {
     options?: Options,
   ) {
     super(args, options);
+    this.node = "GenerateSpeech";
   }
 
   /**
@@ -4420,6 +4443,7 @@ export class RemoveBackground extends Node {
     options?: Options,
   ) {
     super(args, options);
+    this.node = "RemoveBackground";
   }
 
   /**
@@ -4488,6 +4512,7 @@ export class EraseImage extends Node {
     options?: Options,
   ) {
     super(args, options);
+    this.node = "EraseImage";
   }
 
   /**
@@ -4554,6 +4579,7 @@ export class UpscaleImage extends Node {
     options?: Options,
   ) {
     super(args, options);
+    this.node = "UpscaleImage";
   }
 
   /**
@@ -4620,6 +4646,7 @@ export class SegmentUnderPoint extends Node {
     options?: Options,
   ) {
     super(args, options);
+    this.node = "SegmentUnderPoint";
   }
 
   /**
@@ -4688,6 +4715,7 @@ export class SegmentAnything extends Node {
     options?: Options,
   ) {
     super(args, options);
+    this.node = "SegmentAnything";
   }
 
   /**
@@ -4756,6 +4784,7 @@ export class EmbedText extends Node {
     options?: Options,
   ) {
     super(args, options);
+    this.node = "EmbedText";
   }
 
   /**
@@ -4822,6 +4851,7 @@ export class MultiEmbedText extends Node {
     options?: Options,
   ) {
     super(args, options);
+    this.node = "MultiEmbedText";
   }
 
   /**
@@ -4890,6 +4920,7 @@ export class EmbedImage extends Node {
     options?: Options,
   ) {
     super(args, options);
+    this.node = "EmbedImage";
   }
 
   /**
@@ -4956,6 +4987,7 @@ export class MultiEmbedImage extends Node {
     options?: Options,
   ) {
     super(args, options);
+    this.node = "MultiEmbedImage";
   }
 
   /**
@@ -5024,6 +5056,7 @@ export class JinaV2 extends Node {
     options?: Options,
   ) {
     super(args, options);
+    this.node = "JinaV2";
   }
 
   /**
@@ -5088,6 +5121,7 @@ export class CLIP extends Node {
     options?: Options,
   ) {
     super(args, options);
+    this.node = "CLIP";
   }
 
   /**
@@ -5157,6 +5191,7 @@ export class FindOrCreateVectorStore extends Node {
     options?: Options,
   ) {
     super(args, options);
+    this.node = "FindOrCreateVectorStore";
   }
 
   /**
@@ -5225,6 +5260,7 @@ export class ListVectorStores extends Node {
     options?: Options,
   ) {
     super(args, options);
+    this.node = "ListVectorStores";
   }
 
   /**
@@ -5293,6 +5329,7 @@ export class DeleteVectorStore extends Node {
     options?: Options,
   ) {
     super(args, options);
+    this.node = "DeleteVectorStore";
   }
 
   /**
@@ -5361,6 +5398,7 @@ export class QueryVectorStore extends Node {
     options?: Options,
   ) {
     super(args, options);
+    this.node = "QueryVectorStore";
   }
 
   /**
@@ -5429,6 +5467,7 @@ export class FetchVectors extends Node {
     options?: Options,
   ) {
     super(args, options);
+    this.node = "FetchVectors";
   }
 
   /**
@@ -5495,6 +5534,7 @@ export class UpdateVectors extends Node {
     options?: Options,
   ) {
     super(args, options);
+    this.node = "UpdateVectors";
   }
 
   /**
@@ -5561,6 +5601,7 @@ export class DeleteVectors extends Node {
     options?: Options,
   ) {
     super(args, options);
+    this.node = "DeleteVectors";
   }
 
   /**
