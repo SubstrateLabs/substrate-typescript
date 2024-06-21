@@ -37,6 +37,8 @@ import {
   Mixtral8x7BInstruct,
   Llama3Instruct8B,
   Llama3Instruct70B,
+  If,
+  Box,
 } from "substrate";
 
 const STAGING = "https://api-staging.substrate.run";
@@ -50,6 +52,22 @@ const ALL_ENVS = [STAGING, PRODUCTION];
 const VECTOR_STORE = "kitchen-sink";
 
 const examples = [
+  new Box({
+    value: {
+      a: 1,
+      b: [2, 3, { c: 1 }],
+      d: { e: [4] },
+    },
+  }),
+  new If({
+    condition: true,
+    value_if_true: "yes",
+    value_if_false: "no",
+  }),
+  new FindOrCreateVectorStore({
+    collection_name: VECTOR_STORE,
+    model: "jina-v2",
+  }),
   new FindOrCreateVectorStore({
     collection_name: VECTOR_STORE,
     model: "jina-v2",

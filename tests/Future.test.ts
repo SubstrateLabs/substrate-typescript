@@ -12,7 +12,7 @@ import {
 import { Node } from "substrate/Node";
 import { SubstrateResponse } from "substrate/SubstrateResponse";
 
-class FooFuture extends Future {}
+class FooFuture extends Future<any> {}
 class FooNode extends Node {}
 
 const node = (id: string = "") => new FooNode({}, { id });
@@ -178,14 +178,16 @@ describe("Future", () => {
       const i1 = FutureString.interpolate`hello ${world}, you look ${nice} today.`;
 
       // @ts-expect-error
-      expect(i1.result()).resolves.toEqual("hello world, you look nice today.");
+      expect(i1._result()).resolves.toEqual(
+        "hello world, you look nice today.",
+      );
 
       const f1 = FutureString.concat("texas", " ", "sun");
       const f2 = FutureString.concat("texas", " ", "moon");
       const i2 = FutureString.interpolate`~~ ${f1} x ${f2} ~~`;
 
       // @ts-expect-error
-      expect(i2.result()).resolves.toEqual("~~ texas sun x texas moon ~~");
+      expect(i2._result()).resolves.toEqual("~~ texas sun x texas moon ~~");
     });
   });
 });

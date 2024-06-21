@@ -11,6 +11,20 @@ export interface paths {
      */
     post: operations["Experimental"];
   };
+  "/Box": {
+    /**
+     * Box
+     * @description Combine multiple values into a single output.
+     */
+    post: operations["Box"];
+  };
+  "/If": {
+    /**
+     * If
+     * @description Return one of two options based on a condition.
+     */
+    post: operations["If"];
+  };
   "/RunPython": {
     /**
      * RunPython
@@ -320,6 +334,30 @@ export interface components {
       output: {
         [key: string]: unknown;
       };
+    };
+    /** BoxIn */
+    BoxIn: {
+      /** @description Values to box. */
+      value: unknown;
+    };
+    /** BoxOut */
+    BoxOut: {
+      /** @description The evaluated result. */
+      value: unknown;
+    };
+    /** IfIn */
+    IfIn: {
+      /** @description Condition. */
+      condition: boolean;
+      /** @description Result when condition is true. */
+      value_if_true: unknown;
+      /** @description Result when condition is false. */
+      value_if_false?: unknown;
+    };
+    /** IfOut */
+    IfOut: {
+      /** @description Result. Null if `value_if_false` is not provided and `condition` is false. */
+      result: unknown;
     };
     /** RunPythonIn */
     RunPythonIn: {
@@ -1986,6 +2024,81 @@ export interface operations {
             output: {
               [key: string]: unknown;
             };
+          };
+        };
+      };
+    };
+  };
+  /**
+   * Box
+   * @description Combine multiple values into a single output.
+   */
+  Box: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "value": {
+         *     "a": "b",
+         *     "c": {
+         *       "d": [
+         *         1,
+         *         2,
+         *         3
+         *       ]
+         *     }
+         *   }
+         * }
+         */
+        "application/json": {
+          /** @description Values to box. */
+          value: unknown;
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": {
+            /** @description The evaluated result. */
+            value: unknown;
+          };
+        };
+      };
+    };
+  };
+  /**
+   * If
+   * @description Return one of two options based on a condition.
+   */
+  If: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "condition": true,
+         *   "value_if_true": "yes",
+         *   "value_if_false": "no"
+         * }
+         */
+        "application/json": {
+          /** @description Condition. */
+          condition: boolean;
+          /** @description Result when condition is true. */
+          value_if_true: unknown;
+          /** @description Result when condition is false. */
+          value_if_false?: unknown;
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": {
+            /** @description Result. Null if `value_if_false` is not provided and `condition` is false. */
+            result: unknown;
           };
         };
       };
