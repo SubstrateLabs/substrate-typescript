@@ -57,7 +57,7 @@ const examples = [
       a: 1,
       b: [2, 3, { c: 1 }],
       d: { e: [4] },
-    }
+    },
   }),
   new If({
     condition: true,
