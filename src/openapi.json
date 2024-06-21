@@ -68,6 +68,58 @@
         },
         "required": ["output"]
       },
+      "BoxIn": {
+        "title": "BoxIn",
+        "type": "object",
+        "properties": {
+          "value": {
+            "description": "Values to box.",
+            "x-loggable": false
+          }
+        },
+        "required": ["value"]
+      },
+      "BoxOut": {
+        "title": "BoxOut",
+        "type": "object",
+        "properties": {
+          "value": {
+            "description": "The evaluated result.",
+            "x-loggable": false
+          }
+        },
+        "required": ["value"]
+      },
+      "IfIn": {
+        "title": "IfIn",
+        "type": "object",
+        "properties": {
+          "condition": {
+            "type": "boolean",
+            "description": "Condition.",
+            "x-loggable": true
+          },
+          "value_if_true": {
+            "description": "Result when condition is true.",
+            "x-loggable": false
+          },
+          "value_if_false": {
+            "description": "Result when condition is false.",
+            "x-loggable": false
+          }
+        },
+        "required": ["condition", "value_if_true"]
+      },
+      "IfOut": {
+        "title": "IfOut",
+        "type": "object",
+        "properties": {
+          "result": {
+            "description": "Result. Null if `value_if_false` is not provided and `condition` is false."
+          }
+        },
+        "required": ["result"]
+      },
       "RunPythonIn": {
         "title": "RunPythonIn",
         "type": "object",
@@ -2683,6 +2735,88 @@
                 },
                 "example": {
                   "output": { "foo": "bar" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Box": {
+      "post": {
+        "summary": "Box",
+        "operationId": "Box",
+        "tags": ["category:utility"],
+        "description": "Combine multiple values into a single output.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BoxIn"
+              },
+              "example": {
+                "value": {
+                  "a": "b",
+                  "c": {
+                    "d": [1, 2, 3]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoxOut"
+                },
+                "example": {
+                  "value": {
+                    "a": "b",
+                    "c": {
+                      "d": [1, 2, 3]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/If": {
+      "post": {
+        "summary": "If",
+        "operationId": "If",
+        "tags": ["category:utility"],
+        "description": "Return one of two options based on a condition.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IfIn"
+              },
+              "example": {
+                "condition": true,
+                "value_if_true": "yes",
+                "value_if_false": "no"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IfOut"
+                },
+                "example": {
+                  "result": "yes"
                 }
               }
             }

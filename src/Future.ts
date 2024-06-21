@@ -76,7 +76,7 @@ export class Trace extends Directive {
     for (let item of this.items) {
       if (item instanceof Future) {
         // @ts-expect-error (protected result())
-        item = await item.result();
+        item = await item._result();
       }
       result = result[item as string | number];
     }
@@ -127,7 +127,7 @@ export class JQ extends Directive {
   override async result(): Promise<JQCompatible> {
     return this.target instanceof Future
       ? // @ts-expect-error (accessing protected prop: id)
-        await this.target.result()
+        await this.target._result()
       : this.target;
   }
 
@@ -166,7 +166,7 @@ export class StringConcat extends Directive {
     for (let item of this.items) {
       if (item instanceof Future) {
         // @ts-expect-error (protected result())
-        item = await item.result();
+        item = await item._result();
       }
       result = result.concat(item);
     }
@@ -204,7 +204,7 @@ export abstract class Future<T> {
     return { __$$SB_GRAPH_OP_ID$$__: this._id };
   }
 
-  protected async result(): Promise<T> {
+  protected async _result(): Promise<T> {
     return this._directive.result();
   }
 
@@ -263,8 +263,8 @@ export class FutureString extends Future<string> {
     return FutureString.concat(...[this, ...items]);
   }
 
-  protected override async result(): Promise<string> {
-    return super.result();
+  protected override async _result(): Promise<string> {
+    return super._result();
   }
 }
 
@@ -273,8 +273,8 @@ export class FutureNumber extends Future<number> {}
 export abstract class FutureArray extends Future<any[] | FutureArray> {
   abstract at(index: number): Future<any>;
 
-  protected override async result(): Promise<any[] | FutureArray> {
-    return super.result();
+  protected override async _result(): Promise<any[] | FutureArray> {
+    return super._result();
   }
 }
 
@@ -293,8 +293,8 @@ export abstract class FutureObject extends Future<Object> {
     }, this) as Future<any>;
   }
 
-  protected override async result(): Promise<Object> {
-    return super.result();
+  protected override async _result(): Promise<Object> {
+    return super._result();
   }
 }
 
@@ -311,7 +311,7 @@ export class FutureAnyObject extends Future<Object> {
     return new FutureAnyObject(this._directive.next(index));
   }
 
-  protected override async result(): Promise<Object> {
-    return super.result();
+  protected override async _result(): Promise<Object> {
+    return super._result();
   }
 }
