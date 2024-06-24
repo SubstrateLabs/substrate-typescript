@@ -154,7 +154,7 @@ export abstract class Node {
         futures.add(future);
       }
     }
-    
+
     const collectFutures = (obj: any) => {
       if (Array.isArray(obj)) {
         for (let item of obj) {
