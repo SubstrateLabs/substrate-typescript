@@ -148,7 +148,7 @@ describe("Substrate", () => {
     test("when there are nodes and we use the `depends` key", () => {
       const a = new FooNode({ a: 123 }, { id: "a" });
       const b = new FooNode({ b: 456 }, { id: "b", depends: [a] });
-      const c = new FooNode({ c: 789 }, { id: "c", depends: [a, b] });
+      const c = new FooNode({ c: 789 }, { id: "c", depends: [a, b, b] }); // intentionally using b twice here
 
       const result = Substrate.serialize(a, b, c);
 
