@@ -19,6 +19,8 @@ export type Options = {
   cache_keys?: string[];
   /** Max number of times to retry this node if it fails. Default: null means no retries */
   max_retries?: number;
+  /** Specify nodes that this node depends on. */
+  depends?: Node[];
 };
 
 export abstract class Node {
@@ -38,6 +40,8 @@ export abstract class Node {
   cache_keys?: string[];
   /** Max number of times to retry this node if it fails. Default: null means no retries */
   max_retries?: number;
+  /** Specify nodes that this node depends on. */
+  depends: Node[];
 
   /** TODO this field stores the last response, but it's just temporary until the internals are refactored */
   protected _response: SubstrateResponse | undefined;
@@ -50,6 +54,9 @@ export abstract class Node {
     this.cache_age = opts?.cache_age;
     this.cache_keys = opts?.cache_keys;
     this.max_retries = opts?.max_retries;
+    this.id = opts?.id ?? generator(this.node);
+    this.hide = opts?.hide ?? false;
+    this.depends = opts?.depends ?? [];
   }
 
   /**
@@ -138,6 +145,16 @@ export abstract class Node {
 
     nodes.add(this);
 
+    for (let node of this.depends) {
+      const references = node.references();
+      for (let node of references.nodes) {
+        nodes.add(node);
+      }
+      for (let future of references.futures) {
+        futures.add(future);
+      }
+    }
+    
     const collectFutures = (obj: any) => {
       if (Array.isArray(obj)) {
         for (let item of obj) {
