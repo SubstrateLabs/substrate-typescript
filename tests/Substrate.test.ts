@@ -144,5 +144,49 @@ describe("Substrate", () => {
         ],
       });
     });
+
+    test("when there are nodes and we use the `depends` key", () => {
+      const a = new FooNode({ a: 123 }, { id: "a" });
+      const b = new FooNode({ b: 456 }, { id: "b", depends: [a] });
+      const c = new FooNode({ c: 789 }, { id: "c", depends: [a, b] });
+
+      const result = Substrate.serialize(a, b, c);
+
+      expect(result).toEqual({
+        edges: [
+          ["a", "b"],
+          ["a", "c"],
+          ["b", "c"],
+        ],
+        initial_args: {},
+        nodes: [
+          {
+            node: "FooNode",
+            id: a.id,
+            args: {
+              a: 123,
+            },
+            _should_output_globally: true,
+          },
+          {
+            node: "FooNode",
+            id: b.id,
+            args: {
+              b: 456,
+            },
+            _should_output_globally: true,
+          },
+          {
+            node: "FooNode",
+            id: c.id,
+            args: {
+              c: 789,
+            },
+            _should_output_globally: true,
+          },
+        ],
+        futures: [],
+      });
+    });
   });
 });
