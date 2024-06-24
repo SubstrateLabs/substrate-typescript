@@ -11,6 +11,8 @@ export type Options = {
   id?: Node["id"];
   /** When true the server will omit this node's output. Default: false */
   hide?: boolean;
+  /** Specify nodes that this node depends on. */
+  depends?: Node[];
 };
 
 export abstract class Node {
@@ -22,6 +24,8 @@ export abstract class Node {
   args: Object;
   /** When true the server will omit this node's output. Default: false */
   hide: boolean;
+  /** Specify nodes that this node depends on. */
+  depends: Node[];
 
   /** TODO this field stores the last response, but it's just temporary until the internals are refactored */
   protected _response: SubstrateResponse | undefined;
@@ -29,8 +33,9 @@ export abstract class Node {
   constructor(args: Object = {}, opts?: Options) {
     this.node = this.constructor.name;
     this.args = args;
-    this.id = opts?.id || generator(this.node);
-    this.hide = opts?.hide || false;
+    this.id = opts?.id ?? generator(this.node);
+    this.hide = opts?.hide ?? false;
+    this.depends = opts?.depends ?? [];
   }
 
   /**
@@ -115,6 +120,16 @@ export abstract class Node {
     const futures = new Set<Future<any>>();
 
     nodes.add(this);
+
+    for (let node of this.depends) {
+      const references = node.references();
+      for (let node of references.nodes) {
+        nodes.add(node);
+      }
+      for (let future of references.futures) {
+        futures.add(future);
+      }
+    }
 
     const collectFutures = (obj: any) => {
       if (Array.isArray(obj)) {

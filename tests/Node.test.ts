@@ -31,17 +31,18 @@ describe("Node", () => {
   });
 
   test(".references", () => {
-    const a = new FooNode({ x: "x" });
+    const a = new FooNode({ x: "x" }, { id: "a" });
     const f1 = a.future.get("x");
     const f2 = a.future.get("y");
-    const b = new FooNode({ x: f1, z: f2 });
+    const b = new FooNode({ x: f1, z: f2 }, { id: "b" });
     const f3 = b.future.get("x");
-    const c = new FooNode({ x: f3 });
+    const c = new FooNode({ x: f3 }, { id: "c" });
+    const d = new FooNode({}, { id: "d", depends: [c] });
 
     // @ts-ignore (protected)
-    const { nodes, futures } = c.references();
+    const { nodes, futures } = d.references();
 
-    expect(nodes).toEqual(new Set([a, b, c]));
+    expect(nodes).toEqual(new Set([a, b, c, d]));
     expect(futures).toEqual(new Set([f1, f2, f3]));
   });
 });
