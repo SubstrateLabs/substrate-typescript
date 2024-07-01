@@ -11,6 +11,14 @@ export type Options = {
   id?: Node["id"];
   /** When true the server will omit this node's output. Default: false */
   hide?: boolean;
+  /** Number of seconds to cache an output for this node's unique inputs. Default: null */
+  cache_age?: number;
+  /** Applies if cache_age > 0. Optionally specify a subset of keys to use when computing a cache key.
+   * Default: all node arguments
+   */
+  cache_keys?: string[];
+  /** Max number of times to retry this node if it fails. Default: null means no retries */
+  max_retries?: number;
 };
 
 export abstract class Node {
@@ -22,6 +30,14 @@ export abstract class Node {
   args: Object;
   /** When true the server will omit this node's output. Default: false */
   hide: boolean;
+  /** Number of seconds to cache an output for this node's unique inputs. Default: null */
+  cache_age?: number;
+  /** Applies if cache_age > 0. Optionally specify a subset of keys to use when computing a cache key.
+   * Default: all node arguments
+   */
+  cache_keys?: string[];
+  /** Max number of times to retry this node if it fails. Default: null means no retries */
+  max_retries?: number;
 
   /** TODO this field stores the last response, but it's just temporary until the internals are refactored */
   protected _response: SubstrateResponse | undefined;
@@ -31,6 +47,9 @@ export abstract class Node {
     this.args = args;
     this.id = opts?.id || generator(this.node);
     this.hide = opts?.hide || false;
+    this.cache_age = opts?.cache_age;
+    this.cache_keys = opts?.cache_keys;
+    this.max_retries = opts?.max_retries;
   }
 
   /**
@@ -103,6 +122,9 @@ export abstract class Node {
       node: this.node,
       args: withPlaceholders(this.args),
       _should_output_globally: !this.hide,
+      ...(this.cache_age && { _cache_age: this.cache_age }),
+      ...(this.cache_keys && { _cache_keys: this.cache_keys }),
+      ...(this.max_retries && { _max_retries: this.max_retries }),
     };
   }
 
