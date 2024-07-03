@@ -54,8 +54,6 @@ export abstract class Node {
     this.cache_age = opts?.cache_age;
     this.cache_keys = opts?.cache_keys;
     this.max_retries = opts?.max_retries;
-    this.id = opts?.id ?? generator(this.node);
-    this.hide = opts?.hide ?? false;
     this.depends = opts?.depends ?? [];
   }
 
@@ -114,7 +112,7 @@ export abstract class Node {
         return obj.toPlaceholder();
       }
 
-      if (typeof obj === "object") {
+      if (obj && typeof obj === "object") {
         return Object.keys(obj).reduce((acc: any, k: any) => {
           acc[k] = withPlaceholders(obj[k]);
           return acc;
@@ -172,7 +170,7 @@ export abstract class Node {
         return;
       }
 
-      if (typeof obj === "object") {
+      if (obj && typeof obj === "object") {
         for (let key of Object.keys(obj)) {
           collectFutures(obj[key]);
         }

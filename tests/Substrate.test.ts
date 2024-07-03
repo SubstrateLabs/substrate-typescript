@@ -154,9 +154,9 @@ describe("Substrate", () => {
 
       expect(result).toEqual({
         edges: [
-          ["a", "b"],
-          ["a", "c"],
-          ["b", "c"],
+          ["a", "b", {}],
+          ["a", "c", {}],
+          ["b", "c", {}],
         ],
         initial_args: {},
         nodes: [

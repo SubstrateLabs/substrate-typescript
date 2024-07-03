@@ -211,7 +211,7 @@ export class Substrate {
       futures: Array.from(allFutures).map((future) => future.toJSON()),
       edges: Object.keys(allEdges).flatMap((toId: string) => {
         let fromIds: string[] = Array.from(allEdges[toId] as Set<string>);
-        return fromIds.map((fromId: string) => [fromId, toId]);
+        return fromIds.map((fromId: string) => [fromId, toId, {}]);
       }),
       initial_args: {}, // @deprecated
     };
