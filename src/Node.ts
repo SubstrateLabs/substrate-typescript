@@ -1,5 +1,5 @@
 import { idGenerator } from "substrate/idGenerator";
-import { Future, FutureAnyObject, Trace } from "substrate/Future";
+import { Future, Trace } from "substrate/Future";
 import { SubstrateResponse } from "substrate/SubstrateResponse";
 import { NodeError, SubstrateError } from "substrate/Error";
 import { AnyNode } from "substrate/Nodes";
@@ -60,8 +60,8 @@ export abstract class Node {
   /**
    * Reference the future output of this node.
    */
-  get future(): any {
-    return new FutureAnyObject(new Trace([], this as Node));
+  get future(): Future<Object> {
+    return new Future<Object>(new Trace([], this as Node));
   }
 
   protected set response(res: SubstrateResponse) {

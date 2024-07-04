@@ -97,7 +97,7 @@
           "condition": {
             "type": "boolean",
             "description": "Condition.",
-            "x-loggable": true
+            "x-loggable": false
           },
           "value_if_true": {
             "description": "Result when condition is true.",
