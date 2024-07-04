@@ -94,7 +94,7 @@ describe("Future", () => {
           Trace.Operation.key("attr", "a"),
           Trace.Operation.key("item", 1),
           Trace.Operation.future("attr", "123"),
-          Trace.Operation.future("attr", "456"), // LIAM_TODO: there isn't a way to distinguish at runtime using static types
+          Trace.Operation.future("attr", "456"), // TODO(liam): there isn't a way to distinguish at runtime using static types
           // Trace.Operation.future("item", "456"),
         ],
       });

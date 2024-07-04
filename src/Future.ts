@@ -12,13 +12,7 @@ type TraceProp = string | Future<string> | number | Future<number>;
 type Concatable = string | Future<string>;
 type JQCompatible = Record<string, unknown> | any[] | string | number;
 type JQDirectiveTarget = Future<any> | JQCompatible;
-// type FutureTypeMap = {
-//   string: FutureString;
-//   object: FutureAnyObject;
-//   number: FutureNumber;
-//   boolean: FutureBoolean;
-// };
-//
+
 const parsePath = (path: string): TraceProp[] => {
   // Split the path by dots or brackets, and filter out empty strings
   const parts = path.split(/\.|\[|\]\[?/).filter(Boolean);
@@ -217,27 +211,6 @@ export class Future<T> {
   protected async _result(): Promise<T> {
     return this._directive.result();
   }
-
-  // TODO(liam): don't think we need this type mapping here
-  // static jq<T extends keyof FutureTypeMap>(
-  //   future: JQDirectiveTarget,
-  //   query: string,
-  //   futureType: keyof FutureTypeMap = "string",
-  // ): FutureTypeMap[T] {
-  //   const directive = new JQ(query, future);
-  //   switch (futureType) {
-  //     case "string":
-  //       return new FutureString(directive) as FutureTypeMap[T];
-  //     case "number":
-  //       return new FutureNumber(directive) as FutureTypeMap[T];
-  //     case "object":
-  //       return new FutureAnyObject(directive) as FutureTypeMap[T];
-  //     case "boolean":
-  //       return new FutureBoolean(directive) as FutureTypeMap[T];
-  //     default:
-  //       throw new Error(`Unknown future type: ${futureType}`);
-  //   }
-  // }
 
   toJSON() {
     return {
