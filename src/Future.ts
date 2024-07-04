@@ -247,10 +247,24 @@ export class Future<T> {
   }
 }
 
+/**
+ * `concat` combines multiple `string` or `Future<string>` items together into a new `Future<string>`.
+ *
+ * @example
+ *
+ *    let newFuture = concat("string", node.future.someString, "!")
+ */
 export const concat = (...items: (string | Future<string>)[]) => {
   return new Future<string>(new StringConcat(items));
 };
 
+/**
+ * `interpolate` creates a `Future<string>` using interpolate and supports `Future<string>` values.
+ *
+ * @example
+ *
+ *    let newFuture = interpolate`hello ${"world"}, you look ${node.future.niceString} today.`
+ */
 export const interpolate = (
   strings: TemplateStringsArray,
   ...exprs: ({ toString(): string } | Future<string>)[]
@@ -263,6 +277,14 @@ export const interpolate = (
   );
 };
 
+/**
+ * `jq` supports running [jq](https://jqlang.github.io/jq) operations on a `Future` and returns a new `Future<T>`.
+ *
+ * @example
+ *
+ *    let newFuture = jq<string>(node.future.json_object, ".country")
+ *
+ */
 export const jq = <T>(
   future: JQDirectiveTarget,
   query: string,
@@ -272,83 +294,36 @@ export const jq = <T>(
   return new Future<T>(directive);
 };
 
-// export class FutureBoolean extends Future<boolean> {}
-//
-// export class FutureString extends Future<string> {
-//   static concat(...items: (string | FutureString)[]) {
-//     return new FutureString(new StringConcat(items));
-//   }
-//
-//   static interpolate(
-//     strings: TemplateStringsArray,
-//     ...exprs: ({ toString(): string } | FutureString)[]
-//   ): FutureString {
-//     return FutureString.concat(
-//       ...strings
-//         .filter((s) => s !== "") // FIXME: Work around until SubstrateLabs/substrate#514 is live
-//         .flatMap((s: string, i: number) => {
-//           const expr = exprs[i];
-//           return expr
-//             ? [s, expr instanceof Future ? expr : expr.toString()]
-//             : [s];
-//         }),
-//     );
-//   }
-//
-//   concat(...items: (string | FutureString)[]) {
-//     return FutureString.concat(...[this, ...items]);
-//   }
-//
-//   protected override async _result(): Promise<string> {
-//     return super._result();
-//   }
-// }
-//
-// export class FutureNumber extends Future<number> {}
-//
-// export abstract class FutureArray extends Future<any[] | FutureArray> {
-//   abstract at(index: number): Future<any>;
-//
-//   protected override async _result(): Promise<any[] | FutureArray> {
-//     return super._result();
-//   }
-// }
-//
-// export abstract class FutureObject extends Future<Object> {
-//   get(path: string): Future<any> {
-//     const props = parsePath(path);
-//     return props.reduce((future, prop) => {
-//       if (future instanceof FutureAnyObject) {
-//         return typeof prop === "string"
-//           ? future.get(prop as string)
-//           : future.at(prop as number);
-//       } else {
-//         // @ts-ignore
-//         return typeof prop === "string" ? future[prop] : future.at(prop);
-//       }
-//     }, this) as Future<any>;
-//   }
-//
-//   protected override async _result(): Promise<Object> {
-//     return super._result();
-//   }
-// }
+/**
+ * `get` returns a `Future` by selecting a value by path from a `Future<Object>`.
+ *
+ * @example
+ *
+ *    let newFuture = get<string>(node.future, "choices[0].text")
+ *
+ */
+export const get = <T = unknown>(
+  future: Future<Object>,
+  path: string | Future<string>,
+) => {
+  const d =
+    typeof path === "string"
+      ? // @ts-ignore (protected _directive)
+        future._directive.next(...parsePath(path))
+      : // @ts-ignore (protected _directive)
+        future._directive.next(path);
+  return new Future<T>(d);
+};
 
-/** Represents a future of some unknown type, and so it is equipped with special accessors for getting values at arbitrary paths or indexes */
-export class FutureAny<T> extends Future<T> {
-  get<T>(path: string | Future<string>) {
-    const d =
-      typeof path === "string"
-        ? this._directive.next(...parsePath(path))
-        : this._directive.next(path);
-    return new FutureAny<T>(d);
-  }
-
-  at<T>(index: number | Future<number>) {
-    return new FutureAny<T>(this._directive.next(index));
-  }
-
-  protected override async _result(): Promise<T> {
-    return super._result();
-  }
-}
+/**
+ * `at` returns a `Future` item at some index of a `Future` containing an array.
+ *
+ * @example
+ *
+ *    let newFuture = at<string>(node.future.strings, 0);
+ *
+ */
+export const at = <T>(future: Future<T[]>, index: number | Future<number>) => {
+  // @ts-ignore (protected _directive)
+  return new Future<T>(future._directive.next(index));
+};

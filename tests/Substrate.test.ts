@@ -10,7 +10,7 @@ describe("Substrate", () => {
     test("when there are nodes and futures", () => {
       const a = new FooNode({ a: 123 }, { id: "a" });
       const b = new FooNode(
-        { b: a.future.get("x"), c: sb.concat("x", "y") },
+        { b: sb.get(a.future, "x"), c: sb.concat("x", "y") },
         { id: "b" },
       );
 
@@ -79,7 +79,7 @@ describe("Substrate", () => {
 
     test("when there are nodes and futures, but we only supply the 'final' node", () => {
       const a = new FooNode({ a: 123 });
-      const b = new FooNode({ b: a.future.get("x"), c: sb.concat("x", "y") });
+      const b = new FooNode({ b: sb.get(a.future, "x"), c: sb.concat("x", "y") });
 
       // Here we're only supplying `b` and relying on the graph-serialiation to find `a`
       const result = Substrate.serialize(b);
