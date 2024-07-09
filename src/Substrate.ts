@@ -198,10 +198,21 @@ export class Substrate {
       }
     }
 
+    const allEdges: Record<string, Set<string>> = {};
+    for (let n of allNodes) {
+      allEdges[n.id] = new Set<string>();
+      for (let d of n.depends) {
+        allEdges[n.id]!.add(d.id);
+      }
+    }
+
     return {
       nodes: Array.from(allNodes).map((node) => node.toJSON()),
       futures: Array.from(allFutures).map((future) => future.toJSON()),
-      edges: [], // @deprecated
+      edges: Object.keys(allEdges).flatMap((toId: string) => {
+        let fromIds: string[] = Array.from(allEdges[toId] as Set<string>);
+        return fromIds.map((fromId: string) => [fromId, toId, {}]);
+      }),
       initial_args: {}, // @deprecated
     };
   }
