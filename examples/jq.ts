@@ -23,7 +23,7 @@ async function main() {
   const b = new ComputeText({
     prompt: sb.concat(
       "give me the leader of the country: ",
-      sb.jq<"string">(a.future.json_object, ".country"),
+      sb.jq<string>(a.future.json_object, ".country"),
     ),
   });
 
