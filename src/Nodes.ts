@@ -1,7 +1,7 @@
 /**
  * 𐃏 Substrate
  * @generated file
- * 20240617.20240703
+ * 20240617.20240710
  */
 
 import * as OpenAPI from "substrate/OpenAPI";
@@ -10,26 +10,6 @@ import { Trace, Future } from "substrate/Future";
 
 // The following type helpers are used to "expand" Node input types to allow them to also accept
 // instances of their corresponding "Future" types.
-
-// type FutureExpandScalar<T> =
-//   T extends string ? string | FutureString :
-//   T extends number ? number | FutureNumber :
-//   T extends boolean ? boolean | FutureBoolean :
-//   T;
-//
-// type FutureExpandObject<T> =
-//   T extends object ? { [P in keyof T]: FutureExpandAny<T[P]> } | FutureObject :
-//   T;
-//
-// type FutureExpandArray<T> =
-//   T extends (infer U)[] ? FutureExpandAny<U>[] | FutureArray :
-//   FutureExpandAny<T>;
-//
-// type FutureExpandAny<T> =
-//   T extends (infer U)[][] ? FutureExpandArray<U>[][] | FutureArray[] :
-//   T extends (infer U)[] ? FutureExpandArray<U>[] | FutureArray :
-//   T extends object ? FutureExpandObject<T> :
-//   FutureExpandScalar<T>;
 
 type FutureExpandItem<T> = T extends string
   ? string | Future<string>
@@ -47,1041 +27,1104 @@ type FutureExpandArray<T> = T extends (infer U)[]
   ? FutureExpandAny<U>[] | Future<U[]>
   : FutureExpandAny<T>;
 
-type FutureExpandAny<T> = T extends (infer U)[][]
-  ? FutureExpandArray<U>[][] | Future<U[][]>
-  : T extends (infer U)[]
-    ? FutureExpandArray<U>[] | Future<U[]>
-    : T extends object
-      ? FutureExpandObject<T>
-      : FutureExpandItem<T>;
-
-export class ExperimentalInArgs extends Future<Object> {}
-export class ExperimentalOutOutput extends Future<Object> {}
+type FutureExpandAny<T> = T extends (infer U)[]
+  ? FutureExpandArray<U>[] | Future<U[]>
+  : T extends object
+    ? FutureExpandObject<T>
+    : FutureExpandItem<T>;
 
 /** Image prompts. */
+
 export class ComputeTextInImageUris extends Future<string[]> {
   /** Returns `Future<string>` at given index. */
   at(index: number) {
     return new Future<string>(this._directive.next(index));
   }
-  /** Returns the result for `ComputeTextInImageUris` once it's node has been run. */
+  /** @internal Returns the result for `ComputeTextInImageUris` once it's node has been run. */
   protected override async _result(): Promise<string[]> {
     return super._result() as Promise<string[]>;
   }
 }
-export class ComputeTextInImageUrisItem extends Future<string> {}
-export class ComputeJSONInJsonSchema extends Future<Object> {}
-export class ComputeJSONOutJsonObject extends Future<Object> {}
 
 /** Response choices. */
+
 export class MultiComputeTextOutChoices extends Future<ComputeTextOut[]> {
-  /** Returns `Future<ComputeTextOut>` at given index. */
+  /** Returns `ComputeTextOut` at given index. */
   at(index: number) {
-    return new Future<ComputeTextOut>(this._directive.next(index));
+    return new ComputeTextOut(this._directive.next(index));
   }
-  /** Returns the result for `MultiComputeTextOutChoices` once it's node has been run. */
+  /** @internal Returns the result for `MultiComputeTextOutChoices` once it's node has been run. */
   protected override async _result(): Promise<ComputeTextOut[]> {
     return super._result() as Promise<ComputeTextOut[]>;
   }
 }
 
 /** Batch input prompts. */
+
 export class BatchComputeTextInPrompts extends Future<string[]> {
   /** Returns `Future<string>` at given index. */
   at(index: number) {
     return new Future<string>(this._directive.next(index));
   }
-  /** Returns the result for `BatchComputeTextInPrompts` once it's node has been run. */
+  /** @internal Returns the result for `BatchComputeTextInPrompts` once it's node has been run. */
   protected override async _result(): Promise<string[]> {
     return super._result() as Promise<string[]>;
   }
 }
-export class BatchComputeTextInPromptsItem extends Future<string> {}
 
 /** Batch outputs. */
+
 export class BatchComputeTextOutOutputs extends Future<ComputeTextOut[]> {
-  /** Returns `Future<ComputeTextOut>` at given index. */
+  /** Returns `ComputeTextOut` at given index. */
   at(index: number) {
-    return new Future<ComputeTextOut>(this._directive.next(index));
+    return new ComputeTextOut(this._directive.next(index));
   }
-  /** Returns the result for `BatchComputeTextOutOutputs` once it's node has been run. */
+  /** @internal Returns the result for `BatchComputeTextOutOutputs` once it's node has been run. */
   protected override async _result(): Promise<ComputeTextOut[]> {
     return super._result() as Promise<ComputeTextOut[]>;
   }
 }
-export class MultiComputeJSONInJsonSchema extends Future<Object> {}
 
 /** Response choices. */
+
 export class MultiComputeJSONOutChoices extends Future<ComputeJSONOut[]> {
-  /** Returns `Future<ComputeJSONOut>` at given index. */
+  /** Returns `ComputeJSONOut` at given index. */
   at(index: number) {
-    return new Future<ComputeJSONOut>(this._directive.next(index));
+    return new ComputeJSONOut(this._directive.next(index));
   }
-  /** Returns the result for `MultiComputeJSONOutChoices` once it's node has been run. */
+  /** @internal Returns the result for `MultiComputeJSONOutChoices` once it's node has been run. */
   protected override async _result(): Promise<ComputeJSONOut[]> {
     return super._result() as Promise<ComputeJSONOut[]>;
   }
 }
 
 /** Batch input prompts. */
+
 export class BatchComputeJSONInPrompts extends Future<string[]> {
   /** Returns `Future<string>` at given index. */
   at(index: number) {
     return new Future<string>(this._directive.next(index));
   }
-  /** Returns the result for `BatchComputeJSONInPrompts` once it's node has been run. */
+  /** @internal Returns the result for `BatchComputeJSONInPrompts` once it's node has been run. */
   protected override async _result(): Promise<string[]> {
     return super._result() as Promise<string[]>;
   }
 }
-export class BatchComputeJSONInPromptsItem extends Future<string> {}
-export class BatchComputeJSONInJsonSchema extends Future<Object> {}
 
 /** Batch outputs. */
+
 export class BatchComputeJSONOutOutputs extends Future<ComputeJSONOut[]> {
-  /** Returns `Future<ComputeJSONOut>` at given index. */
+  /** Returns `ComputeJSONOut` at given index. */
   at(index: number) {
-    return new Future<ComputeJSONOut>(this._directive.next(index));
+    return new ComputeJSONOut(this._directive.next(index));
   }
-  /** Returns the result for `BatchComputeJSONOutOutputs` once it's node has been run. */
+  /** @internal Returns the result for `BatchComputeJSONOutOutputs` once it's node has been run. */
   protected override async _result(): Promise<ComputeJSONOut[]> {
     return super._result() as Promise<ComputeJSONOut[]>;
   }
 }
-export class Mistral7BInstructInJsonSchema extends Future<Object> {}
-export class Mistral7BInstructChoiceJsonObject extends Future<Object> {}
 
 /** Response choices. */
+
 export class Mistral7BInstructOutChoices extends Future<
   Mistral7BInstructChoice[]
 > {
-  /** Returns `Future<Mistral7BInstructChoice>` at given index. */
+  /** Returns `Mistral7BInstructChoice` at given index. */
   at(index: number) {
-    return new Future<Mistral7BInstructChoice>(this._directive.next(index));
+    return new Mistral7BInstructChoice(this._directive.next(index));
   }
-  /** Returns the result for `Mistral7BInstructOutChoices` once it's node has been run. */
+  /** @internal Returns the result for `Mistral7BInstructOutChoices` once it's node has been run. */
   protected override async _result(): Promise<Mistral7BInstructChoice[]> {
     return super._result() as Promise<Mistral7BInstructChoice[]>;
   }
 }
-export class Mixtral8x7BInstructInJsonSchema extends Future<Object> {}
-export class Mixtral8x7BChoiceJsonObject extends Future<Object> {}
 
 /** Response choices. */
+
 export class Mixtral8x7BInstructOutChoices extends Future<Mixtral8x7BChoice[]> {
-  /** Returns `Future<Mixtral8x7BChoice>` at given index. */
+  /** Returns `Mixtral8x7BChoice` at given index. */
   at(index: number) {
-    return new Future<Mixtral8x7BChoice>(this._directive.next(index));
+    return new Mixtral8x7BChoice(this._directive.next(index));
   }
-  /** Returns the result for `Mixtral8x7BInstructOutChoices` once it's node has been run. */
+  /** @internal Returns the result for `Mixtral8x7BInstructOutChoices` once it's node has been run. */
   protected override async _result(): Promise<Mixtral8x7BChoice[]> {
     return super._result() as Promise<Mixtral8x7BChoice[]>;
   }
 }
-export class Llama3Instruct8BInJsonSchema extends Future<Object> {}
-export class Llama3Instruct8BChoiceJsonObject extends Future<Object> {}
 
 /** Response choices. */
+
 export class Llama3Instruct8BOutChoices extends Future<
   Llama3Instruct8BChoice[]
 > {
-  /** Returns `Future<Llama3Instruct8BChoice>` at given index. */
+  /** Returns `Llama3Instruct8BChoice` at given index. */
   at(index: number) {
-    return new Future<Llama3Instruct8BChoice>(this._directive.next(index));
+    return new Llama3Instruct8BChoice(this._directive.next(index));
   }
-  /** Returns the result for `Llama3Instruct8BOutChoices` once it's node has been run. */
+  /** @internal Returns the result for `Llama3Instruct8BOutChoices` once it's node has been run. */
   protected override async _result(): Promise<Llama3Instruct8BChoice[]> {
     return super._result() as Promise<Llama3Instruct8BChoice[]>;
   }
 }
 
 /** Response choices. */
+
 export class Llama3Instruct70BOutChoices extends Future<
   Llama3Instruct70BChoice[]
 > {
-  /** Returns `Future<Llama3Instruct70BChoice>` at given index. */
+  /** Returns `Llama3Instruct70BChoice` at given index. */
   at(index: number) {
-    return new Future<Llama3Instruct70BChoice>(this._directive.next(index));
+    return new Llama3Instruct70BChoice(this._directive.next(index));
   }
-  /** Returns the result for `Llama3Instruct70BOutChoices` once it's node has been run. */
+  /** @internal Returns the result for `Llama3Instruct70BOutChoices` once it's node has been run. */
   protected override async _result(): Promise<Llama3Instruct70BChoice[]> {
     return super._result() as Promise<Llama3Instruct70BChoice[]>;
   }
 }
 
 /** Image prompts. */
+
 export class Firellava13BInImageUris extends Future<string[]> {
   /** Returns `Future<string>` at given index. */
   at(index: number) {
     return new Future<string>(this._directive.next(index));
   }
-  /** Returns the result for `Firellava13BInImageUris` once it's node has been run. */
+  /** @internal Returns the result for `Firellava13BInImageUris` once it's node has been run. */
   protected override async _result(): Promise<string[]> {
     return super._result() as Promise<string[]>;
   }
 }
-export class Firellava13BInImageUrisItem extends Future<string> {}
 
 /** Generated images. */
+
 export class MultiGenerateImageOutOutputs extends Future<GenerateImageOut[]> {
-  /** Returns `Future<GenerateImageOut>` at given index. */
+  /** Returns `GenerateImageOut` at given index. */
   at(index: number) {
-    return new Future<GenerateImageOut>(this._directive.next(index));
+    return new GenerateImageOut(this._directive.next(index));
   }
-  /** Returns the result for `MultiGenerateImageOutOutputs` once it's node has been run. */
+  /** @internal Returns the result for `MultiGenerateImageOutOutputs` once it's node has been run. */
   protected override async _result(): Promise<GenerateImageOut[]> {
     return super._result() as Promise<GenerateImageOut[]>;
   }
 }
 
 /** Seeds for deterministic generation. Default is a random seed. */
+
 export class StableDiffusionXLInSeeds extends Future<number[]> {
   /** Returns `Future<number>` at given index. */
   at(index: number) {
     return new Future<number>(this._directive.next(index));
   }
-  /** Returns the result for `StableDiffusionXLInSeeds` once it's node has been run. */
+  /** @internal Returns the result for `StableDiffusionXLInSeeds` once it's node has been run. */
   protected override async _result(): Promise<number[]> {
     return super._result() as Promise<number[]>;
   }
 }
-export class StableDiffusionXLInSeedsItem extends Future<number> {}
 
 /** Generated images. */
+
 export class StableDiffusionXLOutOutputs extends Future<
   StableDiffusionImage[]
 > {
-  /** Returns `Future<StableDiffusionImage>` at given index. */
+  /** Returns `StableDiffusionImage` at given index. */
   at(index: number) {
-    return new Future<StableDiffusionImage>(this._directive.next(index));
+    return new StableDiffusionImage(this._directive.next(index));
   }
-  /** Returns the result for `StableDiffusionXLOutOutputs` once it's node has been run. */
+  /** @internal Returns the result for `StableDiffusionXLOutOutputs` once it's node has been run. */
   protected override async _result(): Promise<StableDiffusionImage[]> {
     return super._result() as Promise<StableDiffusionImage[]>;
   }
 }
 
 /** Seeds for deterministic generation. Default is a random seed. */
+
 export class StableDiffusionXLLightningInSeeds extends Future<number[]> {
   /** Returns `Future<number>` at given index. */
   at(index: number) {
     return new Future<number>(this._directive.next(index));
   }
-  /** Returns the result for `StableDiffusionXLLightningInSeeds` once it's node has been run. */
+  /** @internal Returns the result for `StableDiffusionXLLightningInSeeds` once it's node has been run. */
   protected override async _result(): Promise<number[]> {
     return super._result() as Promise<number[]>;
   }
 }
-export class StableDiffusionXLLightningInSeedsItem extends Future<number> {}
 
 /** Generated images. */
+
 export class StableDiffusionXLLightningOutOutputs extends Future<
   StableDiffusionImage[]
 > {
-  /** Returns `Future<StableDiffusionImage>` at given index. */
+  /** Returns `StableDiffusionImage` at given index. */
   at(index: number) {
-    return new Future<StableDiffusionImage>(this._directive.next(index));
+    return new StableDiffusionImage(this._directive.next(index));
   }
-  /** Returns the result for `StableDiffusionXLLightningOutOutputs` once it's node has been run. */
+  /** @internal Returns the result for `StableDiffusionXLLightningOutOutputs` once it's node has been run. */
   protected override async _result(): Promise<StableDiffusionImage[]> {
     return super._result() as Promise<StableDiffusionImage[]>;
   }
 }
 
 /** Random noise seeds. Default is random seeds for each generation. */
+
 export class StableDiffusionXLIPAdapterInSeeds extends Future<number[]> {
   /** Returns `Future<number>` at given index. */
   at(index: number) {
     return new Future<number>(this._directive.next(index));
   }
-  /** Returns the result for `StableDiffusionXLIPAdapterInSeeds` once it's node has been run. */
+  /** @internal Returns the result for `StableDiffusionXLIPAdapterInSeeds` once it's node has been run. */
   protected override async _result(): Promise<number[]> {
     return super._result() as Promise<number[]>;
   }
 }
-export class StableDiffusionXLIPAdapterInSeedsItem extends Future<number> {}
 
 /** Generated images. */
+
 export class StableDiffusionXLIPAdapterOutOutputs extends Future<
   StableDiffusionImage[]
 > {
-  /** Returns `Future<StableDiffusionImage>` at given index. */
+  /** Returns `StableDiffusionImage` at given index. */
   at(index: number) {
-    return new Future<StableDiffusionImage>(this._directive.next(index));
+    return new StableDiffusionImage(this._directive.next(index));
   }
-  /** Returns the result for `StableDiffusionXLIPAdapterOutOutputs` once it's node has been run. */
+  /** @internal Returns the result for `StableDiffusionXLIPAdapterOutOutputs` once it's node has been run. */
   protected override async _result(): Promise<StableDiffusionImage[]> {
     return super._result() as Promise<StableDiffusionImage[]>;
   }
 }
 
 /** Random noise seeds. Default is random seeds for each generation. */
+
 export class StableDiffusionXLControlNetInSeeds extends Future<number[]> {
   /** Returns `Future<number>` at given index. */
   at(index: number) {
     return new Future<number>(this._directive.next(index));
   }
-  /** Returns the result for `StableDiffusionXLControlNetInSeeds` once it's node has been run. */
+  /** @internal Returns the result for `StableDiffusionXLControlNetInSeeds` once it's node has been run. */
   protected override async _result(): Promise<number[]> {
     return super._result() as Promise<number[]>;
   }
 }
-export class StableDiffusionXLControlNetInSeedsItem extends Future<number> {}
 
 /** Generated images. */
+
 export class StableDiffusionXLControlNetOutOutputs extends Future<
   StableDiffusionImage[]
 > {
-  /** Returns `Future<StableDiffusionImage>` at given index. */
+  /** Returns `StableDiffusionImage` at given index. */
   at(index: number) {
-    return new Future<StableDiffusionImage>(this._directive.next(index));
+    return new StableDiffusionImage(this._directive.next(index));
   }
-  /** Returns the result for `StableDiffusionXLControlNetOutOutputs` once it's node has been run. */
+  /** @internal Returns the result for `StableDiffusionXLControlNetOutOutputs` once it's node has been run. */
   protected override async _result(): Promise<StableDiffusionImage[]> {
     return super._result() as Promise<StableDiffusionImage[]>;
   }
 }
 
 /** Generated images. */
+
 export class MultiInpaintImageOutOutputs extends Future<InpaintImageOut[]> {
-  /** Returns `Future<InpaintImageOut>` at given index. */
+  /** Returns `InpaintImageOut` at given index. */
   at(index: number) {
-    return new Future<InpaintImageOut>(this._directive.next(index));
+    return new InpaintImageOut(this._directive.next(index));
   }
-  /** Returns the result for `MultiInpaintImageOutOutputs` once it's node has been run. */
+  /** @internal Returns the result for `MultiInpaintImageOutOutputs` once it's node has been run. */
   protected override async _result(): Promise<InpaintImageOut[]> {
     return super._result() as Promise<InpaintImageOut[]>;
   }
 }
 
 /** Random noise seeds. Default is random seeds for each generation. */
+
 export class StableDiffusionXLInpaintInSeeds extends Future<number[]> {
   /** Returns `Future<number>` at given index. */
   at(index: number) {
     return new Future<number>(this._directive.next(index));
   }
-  /** Returns the result for `StableDiffusionXLInpaintInSeeds` once it's node has been run. */
+  /** @internal Returns the result for `StableDiffusionXLInpaintInSeeds` once it's node has been run. */
   protected override async _result(): Promise<number[]> {
     return super._result() as Promise<number[]>;
   }
 }
-export class StableDiffusionXLInpaintInSeedsItem extends Future<number> {}
 
 /** Generated images. */
+
 export class StableDiffusionXLInpaintOutOutputs extends Future<
   StableDiffusionImage[]
 > {
-  /** Returns `Future<StableDiffusionImage>` at given index. */
+  /** Returns `StableDiffusionImage` at given index. */
   at(index: number) {
-    return new Future<StableDiffusionImage>(this._directive.next(index));
+    return new StableDiffusionImage(this._directive.next(index));
   }
-  /** Returns the result for `StableDiffusionXLInpaintOutOutputs` once it's node has been run. */
+  /** @internal Returns the result for `StableDiffusionXLInpaintOutOutputs` once it's node has been run. */
   protected override async _result(): Promise<StableDiffusionImage[]> {
     return super._result() as Promise<StableDiffusionImage[]>;
   }
 }
 
 /** Point prompts, to detect a segment under the point. One of `point_prompts` or `box_prompts` must be set. */
+
 export class SegmentAnythingInPointPrompts extends Future<Point[]> {
-  /** Returns `Future<Point>` at given index. */
+  /** Returns `Point` at given index. */
   at(index: number) {
-    return new Future<Point>(this._directive.next(index));
+    return new Point(this._directive.next(index));
   }
-  /** Returns the result for `SegmentAnythingInPointPrompts` once it's node has been run. */
+  /** @internal Returns the result for `SegmentAnythingInPointPrompts` once it's node has been run. */
   protected override async _result(): Promise<Point[]> {
     return super._result() as Promise<Point[]>;
   }
 }
 
 /** Box prompts, to detect a segment within the bounding box. One of `point_prompts` or `box_prompts` must be set. */
+
 export class SegmentAnythingInBoxPrompts extends Future<BoundingBox[]> {
-  /** Returns `Future<BoundingBox>` at given index. */
+  /** Returns `BoundingBox` at given index. */
   at(index: number) {
-    return new Future<BoundingBox>(this._directive.next(index));
+    return new BoundingBox(this._directive.next(index));
   }
-  /** Returns the result for `SegmentAnythingInBoxPrompts` once it's node has been run. */
+  /** @internal Returns the result for `SegmentAnythingInBoxPrompts` once it's node has been run. */
   protected override async _result(): Promise<BoundingBox[]> {
     return super._result() as Promise<BoundingBox[]>;
   }
 }
 
 /** Aligned words, if `align` is enabled. */
+
 export class TranscribedSegmentWords extends Future<TranscribedWord[]> {
-  /** Returns `Future<TranscribedWord>` at given index. */
+  /** Returns `TranscribedWord` at given index. */
   at(index: number) {
-    return new Future<TranscribedWord>(this._directive.next(index));
+    return new TranscribedWord(this._directive.next(index));
   }
-  /** Returns the result for `TranscribedSegmentWords` once it's node has been run. */
+  /** @internal Returns the result for `TranscribedSegmentWords` once it's node has been run. */
   protected override async _result(): Promise<TranscribedWord[]> {
     return super._result() as Promise<TranscribedWord[]>;
   }
 }
 
 /** Transcribed segments, if `segment` is enabled. */
+
 export class TranscribeSpeechOutSegments extends Future<TranscribedSegment[]> {
-  /** Returns `Future<TranscribedSegment>` at given index. */
+  /** Returns `TranscribedSegment` at given index. */
   at(index: number) {
-    return new Future<TranscribedSegment>(this._directive.next(index));
+    return new TranscribedSegment(this._directive.next(index));
   }
-  /** Returns the result for `TranscribeSpeechOutSegments` once it's node has been run. */
+  /** @internal Returns the result for `TranscribeSpeechOutSegments` once it's node has been run. */
   protected override async _result(): Promise<TranscribedSegment[]> {
     return super._result() as Promise<TranscribedSegment[]>;
   }
 }
 
 /** Chapter markers, if `suggest_chapters` is enabled. */
+
 export class TranscribeSpeechOutChapters extends Future<ChapterMarker[]> {
-  /** Returns `Future<ChapterMarker>` at given index. */
+  /** Returns `ChapterMarker` at given index. */
   at(index: number) {
-    return new Future<ChapterMarker>(this._directive.next(index));
+    return new ChapterMarker(this._directive.next(index));
   }
-  /** Returns the result for `TranscribeSpeechOutChapters` once it's node has been run. */
+  /** @internal Returns the result for `TranscribeSpeechOutChapters` once it's node has been run. */
   protected override async _result(): Promise<ChapterMarker[]> {
     return super._result() as Promise<ChapterMarker[]>;
   }
 }
 
 /** Embedding vector. */
+
 export class EmbeddingVector extends Future<number[]> {
   /** Returns `Future<number>` at given index. */
   at(index: number) {
     return new Future<number>(this._directive.next(index));
   }
-  /** Returns the result for `EmbeddingVector` once it's node has been run. */
+  /** @internal Returns the result for `EmbeddingVector` once it's node has been run. */
   protected override async _result(): Promise<number[]> {
     return super._result() as Promise<number[]>;
   }
 }
-export class EmbeddingVectorItem extends Future<number> {}
-export class EmbeddingMetadata extends Future<Object> {}
-export class EmbedTextInMetadata extends Future<Object> {}
 
 /** Choose keys from `metadata` to embed with text. */
+
 export class EmbedTextInEmbeddedMetadataKeys extends Future<string[]> {
   /** Returns `Future<string>` at given index. */
   at(index: number) {
     return new Future<string>(this._directive.next(index));
   }
-  /** Returns the result for `EmbedTextInEmbeddedMetadataKeys` once it's node has been run. */
+  /** @internal Returns the result for `EmbedTextInEmbeddedMetadataKeys` once it's node has been run. */
   protected override async _result(): Promise<string[]> {
     return super._result() as Promise<string[]>;
   }
 }
-export class EmbedTextInEmbeddedMetadataKeysItem extends Future<string> {}
-export class EmbedTextItemMetadata extends Future<Object> {}
 
 /** Items to embed. */
+
 export class MultiEmbedTextInItems extends Future<EmbedTextItem[]> {
-  /** Returns `Future<EmbedTextItem>` at given index. */
+  /** Returns `EmbedTextItem` at given index. */
   at(index: number) {
-    return new Future<EmbedTextItem>(this._directive.next(index));
+    return new EmbedTextItem(this._directive.next(index));
   }
-  /** Returns the result for `MultiEmbedTextInItems` once it's node has been run. */
+  /** @internal Returns the result for `MultiEmbedTextInItems` once it's node has been run. */
   protected override async _result(): Promise<EmbedTextItem[]> {
     return super._result() as Promise<EmbedTextItem[]>;
   }
 }
 
 /** Choose keys from `metadata` to embed with text. */
+
 export class MultiEmbedTextInEmbeddedMetadataKeys extends Future<string[]> {
   /** Returns `Future<string>` at given index. */
   at(index: number) {
     return new Future<string>(this._directive.next(index));
   }
-  /** Returns the result for `MultiEmbedTextInEmbeddedMetadataKeys` once it's node has been run. */
+  /** @internal Returns the result for `MultiEmbedTextInEmbeddedMetadataKeys` once it's node has been run. */
   protected override async _result(): Promise<string[]> {
     return super._result() as Promise<string[]>;
   }
 }
-export class MultiEmbedTextInEmbeddedMetadataKeysItem extends Future<string> {}
 
 /** Generated embeddings. */
+
 export class MultiEmbedTextOutEmbeddings extends Future<Embedding[]> {
-  /** Returns `Future<Embedding>` at given index. */
+  /** Returns `Embedding` at given index. */
   at(index: number) {
-    return new Future<Embedding>(this._directive.next(index));
+    return new Embedding(this._directive.next(index));
   }
-  /** Returns the result for `MultiEmbedTextOutEmbeddings` once it's node has been run. */
+  /** @internal Returns the result for `MultiEmbedTextOutEmbeddings` once it's node has been run. */
   protected override async _result(): Promise<Embedding[]> {
     return super._result() as Promise<Embedding[]>;
   }
 }
 
 /** Items to embed. */
+
 export class JinaV2InItems extends Future<EmbedTextItem[]> {
-  /** Returns `Future<EmbedTextItem>` at given index. */
+  /** Returns `EmbedTextItem` at given index. */
   at(index: number) {
-    return new Future<EmbedTextItem>(this._directive.next(index));
+    return new EmbedTextItem(this._directive.next(index));
   }
-  /** Returns the result for `JinaV2InItems` once it's node has been run. */
+  /** @internal Returns the result for `JinaV2InItems` once it's node has been run. */
   protected override async _result(): Promise<EmbedTextItem[]> {
     return super._result() as Promise<EmbedTextItem[]>;
   }
 }
 
 /** Choose keys from `metadata` to embed with text. */
+
 export class JinaV2InEmbeddedMetadataKeys extends Future<string[]> {
   /** Returns `Future<string>` at given index. */
   at(index: number) {
     return new Future<string>(this._directive.next(index));
   }
-  /** Returns the result for `JinaV2InEmbeddedMetadataKeys` once it's node has been run. */
+  /** @internal Returns the result for `JinaV2InEmbeddedMetadataKeys` once it's node has been run. */
   protected override async _result(): Promise<string[]> {
     return super._result() as Promise<string[]>;
   }
 }
-export class JinaV2InEmbeddedMetadataKeysItem extends Future<string> {}
 
 /** Generated embeddings. */
+
 export class JinaV2OutEmbeddings extends Future<Embedding[]> {
-  /** Returns `Future<Embedding>` at given index. */
+  /** Returns `Embedding` at given index. */
   at(index: number) {
-    return new Future<Embedding>(this._directive.next(index));
+    return new Embedding(this._directive.next(index));
   }
-  /** Returns the result for `JinaV2OutEmbeddings` once it's node has been run. */
+  /** @internal Returns the result for `JinaV2OutEmbeddings` once it's node has been run. */
   protected override async _result(): Promise<Embedding[]> {
     return super._result() as Promise<Embedding[]>;
   }
 }
-export class EmbedTextOrImageItemMetadata extends Future<Object> {}
 
 /** Items to embed. */
+
 export class MultiEmbedImageInItems extends Future<EmbedImageItem[]> {
-  /** Returns `Future<EmbedImageItem>` at given index. */
+  /** Returns `EmbedImageItem` at given index. */
   at(index: number) {
-    return new Future<EmbedImageItem>(this._directive.next(index));
+    return new EmbedImageItem(this._directive.next(index));
   }
-  /** Returns the result for `MultiEmbedImageInItems` once it's node has been run. */
+  /** @internal Returns the result for `MultiEmbedImageInItems` once it's node has been run. */
   protected override async _result(): Promise<EmbedImageItem[]> {
     return super._result() as Promise<EmbedImageItem[]>;
   }
 }
 
 /** Generated embeddings. */
+
 export class MultiEmbedImageOutEmbeddings extends Future<Embedding[]> {
-  /** Returns `Future<Embedding>` at given index. */
+  /** Returns `Embedding` at given index. */
   at(index: number) {
-    return new Future<Embedding>(this._directive.next(index));
+    return new Embedding(this._directive.next(index));
   }
-  /** Returns the result for `MultiEmbedImageOutEmbeddings` once it's node has been run. */
+  /** @internal Returns the result for `MultiEmbedImageOutEmbeddings` once it's node has been run. */
   protected override async _result(): Promise<Embedding[]> {
     return super._result() as Promise<Embedding[]>;
   }
 }
 
 /** Items to embed. */
+
 export class CLIPInItems extends Future<EmbedTextOrImageItem[]> {
-  /** Returns `Future<EmbedTextOrImageItem>` at given index. */
+  /** Returns `EmbedTextOrImageItem` at given index. */
   at(index: number) {
-    return new Future<EmbedTextOrImageItem>(this._directive.next(index));
+    return new EmbedTextOrImageItem(this._directive.next(index));
   }
-  /** Returns the result for `CLIPInItems` once it's node has been run. */
+  /** @internal Returns the result for `CLIPInItems` once it's node has been run. */
   protected override async _result(): Promise<EmbedTextOrImageItem[]> {
     return super._result() as Promise<EmbedTextOrImageItem[]>;
   }
 }
 
 /** Choose keys from `metadata` to embed with text. Only applies to text items. */
+
 export class CLIPInEmbeddedMetadataKeys extends Future<string[]> {
   /** Returns `Future<string>` at given index. */
   at(index: number) {
     return new Future<string>(this._directive.next(index));
   }
-  /** Returns the result for `CLIPInEmbeddedMetadataKeys` once it's node has been run. */
+  /** @internal Returns the result for `CLIPInEmbeddedMetadataKeys` once it's node has been run. */
   protected override async _result(): Promise<string[]> {
     return super._result() as Promise<string[]>;
   }
 }
-export class CLIPInEmbeddedMetadataKeysItem extends Future<string> {}
 
 /** Generated embeddings. */
+
 export class CLIPOutEmbeddings extends Future<Embedding[]> {
-  /** Returns `Future<Embedding>` at given index. */
+  /** Returns `Embedding` at given index. */
   at(index: number) {
-    return new Future<Embedding>(this._directive.next(index));
+    return new Embedding(this._directive.next(index));
   }
-  /** Returns the result for `CLIPOutEmbeddings` once it's node has been run. */
+  /** @internal Returns the result for `CLIPOutEmbeddings` once it's node has been run. */
   protected override async _result(): Promise<Embedding[]> {
     return super._result() as Promise<Embedding[]>;
   }
 }
 
 /** List of vector stores. */
+
 export class ListVectorStoresOutItems extends Future<
   FindOrCreateVectorStoreOut[]
 > {
-  /** Returns `Future<FindOrCreateVectorStoreOut>` at given index. */
+  /** Returns `FindOrCreateVectorStoreOut` at given index. */
   at(index: number) {
-    return new Future<FindOrCreateVectorStoreOut>(this._directive.next(index));
+    return new FindOrCreateVectorStoreOut(this._directive.next(index));
   }
-  /** Returns the result for `ListVectorStoresOutItems` once it's node has been run. */
+  /** @internal Returns the result for `ListVectorStoresOutItems` once it's node has been run. */
   protected override async _result(): Promise<FindOrCreateVectorStoreOut[]> {
     return super._result() as Promise<FindOrCreateVectorStoreOut[]>;
   }
 }
 
 /** Embedding vector. */
+
 export class VectorVector extends Future<number[]> {
   /** Returns `Future<number>` at given index. */
   at(index: number) {
     return new Future<number>(this._directive.next(index));
   }
-  /** Returns the result for `VectorVector` once it's node has been run. */
+  /** @internal Returns the result for `VectorVector` once it's node has been run. */
   protected override async _result(): Promise<number[]> {
     return super._result() as Promise<number[]>;
   }
 }
-export class VectorVectorItem extends Future<number> {}
-export class VectorMetadata extends Future<Object> {}
 
 /** Document IDs to retrieve. */
+
 export class FetchVectorsInIds extends Future<string[]> {
   /** Returns `Future<string>` at given index. */
   at(index: number) {
     return new Future<string>(this._directive.next(index));
   }
-  /** Returns the result for `FetchVectorsInIds` once it's node has been run. */
+  /** @internal Returns the result for `FetchVectorsInIds` once it's node has been run. */
   protected override async _result(): Promise<string[]> {
     return super._result() as Promise<string[]>;
   }
 }
-export class FetchVectorsInIdsItem extends Future<string> {}
 
 /** Retrieved vectors. */
+
 export class FetchVectorsOutVectors extends Future<Vector[]> {
-  /** Returns `Future<Vector>` at given index. */
+  /** Returns `Vector` at given index. */
   at(index: number) {
-    return new Future<Vector>(this._directive.next(index));
+    return new Vector(this._directive.next(index));
   }
-  /** Returns the result for `FetchVectorsOutVectors` once it's node has been run. */
+  /** @internal Returns the result for `FetchVectorsOutVectors` once it's node has been run. */
   protected override async _result(): Promise<Vector[]> {
     return super._result() as Promise<Vector[]>;
   }
 }
 
 /** Embedding vector. */
+
 export class UpdateVectorParamsVector extends Future<number[]> {
   /** Returns `Future<number>` at given index. */
   at(index: number) {
     return new Future<number>(this._directive.next(index));
   }
-  /** Returns the result for `UpdateVectorParamsVector` once it's node has been run. */
+  /** @internal Returns the result for `UpdateVectorParamsVector` once it's node has been run. */
   protected override async _result(): Promise<number[]> {
     return super._result() as Promise<number[]>;
   }
 }
-export class UpdateVectorParamsVectorItem extends Future<number> {}
-export class UpdateVectorParamsMetadata extends Future<Object> {}
 
 /** Vectors to upsert. */
+
 export class UpdateVectorsInVectors extends Future<UpdateVectorParams[]> {
-  /** Returns `Future<UpdateVectorParams>` at given index. */
+  /** Returns `UpdateVectorParams` at given index. */
   at(index: number) {
-    return new Future<UpdateVectorParams>(this._directive.next(index));
+    return new UpdateVectorParams(this._directive.next(index));
   }
-  /** Returns the result for `UpdateVectorsInVectors` once it's node has been run. */
+  /** @internal Returns the result for `UpdateVectorsInVectors` once it's node has been run. */
   protected override async _result(): Promise<UpdateVectorParams[]> {
     return super._result() as Promise<UpdateVectorParams[]>;
   }
 }
 
 /** Document IDs to delete. */
+
 export class DeleteVectorsInIds extends Future<string[]> {
   /** Returns `Future<string>` at given index. */
   at(index: number) {
     return new Future<string>(this._directive.next(index));
   }
-  /** Returns the result for `DeleteVectorsInIds` once it's node has been run. */
+  /** @internal Returns the result for `DeleteVectorsInIds` once it's node has been run. */
   protected override async _result(): Promise<string[]> {
     return super._result() as Promise<string[]>;
   }
 }
-export class DeleteVectorsInIdsItem extends Future<string> {}
 
 /** Texts to embed and use for the query. */
+
 export class QueryVectorStoreInQueryStrings extends Future<string[]> {
   /** Returns `Future<string>` at given index. */
   at(index: number) {
     return new Future<string>(this._directive.next(index));
   }
-  /** Returns the result for `QueryVectorStoreInQueryStrings` once it's node has been run. */
+  /** @internal Returns the result for `QueryVectorStoreInQueryStrings` once it's node has been run. */
   protected override async _result(): Promise<string[]> {
     return super._result() as Promise<string[]>;
   }
 }
-export class QueryVectorStoreInQueryStringsItem extends Future<string> {}
 
 /** Image URIs to embed and use for the query. */
+
 export class QueryVectorStoreInQueryImageUris extends Future<string[]> {
   /** Returns `Future<string>` at given index. */
   at(index: number) {
     return new Future<string>(this._directive.next(index));
   }
-  /** Returns the result for `QueryVectorStoreInQueryImageUris` once it's node has been run. */
+  /** @internal Returns the result for `QueryVectorStoreInQueryImageUris` once it's node has been run. */
   protected override async _result(): Promise<string[]> {
     return super._result() as Promise<string[]>;
   }
 }
-export class QueryVectorStoreInQueryImageUrisItem extends Future<string> {}
 
 /** Vectors to use for the query. */
+// this is an n-dimensional array and for now we're generating another array type with "Item" appended
+
 export class QueryVectorStoreInQueryVectors extends Future<QueryVectorStoreInQueryVectorsItem> {
-  /** Returns `Future<QueryVectorStoreInQueryVectorsItem>` at given index. */
+  /** Returns `QueryVectorStoreInQueryVectorsItem` at given index. */
   at(index: number) {
-    return new Future<QueryVectorStoreInQueryVectorsItem>(
-      this._directive.next(index),
-    );
+    return new QueryVectorStoreInQueryVectorsItem(this._directive.next(index));
   }
-  /** Returns the result for `QueryVectorStoreInQueryVectors` once it's node has been run. */
+  /** @internal Returns the result for `QueryVectorStoreInQueryVectors` once it's node has been run. */
   protected override async _result(): Promise<QueryVectorStoreInQueryVectorsItem> {
     return super._result() as Promise<QueryVectorStoreInQueryVectorsItem>;
   }
 }
 
 /** QueryVectorStoreInQueryVectorsItem */
+
 export class QueryVectorStoreInQueryVectorsItem extends Future<number[]> {
   /** Returns `Future<number>` at given index. */
   at(index: number) {
     return new Future<number>(this._directive.next(index));
   }
-  /** Returns the result for `QueryVectorStoreInQueryVectorsItem` once it's node has been run. */
+  /** @internal Returns the result for `QueryVectorStoreInQueryVectorsItem` once it's node has been run. */
   protected override async _result(): Promise<number[]> {
     return super._result() as Promise<number[]>;
   }
 }
 
 /** Document IDs to use for the query. */
+
 export class QueryVectorStoreInQueryIds extends Future<string[]> {
   /** Returns `Future<string>` at given index. */
   at(index: number) {
     return new Future<string>(this._directive.next(index));
   }
-  /** Returns the result for `QueryVectorStoreInQueryIds` once it's node has been run. */
+  /** @internal Returns the result for `QueryVectorStoreInQueryIds` once it's node has been run. */
   protected override async _result(): Promise<string[]> {
     return super._result() as Promise<string[]>;
   }
 }
-export class QueryVectorStoreInQueryIdsItem extends Future<string> {}
-export class QueryVectorStoreInFilters extends Future<Object> {}
 
 /** Embedding vector. */
+
 export class VectorStoreQueryResultVector extends Future<number[]> {
   /** Returns `Future<number>` at given index. */
   at(index: number) {
     return new Future<number>(this._directive.next(index));
   }
-  /** Returns the result for `VectorStoreQueryResultVector` once it's node has been run. */
+  /** @internal Returns the result for `VectorStoreQueryResultVector` once it's node has been run. */
   protected override async _result(): Promise<number[]> {
     return super._result() as Promise<number[]>;
   }
 }
-export class VectorStoreQueryResultVectorItem extends Future<number> {}
-export class VectorStoreQueryResultMetadata extends Future<Object> {}
 
 /** Query results. */
+// this is an n-dimensional array and for now we're generating another array type with "Item" appended
+
 export class QueryVectorStoreOutResults extends Future<QueryVectorStoreOutResultsItem> {
-  /** Returns `Future<QueryVectorStoreOutResultsItem>` at given index. */
+  /** Returns `QueryVectorStoreOutResultsItem` at given index. */
   at(index: number) {
-    return new Future<QueryVectorStoreOutResultsItem>(
-      this._directive.next(index),
-    );
+    return new QueryVectorStoreOutResultsItem(this._directive.next(index));
   }
-  /** Returns the result for `QueryVectorStoreOutResults` once it's node has been run. */
+  /** @internal Returns the result for `QueryVectorStoreOutResults` once it's node has been run. */
   protected override async _result(): Promise<QueryVectorStoreOutResultsItem> {
     return super._result() as Promise<QueryVectorStoreOutResultsItem>;
   }
 }
 
 /** QueryVectorStoreOutResultsItem */
+
 export class QueryVectorStoreOutResultsItem extends Future<
   VectorStoreQueryResult[]
 > {
-  /** Returns `Future<VectorStoreQueryResult>` at given index. */
+  /** Returns `VectorStoreQueryResult` at given index. */
   at(index: number) {
-    return new Future<VectorStoreQueryResult>(this._directive.next(index));
+    return new VectorStoreQueryResult(this._directive.next(index));
   }
-  /** Returns the result for `QueryVectorStoreOutResultsItem` once it's node has been run. */
+  /** @internal Returns the result for `QueryVectorStoreOutResultsItem` once it's node has been run. */
   protected override async _result(): Promise<VectorStoreQueryResult[]> {
     return super._result() as Promise<VectorStoreQueryResult[]>;
   }
 }
+
 /** ErrorOut */
 export class ErrorOut extends Future<Object> {
   /** The type of error returned. */
   get type() {
     return new Future<string>(this._directive.next("type"));
   }
+
   /** A message providing more details about the error. */
   get message() {
     return new Future<string>(this._directive.next("message"));
   }
-  /** returns the result for `ErrorOut` once it's node has been run. */
+
+  /** @internal returns the result for `ErrorOut` once it's node has been run. */
   protected override async _result(): Promise<ErrorOut> {
     return super._result() as Promise<ErrorOut>;
   }
 }
+
 /** ExperimentalOut */
 export class ExperimentalOut extends Future<Object> {
   /** Response. */
   get output() {
     return new Future<Object>(this._directive.next("output"));
   }
-  /** returns the result for `ExperimentalOut` once it's node has been run. */
+
+  /** @internal returns the result for `ExperimentalOut` once it's node has been run. */
   protected override async _result(): Promise<ExperimentalOut> {
     return super._result() as Promise<ExperimentalOut>;
   }
 }
+
 /** BoxOut */
 export class BoxOut extends Future<Object> {
   /** The evaluated result. */
   get value() {
-    return new Future<any>(this._directive.next("value"));
+    return new Future<Object>(this._directive.next("value"));
   }
-  /** returns the result for `BoxOut` once it's node has been run. */
+
+  /** @internal returns the result for `BoxOut` once it's node has been run. */
   protected override async _result(): Promise<BoxOut> {
     return super._result() as Promise<BoxOut>;
   }
 }
+
 /** IfOut */
 export class IfOut extends Future<Object> {
   /** Result. Null if `value_if_false` is not provided and `condition` is false. */
   get result() {
-    return new Future<any>(this._directive.next("result"));
+    return new Future<Object>(this._directive.next("result"));
   }
-  /** returns the result for `IfOut` once it's node has been run. */
+
+  /** @internal returns the result for `IfOut` once it's node has been run. */
   protected override async _result(): Promise<IfOut> {
     return super._result() as Promise<IfOut>;
   }
 }
+
 /** ComputeTextOut */
 export class ComputeTextOut extends Future<Object> {
   /** Text response. */
   get text() {
     return new Future<string>(this._directive.next("text"));
   }
-  /** returns the result for `ComputeTextOut` once it's node has been run. */
+
+  /** @internal returns the result for `ComputeTextOut` once it's node has been run. */
   protected override async _result(): Promise<ComputeTextOut> {
     return super._result() as Promise<ComputeTextOut>;
   }
 }
+
 /** ComputeJSONOut */
 export class ComputeJSONOut extends Future<Object> {
   /** JSON response. */
   get json_object() {
     return new Future<Object>(this._directive.next("json_object"));
   }
+
   /** If the model output could not be parsed to JSON, this is the raw text output. */
   get text() {
     return new Future<string>(this._directive.next("text"));
   }
-  /** returns the result for `ComputeJSONOut` once it's node has been run. */
+
+  /** @internal returns the result for `ComputeJSONOut` once it's node has been run. */
   protected override async _result(): Promise<ComputeJSONOut> {
     return super._result() as Promise<ComputeJSONOut>;
   }
 }
+
 /** MultiComputeTextOut */
 export class MultiComputeTextOut extends Future<Object> {
   /** Response choices. */
   get choices() {
     return new MultiComputeTextOutChoices(this._directive.next("choices"));
   }
-  /** returns the result for `MultiComputeTextOut` once it's node has been run. */
+
+  /** @internal returns the result for `MultiComputeTextOut` once it's node has been run. */
   protected override async _result(): Promise<MultiComputeTextOut> {
     return super._result() as Promise<MultiComputeTextOut>;
   }
 }
+
 /** BatchComputeTextOut */
 export class BatchComputeTextOut extends Future<Object> {
   /** Batch outputs. */
   get outputs() {
     return new BatchComputeTextOutOutputs(this._directive.next("outputs"));
   }
-  /** returns the result for `BatchComputeTextOut` once it's node has been run. */
+
+  /** @internal returns the result for `BatchComputeTextOut` once it's node has been run. */
   protected override async _result(): Promise<BatchComputeTextOut> {
     return super._result() as Promise<BatchComputeTextOut>;
   }
 }
+
 /** MultiComputeJSONOut */
 export class MultiComputeJSONOut extends Future<Object> {
   /** Response choices. */
   get choices() {
     return new MultiComputeJSONOutChoices(this._directive.next("choices"));
   }
-  /** returns the result for `MultiComputeJSONOut` once it's node has been run. */
+
+  /** @internal returns the result for `MultiComputeJSONOut` once it's node has been run. */
   protected override async _result(): Promise<MultiComputeJSONOut> {
     return super._result() as Promise<MultiComputeJSONOut>;
   }
 }
+
 /** BatchComputeJSONOut */
 export class BatchComputeJSONOut extends Future<Object> {
   /** Batch outputs. */
   get outputs() {
     return new BatchComputeJSONOutOutputs(this._directive.next("outputs"));
   }
-  /** returns the result for `BatchComputeJSONOut` once it's node has been run. */
+
+  /** @internal returns the result for `BatchComputeJSONOut` once it's node has been run. */
   protected override async _result(): Promise<BatchComputeJSONOut> {
     return super._result() as Promise<BatchComputeJSONOut>;
   }
 }
+
 /** Mistral7BInstructChoice */
 export class Mistral7BInstructChoice extends Future<Object> {
   /** Text response, if `json_schema` was not provided. */
   get text() {
     return new Future<string>(this._directive.next("text"));
   }
+
   /** JSON response, if `json_schema` was provided. */
   get json_object() {
     return new Future<Object>(this._directive.next("json_object"));
   }
-  /** returns the result for `Mistral7BInstructChoice` once it's node has been run. */
+
+  /** @internal returns the result for `Mistral7BInstructChoice` once it's node has been run. */
   protected override async _result(): Promise<Mistral7BInstructChoice> {
     return super._result() as Promise<Mistral7BInstructChoice>;
   }
 }
+
 /** Mistral7BInstructOut */
 export class Mistral7BInstructOut extends Future<Object> {
   /** Response choices. */
   get choices() {
     return new Mistral7BInstructOutChoices(this._directive.next("choices"));
   }
-  /** returns the result for `Mistral7BInstructOut` once it's node has been run. */
+
+  /** @internal returns the result for `Mistral7BInstructOut` once it's node has been run. */
   protected override async _result(): Promise<Mistral7BInstructOut> {
     return super._result() as Promise<Mistral7BInstructOut>;
   }
 }
+
 /** Mixtral8x7BChoice */
 export class Mixtral8x7BChoice extends Future<Object> {
   /** Text response, if `json_schema` was not provided. */
   get text() {
     return new Future<string>(this._directive.next("text"));
   }
+
   /** JSON response, if `json_schema` was provided. */
   get json_object() {
     return new Future<Object>(this._directive.next("json_object"));
   }
-  /** returns the result for `Mixtral8x7BChoice` once it's node has been run. */
+
+  /** @internal returns the result for `Mixtral8x7BChoice` once it's node has been run. */
   protected override async _result(): Promise<Mixtral8x7BChoice> {
     return super._result() as Promise<Mixtral8x7BChoice>;
   }
 }
+
 /** Mixtral8x7BInstructOut */
 export class Mixtral8x7BInstructOut extends Future<Object> {
   /** Response choices. */
   get choices() {
     return new Mixtral8x7BInstructOutChoices(this._directive.next("choices"));
   }
-  /** returns the result for `Mixtral8x7BInstructOut` once it's node has been run. */
+
+  /** @internal returns the result for `Mixtral8x7BInstructOut` once it's node has been run. */
   protected override async _result(): Promise<Mixtral8x7BInstructOut> {
     return super._result() as Promise<Mixtral8x7BInstructOut>;
   }
 }
+
 /** Llama3Instruct8BChoice */
 export class Llama3Instruct8BChoice extends Future<Object> {
   /** Text response. */
   get text() {
     return new Future<string>(this._directive.next("text"));
   }
+
   /** JSON response, if `json_schema` was provided. */
   get json_object() {
     return new Future<Object>(this._directive.next("json_object"));
   }
-  /** returns the result for `Llama3Instruct8BChoice` once it's node has been run. */
+
+  /** @internal returns the result for `Llama3Instruct8BChoice` once it's node has been run. */
   protected override async _result(): Promise<Llama3Instruct8BChoice> {
     return super._result() as Promise<Llama3Instruct8BChoice>;
   }
 }
+
 /** Llama3Instruct8BOut */
 export class Llama3Instruct8BOut extends Future<Object> {
   /** Response choices. */
   get choices() {
     return new Llama3Instruct8BOutChoices(this._directive.next("choices"));
   }
-  /** returns the result for `Llama3Instruct8BOut` once it's node has been run. */
+
+  /** @internal returns the result for `Llama3Instruct8BOut` once it's node has been run. */
   protected override async _result(): Promise<Llama3Instruct8BOut> {
     return super._result() as Promise<Llama3Instruct8BOut>;
   }
 }
+
 /** Llama3Instruct70BChoice */
 export class Llama3Instruct70BChoice extends Future<Object> {
   /** Text response. */
   get text() {
     return new Future<string>(this._directive.next("text"));
   }
-  /** returns the result for `Llama3Instruct70BChoice` once it's node has been run. */
+
+  /** @internal returns the result for `Llama3Instruct70BChoice` once it's node has been run. */
   protected override async _result(): Promise<Llama3Instruct70BChoice> {
     return super._result() as Promise<Llama3Instruct70BChoice>;
   }
 }
+
 /** Llama3Instruct70BOut */
 export class Llama3Instruct70BOut extends Future<Object> {
   /** Response choices. */
   get choices() {
     return new Llama3Instruct70BOutChoices(this._directive.next("choices"));
   }
-  /** returns the result for `Llama3Instruct70BOut` once it's node has been run. */
+
+  /** @internal returns the result for `Llama3Instruct70BOut` once it's node has been run. */
   protected override async _result(): Promise<Llama3Instruct70BOut> {
     return super._result() as Promise<Llama3Instruct70BOut>;
   }
 }
+
 /** Firellava13BOut */
 export class Firellava13BOut extends Future<Object> {
   /** Text response. */
   get text() {
     return new Future<string>(this._directive.next("text"));
   }
-  /** returns the result for `Firellava13BOut` once it's node has been run. */
+
+  /** @internal returns the result for `Firellava13BOut` once it's node has been run. */
   protected override async _result(): Promise<Firellava13BOut> {
     return super._result() as Promise<Firellava13BOut>;
   }
 }
+
 /** GenerateImageOut */
 export class GenerateImageOut extends Future<Object> {
   /** Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
   get image_uri() {
     return new Future<string>(this._directive.next("image_uri"));
   }
-  /** returns the result for `GenerateImageOut` once it's node has been run. */
+
+  /** @internal returns the result for `GenerateImageOut` once it's node has been run. */
   protected override async _result(): Promise<GenerateImageOut> {
     return super._result() as Promise<GenerateImageOut>;
   }
 }
+
 /** MultiGenerateImageOut */
 export class MultiGenerateImageOut extends Future<Object> {
   /** Generated images. */
   get outputs() {
     return new MultiGenerateImageOutOutputs(this._directive.next("outputs"));
   }
-  /** returns the result for `MultiGenerateImageOut` once it's node has been run. */
+
+  /** @internal returns the result for `MultiGenerateImageOut` once it's node has been run. */
   protected override async _result(): Promise<MultiGenerateImageOut> {
     return super._result() as Promise<MultiGenerateImageOut>;
   }
 }
+
 /** StableDiffusionImage */
 export class StableDiffusionImage extends Future<Object> {
   /** Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
   get image_uri() {
     return new Future<string>(this._directive.next("image_uri"));
   }
+
   /** The random noise seed used for generation. */
   get seed() {
     return new Future<number>(this._directive.next("seed"));
   }
-  /** returns the result for `StableDiffusionImage` once it's node has been run. */
+
+  /** @internal returns the result for `StableDiffusionImage` once it's node has been run. */
   protected override async _result(): Promise<StableDiffusionImage> {
     return super._result() as Promise<StableDiffusionImage>;
   }
 }
+
 /** StableDiffusionXLOut */
 export class StableDiffusionXLOut extends Future<Object> {
   /** Generated images. */
   get outputs() {
     return new StableDiffusionXLOutOutputs(this._directive.next("outputs"));
   }
-  /** returns the result for `StableDiffusionXLOut` once it's node has been run. */
+
+  /** @internal returns the result for `StableDiffusionXLOut` once it's node has been run. */
   protected override async _result(): Promise<StableDiffusionXLOut> {
     return super._result() as Promise<StableDiffusionXLOut>;
   }
 }
+
 /** StableDiffusionXLLightningOut */
 export class StableDiffusionXLLightningOut extends Future<Object> {
   /** Generated images. */
@@ -1090,11 +1133,13 @@ export class StableDiffusionXLLightningOut extends Future<Object> {
       this._directive.next("outputs"),
     );
   }
-  /** returns the result for `StableDiffusionXLLightningOut` once it's node has been run. */
+
+  /** @internal returns the result for `StableDiffusionXLLightningOut` once it's node has been run. */
   protected override async _result(): Promise<StableDiffusionXLLightningOut> {
     return super._result() as Promise<StableDiffusionXLLightningOut>;
   }
 }
+
 /** StableDiffusionXLIPAdapterOut */
 export class StableDiffusionXLIPAdapterOut extends Future<Object> {
   /** Generated images. */
@@ -1103,11 +1148,13 @@ export class StableDiffusionXLIPAdapterOut extends Future<Object> {
       this._directive.next("outputs"),
     );
   }
-  /** returns the result for `StableDiffusionXLIPAdapterOut` once it's node has been run. */
+
+  /** @internal returns the result for `StableDiffusionXLIPAdapterOut` once it's node has been run. */
   protected override async _result(): Promise<StableDiffusionXLIPAdapterOut> {
     return super._result() as Promise<StableDiffusionXLIPAdapterOut>;
   }
 }
+
 /** StableDiffusionXLControlNetOut */
 export class StableDiffusionXLControlNetOut extends Future<Object> {
   /** Generated images. */
@@ -1116,33 +1163,39 @@ export class StableDiffusionXLControlNetOut extends Future<Object> {
       this._directive.next("outputs"),
     );
   }
-  /** returns the result for `StableDiffusionXLControlNetOut` once it's node has been run. */
+
+  /** @internal returns the result for `StableDiffusionXLControlNetOut` once it's node has been run. */
   protected override async _result(): Promise<StableDiffusionXLControlNetOut> {
     return super._result() as Promise<StableDiffusionXLControlNetOut>;
   }
 }
+
 /** InpaintImageOut */
 export class InpaintImageOut extends Future<Object> {
   /** Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
   get image_uri() {
     return new Future<string>(this._directive.next("image_uri"));
   }
-  /** returns the result for `InpaintImageOut` once it's node has been run. */
+
+  /** @internal returns the result for `InpaintImageOut` once it's node has been run. */
   protected override async _result(): Promise<InpaintImageOut> {
     return super._result() as Promise<InpaintImageOut>;
   }
 }
+
 /** MultiInpaintImageOut */
 export class MultiInpaintImageOut extends Future<Object> {
   /** Generated images. */
   get outputs() {
     return new MultiInpaintImageOutOutputs(this._directive.next("outputs"));
   }
-  /** returns the result for `MultiInpaintImageOut` once it's node has been run. */
+
+  /** @internal returns the result for `MultiInpaintImageOut` once it's node has been run. */
   protected override async _result(): Promise<MultiInpaintImageOut> {
     return super._result() as Promise<MultiInpaintImageOut>;
   }
 }
+
 /** StableDiffusionXLInpaintOut */
 export class StableDiffusionXLInpaintOut extends Future<Object> {
   /** Generated images. */
@@ -1151,163 +1204,195 @@ export class StableDiffusionXLInpaintOut extends Future<Object> {
       this._directive.next("outputs"),
     );
   }
-  /** returns the result for `StableDiffusionXLInpaintOut` once it's node has been run. */
+
+  /** @internal returns the result for `StableDiffusionXLInpaintOut` once it's node has been run. */
   protected override async _result(): Promise<StableDiffusionXLInpaintOut> {
     return super._result() as Promise<StableDiffusionXLInpaintOut>;
   }
 }
+
 /** BoundingBox */
 export class BoundingBox extends Future<Object> {
   /** Top left corner x. */
   get x1() {
     return new Future<number>(this._directive.next("x1"));
   }
+
   /** Top left corner y. */
   get y1() {
     return new Future<number>(this._directive.next("y1"));
   }
+
   /** Bottom right corner x. */
   get x2() {
     return new Future<number>(this._directive.next("x2"));
   }
+
   /** Bottom right corner y. */
   get y2() {
     return new Future<number>(this._directive.next("y2"));
   }
-  /** returns the result for `BoundingBox` once it's node has been run. */
+
+  /** @internal returns the result for `BoundingBox` once it's node has been run. */
   protected override async _result(): Promise<BoundingBox> {
     return super._result() as Promise<BoundingBox>;
   }
 }
+
 /** Point */
 export class Point extends Future<Object> {
   /** X position. */
   get x() {
     return new Future<number>(this._directive.next("x"));
   }
+
   /** Y position. */
   get y() {
     return new Future<number>(this._directive.next("y"));
   }
-  /** returns the result for `Point` once it's node has been run. */
+
+  /** @internal returns the result for `Point` once it's node has been run. */
   protected override async _result(): Promise<Point> {
     return super._result() as Promise<Point>;
   }
 }
+
 /** EraseImageOut */
 export class EraseImageOut extends Future<Object> {
   /** Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
   get image_uri() {
     return new Future<string>(this._directive.next("image_uri"));
   }
-  /** returns the result for `EraseImageOut` once it's node has been run. */
+
+  /** @internal returns the result for `EraseImageOut` once it's node has been run. */
   protected override async _result(): Promise<EraseImageOut> {
     return super._result() as Promise<EraseImageOut>;
   }
 }
+
 /** BigLaMaOut */
 export class BigLaMaOut extends Future<Object> {
   /** Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
   get image_uri() {
     return new Future<string>(this._directive.next("image_uri"));
   }
-  /** returns the result for `BigLaMaOut` once it's node has been run. */
+
+  /** @internal returns the result for `BigLaMaOut` once it's node has been run. */
   protected override async _result(): Promise<BigLaMaOut> {
     return super._result() as Promise<BigLaMaOut>;
   }
 }
+
 /** RemoveBackgroundOut */
 export class RemoveBackgroundOut extends Future<Object> {
   /** Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
   get image_uri() {
     return new Future<string>(this._directive.next("image_uri"));
   }
-  /** returns the result for `RemoveBackgroundOut` once it's node has been run. */
+
+  /** @internal returns the result for `RemoveBackgroundOut` once it's node has been run. */
   protected override async _result(): Promise<RemoveBackgroundOut> {
     return super._result() as Promise<RemoveBackgroundOut>;
   }
 }
+
 /** DISISNetOut */
 export class DISISNetOut extends Future<Object> {
   /** Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
   get image_uri() {
     return new Future<string>(this._directive.next("image_uri"));
   }
-  /** returns the result for `DISISNetOut` once it's node has been run. */
+
+  /** @internal returns the result for `DISISNetOut` once it's node has been run. */
   protected override async _result(): Promise<DISISNetOut> {
     return super._result() as Promise<DISISNetOut>;
   }
 }
+
 /** UpscaleImageOut */
 export class UpscaleImageOut extends Future<Object> {
   /** Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
   get image_uri() {
     return new Future<string>(this._directive.next("image_uri"));
   }
-  /** returns the result for `UpscaleImageOut` once it's node has been run. */
+
+  /** @internal returns the result for `UpscaleImageOut` once it's node has been run. */
   protected override async _result(): Promise<UpscaleImageOut> {
     return super._result() as Promise<UpscaleImageOut>;
   }
 }
+
 /** SegmentUnderPointOut */
 export class SegmentUnderPointOut extends Future<Object> {
   /** Detected segments in 'mask image' format. Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
   get mask_image_uri() {
     return new Future<string>(this._directive.next("mask_image_uri"));
   }
-  /** returns the result for `SegmentUnderPointOut` once it's node has been run. */
+
+  /** @internal returns the result for `SegmentUnderPointOut` once it's node has been run. */
   protected override async _result(): Promise<SegmentUnderPointOut> {
     return super._result() as Promise<SegmentUnderPointOut>;
   }
 }
+
 /** SegmentAnythingOut */
 export class SegmentAnythingOut extends Future<Object> {
   /** Detected segments in 'mask image' format. Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
   get mask_image_uri() {
     return new Future<string>(this._directive.next("mask_image_uri"));
   }
-  /** returns the result for `SegmentAnythingOut` once it's node has been run. */
+
+  /** @internal returns the result for `SegmentAnythingOut` once it's node has been run. */
   protected override async _result(): Promise<SegmentAnythingOut> {
     return super._result() as Promise<SegmentAnythingOut>;
   }
 }
+
 /** TranscribedWord */
 export class TranscribedWord extends Future<Object> {
   /** Text of word. */
   get word() {
     return new Future<string>(this._directive.next("word"));
   }
+
   /** (Optional) Start time of word, in seconds. */
   get start() {
     return new Future<number>(this._directive.next("start"));
   }
+
   /** (Optional) End time of word, in seconds. */
   get end() {
     return new Future<number>(this._directive.next("end"));
   }
+
   /** (Optional) ID of speaker, if `diarize` is enabled. */
   get speaker() {
     return new Future<string>(this._directive.next("speaker"));
   }
-  /** returns the result for `TranscribedWord` once it's node has been run. */
+
+  /** @internal returns the result for `TranscribedWord` once it's node has been run. */
   protected override async _result(): Promise<TranscribedWord> {
     return super._result() as Promise<TranscribedWord>;
   }
 }
+
 /** TranscribedSegment */
 export class TranscribedSegment extends Future<Object> {
   /** Text of segment. */
   get text() {
     return new Future<string>(this._directive.next("text"));
   }
+
   /** Start time of segment, in seconds. */
   get start() {
     return new Future<number>(this._directive.next("start"));
   }
+
   /** End time of segment, in seconds. */
   get end() {
     return new Future<number>(this._directive.next("end"));
   }
+
   /** (Optional) ID of speaker, if `diarize` is enabled. */
   get speaker() {
     return new Future<string>(this._directive.next("speaker"));
@@ -1317,26 +1402,31 @@ export class TranscribedSegment extends Future<Object> {
   get words() {
     return new TranscribedSegmentWords(this._directive.next("words"));
   }
-  /** returns the result for `TranscribedSegment` once it's node has been run. */
+
+  /** @internal returns the result for `TranscribedSegment` once it's node has been run. */
   protected override async _result(): Promise<TranscribedSegment> {
     return super._result() as Promise<TranscribedSegment>;
   }
 }
+
 /** ChapterMarker */
 export class ChapterMarker extends Future<Object> {
   /** Chapter title. */
   get title() {
     return new Future<string>(this._directive.next("title"));
   }
+
   /** Start time of chapter, in seconds. */
   get start() {
     return new Future<number>(this._directive.next("start"));
   }
-  /** returns the result for `ChapterMarker` once it's node has been run. */
+
+  /** @internal returns the result for `ChapterMarker` once it's node has been run. */
   protected override async _result(): Promise<ChapterMarker> {
     return super._result() as Promise<ChapterMarker>;
   }
 }
+
 /** TranscribeSpeechOut */
 export class TranscribeSpeechOut extends Future<Object> {
   /** Transcribed text. */
@@ -1353,216 +1443,258 @@ export class TranscribeSpeechOut extends Future<Object> {
   get chapters() {
     return new TranscribeSpeechOutChapters(this._directive.next("chapters"));
   }
-  /** returns the result for `TranscribeSpeechOut` once it's node has been run. */
+
+  /** @internal returns the result for `TranscribeSpeechOut` once it's node has been run. */
   protected override async _result(): Promise<TranscribeSpeechOut> {
     return super._result() as Promise<TranscribeSpeechOut>;
   }
 }
+
 /** GenerateSpeechOut */
 export class GenerateSpeechOut extends Future<Object> {
   /** Base 64-encoded WAV audio bytes, or a hosted audio url if `store` is provided. */
   get audio_uri() {
     return new Future<string>(this._directive.next("audio_uri"));
   }
-  /** returns the result for `GenerateSpeechOut` once it's node has been run. */
+
+  /** @internal returns the result for `GenerateSpeechOut` once it's node has been run. */
   protected override async _result(): Promise<GenerateSpeechOut> {
     return super._result() as Promise<GenerateSpeechOut>;
   }
 }
+
 /** XTTSV2Out */
 export class XTTSV2Out extends Future<Object> {
   /** Base 64-encoded WAV audio bytes, or a hosted audio url if `store` is provided. */
   get audio_uri() {
     return new Future<string>(this._directive.next("audio_uri"));
   }
-  /** returns the result for `XTTSV2Out` once it's node has been run. */
+
+  /** @internal returns the result for `XTTSV2Out` once it's node has been run. */
   protected override async _result(): Promise<XTTSV2Out> {
     return super._result() as Promise<XTTSV2Out>;
   }
 }
+
 /** Embedding */
 export class Embedding extends Future<Object> {
   /** Embedding vector. */
   get vector() {
     return new EmbeddingVector(this._directive.next("vector"));
   }
+
   /** (Optional) Vector store document ID. */
   get doc_id() {
     return new Future<string>(this._directive.next("doc_id"));
   }
+
   /** (Optional) Vector store document metadata. */
   get metadata() {
     return new Future<Object>(this._directive.next("metadata"));
   }
-  /** returns the result for `Embedding` once it's node has been run. */
+
+  /** @internal returns the result for `Embedding` once it's node has been run. */
   protected override async _result(): Promise<Embedding> {
     return super._result() as Promise<Embedding>;
   }
 }
+
 /** EmbedTextOut */
 export class EmbedTextOut extends Future<Object> {
   /** Generated embedding. */
   get embedding() {
     return new Embedding(this._directive.next("embedding"));
   }
-  /** returns the result for `EmbedTextOut` once it's node has been run. */
+
+  /** @internal returns the result for `EmbedTextOut` once it's node has been run. */
   protected override async _result(): Promise<EmbedTextOut> {
     return super._result() as Promise<EmbedTextOut>;
   }
 }
+
 /** EmbedTextItem */
 export class EmbedTextItem extends Future<Object> {
   /** Text to embed. */
   get text() {
     return new Future<string>(this._directive.next("text"));
   }
+
   /** (Optional) Metadata that can be used to query the vector store. Ignored if `collection_name` is unset. */
   get metadata() {
     return new Future<Object>(this._directive.next("metadata"));
   }
+
   /** (Optional) Vector store document ID. Ignored if `collection_name` is unset. */
   get doc_id() {
     return new Future<string>(this._directive.next("doc_id"));
   }
-  /** returns the result for `EmbedTextItem` once it's node has been run. */
+
+  /** @internal returns the result for `EmbedTextItem` once it's node has been run. */
   protected override async _result(): Promise<EmbedTextItem> {
     return super._result() as Promise<EmbedTextItem>;
   }
 }
+
 /** MultiEmbedTextOut */
 export class MultiEmbedTextOut extends Future<Object> {
   /** Generated embeddings. */
   get embeddings() {
     return new MultiEmbedTextOutEmbeddings(this._directive.next("embeddings"));
   }
-  /** returns the result for `MultiEmbedTextOut` once it's node has been run. */
+
+  /** @internal returns the result for `MultiEmbedTextOut` once it's node has been run. */
   protected override async _result(): Promise<MultiEmbedTextOut> {
     return super._result() as Promise<MultiEmbedTextOut>;
   }
 }
+
 /** JinaV2Out */
 export class JinaV2Out extends Future<Object> {
   /** Generated embeddings. */
   get embeddings() {
     return new JinaV2OutEmbeddings(this._directive.next("embeddings"));
   }
-  /** returns the result for `JinaV2Out` once it's node has been run. */
+
+  /** @internal returns the result for `JinaV2Out` once it's node has been run. */
   protected override async _result(): Promise<JinaV2Out> {
     return super._result() as Promise<JinaV2Out>;
   }
 }
+
 /** EmbedImageOut */
 export class EmbedImageOut extends Future<Object> {
   /** Generated embedding. */
   get embedding() {
     return new Embedding(this._directive.next("embedding"));
   }
-  /** returns the result for `EmbedImageOut` once it's node has been run. */
+
+  /** @internal returns the result for `EmbedImageOut` once it's node has been run. */
   protected override async _result(): Promise<EmbedImageOut> {
     return super._result() as Promise<EmbedImageOut>;
   }
 }
+
 /** EmbedImageItem */
 export class EmbedImageItem extends Future<Object> {
   /** Image to embed. */
   get image_uri() {
     return new Future<string>(this._directive.next("image_uri"));
   }
+
   /** (Optional) Vector store document ID. Ignored if `collection_name` is unset. */
   get doc_id() {
     return new Future<string>(this._directive.next("doc_id"));
   }
-  /** returns the result for `EmbedImageItem` once it's node has been run. */
+
+  /** @internal returns the result for `EmbedImageItem` once it's node has been run. */
   protected override async _result(): Promise<EmbedImageItem> {
     return super._result() as Promise<EmbedImageItem>;
   }
 }
+
 /** EmbedTextOrImageItem */
 export class EmbedTextOrImageItem extends Future<Object> {
   /** Image to embed. */
   get image_uri() {
     return new Future<string>(this._directive.next("image_uri"));
   }
+
   /** Text to embed. */
   get text() {
     return new Future<string>(this._directive.next("text"));
   }
+
   /** Metadata that can be used to query the vector store. Ignored if `collection_name` is unset. */
   get metadata() {
     return new Future<Object>(this._directive.next("metadata"));
   }
+
   /** Vector store document ID. Ignored if `collection_name` is unset. */
   get doc_id() {
     return new Future<string>(this._directive.next("doc_id"));
   }
-  /** returns the result for `EmbedTextOrImageItem` once it's node has been run. */
+
+  /** @internal returns the result for `EmbedTextOrImageItem` once it's node has been run. */
   protected override async _result(): Promise<EmbedTextOrImageItem> {
     return super._result() as Promise<EmbedTextOrImageItem>;
   }
 }
+
 /** MultiEmbedImageOut */
 export class MultiEmbedImageOut extends Future<Object> {
   /** Generated embeddings. */
   get embeddings() {
     return new MultiEmbedImageOutEmbeddings(this._directive.next("embeddings"));
   }
-  /** returns the result for `MultiEmbedImageOut` once it's node has been run. */
+
+  /** @internal returns the result for `MultiEmbedImageOut` once it's node has been run. */
   protected override async _result(): Promise<MultiEmbedImageOut> {
     return super._result() as Promise<MultiEmbedImageOut>;
   }
 }
+
 /** CLIPOut */
 export class CLIPOut extends Future<Object> {
   /** Generated embeddings. */
   get embeddings() {
     return new CLIPOutEmbeddings(this._directive.next("embeddings"));
   }
-  /** returns the result for `CLIPOut` once it's node has been run. */
+
+  /** @internal returns the result for `CLIPOut` once it's node has been run. */
   protected override async _result(): Promise<CLIPOut> {
     return super._result() as Promise<CLIPOut>;
   }
 }
+
 /** FindOrCreateVectorStoreOut */
 export class FindOrCreateVectorStoreOut extends Future<Object> {
   /** Vector store name. */
   get collection_name() {
     return new Future<string>(this._directive.next("collection_name"));
   }
+
   /** Selected embedding model. */
   get model() {
     return new Future<string>(this._directive.next("model"));
   }
-  /** returns the result for `FindOrCreateVectorStoreOut` once it's node has been run. */
+
+  /** @internal returns the result for `FindOrCreateVectorStoreOut` once it's node has been run. */
   protected override async _result(): Promise<FindOrCreateVectorStoreOut> {
     return super._result() as Promise<FindOrCreateVectorStoreOut>;
   }
 }
+
 /** ListVectorStoresOut */
 export class ListVectorStoresOut extends Future<Object> {
   /** List of vector stores. */
   get items() {
     return new ListVectorStoresOutItems(this._directive.next("items"));
   }
-  /** returns the result for `ListVectorStoresOut` once it's node has been run. */
+
+  /** @internal returns the result for `ListVectorStoresOut` once it's node has been run. */
   protected override async _result(): Promise<ListVectorStoresOut> {
     return super._result() as Promise<ListVectorStoresOut>;
   }
 }
+
 /** DeleteVectorStoreOut */
 export class DeleteVectorStoreOut extends Future<Object> {
   /** Vector store name. */
   get collection_name() {
     return new Future<string>(this._directive.next("collection_name"));
   }
+
   /** Selected embedding model. */
   get model() {
     return new Future<string>(this._directive.next("model"));
   }
-  /** returns the result for `DeleteVectorStoreOut` once it's node has been run. */
+
+  /** @internal returns the result for `DeleteVectorStoreOut` once it's node has been run. */
   protected override async _result(): Promise<DeleteVectorStoreOut> {
     return super._result() as Promise<DeleteVectorStoreOut>;
   }
 }
+
 /** Canonical representation of document with embedding vector. */
 export class Vector extends Future<Object> {
   /** Document ID. */
@@ -1574,48 +1706,57 @@ export class Vector extends Future<Object> {
   get vector() {
     return new VectorVector(this._directive.next("vector"));
   }
+
   /** Document metadata. */
   get metadata() {
     return new Future<Object>(this._directive.next("metadata"));
   }
-  /** returns the result for `Vector` once it's node has been run. */
+
+  /** @internal returns the result for `Vector` once it's node has been run. */
   protected override async _result(): Promise<Vector> {
     return super._result() as Promise<Vector>;
   }
 }
+
 /** FetchVectorsOut */
 export class FetchVectorsOut extends Future<Object> {
   /** Retrieved vectors. */
   get vectors() {
     return new FetchVectorsOutVectors(this._directive.next("vectors"));
   }
-  /** returns the result for `FetchVectorsOut` once it's node has been run. */
+
+  /** @internal returns the result for `FetchVectorsOut` once it's node has been run. */
   protected override async _result(): Promise<FetchVectorsOut> {
     return super._result() as Promise<FetchVectorsOut>;
   }
 }
+
 /** UpdateVectorsOut */
 export class UpdateVectorsOut extends Future<Object> {
   /** Number of vectors modified. */
   get count() {
     return new Future<number>(this._directive.next("count"));
   }
-  /** returns the result for `UpdateVectorsOut` once it's node has been run. */
+
+  /** @internal returns the result for `UpdateVectorsOut` once it's node has been run. */
   protected override async _result(): Promise<UpdateVectorsOut> {
     return super._result() as Promise<UpdateVectorsOut>;
   }
 }
+
 /** DeleteVectorsOut */
 export class DeleteVectorsOut extends Future<Object> {
   /** Number of vectors modified. */
   get count() {
     return new Future<number>(this._directive.next("count"));
   }
-  /** returns the result for `DeleteVectorsOut` once it's node has been run. */
+
+  /** @internal returns the result for `DeleteVectorsOut` once it's node has been run. */
   protected override async _result(): Promise<DeleteVectorsOut> {
     return super._result() as Promise<DeleteVectorsOut>;
   }
 }
+
 /** UpdateVectorParams */
 export class UpdateVectorParams extends Future<Object> {
   /** Document ID. */
@@ -1627,21 +1768,25 @@ export class UpdateVectorParams extends Future<Object> {
   get vector() {
     return new UpdateVectorParamsVector(this._directive.next("vector"));
   }
+
   /** (Optional) Document metadata. */
   get metadata() {
     return new Future<Object>(this._directive.next("metadata"));
   }
-  /** returns the result for `UpdateVectorParams` once it's node has been run. */
+
+  /** @internal returns the result for `UpdateVectorParams` once it's node has been run. */
   protected override async _result(): Promise<UpdateVectorParams> {
     return super._result() as Promise<UpdateVectorParams>;
   }
 }
+
 /** VectorStoreQueryResult */
 export class VectorStoreQueryResult extends Future<Object> {
   /** Document ID. */
   get id() {
     return new Future<string>(this._directive.next("id"));
   }
+
   /** Similarity score. */
   get distance() {
     return new Future<number>(this._directive.next("distance"));
@@ -1651,34 +1796,41 @@ export class VectorStoreQueryResult extends Future<Object> {
   get vector() {
     return new VectorStoreQueryResultVector(this._directive.next("vector"));
   }
+
   /** (Optional) Document metadata. */
   get metadata() {
     return new Future<Object>(this._directive.next("metadata"));
   }
-  /** returns the result for `VectorStoreQueryResult` once it's node has been run. */
+
+  /** @internal returns the result for `VectorStoreQueryResult` once it's node has been run. */
   protected override async _result(): Promise<VectorStoreQueryResult> {
     return super._result() as Promise<VectorStoreQueryResult>;
   }
 }
+
 /** QueryVectorStoreOut */
 export class QueryVectorStoreOut extends Future<Object> {
   /** Query results. */
   get results() {
     return new QueryVectorStoreOutResults(this._directive.next("results"));
   }
+
   /** (Optional) Vector store name. */
   get collection_name() {
     return new Future<string>(this._directive.next("collection_name"));
   }
+
   /** (Optional) Selected embedding model. */
   get model() {
     return new Future<string>(this._directive.next("model"));
   }
-  /** returns the result for `QueryVectorStoreOut` once it's node has been run. */
+
+  /** @internal returns the result for `QueryVectorStoreOut` once it's node has been run. */
   protected override async _result(): Promise<QueryVectorStoreOut> {
     return super._result() as Promise<QueryVectorStoreOut>;
   }
 }
+
 export namespace Experimental {
   /**
    * Experimental Input
@@ -1717,6 +1869,17 @@ export class Experimental extends Node {
   }
 
   /**
+   * Future reference to this node's output.
+   *
+   * Output fields: `output`
+   *
+   * https://www.substrate.run/nodes#Experimental
+   */
+  override get future(): ExperimentalOut {
+    return new ExperimentalOut(new Trace([], this));
+  }
+
+  /**
    * Retrieve this node's output from a response.
    *
    * Output fields: `output`
@@ -1729,17 +1892,6 @@ export class Experimental extends Node {
     return Promise.resolve(
       this._response ? this._response.get(this) : undefined,
     ) as Promise<OpenAPI.components["schemas"]["ExperimentalOut"] | undefined>;
-  }
-
-  /**
-   * Future reference to this node's output.
-   *
-   * Output fields: `output`
-   *
-   * https://www.substrate.run/nodes#Experimental
-   */
-  override get future(): ExperimentalOut {
-    return new ExperimentalOut(new Trace([], this));
   }
 
   protected override output(): OpenAPI.components["schemas"]["ExperimentalOut"] {
@@ -1782,6 +1934,17 @@ export class Box extends Node {
   }
 
   /**
+   * Future reference to this node's output.
+   *
+   * Output fields: `value`
+   *
+   * https://www.substrate.run/nodes#Box
+   */
+  override get future(): BoxOut {
+    return new BoxOut(new Trace([], this));
+  }
+
+  /**
    * Retrieve this node's output from a response.
    *
    * Output fields: `value`
@@ -1794,17 +1957,6 @@ export class Box extends Node {
     return Promise.resolve(
       this._response ? this._response.get(this) : undefined,
     ) as Promise<OpenAPI.components["schemas"]["BoxOut"] | undefined>;
-  }
-
-  /**
-   * Future reference to this node's output.
-   *
-   * Output fields: `value`
-   *
-   * https://www.substrate.run/nodes#Box
-   */
-  override get future(): BoxOut {
-    return new BoxOut(new Trace([], this));
   }
 
   protected override output(): OpenAPI.components["schemas"]["BoxOut"] {
@@ -1847,6 +1999,17 @@ export class If extends Node {
   }
 
   /**
+   * Future reference to this node's output.
+   *
+   * Output fields: `result`
+   *
+   * https://www.substrate.run/nodes#If
+   */
+  override get future(): IfOut {
+    return new IfOut(new Trace([], this));
+  }
+
+  /**
    * Retrieve this node's output from a response.
    *
    * Output fields: `result`
@@ -1859,17 +2022,6 @@ export class If extends Node {
     return Promise.resolve(
       this._response ? this._response.get(this) : undefined,
     ) as Promise<OpenAPI.components["schemas"]["IfOut"] | undefined>;
-  }
-
-  /**
-   * Future reference to this node's output.
-   *
-   * Output fields: `result`
-   *
-   * https://www.substrate.run/nodes#If
-   */
-  override get future(): IfOut {
-    return new IfOut(new Trace([], this));
   }
 
   protected override output(): OpenAPI.components["schemas"]["IfOut"] {
@@ -1914,6 +2066,17 @@ export class ComputeText extends Node {
   }
 
   /**
+   * Future reference to this node's output.
+   *
+   * Output fields: `text`
+   *
+   * https://www.substrate.run/nodes#ComputeText
+   */
+  override get future(): ComputeTextOut {
+    return new ComputeTextOut(new Trace([], this));
+  }
+
+  /**
    * Retrieve this node's output from a response.
    *
    * Output fields: `text`
@@ -1926,17 +2089,6 @@ export class ComputeText extends Node {
     return Promise.resolve(
       this._response ? this._response.get(this) : undefined,
     ) as Promise<OpenAPI.components["schemas"]["ComputeTextOut"] | undefined>;
-  }
-
-  /**
-   * Future reference to this node's output.
-   *
-   * Output fields: `text`
-   *
-   * https://www.substrate.run/nodes#ComputeText
-   */
-  override get future(): ComputeTextOut {
-    return new ComputeTextOut(new Trace([], this));
   }
 
   protected override output(): OpenAPI.components["schemas"]["ComputeTextOut"] {
@@ -1981,6 +2133,17 @@ export class MultiComputeText extends Node {
   }
 
   /**
+   * Future reference to this node's output.
+   *
+   * Output fields: `choices`
+   *
+   * https://www.substrate.run/nodes#MultiComputeText
+   */
+  override get future(): MultiComputeTextOut {
+    return new MultiComputeTextOut(new Trace([], this));
+  }
+
+  /**
    * Retrieve this node's output from a response.
    *
    * Output fields: `choices`
@@ -1995,17 +2158,6 @@ export class MultiComputeText extends Node {
     ) as Promise<
       OpenAPI.components["schemas"]["MultiComputeTextOut"] | undefined
     >;
-  }
-
-  /**
-   * Future reference to this node's output.
-   *
-   * Output fields: `choices`
-   *
-   * https://www.substrate.run/nodes#MultiComputeText
-   */
-  override get future(): MultiComputeTextOut {
-    return new MultiComputeTextOut(new Trace([], this));
   }
 
   protected override output(): OpenAPI.components["schemas"]["MultiComputeTextOut"] {
@@ -2050,6 +2202,17 @@ export class BatchComputeText extends Node {
   }
 
   /**
+   * Future reference to this node's output.
+   *
+   * Output fields: `outputs`
+   *
+   * https://www.substrate.run/nodes#BatchComputeText
+   */
+  override get future(): BatchComputeTextOut {
+    return new BatchComputeTextOut(new Trace([], this));
+  }
+
+  /**
    * Retrieve this node's output from a response.
    *
    * Output fields: `outputs`
@@ -2064,17 +2227,6 @@ export class BatchComputeText extends Node {
     ) as Promise<
       OpenAPI.components["schemas"]["BatchComputeTextOut"] | undefined
     >;
-  }
-
-  /**
-   * Future reference to this node's output.
-   *
-   * Output fields: `outputs`
-   *
-   * https://www.substrate.run/nodes#BatchComputeText
-   */
-  override get future(): BatchComputeTextOut {
-    return new BatchComputeTextOut(new Trace([], this));
   }
 
   protected override output(): OpenAPI.components["schemas"]["BatchComputeTextOut"] {
@@ -2119,6 +2271,17 @@ export class BatchComputeJSON extends Node {
   }
 
   /**
+   * Future reference to this node's output.
+   *
+   * Output fields: `outputs`
+   *
+   * https://www.substrate.run/nodes#BatchComputeJSON
+   */
+  override get future(): BatchComputeJSONOut {
+    return new BatchComputeJSONOut(new Trace([], this));
+  }
+
+  /**
    * Retrieve this node's output from a response.
    *
    * Output fields: `outputs`
@@ -2133,17 +2296,6 @@ export class BatchComputeJSON extends Node {
     ) as Promise<
       OpenAPI.components["schemas"]["BatchComputeJSONOut"] | undefined
     >;
-  }
-
-  /**
-   * Future reference to this node's output.
-   *
-   * Output fields: `outputs`
-   *
-   * https://www.substrate.run/nodes#BatchComputeJSON
-   */
-  override get future(): BatchComputeJSONOut {
-    return new BatchComputeJSONOut(new Trace([], this));
   }
 
   protected override output(): OpenAPI.components["schemas"]["BatchComputeJSONOut"] {
@@ -2188,6 +2340,17 @@ export class ComputeJSON extends Node {
   }
 
   /**
+   * Future reference to this node's output.
+   *
+   * Output fields: `json_object` (optional), `text` (optional)
+   *
+   * https://www.substrate.run/nodes#ComputeJSON
+   */
+  override get future(): ComputeJSONOut {
+    return new ComputeJSONOut(new Trace([], this));
+  }
+
+  /**
    * Retrieve this node's output from a response.
    *
    * Output fields: `json_object` (optional), `text` (optional)
@@ -2200,17 +2363,6 @@ export class ComputeJSON extends Node {
     return Promise.resolve(
       this._response ? this._response.get(this) : undefined,
     ) as Promise<OpenAPI.components["schemas"]["ComputeJSONOut"] | undefined>;
-  }
-
-  /**
-   * Future reference to this node's output.
-   *
-   * Output fields: `json_object` (optional), `text` (optional)
-   *
-   * https://www.substrate.run/nodes#ComputeJSON
-   */
-  override get future(): ComputeJSONOut {
-    return new ComputeJSONOut(new Trace([], this));
   }
 
   protected override output(): OpenAPI.components["schemas"]["ComputeJSONOut"] {
@@ -2255,6 +2407,17 @@ export class MultiComputeJSON extends Node {
   }
 
   /**
+   * Future reference to this node's output.
+   *
+   * Output fields: `choices`
+   *
+   * https://www.substrate.run/nodes#MultiComputeJSON
+   */
+  override get future(): MultiComputeJSONOut {
+    return new MultiComputeJSONOut(new Trace([], this));
+  }
+
+  /**
    * Retrieve this node's output from a response.
    *
    * Output fields: `choices`
@@ -2269,17 +2432,6 @@ export class MultiComputeJSON extends Node {
     ) as Promise<
       OpenAPI.components["schemas"]["MultiComputeJSONOut"] | undefined
     >;
-  }
-
-  /**
-   * Future reference to this node's output.
-   *
-   * Output fields: `choices`
-   *
-   * https://www.substrate.run/nodes#MultiComputeJSON
-   */
-  override get future(): MultiComputeJSONOut {
-    return new MultiComputeJSONOut(new Trace([], this));
   }
 
   protected override output(): OpenAPI.components["schemas"]["MultiComputeJSONOut"] {
@@ -2324,6 +2476,17 @@ export class Mistral7BInstruct extends Node {
   }
 
   /**
+   * Future reference to this node's output.
+   *
+   * Output fields: `choices`
+   *
+   * https://www.substrate.run/nodes#Mistral7BInstruct
+   */
+  override get future(): Mistral7BInstructOut {
+    return new Mistral7BInstructOut(new Trace([], this));
+  }
+
+  /**
    * Retrieve this node's output from a response.
    *
    * Output fields: `choices`
@@ -2338,17 +2501,6 @@ export class Mistral7BInstruct extends Node {
     ) as Promise<
       OpenAPI.components["schemas"]["Mistral7BInstructOut"] | undefined
     >;
-  }
-
-  /**
-   * Future reference to this node's output.
-   *
-   * Output fields: `choices`
-   *
-   * https://www.substrate.run/nodes#Mistral7BInstruct
-   */
-  override get future(): Mistral7BInstructOut {
-    return new Mistral7BInstructOut(new Trace([], this));
   }
 
   protected override output(): OpenAPI.components["schemas"]["Mistral7BInstructOut"] {
@@ -2395,6 +2547,17 @@ export class Mixtral8x7BInstruct extends Node {
   }
 
   /**
+   * Future reference to this node's output.
+   *
+   * Output fields: `choices`
+   *
+   * https://www.substrate.run/nodes#Mixtral8x7BInstruct
+   */
+  override get future(): Mixtral8x7BInstructOut {
+    return new Mixtral8x7BInstructOut(new Trace([], this));
+  }
+
+  /**
    * Retrieve this node's output from a response.
    *
    * Output fields: `choices`
@@ -2409,17 +2572,6 @@ export class Mixtral8x7BInstruct extends Node {
     ) as Promise<
       OpenAPI.components["schemas"]["Mixtral8x7BInstructOut"] | undefined
     >;
-  }
-
-  /**
-   * Future reference to this node's output.
-   *
-   * Output fields: `choices`
-   *
-   * https://www.substrate.run/nodes#Mixtral8x7BInstruct
-   */
-  override get future(): Mixtral8x7BInstructOut {
-    return new Mixtral8x7BInstructOut(new Trace([], this));
   }
 
   protected override output(): OpenAPI.components["schemas"]["Mixtral8x7BInstructOut"] {
@@ -2464,6 +2616,17 @@ export class Llama3Instruct8B extends Node {
   }
 
   /**
+   * Future reference to this node's output.
+   *
+   * Output fields: `choices`
+   *
+   * https://www.substrate.run/nodes#Llama3Instruct8B
+   */
+  override get future(): Llama3Instruct8BOut {
+    return new Llama3Instruct8BOut(new Trace([], this));
+  }
+
+  /**
    * Retrieve this node's output from a response.
    *
    * Output fields: `choices`
@@ -2478,17 +2641,6 @@ export class Llama3Instruct8B extends Node {
     ) as Promise<
       OpenAPI.components["schemas"]["Llama3Instruct8BOut"] | undefined
     >;
-  }
-
-  /**
-   * Future reference to this node's output.
-   *
-   * Output fields: `choices`
-   *
-   * https://www.substrate.run/nodes#Llama3Instruct8B
-   */
-  override get future(): Llama3Instruct8BOut {
-    return new Llama3Instruct8BOut(new Trace([], this));
   }
 
   protected override output(): OpenAPI.components["schemas"]["Llama3Instruct8BOut"] {
@@ -2533,6 +2685,17 @@ export class Llama3Instruct70B extends Node {
   }
 
   /**
+   * Future reference to this node's output.
+   *
+   * Output fields: `choices`
+   *
+   * https://www.substrate.run/nodes#Llama3Instruct70B
+   */
+  override get future(): Llama3Instruct70BOut {
+    return new Llama3Instruct70BOut(new Trace([], this));
+  }
+
+  /**
    * Retrieve this node's output from a response.
    *
    * Output fields: `choices`
@@ -2547,17 +2710,6 @@ export class Llama3Instruct70B extends Node {
     ) as Promise<
       OpenAPI.components["schemas"]["Llama3Instruct70BOut"] | undefined
     >;
-  }
-
-  /**
-   * Future reference to this node's output.
-   *
-   * Output fields: `choices`
-   *
-   * https://www.substrate.run/nodes#Llama3Instruct70B
-   */
-  override get future(): Llama3Instruct70BOut {
-    return new Llama3Instruct70BOut(new Trace([], this));
   }
 
   protected override output(): OpenAPI.components["schemas"]["Llama3Instruct70BOut"] {
@@ -2602,6 +2754,17 @@ export class Firellava13B extends Node {
   }
 
   /**
+   * Future reference to this node's output.
+   *
+   * Output fields: `text`
+   *
+   * https://www.substrate.run/nodes#Firellava13B
+   */
+  override get future(): Firellava13BOut {
+    return new Firellava13BOut(new Trace([], this));
+  }
+
+  /**
    * Retrieve this node's output from a response.
    *
    * Output fields: `text`
@@ -2614,17 +2777,6 @@ export class Firellava13B extends Node {
     return Promise.resolve(
       this._response ? this._response.get(this) : undefined,
     ) as Promise<OpenAPI.components["schemas"]["Firellava13BOut"] | undefined>;
-  }
-
-  /**
-   * Future reference to this node's output.
-   *
-   * Output fields: `text`
-   *
-   * https://www.substrate.run/nodes#Firellava13B
-   */
-  override get future(): Firellava13BOut {
-    return new Firellava13BOut(new Trace([], this));
   }
 
   protected override output(): OpenAPI.components["schemas"]["Firellava13BOut"] {
@@ -2669,6 +2821,17 @@ export class GenerateImage extends Node {
   }
 
   /**
+   * Future reference to this node's output.
+   *
+   * Output fields: `image_uri`
+   *
+   * https://www.substrate.run/nodes#GenerateImage
+   */
+  override get future(): GenerateImageOut {
+    return new GenerateImageOut(new Trace([], this));
+  }
+
+  /**
    * Retrieve this node's output from a response.
    *
    * Output fields: `image_uri`
@@ -2681,17 +2844,6 @@ export class GenerateImage extends Node {
     return Promise.resolve(
       this._response ? this._response.get(this) : undefined,
     ) as Promise<OpenAPI.components["schemas"]["GenerateImageOut"] | undefined>;
-  }
-
-  /**
-   * Future reference to this node's output.
-   *
-   * Output fields: `image_uri`
-   *
-   * https://www.substrate.run/nodes#GenerateImage
-   */
-  override get future(): GenerateImageOut {
-    return new GenerateImageOut(new Trace([], this));
   }
 
   protected override output(): OpenAPI.components["schemas"]["GenerateImageOut"] {
@@ -2738,6 +2890,17 @@ export class MultiGenerateImage extends Node {
   }
 
   /**
+   * Future reference to this node's output.
+   *
+   * Output fields: `outputs`
+   *
+   * https://www.substrate.run/nodes#MultiGenerateImage
+   */
+  override get future(): MultiGenerateImageOut {
+    return new MultiGenerateImageOut(new Trace([], this));
+  }
+
+  /**
    * Retrieve this node's output from a response.
    *
    * Output fields: `outputs`
@@ -2752,17 +2915,6 @@ export class MultiGenerateImage extends Node {
     ) as Promise<
       OpenAPI.components["schemas"]["MultiGenerateImageOut"] | undefined
     >;
-  }
-
-  /**
-   * Future reference to this node's output.
-   *
-   * Output fields: `outputs`
-   *
-   * https://www.substrate.run/nodes#MultiGenerateImage
-   */
-  override get future(): MultiGenerateImageOut {
-    return new MultiGenerateImageOut(new Trace([], this));
   }
 
   protected override output(): OpenAPI.components["schemas"]["MultiGenerateImageOut"] {
@@ -2807,6 +2959,17 @@ export class InpaintImage extends Node {
   }
 
   /**
+   * Future reference to this node's output.
+   *
+   * Output fields: `image_uri`
+   *
+   * https://www.substrate.run/nodes#InpaintImage
+   */
+  override get future(): InpaintImageOut {
+    return new InpaintImageOut(new Trace([], this));
+  }
+
+  /**
    * Retrieve this node's output from a response.
    *
    * Output fields: `image_uri`
@@ -2819,17 +2982,6 @@ export class InpaintImage extends Node {
     return Promise.resolve(
       this._response ? this._response.get(this) : undefined,
     ) as Promise<OpenAPI.components["schemas"]["InpaintImageOut"] | undefined>;
-  }
-
-  /**
-   * Future reference to this node's output.
-   *
-   * Output fields: `image_uri`
-   *
-   * https://www.substrate.run/nodes#InpaintImage
-   */
-  override get future(): InpaintImageOut {
-    return new InpaintImageOut(new Trace([], this));
   }
 
   protected override output(): OpenAPI.components["schemas"]["InpaintImageOut"] {
@@ -2874,6 +3026,17 @@ export class MultiInpaintImage extends Node {
   }
 
   /**
+   * Future reference to this node's output.
+   *
+   * Output fields: `outputs`
+   *
+   * https://www.substrate.run/nodes#MultiInpaintImage
+   */
+  override get future(): MultiInpaintImageOut {
+    return new MultiInpaintImageOut(new Trace([], this));
+  }
+
+  /**
    * Retrieve this node's output from a response.
    *
    * Output fields: `outputs`
@@ -2888,17 +3051,6 @@ export class MultiInpaintImage extends Node {
     ) as Promise<
       OpenAPI.components["schemas"]["MultiInpaintImageOut"] | undefined
     >;
-  }
-
-  /**
-   * Future reference to this node's output.
-   *
-   * Output fields: `outputs`
-   *
-   * https://www.substrate.run/nodes#MultiInpaintImage
-   */
-  override get future(): MultiInpaintImageOut {
-    return new MultiInpaintImageOut(new Trace([], this));
   }
 
   protected override output(): OpenAPI.components["schemas"]["MultiInpaintImageOut"] {
@@ -2946,6 +3098,17 @@ export class StableDiffusionXLLightning extends Node {
   }
 
   /**
+   * Future reference to this node's output.
+   *
+   * Output fields: `outputs`
+   *
+   * https://www.substrate.run/nodes#StableDiffusionXLLightning
+   */
+  override get future(): StableDiffusionXLLightningOut {
+    return new StableDiffusionXLLightningOut(new Trace([], this));
+  }
+
+  /**
    * Retrieve this node's output from a response.
    *
    * Output fields: `outputs`
@@ -2960,17 +3123,6 @@ export class StableDiffusionXLLightning extends Node {
     ) as Promise<
       OpenAPI.components["schemas"]["StableDiffusionXLLightningOut"] | undefined
     >;
-  }
-
-  /**
-   * Future reference to this node's output.
-   *
-   * Output fields: `outputs`
-   *
-   * https://www.substrate.run/nodes#StableDiffusionXLLightning
-   */
-  override get future(): StableDiffusionXLLightningOut {
-    return new StableDiffusionXLLightningOut(new Trace([], this));
   }
 
   protected override output(): OpenAPI.components["schemas"]["StableDiffusionXLLightningOut"] {
@@ -3018,6 +3170,17 @@ export class StableDiffusionXLInpaint extends Node {
   }
 
   /**
+   * Future reference to this node's output.
+   *
+   * Output fields: `outputs`
+   *
+   * https://www.substrate.run/nodes#StableDiffusionXLInpaint
+   */
+  override get future(): StableDiffusionXLInpaintOut {
+    return new StableDiffusionXLInpaintOut(new Trace([], this));
+  }
+
+  /**
    * Retrieve this node's output from a response.
    *
    * Output fields: `outputs`
@@ -3032,17 +3195,6 @@ export class StableDiffusionXLInpaint extends Node {
     ) as Promise<
       OpenAPI.components["schemas"]["StableDiffusionXLInpaintOut"] | undefined
     >;
-  }
-
-  /**
-   * Future reference to this node's output.
-   *
-   * Output fields: `outputs`
-   *
-   * https://www.substrate.run/nodes#StableDiffusionXLInpaint
-   */
-  override get future(): StableDiffusionXLInpaintOut {
-    return new StableDiffusionXLInpaintOut(new Trace([], this));
   }
 
   protected override output(): OpenAPI.components["schemas"]["StableDiffusionXLInpaintOut"] {
@@ -3090,6 +3242,17 @@ export class StableDiffusionXLControlNet extends Node {
   }
 
   /**
+   * Future reference to this node's output.
+   *
+   * Output fields: `outputs`
+   *
+   * https://www.substrate.run/nodes#StableDiffusionXLControlNet
+   */
+  override get future(): StableDiffusionXLControlNetOut {
+    return new StableDiffusionXLControlNetOut(new Trace([], this));
+  }
+
+  /**
    * Retrieve this node's output from a response.
    *
    * Output fields: `outputs`
@@ -3105,17 +3268,6 @@ export class StableDiffusionXLControlNet extends Node {
       | OpenAPI.components["schemas"]["StableDiffusionXLControlNetOut"]
       | undefined
     >;
-  }
-
-  /**
-   * Future reference to this node's output.
-   *
-   * Output fields: `outputs`
-   *
-   * https://www.substrate.run/nodes#StableDiffusionXLControlNet
-   */
-  override get future(): StableDiffusionXLControlNetOut {
-    return new StableDiffusionXLControlNetOut(new Trace([], this));
   }
 
   protected override output(): OpenAPI.components["schemas"]["StableDiffusionXLControlNetOut"] {
@@ -3160,6 +3312,17 @@ export class TranscribeSpeech extends Node {
   }
 
   /**
+   * Future reference to this node's output.
+   *
+   * Output fields: `text`, `segments` (optional), `chapters` (optional)
+   *
+   * https://www.substrate.run/nodes#TranscribeSpeech
+   */
+  override get future(): TranscribeSpeechOut {
+    return new TranscribeSpeechOut(new Trace([], this));
+  }
+
+  /**
    * Retrieve this node's output from a response.
    *
    * Output fields: `text`, `segments` (optional), `chapters` (optional)
@@ -3174,17 +3337,6 @@ export class TranscribeSpeech extends Node {
     ) as Promise<
       OpenAPI.components["schemas"]["TranscribeSpeechOut"] | undefined
     >;
-  }
-
-  /**
-   * Future reference to this node's output.
-   *
-   * Output fields: `text`, `segments` (optional), `chapters` (optional)
-   *
-   * https://www.substrate.run/nodes#TranscribeSpeech
-   */
-  override get future(): TranscribeSpeechOut {
-    return new TranscribeSpeechOut(new Trace([], this));
   }
 
   protected override output(): OpenAPI.components["schemas"]["TranscribeSpeechOut"] {
@@ -3229,6 +3381,17 @@ export class GenerateSpeech extends Node {
   }
 
   /**
+   * Future reference to this node's output.
+   *
+   * Output fields: `audio_uri`
+   *
+   * https://www.substrate.run/nodes#GenerateSpeech
+   */
+  override get future(): GenerateSpeechOut {
+    return new GenerateSpeechOut(new Trace([], this));
+  }
+
+  /**
    * Retrieve this node's output from a response.
    *
    * Output fields: `audio_uri`
@@ -3243,17 +3406,6 @@ export class GenerateSpeech extends Node {
     ) as Promise<
       OpenAPI.components["schemas"]["GenerateSpeechOut"] | undefined
     >;
-  }
-
-  /**
-   * Future reference to this node's output.
-   *
-   * Output fields: `audio_uri`
-   *
-   * https://www.substrate.run/nodes#GenerateSpeech
-   */
-  override get future(): GenerateSpeechOut {
-    return new GenerateSpeechOut(new Trace([], this));
   }
 
   protected override output(): OpenAPI.components["schemas"]["GenerateSpeechOut"] {
@@ -3298,6 +3450,17 @@ export class RemoveBackground extends Node {
   }
 
   /**
+   * Future reference to this node's output.
+   *
+   * Output fields: `image_uri`
+   *
+   * https://www.substrate.run/nodes#RemoveBackground
+   */
+  override get future(): RemoveBackgroundOut {
+    return new RemoveBackgroundOut(new Trace([], this));
+  }
+
+  /**
    * Retrieve this node's output from a response.
    *
    * Output fields: `image_uri`
@@ -3312,17 +3475,6 @@ export class RemoveBackground extends Node {
     ) as Promise<
       OpenAPI.components["schemas"]["RemoveBackgroundOut"] | undefined
     >;
-  }
-
-  /**
-   * Future reference to this node's output.
-   *
-   * Output fields: `image_uri`
-   *
-   * https://www.substrate.run/nodes#RemoveBackground
-   */
-  override get future(): RemoveBackgroundOut {
-    return new RemoveBackgroundOut(new Trace([], this));
   }
 
   protected override output(): OpenAPI.components["schemas"]["RemoveBackgroundOut"] {
@@ -3367,6 +3519,17 @@ export class EraseImage extends Node {
   }
 
   /**
+   * Future reference to this node's output.
+   *
+   * Output fields: `image_uri`
+   *
+   * https://www.substrate.run/nodes#EraseImage
+   */
+  override get future(): EraseImageOut {
+    return new EraseImageOut(new Trace([], this));
+  }
+
+  /**
    * Retrieve this node's output from a response.
    *
    * Output fields: `image_uri`
@@ -3379,17 +3542,6 @@ export class EraseImage extends Node {
     return Promise.resolve(
       this._response ? this._response.get(this) : undefined,
     ) as Promise<OpenAPI.components["schemas"]["EraseImageOut"] | undefined>;
-  }
-
-  /**
-   * Future reference to this node's output.
-   *
-   * Output fields: `image_uri`
-   *
-   * https://www.substrate.run/nodes#EraseImage
-   */
-  override get future(): EraseImageOut {
-    return new EraseImageOut(new Trace([], this));
   }
 
   protected override output(): OpenAPI.components["schemas"]["EraseImageOut"] {
@@ -3434,6 +3586,17 @@ export class UpscaleImage extends Node {
   }
 
   /**
+   * Future reference to this node's output.
+   *
+   * Output fields: `image_uri`
+   *
+   * https://www.substrate.run/nodes#UpscaleImage
+   */
+  override get future(): UpscaleImageOut {
+    return new UpscaleImageOut(new Trace([], this));
+  }
+
+  /**
    * Retrieve this node's output from a response.
    *
    * Output fields: `image_uri`
@@ -3446,17 +3609,6 @@ export class UpscaleImage extends Node {
     return Promise.resolve(
       this._response ? this._response.get(this) : undefined,
     ) as Promise<OpenAPI.components["schemas"]["UpscaleImageOut"] | undefined>;
-  }
-
-  /**
-   * Future reference to this node's output.
-   *
-   * Output fields: `image_uri`
-   *
-   * https://www.substrate.run/nodes#UpscaleImage
-   */
-  override get future(): UpscaleImageOut {
-    return new UpscaleImageOut(new Trace([], this));
   }
 
   protected override output(): OpenAPI.components["schemas"]["UpscaleImageOut"] {
@@ -3501,6 +3653,17 @@ export class SegmentUnderPoint extends Node {
   }
 
   /**
+   * Future reference to this node's output.
+   *
+   * Output fields: `mask_image_uri`
+   *
+   * https://www.substrate.run/nodes#SegmentUnderPoint
+   */
+  override get future(): SegmentUnderPointOut {
+    return new SegmentUnderPointOut(new Trace([], this));
+  }
+
+  /**
    * Retrieve this node's output from a response.
    *
    * Output fields: `mask_image_uri`
@@ -3515,17 +3678,6 @@ export class SegmentUnderPoint extends Node {
     ) as Promise<
       OpenAPI.components["schemas"]["SegmentUnderPointOut"] | undefined
     >;
-  }
-
-  /**
-   * Future reference to this node's output.
-   *
-   * Output fields: `mask_image_uri`
-   *
-   * https://www.substrate.run/nodes#SegmentUnderPoint
-   */
-  override get future(): SegmentUnderPointOut {
-    return new SegmentUnderPointOut(new Trace([], this));
   }
 
   protected override output(): OpenAPI.components["schemas"]["SegmentUnderPointOut"] {
@@ -3570,6 +3722,17 @@ export class SegmentAnything extends Node {
   }
 
   /**
+   * Future reference to this node's output.
+   *
+   * Output fields: `mask_image_uri`
+   *
+   * https://www.substrate.run/nodes#SegmentAnything
+   */
+  override get future(): SegmentAnythingOut {
+    return new SegmentAnythingOut(new Trace([], this));
+  }
+
+  /**
    * Retrieve this node's output from a response.
    *
    * Output fields: `mask_image_uri`
@@ -3584,17 +3747,6 @@ export class SegmentAnything extends Node {
     ) as Promise<
       OpenAPI.components["schemas"]["SegmentAnythingOut"] | undefined
     >;
-  }
-
-  /**
-   * Future reference to this node's output.
-   *
-   * Output fields: `mask_image_uri`
-   *
-   * https://www.substrate.run/nodes#SegmentAnything
-   */
-  override get future(): SegmentAnythingOut {
-    return new SegmentAnythingOut(new Trace([], this));
   }
 
   protected override output(): OpenAPI.components["schemas"]["SegmentAnythingOut"] {
@@ -3639,6 +3791,17 @@ export class EmbedText extends Node {
   }
 
   /**
+   * Future reference to this node's output.
+   *
+   * Output fields: `embedding`
+   *
+   * https://www.substrate.run/nodes#EmbedText
+   */
+  override get future(): EmbedTextOut {
+    return new EmbedTextOut(new Trace([], this));
+  }
+
+  /**
    * Retrieve this node's output from a response.
    *
    * Output fields: `embedding`
@@ -3651,17 +3814,6 @@ export class EmbedText extends Node {
     return Promise.resolve(
       this._response ? this._response.get(this) : undefined,
     ) as Promise<OpenAPI.components["schemas"]["EmbedTextOut"] | undefined>;
-  }
-
-  /**
-   * Future reference to this node's output.
-   *
-   * Output fields: `embedding`
-   *
-   * https://www.substrate.run/nodes#EmbedText
-   */
-  override get future(): EmbedTextOut {
-    return new EmbedTextOut(new Trace([], this));
   }
 
   protected override output(): OpenAPI.components["schemas"]["EmbedTextOut"] {
@@ -3706,6 +3858,17 @@ export class MultiEmbedText extends Node {
   }
 
   /**
+   * Future reference to this node's output.
+   *
+   * Output fields: `embeddings`
+   *
+   * https://www.substrate.run/nodes#MultiEmbedText
+   */
+  override get future(): MultiEmbedTextOut {
+    return new MultiEmbedTextOut(new Trace([], this));
+  }
+
+  /**
    * Retrieve this node's output from a response.
    *
    * Output fields: `embeddings`
@@ -3720,17 +3883,6 @@ export class MultiEmbedText extends Node {
     ) as Promise<
       OpenAPI.components["schemas"]["MultiEmbedTextOut"] | undefined
     >;
-  }
-
-  /**
-   * Future reference to this node's output.
-   *
-   * Output fields: `embeddings`
-   *
-   * https://www.substrate.run/nodes#MultiEmbedText
-   */
-  override get future(): MultiEmbedTextOut {
-    return new MultiEmbedTextOut(new Trace([], this));
   }
 
   protected override output(): OpenAPI.components["schemas"]["MultiEmbedTextOut"] {
@@ -3775,6 +3927,17 @@ export class EmbedImage extends Node {
   }
 
   /**
+   * Future reference to this node's output.
+   *
+   * Output fields: `embedding`
+   *
+   * https://www.substrate.run/nodes#EmbedImage
+   */
+  override get future(): EmbedImageOut {
+    return new EmbedImageOut(new Trace([], this));
+  }
+
+  /**
    * Retrieve this node's output from a response.
    *
    * Output fields: `embedding`
@@ -3787,17 +3950,6 @@ export class EmbedImage extends Node {
     return Promise.resolve(
       this._response ? this._response.get(this) : undefined,
     ) as Promise<OpenAPI.components["schemas"]["EmbedImageOut"] | undefined>;
-  }
-
-  /**
-   * Future reference to this node's output.
-   *
-   * Output fields: `embedding`
-   *
-   * https://www.substrate.run/nodes#EmbedImage
-   */
-  override get future(): EmbedImageOut {
-    return new EmbedImageOut(new Trace([], this));
   }
 
   protected override output(): OpenAPI.components["schemas"]["EmbedImageOut"] {
@@ -3842,6 +3994,17 @@ export class MultiEmbedImage extends Node {
   }
 
   /**
+   * Future reference to this node's output.
+   *
+   * Output fields: `embeddings`
+   *
+   * https://www.substrate.run/nodes#MultiEmbedImage
+   */
+  override get future(): MultiEmbedImageOut {
+    return new MultiEmbedImageOut(new Trace([], this));
+  }
+
+  /**
    * Retrieve this node's output from a response.
    *
    * Output fields: `embeddings`
@@ -3856,17 +4019,6 @@ export class MultiEmbedImage extends Node {
     ) as Promise<
       OpenAPI.components["schemas"]["MultiEmbedImageOut"] | undefined
     >;
-  }
-
-  /**
-   * Future reference to this node's output.
-   *
-   * Output fields: `embeddings`
-   *
-   * https://www.substrate.run/nodes#MultiEmbedImage
-   */
-  override get future(): MultiEmbedImageOut {
-    return new MultiEmbedImageOut(new Trace([], this));
   }
 
   protected override output(): OpenAPI.components["schemas"]["MultiEmbedImageOut"] {
@@ -3911,6 +4063,17 @@ export class JinaV2 extends Node {
   }
 
   /**
+   * Future reference to this node's output.
+   *
+   * Output fields: `embeddings`
+   *
+   * https://www.substrate.run/nodes#JinaV2
+   */
+  override get future(): JinaV2Out {
+    return new JinaV2Out(new Trace([], this));
+  }
+
+  /**
    * Retrieve this node's output from a response.
    *
    * Output fields: `embeddings`
@@ -3923,17 +4086,6 @@ export class JinaV2 extends Node {
     return Promise.resolve(
       this._response ? this._response.get(this) : undefined,
     ) as Promise<OpenAPI.components["schemas"]["JinaV2Out"] | undefined>;
-  }
-
-  /**
-   * Future reference to this node's output.
-   *
-   * Output fields: `embeddings`
-   *
-   * https://www.substrate.run/nodes#JinaV2
-   */
-  override get future(): JinaV2Out {
-    return new JinaV2Out(new Trace([], this));
   }
 
   protected override output(): OpenAPI.components["schemas"]["JinaV2Out"] {
@@ -3976,6 +4128,17 @@ export class CLIP extends Node {
   }
 
   /**
+   * Future reference to this node's output.
+   *
+   * Output fields: `embeddings`
+   *
+   * https://www.substrate.run/nodes#CLIP
+   */
+  override get future(): CLIPOut {
+    return new CLIPOut(new Trace([], this));
+  }
+
+  /**
    * Retrieve this node's output from a response.
    *
    * Output fields: `embeddings`
@@ -3988,17 +4151,6 @@ export class CLIP extends Node {
     return Promise.resolve(
       this._response ? this._response.get(this) : undefined,
     ) as Promise<OpenAPI.components["schemas"]["CLIPOut"] | undefined>;
-  }
-
-  /**
-   * Future reference to this node's output.
-   *
-   * Output fields: `embeddings`
-   *
-   * https://www.substrate.run/nodes#CLIP
-   */
-  override get future(): CLIPOut {
-    return new CLIPOut(new Trace([], this));
   }
 
   protected override output(): OpenAPI.components["schemas"]["CLIPOut"] {
@@ -4046,6 +4198,17 @@ export class FindOrCreateVectorStore extends Node {
   }
 
   /**
+   * Future reference to this node's output.
+   *
+   * Output fields: `collection_name`, `model`
+   *
+   * https://www.substrate.run/nodes#FindOrCreateVectorStore
+   */
+  override get future(): FindOrCreateVectorStoreOut {
+    return new FindOrCreateVectorStoreOut(new Trace([], this));
+  }
+
+  /**
    * Retrieve this node's output from a response.
    *
    * Output fields: `collection_name`, `model`
@@ -4060,17 +4223,6 @@ export class FindOrCreateVectorStore extends Node {
     ) as Promise<
       OpenAPI.components["schemas"]["FindOrCreateVectorStoreOut"] | undefined
     >;
-  }
-
-  /**
-   * Future reference to this node's output.
-   *
-   * Output fields: `collection_name`, `model`
-   *
-   * https://www.substrate.run/nodes#FindOrCreateVectorStore
-   */
-  override get future(): FindOrCreateVectorStoreOut {
-    return new FindOrCreateVectorStoreOut(new Trace([], this));
   }
 
   protected override output(): OpenAPI.components["schemas"]["FindOrCreateVectorStoreOut"] {
@@ -4115,6 +4267,17 @@ export class ListVectorStores extends Node {
   }
 
   /**
+   * Future reference to this node's output.
+   *
+   * Output fields: `items` (optional)
+   *
+   * https://www.substrate.run/nodes#ListVectorStores
+   */
+  override get future(): ListVectorStoresOut {
+    return new ListVectorStoresOut(new Trace([], this));
+  }
+
+  /**
    * Retrieve this node's output from a response.
    *
    * Output fields: `items` (optional)
@@ -4129,17 +4292,6 @@ export class ListVectorStores extends Node {
     ) as Promise<
       OpenAPI.components["schemas"]["ListVectorStoresOut"] | undefined
     >;
-  }
-
-  /**
-   * Future reference to this node's output.
-   *
-   * Output fields: `items` (optional)
-   *
-   * https://www.substrate.run/nodes#ListVectorStores
-   */
-  override get future(): ListVectorStoresOut {
-    return new ListVectorStoresOut(new Trace([], this));
   }
 
   protected override output(): OpenAPI.components["schemas"]["ListVectorStoresOut"] {
@@ -4184,6 +4336,17 @@ export class DeleteVectorStore extends Node {
   }
 
   /**
+   * Future reference to this node's output.
+   *
+   * Output fields: `collection_name`, `model`
+   *
+   * https://www.substrate.run/nodes#DeleteVectorStore
+   */
+  override get future(): DeleteVectorStoreOut {
+    return new DeleteVectorStoreOut(new Trace([], this));
+  }
+
+  /**
    * Retrieve this node's output from a response.
    *
    * Output fields: `collection_name`, `model`
@@ -4198,17 +4361,6 @@ export class DeleteVectorStore extends Node {
     ) as Promise<
       OpenAPI.components["schemas"]["DeleteVectorStoreOut"] | undefined
     >;
-  }
-
-  /**
-   * Future reference to this node's output.
-   *
-   * Output fields: `collection_name`, `model`
-   *
-   * https://www.substrate.run/nodes#DeleteVectorStore
-   */
-  override get future(): DeleteVectorStoreOut {
-    return new DeleteVectorStoreOut(new Trace([], this));
   }
 
   protected override output(): OpenAPI.components["schemas"]["DeleteVectorStoreOut"] {
@@ -4253,6 +4405,17 @@ export class QueryVectorStore extends Node {
   }
 
   /**
+   * Future reference to this node's output.
+   *
+   * Output fields: `results`, `collection_name` (optional), `model` (optional)
+   *
+   * https://www.substrate.run/nodes#QueryVectorStore
+   */
+  override get future(): QueryVectorStoreOut {
+    return new QueryVectorStoreOut(new Trace([], this));
+  }
+
+  /**
    * Retrieve this node's output from a response.
    *
    * Output fields: `results`, `collection_name` (optional), `model` (optional)
@@ -4267,17 +4430,6 @@ export class QueryVectorStore extends Node {
     ) as Promise<
       OpenAPI.components["schemas"]["QueryVectorStoreOut"] | undefined
     >;
-  }
-
-  /**
-   * Future reference to this node's output.
-   *
-   * Output fields: `results`, `collection_name` (optional), `model` (optional)
-   *
-   * https://www.substrate.run/nodes#QueryVectorStore
-   */
-  override get future(): QueryVectorStoreOut {
-    return new QueryVectorStoreOut(new Trace([], this));
   }
 
   protected override output(): OpenAPI.components["schemas"]["QueryVectorStoreOut"] {
@@ -4322,6 +4474,17 @@ export class FetchVectors extends Node {
   }
 
   /**
+   * Future reference to this node's output.
+   *
+   * Output fields: `vectors`
+   *
+   * https://www.substrate.run/nodes#FetchVectors
+   */
+  override get future(): FetchVectorsOut {
+    return new FetchVectorsOut(new Trace([], this));
+  }
+
+  /**
    * Retrieve this node's output from a response.
    *
    * Output fields: `vectors`
@@ -4334,17 +4497,6 @@ export class FetchVectors extends Node {
     return Promise.resolve(
       this._response ? this._response.get(this) : undefined,
     ) as Promise<OpenAPI.components["schemas"]["FetchVectorsOut"] | undefined>;
-  }
-
-  /**
-   * Future reference to this node's output.
-   *
-   * Output fields: `vectors`
-   *
-   * https://www.substrate.run/nodes#FetchVectors
-   */
-  override get future(): FetchVectorsOut {
-    return new FetchVectorsOut(new Trace([], this));
   }
 
   protected override output(): OpenAPI.components["schemas"]["FetchVectorsOut"] {
@@ -4389,6 +4541,17 @@ export class UpdateVectors extends Node {
   }
 
   /**
+   * Future reference to this node's output.
+   *
+   * Output fields: `count`
+   *
+   * https://www.substrate.run/nodes#UpdateVectors
+   */
+  override get future(): UpdateVectorsOut {
+    return new UpdateVectorsOut(new Trace([], this));
+  }
+
+  /**
    * Retrieve this node's output from a response.
    *
    * Output fields: `count`
@@ -4401,17 +4564,6 @@ export class UpdateVectors extends Node {
     return Promise.resolve(
       this._response ? this._response.get(this) : undefined,
     ) as Promise<OpenAPI.components["schemas"]["UpdateVectorsOut"] | undefined>;
-  }
-
-  /**
-   * Future reference to this node's output.
-   *
-   * Output fields: `count`
-   *
-   * https://www.substrate.run/nodes#UpdateVectors
-   */
-  override get future(): UpdateVectorsOut {
-    return new UpdateVectorsOut(new Trace([], this));
   }
 
   protected override output(): OpenAPI.components["schemas"]["UpdateVectorsOut"] {
@@ -4456,6 +4608,17 @@ export class DeleteVectors extends Node {
   }
 
   /**
+   * Future reference to this node's output.
+   *
+   * Output fields: `count`
+   *
+   * https://www.substrate.run/nodes#DeleteVectors
+   */
+  override get future(): DeleteVectorsOut {
+    return new DeleteVectorsOut(new Trace([], this));
+  }
+
+  /**
    * Retrieve this node's output from a response.
    *
    * Output fields: `count`
@@ -4470,21 +4633,11 @@ export class DeleteVectors extends Node {
     ) as Promise<OpenAPI.components["schemas"]["DeleteVectorsOut"] | undefined>;
   }
 
-  /**
-   * Future reference to this node's output.
-   *
-   * Output fields: `count`
-   *
-   * https://www.substrate.run/nodes#DeleteVectors
-   */
-  override get future(): DeleteVectorsOut {
-    return new DeleteVectorsOut(new Trace([], this));
-  }
-
   protected override output(): OpenAPI.components["schemas"]["DeleteVectorsOut"] {
     return super.output() as OpenAPI.components["schemas"]["DeleteVectorsOut"];
   }
 }
+
 export type AnyNode =
   | Experimental
   | Box
