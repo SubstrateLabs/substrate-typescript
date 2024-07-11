@@ -117,10 +117,7 @@ export class JQ extends Directive {
     rawValue: (val: JQCompatible) => ({ future_id: null, val }),
   };
 
-  override next(
-    // @ts-ignore
-    ...items: TraceProp[]
-  ) {
+  override next(...items: TraceProp[]) {
     return new JQ(this.query, this.target);
   }
 
