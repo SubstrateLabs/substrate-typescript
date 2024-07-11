@@ -1,7 +1,7 @@
 /**
  * 𐃏 Substrate
  * @generated file
- * 20240617.20240710
+ * 20240617.20240711
  */
 
 import * as OpenAPI from "substrate/OpenAPI";
@@ -37,7 +37,10 @@ type FutureExpandAny<T> = T extends (infer U)[]
 
 export class ComputeTextInImageUris extends Future<string[]> {
   /** Returns `Future<string>` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new Future<string>(this._directive.next(index));
   }
   /** @internal Returns the result for `ComputeTextInImageUris` once it's node has been run. */
@@ -50,7 +53,10 @@ export class ComputeTextInImageUris extends Future<string[]> {
 
 export class MultiComputeTextOutChoices extends Future<ComputeTextOut[]> {
   /** Returns `ComputeTextOut` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new ComputeTextOut(this._directive.next(index));
   }
   /** @internal Returns the result for `MultiComputeTextOutChoices` once it's node has been run. */
@@ -63,7 +69,10 @@ export class MultiComputeTextOutChoices extends Future<ComputeTextOut[]> {
 
 export class BatchComputeTextInPrompts extends Future<string[]> {
   /** Returns `Future<string>` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new Future<string>(this._directive.next(index));
   }
   /** @internal Returns the result for `BatchComputeTextInPrompts` once it's node has been run. */
@@ -76,7 +85,10 @@ export class BatchComputeTextInPrompts extends Future<string[]> {
 
 export class BatchComputeTextOutOutputs extends Future<ComputeTextOut[]> {
   /** Returns `ComputeTextOut` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new ComputeTextOut(this._directive.next(index));
   }
   /** @internal Returns the result for `BatchComputeTextOutOutputs` once it's node has been run. */
@@ -89,7 +101,10 @@ export class BatchComputeTextOutOutputs extends Future<ComputeTextOut[]> {
 
 export class MultiComputeJSONOutChoices extends Future<ComputeJSONOut[]> {
   /** Returns `ComputeJSONOut` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new ComputeJSONOut(this._directive.next(index));
   }
   /** @internal Returns the result for `MultiComputeJSONOutChoices` once it's node has been run. */
@@ -102,7 +117,10 @@ export class MultiComputeJSONOutChoices extends Future<ComputeJSONOut[]> {
 
 export class BatchComputeJSONInPrompts extends Future<string[]> {
   /** Returns `Future<string>` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new Future<string>(this._directive.next(index));
   }
   /** @internal Returns the result for `BatchComputeJSONInPrompts` once it's node has been run. */
@@ -115,7 +133,10 @@ export class BatchComputeJSONInPrompts extends Future<string[]> {
 
 export class BatchComputeJSONOutOutputs extends Future<ComputeJSONOut[]> {
   /** Returns `ComputeJSONOut` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new ComputeJSONOut(this._directive.next(index));
   }
   /** @internal Returns the result for `BatchComputeJSONOutOutputs` once it's node has been run. */
@@ -130,7 +151,10 @@ export class Mistral7BInstructOutChoices extends Future<
   Mistral7BInstructChoice[]
 > {
   /** Returns `Mistral7BInstructChoice` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new Mistral7BInstructChoice(this._directive.next(index));
   }
   /** @internal Returns the result for `Mistral7BInstructOutChoices` once it's node has been run. */
@@ -143,7 +167,10 @@ export class Mistral7BInstructOutChoices extends Future<
 
 export class Mixtral8x7BInstructOutChoices extends Future<Mixtral8x7BChoice[]> {
   /** Returns `Mixtral8x7BChoice` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new Mixtral8x7BChoice(this._directive.next(index));
   }
   /** @internal Returns the result for `Mixtral8x7BInstructOutChoices` once it's node has been run. */
@@ -158,7 +185,10 @@ export class Llama3Instruct8BOutChoices extends Future<
   Llama3Instruct8BChoice[]
 > {
   /** Returns `Llama3Instruct8BChoice` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new Llama3Instruct8BChoice(this._directive.next(index));
   }
   /** @internal Returns the result for `Llama3Instruct8BOutChoices` once it's node has been run. */
@@ -173,7 +203,10 @@ export class Llama3Instruct70BOutChoices extends Future<
   Llama3Instruct70BChoice[]
 > {
   /** Returns `Llama3Instruct70BChoice` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new Llama3Instruct70BChoice(this._directive.next(index));
   }
   /** @internal Returns the result for `Llama3Instruct70BOutChoices` once it's node has been run. */
@@ -186,7 +219,10 @@ export class Llama3Instruct70BOutChoices extends Future<
 
 export class Firellava13BInImageUris extends Future<string[]> {
   /** Returns `Future<string>` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new Future<string>(this._directive.next(index));
   }
   /** @internal Returns the result for `Firellava13BInImageUris` once it's node has been run. */
@@ -199,7 +235,10 @@ export class Firellava13BInImageUris extends Future<string[]> {
 
 export class MultiGenerateImageOutOutputs extends Future<GenerateImageOut[]> {
   /** Returns `GenerateImageOut` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new GenerateImageOut(this._directive.next(index));
   }
   /** @internal Returns the result for `MultiGenerateImageOutOutputs` once it's node has been run. */
@@ -212,7 +251,10 @@ export class MultiGenerateImageOutOutputs extends Future<GenerateImageOut[]> {
 
 export class StableDiffusionXLInSeeds extends Future<number[]> {
   /** Returns `Future<number>` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new Future<number>(this._directive.next(index));
   }
   /** @internal Returns the result for `StableDiffusionXLInSeeds` once it's node has been run. */
@@ -227,7 +269,10 @@ export class StableDiffusionXLOutOutputs extends Future<
   StableDiffusionImage[]
 > {
   /** Returns `StableDiffusionImage` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new StableDiffusionImage(this._directive.next(index));
   }
   /** @internal Returns the result for `StableDiffusionXLOutOutputs` once it's node has been run. */
@@ -240,7 +285,10 @@ export class StableDiffusionXLOutOutputs extends Future<
 
 export class StableDiffusionXLLightningInSeeds extends Future<number[]> {
   /** Returns `Future<number>` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new Future<number>(this._directive.next(index));
   }
   /** @internal Returns the result for `StableDiffusionXLLightningInSeeds` once it's node has been run. */
@@ -255,7 +303,10 @@ export class StableDiffusionXLLightningOutOutputs extends Future<
   StableDiffusionImage[]
 > {
   /** Returns `StableDiffusionImage` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new StableDiffusionImage(this._directive.next(index));
   }
   /** @internal Returns the result for `StableDiffusionXLLightningOutOutputs` once it's node has been run. */
@@ -268,7 +319,10 @@ export class StableDiffusionXLLightningOutOutputs extends Future<
 
 export class StableDiffusionXLIPAdapterInSeeds extends Future<number[]> {
   /** Returns `Future<number>` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new Future<number>(this._directive.next(index));
   }
   /** @internal Returns the result for `StableDiffusionXLIPAdapterInSeeds` once it's node has been run. */
@@ -283,7 +337,10 @@ export class StableDiffusionXLIPAdapterOutOutputs extends Future<
   StableDiffusionImage[]
 > {
   /** Returns `StableDiffusionImage` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new StableDiffusionImage(this._directive.next(index));
   }
   /** @internal Returns the result for `StableDiffusionXLIPAdapterOutOutputs` once it's node has been run. */
@@ -296,7 +353,10 @@ export class StableDiffusionXLIPAdapterOutOutputs extends Future<
 
 export class StableDiffusionXLControlNetInSeeds extends Future<number[]> {
   /** Returns `Future<number>` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new Future<number>(this._directive.next(index));
   }
   /** @internal Returns the result for `StableDiffusionXLControlNetInSeeds` once it's node has been run. */
@@ -311,7 +371,10 @@ export class StableDiffusionXLControlNetOutOutputs extends Future<
   StableDiffusionImage[]
 > {
   /** Returns `StableDiffusionImage` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new StableDiffusionImage(this._directive.next(index));
   }
   /** @internal Returns the result for `StableDiffusionXLControlNetOutOutputs` once it's node has been run. */
@@ -324,7 +387,10 @@ export class StableDiffusionXLControlNetOutOutputs extends Future<
 
 export class MultiInpaintImageOutOutputs extends Future<InpaintImageOut[]> {
   /** Returns `InpaintImageOut` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new InpaintImageOut(this._directive.next(index));
   }
   /** @internal Returns the result for `MultiInpaintImageOutOutputs` once it's node has been run. */
@@ -337,7 +403,10 @@ export class MultiInpaintImageOutOutputs extends Future<InpaintImageOut[]> {
 
 export class StableDiffusionXLInpaintInSeeds extends Future<number[]> {
   /** Returns `Future<number>` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new Future<number>(this._directive.next(index));
   }
   /** @internal Returns the result for `StableDiffusionXLInpaintInSeeds` once it's node has been run. */
@@ -352,7 +421,10 @@ export class StableDiffusionXLInpaintOutOutputs extends Future<
   StableDiffusionImage[]
 > {
   /** Returns `StableDiffusionImage` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new StableDiffusionImage(this._directive.next(index));
   }
   /** @internal Returns the result for `StableDiffusionXLInpaintOutOutputs` once it's node has been run. */
@@ -365,7 +437,10 @@ export class StableDiffusionXLInpaintOutOutputs extends Future<
 
 export class SegmentAnythingInPointPrompts extends Future<Point[]> {
   /** Returns `Point` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new Point(this._directive.next(index));
   }
   /** @internal Returns the result for `SegmentAnythingInPointPrompts` once it's node has been run. */
@@ -378,7 +453,10 @@ export class SegmentAnythingInPointPrompts extends Future<Point[]> {
 
 export class SegmentAnythingInBoxPrompts extends Future<BoundingBox[]> {
   /** Returns `BoundingBox` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new BoundingBox(this._directive.next(index));
   }
   /** @internal Returns the result for `SegmentAnythingInBoxPrompts` once it's node has been run. */
@@ -391,7 +469,10 @@ export class SegmentAnythingInBoxPrompts extends Future<BoundingBox[]> {
 
 export class TranscribedSegmentWords extends Future<TranscribedWord[]> {
   /** Returns `TranscribedWord` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new TranscribedWord(this._directive.next(index));
   }
   /** @internal Returns the result for `TranscribedSegmentWords` once it's node has been run. */
@@ -404,7 +485,10 @@ export class TranscribedSegmentWords extends Future<TranscribedWord[]> {
 
 export class TranscribeSpeechOutSegments extends Future<TranscribedSegment[]> {
   /** Returns `TranscribedSegment` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new TranscribedSegment(this._directive.next(index));
   }
   /** @internal Returns the result for `TranscribeSpeechOutSegments` once it's node has been run. */
@@ -417,7 +501,10 @@ export class TranscribeSpeechOutSegments extends Future<TranscribedSegment[]> {
 
 export class TranscribeSpeechOutChapters extends Future<ChapterMarker[]> {
   /** Returns `ChapterMarker` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new ChapterMarker(this._directive.next(index));
   }
   /** @internal Returns the result for `TranscribeSpeechOutChapters` once it's node has been run. */
@@ -430,7 +517,10 @@ export class TranscribeSpeechOutChapters extends Future<ChapterMarker[]> {
 
 export class EmbeddingVector extends Future<number[]> {
   /** Returns `Future<number>` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new Future<number>(this._directive.next(index));
   }
   /** @internal Returns the result for `EmbeddingVector` once it's node has been run. */
@@ -443,7 +533,10 @@ export class EmbeddingVector extends Future<number[]> {
 
 export class EmbedTextInEmbeddedMetadataKeys extends Future<string[]> {
   /** Returns `Future<string>` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new Future<string>(this._directive.next(index));
   }
   /** @internal Returns the result for `EmbedTextInEmbeddedMetadataKeys` once it's node has been run. */
@@ -456,7 +549,10 @@ export class EmbedTextInEmbeddedMetadataKeys extends Future<string[]> {
 
 export class MultiEmbedTextInItems extends Future<EmbedTextItem[]> {
   /** Returns `EmbedTextItem` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new EmbedTextItem(this._directive.next(index));
   }
   /** @internal Returns the result for `MultiEmbedTextInItems` once it's node has been run. */
@@ -469,7 +565,10 @@ export class MultiEmbedTextInItems extends Future<EmbedTextItem[]> {
 
 export class MultiEmbedTextInEmbeddedMetadataKeys extends Future<string[]> {
   /** Returns `Future<string>` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new Future<string>(this._directive.next(index));
   }
   /** @internal Returns the result for `MultiEmbedTextInEmbeddedMetadataKeys` once it's node has been run. */
@@ -482,7 +581,10 @@ export class MultiEmbedTextInEmbeddedMetadataKeys extends Future<string[]> {
 
 export class MultiEmbedTextOutEmbeddings extends Future<Embedding[]> {
   /** Returns `Embedding` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new Embedding(this._directive.next(index));
   }
   /** @internal Returns the result for `MultiEmbedTextOutEmbeddings` once it's node has been run. */
@@ -495,7 +597,10 @@ export class MultiEmbedTextOutEmbeddings extends Future<Embedding[]> {
 
 export class JinaV2InItems extends Future<EmbedTextItem[]> {
   /** Returns `EmbedTextItem` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new EmbedTextItem(this._directive.next(index));
   }
   /** @internal Returns the result for `JinaV2InItems` once it's node has been run. */
@@ -508,7 +613,10 @@ export class JinaV2InItems extends Future<EmbedTextItem[]> {
 
 export class JinaV2InEmbeddedMetadataKeys extends Future<string[]> {
   /** Returns `Future<string>` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new Future<string>(this._directive.next(index));
   }
   /** @internal Returns the result for `JinaV2InEmbeddedMetadataKeys` once it's node has been run. */
@@ -521,7 +629,10 @@ export class JinaV2InEmbeddedMetadataKeys extends Future<string[]> {
 
 export class JinaV2OutEmbeddings extends Future<Embedding[]> {
   /** Returns `Embedding` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new Embedding(this._directive.next(index));
   }
   /** @internal Returns the result for `JinaV2OutEmbeddings` once it's node has been run. */
@@ -534,7 +645,10 @@ export class JinaV2OutEmbeddings extends Future<Embedding[]> {
 
 export class MultiEmbedImageInItems extends Future<EmbedImageItem[]> {
   /** Returns `EmbedImageItem` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new EmbedImageItem(this._directive.next(index));
   }
   /** @internal Returns the result for `MultiEmbedImageInItems` once it's node has been run. */
@@ -547,7 +661,10 @@ export class MultiEmbedImageInItems extends Future<EmbedImageItem[]> {
 
 export class MultiEmbedImageOutEmbeddings extends Future<Embedding[]> {
   /** Returns `Embedding` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new Embedding(this._directive.next(index));
   }
   /** @internal Returns the result for `MultiEmbedImageOutEmbeddings` once it's node has been run. */
@@ -560,7 +677,10 @@ export class MultiEmbedImageOutEmbeddings extends Future<Embedding[]> {
 
 export class CLIPInItems extends Future<EmbedTextOrImageItem[]> {
   /** Returns `EmbedTextOrImageItem` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new EmbedTextOrImageItem(this._directive.next(index));
   }
   /** @internal Returns the result for `CLIPInItems` once it's node has been run. */
@@ -573,7 +693,10 @@ export class CLIPInItems extends Future<EmbedTextOrImageItem[]> {
 
 export class CLIPInEmbeddedMetadataKeys extends Future<string[]> {
   /** Returns `Future<string>` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new Future<string>(this._directive.next(index));
   }
   /** @internal Returns the result for `CLIPInEmbeddedMetadataKeys` once it's node has been run. */
@@ -586,7 +709,10 @@ export class CLIPInEmbeddedMetadataKeys extends Future<string[]> {
 
 export class CLIPOutEmbeddings extends Future<Embedding[]> {
   /** Returns `Embedding` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new Embedding(this._directive.next(index));
   }
   /** @internal Returns the result for `CLIPOutEmbeddings` once it's node has been run. */
@@ -601,7 +727,10 @@ export class ListVectorStoresOutItems extends Future<
   FindOrCreateVectorStoreOut[]
 > {
   /** Returns `FindOrCreateVectorStoreOut` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new FindOrCreateVectorStoreOut(this._directive.next(index));
   }
   /** @internal Returns the result for `ListVectorStoresOutItems` once it's node has been run. */
@@ -614,7 +743,10 @@ export class ListVectorStoresOutItems extends Future<
 
 export class VectorVector extends Future<number[]> {
   /** Returns `Future<number>` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new Future<number>(this._directive.next(index));
   }
   /** @internal Returns the result for `VectorVector` once it's node has been run. */
@@ -627,7 +759,10 @@ export class VectorVector extends Future<number[]> {
 
 export class FetchVectorsInIds extends Future<string[]> {
   /** Returns `Future<string>` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new Future<string>(this._directive.next(index));
   }
   /** @internal Returns the result for `FetchVectorsInIds` once it's node has been run. */
@@ -640,7 +775,10 @@ export class FetchVectorsInIds extends Future<string[]> {
 
 export class FetchVectorsOutVectors extends Future<Vector[]> {
   /** Returns `Vector` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new Vector(this._directive.next(index));
   }
   /** @internal Returns the result for `FetchVectorsOutVectors` once it's node has been run. */
@@ -653,7 +791,10 @@ export class FetchVectorsOutVectors extends Future<Vector[]> {
 
 export class UpdateVectorParamsVector extends Future<number[]> {
   /** Returns `Future<number>` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new Future<number>(this._directive.next(index));
   }
   /** @internal Returns the result for `UpdateVectorParamsVector` once it's node has been run. */
@@ -666,7 +807,10 @@ export class UpdateVectorParamsVector extends Future<number[]> {
 
 export class UpdateVectorsInVectors extends Future<UpdateVectorParams[]> {
   /** Returns `UpdateVectorParams` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new UpdateVectorParams(this._directive.next(index));
   }
   /** @internal Returns the result for `UpdateVectorsInVectors` once it's node has been run. */
@@ -679,7 +823,10 @@ export class UpdateVectorsInVectors extends Future<UpdateVectorParams[]> {
 
 export class DeleteVectorsInIds extends Future<string[]> {
   /** Returns `Future<string>` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new Future<string>(this._directive.next(index));
   }
   /** @internal Returns the result for `DeleteVectorsInIds` once it's node has been run. */
@@ -692,7 +839,10 @@ export class DeleteVectorsInIds extends Future<string[]> {
 
 export class QueryVectorStoreInQueryStrings extends Future<string[]> {
   /** Returns `Future<string>` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new Future<string>(this._directive.next(index));
   }
   /** @internal Returns the result for `QueryVectorStoreInQueryStrings` once it's node has been run. */
@@ -705,7 +855,10 @@ export class QueryVectorStoreInQueryStrings extends Future<string[]> {
 
 export class QueryVectorStoreInQueryImageUris extends Future<string[]> {
   /** Returns `Future<string>` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new Future<string>(this._directive.next(index));
   }
   /** @internal Returns the result for `QueryVectorStoreInQueryImageUris` once it's node has been run. */
@@ -719,7 +872,10 @@ export class QueryVectorStoreInQueryImageUris extends Future<string[]> {
 
 export class QueryVectorStoreInQueryVectors extends Future<QueryVectorStoreInQueryVectorsItem> {
   /** Returns `QueryVectorStoreInQueryVectorsItem` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new QueryVectorStoreInQueryVectorsItem(this._directive.next(index));
   }
   /** @internal Returns the result for `QueryVectorStoreInQueryVectors` once it's node has been run. */
@@ -732,7 +888,10 @@ export class QueryVectorStoreInQueryVectors extends Future<QueryVectorStoreInQue
 
 export class QueryVectorStoreInQueryVectorsItem extends Future<number[]> {
   /** Returns `Future<number>` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new Future<number>(this._directive.next(index));
   }
   /** @internal Returns the result for `QueryVectorStoreInQueryVectorsItem` once it's node has been run. */
@@ -745,7 +904,10 @@ export class QueryVectorStoreInQueryVectorsItem extends Future<number[]> {
 
 export class QueryVectorStoreInQueryIds extends Future<string[]> {
   /** Returns `Future<string>` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new Future<string>(this._directive.next(index));
   }
   /** @internal Returns the result for `QueryVectorStoreInQueryIds` once it's node has been run. */
@@ -758,7 +920,10 @@ export class QueryVectorStoreInQueryIds extends Future<string[]> {
 
 export class VectorStoreQueryResultVector extends Future<number[]> {
   /** Returns `Future<number>` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new Future<number>(this._directive.next(index));
   }
   /** @internal Returns the result for `VectorStoreQueryResultVector` once it's node has been run. */
@@ -772,7 +937,10 @@ export class VectorStoreQueryResultVector extends Future<number[]> {
 
 export class QueryVectorStoreOutResults extends Future<QueryVectorStoreOutResultsItem> {
   /** Returns `QueryVectorStoreOutResultsItem` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new QueryVectorStoreOutResultsItem(this._directive.next(index));
   }
   /** @internal Returns the result for `QueryVectorStoreOutResults` once it's node has been run. */
@@ -787,7 +955,10 @@ export class QueryVectorStoreOutResultsItem extends Future<
   VectorStoreQueryResult[]
 > {
   /** Returns `VectorStoreQueryResult` at given index. */
-  at(index: number) {
+  at(index: number | Future<number>) {
+    // @ts-ignore
+    if (index instanceof Future) index._runtimeHint = "number";
+    // @ts-ignore
     return new VectorStoreQueryResult(this._directive.next(index));
   }
   /** @internal Returns the result for `QueryVectorStoreOutResultsItem` once it's node has been run. */
@@ -800,12 +971,20 @@ export class QueryVectorStoreOutResultsItem extends Future<
 export class ErrorOut extends Future<Object> {
   /** The type of error returned. */
   get type() {
-    return new Future<string>(this._directive.next("type"));
+    // @ts-ignore
+    const future = new Future<string>(this._directive.next("type"));
+    // @ts-ignore
+    future._runtimeHint = "string";
+    return future;
   }
 
   /** A message providing more details about the error. */
   get message() {
-    return new Future<string>(this._directive.next("message"));
+    // @ts-ignore
+    const future = new Future<string>(this._directive.next("message"));
+    // @ts-ignore
+    future._runtimeHint = "string";
+    return future;
   }
 
   /** @internal returns the result for `ErrorOut` once it's node has been run. */
@@ -818,7 +997,11 @@ export class ErrorOut extends Future<Object> {
 export class ExperimentalOut extends Future<Object> {
   /** Response. */
   get output() {
-    return new Future<Object>(this._directive.next("output"));
+    // @ts-ignore
+    const future = new Future<Object>(this._directive.next("output"));
+    // @ts-ignore
+    future._runtimeHint = "object";
+    return future;
   }
 
   /** @internal returns the result for `ExperimentalOut` once it's node has been run. */
@@ -831,7 +1014,11 @@ export class ExperimentalOut extends Future<Object> {
 export class BoxOut extends Future<Object> {
   /** The evaluated result. */
   get value() {
-    return new Future<Object>(this._directive.next("value"));
+    // @ts-ignore
+    const future = new Future<Object>(this._directive.next("value"));
+    // @ts-ignore
+    future._runtimeHint = "object";
+    return future;
   }
 
   /** @internal returns the result for `BoxOut` once it's node has been run. */
@@ -844,7 +1031,11 @@ export class BoxOut extends Future<Object> {
 export class IfOut extends Future<Object> {
   /** Result. Null if `value_if_false` is not provided and `condition` is false. */
   get result() {
-    return new Future<Object>(this._directive.next("result"));
+    // @ts-ignore
+    const future = new Future<Object>(this._directive.next("result"));
+    // @ts-ignore
+    future._runtimeHint = "object";
+    return future;
   }
 
   /** @internal returns the result for `IfOut` once it's node has been run. */
@@ -857,7 +1048,11 @@ export class IfOut extends Future<Object> {
 export class ComputeTextOut extends Future<Object> {
   /** Text response. */
   get text() {
-    return new Future<string>(this._directive.next("text"));
+    // @ts-ignore
+    const future = new Future<string>(this._directive.next("text"));
+    // @ts-ignore
+    future._runtimeHint = "string";
+    return future;
   }
 
   /** @internal returns the result for `ComputeTextOut` once it's node has been run. */
@@ -870,12 +1065,20 @@ export class ComputeTextOut extends Future<Object> {
 export class ComputeJSONOut extends Future<Object> {
   /** JSON response. */
   get json_object() {
-    return new Future<Object>(this._directive.next("json_object"));
+    // @ts-ignore
+    const future = new Future<Object>(this._directive.next("json_object"));
+    // @ts-ignore
+    future._runtimeHint = "object";
+    return future;
   }
 
   /** If the model output could not be parsed to JSON, this is the raw text output. */
   get text() {
-    return new Future<string>(this._directive.next("text"));
+    // @ts-ignore
+    const future = new Future<string>(this._directive.next("text"));
+    // @ts-ignore
+    future._runtimeHint = "string";
+    return future;
   }
 
   /** @internal returns the result for `ComputeJSONOut` once it's node has been run. */
@@ -888,7 +1091,13 @@ export class ComputeJSONOut extends Future<Object> {
 export class MultiComputeTextOut extends Future<Object> {
   /** Response choices. */
   get choices() {
-    return new MultiComputeTextOutChoices(this._directive.next("choices"));
+    // @ts-ignore
+    const future = new MultiComputeTextOutChoices(
+      this._directive.next("choices"),
+    );
+    // @ts-ignore
+    future._runtimeHint = "array";
+    return future;
   }
 
   /** @internal returns the result for `MultiComputeTextOut` once it's node has been run. */
@@ -901,7 +1110,13 @@ export class MultiComputeTextOut extends Future<Object> {
 export class BatchComputeTextOut extends Future<Object> {
   /** Batch outputs. */
   get outputs() {
-    return new BatchComputeTextOutOutputs(this._directive.next("outputs"));
+    // @ts-ignore
+    const future = new BatchComputeTextOutOutputs(
+      this._directive.next("outputs"),
+    );
+    // @ts-ignore
+    future._runtimeHint = "array";
+    return future;
   }
 
   /** @internal returns the result for `BatchComputeTextOut` once it's node has been run. */
@@ -914,7 +1129,13 @@ export class BatchComputeTextOut extends Future<Object> {
 export class MultiComputeJSONOut extends Future<Object> {
   /** Response choices. */
   get choices() {
-    return new MultiComputeJSONOutChoices(this._directive.next("choices"));
+    // @ts-ignore
+    const future = new MultiComputeJSONOutChoices(
+      this._directive.next("choices"),
+    );
+    // @ts-ignore
+    future._runtimeHint = "array";
+    return future;
   }
 
   /** @internal returns the result for `MultiComputeJSONOut` once it's node has been run. */
@@ -927,7 +1148,13 @@ export class MultiComputeJSONOut extends Future<Object> {
 export class BatchComputeJSONOut extends Future<Object> {
   /** Batch outputs. */
   get outputs() {
-    return new BatchComputeJSONOutOutputs(this._directive.next("outputs"));
+    // @ts-ignore
+    const future = new BatchComputeJSONOutOutputs(
+      this._directive.next("outputs"),
+    );
+    // @ts-ignore
+    future._runtimeHint = "array";
+    return future;
   }
 
   /** @internal returns the result for `BatchComputeJSONOut` once it's node has been run. */
@@ -940,12 +1167,20 @@ export class BatchComputeJSONOut extends Future<Object> {
 export class Mistral7BInstructChoice extends Future<Object> {
   /** Text response, if `json_schema` was not provided. */
   get text() {
-    return new Future<string>(this._directive.next("text"));
+    // @ts-ignore
+    const future = new Future<string>(this._directive.next("text"));
+    // @ts-ignore
+    future._runtimeHint = "string";
+    return future;
   }
 
   /** JSON response, if `json_schema` was provided. */
   get json_object() {
-    return new Future<Object>(this._directive.next("json_object"));
+    // @ts-ignore
+    const future = new Future<Object>(this._directive.next("json_object"));
+    // @ts-ignore
+    future._runtimeHint = "object";
+    return future;
   }
 
   /** @internal returns the result for `Mistral7BInstructChoice` once it's node has been run. */
@@ -958,7 +1193,13 @@ export class Mistral7BInstructChoice extends Future<Object> {
 export class Mistral7BInstructOut extends Future<Object> {
   /** Response choices. */
   get choices() {
-    return new Mistral7BInstructOutChoices(this._directive.next("choices"));
+    // @ts-ignore
+    const future = new Mistral7BInstructOutChoices(
+      this._directive.next("choices"),
+    );
+    // @ts-ignore
+    future._runtimeHint = "array";
+    return future;
   }
 
   /** @internal returns the result for `Mistral7BInstructOut` once it's node has been run. */
@@ -971,12 +1212,20 @@ export class Mistral7BInstructOut extends Future<Object> {
 export class Mixtral8x7BChoice extends Future<Object> {
   /** Text response, if `json_schema` was not provided. */
   get text() {
-    return new Future<string>(this._directive.next("text"));
+    // @ts-ignore
+    const future = new Future<string>(this._directive.next("text"));
+    // @ts-ignore
+    future._runtimeHint = "string";
+    return future;
   }
 
   /** JSON response, if `json_schema` was provided. */
   get json_object() {
-    return new Future<Object>(this._directive.next("json_object"));
+    // @ts-ignore
+    const future = new Future<Object>(this._directive.next("json_object"));
+    // @ts-ignore
+    future._runtimeHint = "object";
+    return future;
   }
 
   /** @internal returns the result for `Mixtral8x7BChoice` once it's node has been run. */
@@ -989,7 +1238,13 @@ export class Mixtral8x7BChoice extends Future<Object> {
 export class Mixtral8x7BInstructOut extends Future<Object> {
   /** Response choices. */
   get choices() {
-    return new Mixtral8x7BInstructOutChoices(this._directive.next("choices"));
+    // @ts-ignore
+    const future = new Mixtral8x7BInstructOutChoices(
+      this._directive.next("choices"),
+    );
+    // @ts-ignore
+    future._runtimeHint = "array";
+    return future;
   }
 
   /** @internal returns the result for `Mixtral8x7BInstructOut` once it's node has been run. */
@@ -1002,12 +1257,20 @@ export class Mixtral8x7BInstructOut extends Future<Object> {
 export class Llama3Instruct8BChoice extends Future<Object> {
   /** Text response. */
   get text() {
-    return new Future<string>(this._directive.next("text"));
+    // @ts-ignore
+    const future = new Future<string>(this._directive.next("text"));
+    // @ts-ignore
+    future._runtimeHint = "string";
+    return future;
   }
 
   /** JSON response, if `json_schema` was provided. */
   get json_object() {
-    return new Future<Object>(this._directive.next("json_object"));
+    // @ts-ignore
+    const future = new Future<Object>(this._directive.next("json_object"));
+    // @ts-ignore
+    future._runtimeHint = "object";
+    return future;
   }
 
   /** @internal returns the result for `Llama3Instruct8BChoice` once it's node has been run. */
@@ -1020,7 +1283,13 @@ export class Llama3Instruct8BChoice extends Future<Object> {
 export class Llama3Instruct8BOut extends Future<Object> {
   /** Response choices. */
   get choices() {
-    return new Llama3Instruct8BOutChoices(this._directive.next("choices"));
+    // @ts-ignore
+    const future = new Llama3Instruct8BOutChoices(
+      this._directive.next("choices"),
+    );
+    // @ts-ignore
+    future._runtimeHint = "array";
+    return future;
   }
 
   /** @internal returns the result for `Llama3Instruct8BOut` once it's node has been run. */
@@ -1033,7 +1302,11 @@ export class Llama3Instruct8BOut extends Future<Object> {
 export class Llama3Instruct70BChoice extends Future<Object> {
   /** Text response. */
   get text() {
-    return new Future<string>(this._directive.next("text"));
+    // @ts-ignore
+    const future = new Future<string>(this._directive.next("text"));
+    // @ts-ignore
+    future._runtimeHint = "string";
+    return future;
   }
 
   /** @internal returns the result for `Llama3Instruct70BChoice` once it's node has been run. */
@@ -1046,7 +1319,13 @@ export class Llama3Instruct70BChoice extends Future<Object> {
 export class Llama3Instruct70BOut extends Future<Object> {
   /** Response choices. */
   get choices() {
-    return new Llama3Instruct70BOutChoices(this._directive.next("choices"));
+    // @ts-ignore
+    const future = new Llama3Instruct70BOutChoices(
+      this._directive.next("choices"),
+    );
+    // @ts-ignore
+    future._runtimeHint = "array";
+    return future;
   }
 
   /** @internal returns the result for `Llama3Instruct70BOut` once it's node has been run. */
@@ -1059,7 +1338,11 @@ export class Llama3Instruct70BOut extends Future<Object> {
 export class Firellava13BOut extends Future<Object> {
   /** Text response. */
   get text() {
-    return new Future<string>(this._directive.next("text"));
+    // @ts-ignore
+    const future = new Future<string>(this._directive.next("text"));
+    // @ts-ignore
+    future._runtimeHint = "string";
+    return future;
   }
 
   /** @internal returns the result for `Firellava13BOut` once it's node has been run. */
@@ -1072,7 +1355,11 @@ export class Firellava13BOut extends Future<Object> {
 export class GenerateImageOut extends Future<Object> {
   /** Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
   get image_uri() {
-    return new Future<string>(this._directive.next("image_uri"));
+    // @ts-ignore
+    const future = new Future<string>(this._directive.next("image_uri"));
+    // @ts-ignore
+    future._runtimeHint = "string";
+    return future;
   }
 
   /** @internal returns the result for `GenerateImageOut` once it's node has been run. */
@@ -1085,7 +1372,13 @@ export class GenerateImageOut extends Future<Object> {
 export class MultiGenerateImageOut extends Future<Object> {
   /** Generated images. */
   get outputs() {
-    return new MultiGenerateImageOutOutputs(this._directive.next("outputs"));
+    // @ts-ignore
+    const future = new MultiGenerateImageOutOutputs(
+      this._directive.next("outputs"),
+    );
+    // @ts-ignore
+    future._runtimeHint = "array";
+    return future;
   }
 
   /** @internal returns the result for `MultiGenerateImageOut` once it's node has been run. */
@@ -1098,12 +1391,20 @@ export class MultiGenerateImageOut extends Future<Object> {
 export class StableDiffusionImage extends Future<Object> {
   /** Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
   get image_uri() {
-    return new Future<string>(this._directive.next("image_uri"));
+    // @ts-ignore
+    const future = new Future<string>(this._directive.next("image_uri"));
+    // @ts-ignore
+    future._runtimeHint = "string";
+    return future;
   }
 
   /** The random noise seed used for generation. */
   get seed() {
-    return new Future<number>(this._directive.next("seed"));
+    // @ts-ignore
+    const future = new Future<number>(this._directive.next("seed"));
+    // @ts-ignore
+    future._runtimeHint = "number";
+    return future;
   }
 
   /** @internal returns the result for `StableDiffusionImage` once it's node has been run. */
@@ -1116,7 +1417,13 @@ export class StableDiffusionImage extends Future<Object> {
 export class StableDiffusionXLOut extends Future<Object> {
   /** Generated images. */
   get outputs() {
-    return new StableDiffusionXLOutOutputs(this._directive.next("outputs"));
+    // @ts-ignore
+    const future = new StableDiffusionXLOutOutputs(
+      this._directive.next("outputs"),
+    );
+    // @ts-ignore
+    future._runtimeHint = "array";
+    return future;
   }
 
   /** @internal returns the result for `StableDiffusionXLOut` once it's node has been run. */
@@ -1129,9 +1436,13 @@ export class StableDiffusionXLOut extends Future<Object> {
 export class StableDiffusionXLLightningOut extends Future<Object> {
   /** Generated images. */
   get outputs() {
-    return new StableDiffusionXLLightningOutOutputs(
+    // @ts-ignore
+    const future = new StableDiffusionXLLightningOutOutputs(
       this._directive.next("outputs"),
     );
+    // @ts-ignore
+    future._runtimeHint = "array";
+    return future;
   }
 
   /** @internal returns the result for `StableDiffusionXLLightningOut` once it's node has been run. */
@@ -1144,9 +1455,13 @@ export class StableDiffusionXLLightningOut extends Future<Object> {
 export class StableDiffusionXLIPAdapterOut extends Future<Object> {
   /** Generated images. */
   get outputs() {
-    return new StableDiffusionXLIPAdapterOutOutputs(
+    // @ts-ignore
+    const future = new StableDiffusionXLIPAdapterOutOutputs(
       this._directive.next("outputs"),
     );
+    // @ts-ignore
+    future._runtimeHint = "array";
+    return future;
   }
 
   /** @internal returns the result for `StableDiffusionXLIPAdapterOut` once it's node has been run. */
@@ -1159,9 +1474,13 @@ export class StableDiffusionXLIPAdapterOut extends Future<Object> {
 export class StableDiffusionXLControlNetOut extends Future<Object> {
   /** Generated images. */
   get outputs() {
-    return new StableDiffusionXLControlNetOutOutputs(
+    // @ts-ignore
+    const future = new StableDiffusionXLControlNetOutOutputs(
       this._directive.next("outputs"),
     );
+    // @ts-ignore
+    future._runtimeHint = "array";
+    return future;
   }
 
   /** @internal returns the result for `StableDiffusionXLControlNetOut` once it's node has been run. */
@@ -1174,7 +1493,11 @@ export class StableDiffusionXLControlNetOut extends Future<Object> {
 export class InpaintImageOut extends Future<Object> {
   /** Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
   get image_uri() {
-    return new Future<string>(this._directive.next("image_uri"));
+    // @ts-ignore
+    const future = new Future<string>(this._directive.next("image_uri"));
+    // @ts-ignore
+    future._runtimeHint = "string";
+    return future;
   }
 
   /** @internal returns the result for `InpaintImageOut` once it's node has been run. */
@@ -1187,7 +1510,13 @@ export class InpaintImageOut extends Future<Object> {
 export class MultiInpaintImageOut extends Future<Object> {
   /** Generated images. */
   get outputs() {
-    return new MultiInpaintImageOutOutputs(this._directive.next("outputs"));
+    // @ts-ignore
+    const future = new MultiInpaintImageOutOutputs(
+      this._directive.next("outputs"),
+    );
+    // @ts-ignore
+    future._runtimeHint = "array";
+    return future;
   }
 
   /** @internal returns the result for `MultiInpaintImageOut` once it's node has been run. */
@@ -1200,9 +1529,13 @@ export class MultiInpaintImageOut extends Future<Object> {
 export class StableDiffusionXLInpaintOut extends Future<Object> {
   /** Generated images. */
   get outputs() {
-    return new StableDiffusionXLInpaintOutOutputs(
+    // @ts-ignore
+    const future = new StableDiffusionXLInpaintOutOutputs(
       this._directive.next("outputs"),
     );
+    // @ts-ignore
+    future._runtimeHint = "array";
+    return future;
   }
 
   /** @internal returns the result for `StableDiffusionXLInpaintOut` once it's node has been run. */
@@ -1215,22 +1548,38 @@ export class StableDiffusionXLInpaintOut extends Future<Object> {
 export class BoundingBox extends Future<Object> {
   /** Top left corner x. */
   get x1() {
-    return new Future<number>(this._directive.next("x1"));
+    // @ts-ignore
+    const future = new Future<number>(this._directive.next("x1"));
+    // @ts-ignore
+    future._runtimeHint = "number";
+    return future;
   }
 
   /** Top left corner y. */
   get y1() {
-    return new Future<number>(this._directive.next("y1"));
+    // @ts-ignore
+    const future = new Future<number>(this._directive.next("y1"));
+    // @ts-ignore
+    future._runtimeHint = "number";
+    return future;
   }
 
   /** Bottom right corner x. */
   get x2() {
-    return new Future<number>(this._directive.next("x2"));
+    // @ts-ignore
+    const future = new Future<number>(this._directive.next("x2"));
+    // @ts-ignore
+    future._runtimeHint = "number";
+    return future;
   }
 
   /** Bottom right corner y. */
   get y2() {
-    return new Future<number>(this._directive.next("y2"));
+    // @ts-ignore
+    const future = new Future<number>(this._directive.next("y2"));
+    // @ts-ignore
+    future._runtimeHint = "number";
+    return future;
   }
 
   /** @internal returns the result for `BoundingBox` once it's node has been run. */
@@ -1243,12 +1592,20 @@ export class BoundingBox extends Future<Object> {
 export class Point extends Future<Object> {
   /** X position. */
   get x() {
-    return new Future<number>(this._directive.next("x"));
+    // @ts-ignore
+    const future = new Future<number>(this._directive.next("x"));
+    // @ts-ignore
+    future._runtimeHint = "number";
+    return future;
   }
 
   /** Y position. */
   get y() {
-    return new Future<number>(this._directive.next("y"));
+    // @ts-ignore
+    const future = new Future<number>(this._directive.next("y"));
+    // @ts-ignore
+    future._runtimeHint = "number";
+    return future;
   }
 
   /** @internal returns the result for `Point` once it's node has been run. */
@@ -1261,7 +1618,11 @@ export class Point extends Future<Object> {
 export class EraseImageOut extends Future<Object> {
   /** Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
   get image_uri() {
-    return new Future<string>(this._directive.next("image_uri"));
+    // @ts-ignore
+    const future = new Future<string>(this._directive.next("image_uri"));
+    // @ts-ignore
+    future._runtimeHint = "string";
+    return future;
   }
 
   /** @internal returns the result for `EraseImageOut` once it's node has been run. */
@@ -1274,7 +1635,11 @@ export class EraseImageOut extends Future<Object> {
 export class BigLaMaOut extends Future<Object> {
   /** Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
   get image_uri() {
-    return new Future<string>(this._directive.next("image_uri"));
+    // @ts-ignore
+    const future = new Future<string>(this._directive.next("image_uri"));
+    // @ts-ignore
+    future._runtimeHint = "string";
+    return future;
   }
 
   /** @internal returns the result for `BigLaMaOut` once it's node has been run. */
@@ -1287,7 +1652,11 @@ export class BigLaMaOut extends Future<Object> {
 export class RemoveBackgroundOut extends Future<Object> {
   /** Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
   get image_uri() {
-    return new Future<string>(this._directive.next("image_uri"));
+    // @ts-ignore
+    const future = new Future<string>(this._directive.next("image_uri"));
+    // @ts-ignore
+    future._runtimeHint = "string";
+    return future;
   }
 
   /** @internal returns the result for `RemoveBackgroundOut` once it's node has been run. */
@@ -1300,7 +1669,11 @@ export class RemoveBackgroundOut extends Future<Object> {
 export class DISISNetOut extends Future<Object> {
   /** Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
   get image_uri() {
-    return new Future<string>(this._directive.next("image_uri"));
+    // @ts-ignore
+    const future = new Future<string>(this._directive.next("image_uri"));
+    // @ts-ignore
+    future._runtimeHint = "string";
+    return future;
   }
 
   /** @internal returns the result for `DISISNetOut` once it's node has been run. */
@@ -1313,7 +1686,11 @@ export class DISISNetOut extends Future<Object> {
 export class UpscaleImageOut extends Future<Object> {
   /** Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
   get image_uri() {
-    return new Future<string>(this._directive.next("image_uri"));
+    // @ts-ignore
+    const future = new Future<string>(this._directive.next("image_uri"));
+    // @ts-ignore
+    future._runtimeHint = "string";
+    return future;
   }
 
   /** @internal returns the result for `UpscaleImageOut` once it's node has been run. */
@@ -1326,7 +1703,11 @@ export class UpscaleImageOut extends Future<Object> {
 export class SegmentUnderPointOut extends Future<Object> {
   /** Detected segments in 'mask image' format. Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
   get mask_image_uri() {
-    return new Future<string>(this._directive.next("mask_image_uri"));
+    // @ts-ignore
+    const future = new Future<string>(this._directive.next("mask_image_uri"));
+    // @ts-ignore
+    future._runtimeHint = "string";
+    return future;
   }
 
   /** @internal returns the result for `SegmentUnderPointOut` once it's node has been run. */
@@ -1339,7 +1720,11 @@ export class SegmentUnderPointOut extends Future<Object> {
 export class SegmentAnythingOut extends Future<Object> {
   /** Detected segments in 'mask image' format. Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
   get mask_image_uri() {
-    return new Future<string>(this._directive.next("mask_image_uri"));
+    // @ts-ignore
+    const future = new Future<string>(this._directive.next("mask_image_uri"));
+    // @ts-ignore
+    future._runtimeHint = "string";
+    return future;
   }
 
   /** @internal returns the result for `SegmentAnythingOut` once it's node has been run. */
@@ -1352,22 +1737,38 @@ export class SegmentAnythingOut extends Future<Object> {
 export class TranscribedWord extends Future<Object> {
   /** Text of word. */
   get word() {
-    return new Future<string>(this._directive.next("word"));
+    // @ts-ignore
+    const future = new Future<string>(this._directive.next("word"));
+    // @ts-ignore
+    future._runtimeHint = "string";
+    return future;
   }
 
   /** (Optional) Start time of word, in seconds. */
   get start() {
-    return new Future<number>(this._directive.next("start"));
+    // @ts-ignore
+    const future = new Future<number>(this._directive.next("start"));
+    // @ts-ignore
+    future._runtimeHint = "number";
+    return future;
   }
 
   /** (Optional) End time of word, in seconds. */
   get end() {
-    return new Future<number>(this._directive.next("end"));
+    // @ts-ignore
+    const future = new Future<number>(this._directive.next("end"));
+    // @ts-ignore
+    future._runtimeHint = "number";
+    return future;
   }
 
   /** (Optional) ID of speaker, if `diarize` is enabled. */
   get speaker() {
-    return new Future<string>(this._directive.next("speaker"));
+    // @ts-ignore
+    const future = new Future<string>(this._directive.next("speaker"));
+    // @ts-ignore
+    future._runtimeHint = "string";
+    return future;
   }
 
   /** @internal returns the result for `TranscribedWord` once it's node has been run. */
@@ -1380,27 +1781,47 @@ export class TranscribedWord extends Future<Object> {
 export class TranscribedSegment extends Future<Object> {
   /** Text of segment. */
   get text() {
-    return new Future<string>(this._directive.next("text"));
+    // @ts-ignore
+    const future = new Future<string>(this._directive.next("text"));
+    // @ts-ignore
+    future._runtimeHint = "string";
+    return future;
   }
 
   /** Start time of segment, in seconds. */
   get start() {
-    return new Future<number>(this._directive.next("start"));
+    // @ts-ignore
+    const future = new Future<number>(this._directive.next("start"));
+    // @ts-ignore
+    future._runtimeHint = "number";
+    return future;
   }
 
   /** End time of segment, in seconds. */
   get end() {
-    return new Future<number>(this._directive.next("end"));
+    // @ts-ignore
+    const future = new Future<number>(this._directive.next("end"));
+    // @ts-ignore
+    future._runtimeHint = "number";
+    return future;
   }
 
   /** (Optional) ID of speaker, if `diarize` is enabled. */
   get speaker() {
-    return new Future<string>(this._directive.next("speaker"));
+    // @ts-ignore
+    const future = new Future<string>(this._directive.next("speaker"));
+    // @ts-ignore
+    future._runtimeHint = "string";
+    return future;
   }
 
   /** (Optional) Aligned words, if `align` is enabled. */
   get words() {
-    return new TranscribedSegmentWords(this._directive.next("words"));
+    // @ts-ignore
+    const future = new TranscribedSegmentWords(this._directive.next("words"));
+    // @ts-ignore
+    future._runtimeHint = "array";
+    return future;
   }
 
   /** @internal returns the result for `TranscribedSegment` once it's node has been run. */
@@ -1413,12 +1834,20 @@ export class TranscribedSegment extends Future<Object> {
 export class ChapterMarker extends Future<Object> {
   /** Chapter title. */
   get title() {
-    return new Future<string>(this._directive.next("title"));
+    // @ts-ignore
+    const future = new Future<string>(this._directive.next("title"));
+    // @ts-ignore
+    future._runtimeHint = "string";
+    return future;
   }
 
   /** Start time of chapter, in seconds. */
   get start() {
-    return new Future<number>(this._directive.next("start"));
+    // @ts-ignore
+    const future = new Future<number>(this._directive.next("start"));
+    // @ts-ignore
+    future._runtimeHint = "number";
+    return future;
   }
 
   /** @internal returns the result for `ChapterMarker` once it's node has been run. */
@@ -1431,17 +1860,33 @@ export class ChapterMarker extends Future<Object> {
 export class TranscribeSpeechOut extends Future<Object> {
   /** Transcribed text. */
   get text() {
-    return new Future<string>(this._directive.next("text"));
+    // @ts-ignore
+    const future = new Future<string>(this._directive.next("text"));
+    // @ts-ignore
+    future._runtimeHint = "string";
+    return future;
   }
 
   /** (Optional) Transcribed segments, if `segment` is enabled. */
   get segments() {
-    return new TranscribeSpeechOutSegments(this._directive.next("segments"));
+    // @ts-ignore
+    const future = new TranscribeSpeechOutSegments(
+      this._directive.next("segments"),
+    );
+    // @ts-ignore
+    future._runtimeHint = "array";
+    return future;
   }
 
   /** (Optional) Chapter markers, if `suggest_chapters` is enabled. */
   get chapters() {
-    return new TranscribeSpeechOutChapters(this._directive.next("chapters"));
+    // @ts-ignore
+    const future = new TranscribeSpeechOutChapters(
+      this._directive.next("chapters"),
+    );
+    // @ts-ignore
+    future._runtimeHint = "array";
+    return future;
   }
 
   /** @internal returns the result for `TranscribeSpeechOut` once it's node has been run. */
@@ -1454,7 +1899,11 @@ export class TranscribeSpeechOut extends Future<Object> {
 export class GenerateSpeechOut extends Future<Object> {
   /** Base 64-encoded WAV audio bytes, or a hosted audio url if `store` is provided. */
   get audio_uri() {
-    return new Future<string>(this._directive.next("audio_uri"));
+    // @ts-ignore
+    const future = new Future<string>(this._directive.next("audio_uri"));
+    // @ts-ignore
+    future._runtimeHint = "string";
+    return future;
   }
 
   /** @internal returns the result for `GenerateSpeechOut` once it's node has been run. */
@@ -1467,7 +1916,11 @@ export class GenerateSpeechOut extends Future<Object> {
 export class XTTSV2Out extends Future<Object> {
   /** Base 64-encoded WAV audio bytes, or a hosted audio url if `store` is provided. */
   get audio_uri() {
-    return new Future<string>(this._directive.next("audio_uri"));
+    // @ts-ignore
+    const future = new Future<string>(this._directive.next("audio_uri"));
+    // @ts-ignore
+    future._runtimeHint = "string";
+    return future;
   }
 
   /** @internal returns the result for `XTTSV2Out` once it's node has been run. */
@@ -1480,17 +1933,29 @@ export class XTTSV2Out extends Future<Object> {
 export class Embedding extends Future<Object> {
   /** Embedding vector. */
   get vector() {
-    return new EmbeddingVector(this._directive.next("vector"));
+    // @ts-ignore
+    const future = new EmbeddingVector(this._directive.next("vector"));
+    // @ts-ignore
+    future._runtimeHint = "array";
+    return future;
   }
 
   /** (Optional) Vector store document ID. */
   get doc_id() {
-    return new Future<string>(this._directive.next("doc_id"));
+    // @ts-ignore
+    const future = new Future<string>(this._directive.next("doc_id"));
+    // @ts-ignore
+    future._runtimeHint = "string";
+    return future;
   }
 
   /** (Optional) Vector store document metadata. */
   get metadata() {
-    return new Future<Object>(this._directive.next("metadata"));
+    // @ts-ignore
+    const future = new Future<Object>(this._directive.next("metadata"));
+    // @ts-ignore
+    future._runtimeHint = "object";
+    return future;
   }
 
   /** @internal returns the result for `Embedding` once it's node has been run. */
@@ -1503,7 +1968,11 @@ export class Embedding extends Future<Object> {
 export class EmbedTextOut extends Future<Object> {
   /** Generated embedding. */
   get embedding() {
-    return new Embedding(this._directive.next("embedding"));
+    // @ts-ignore
+    const future = new Embedding(this._directive.next("embedding"));
+    // @ts-ignore
+    future._runtimeHint = "object";
+    return future;
   }
 
   /** @internal returns the result for `EmbedTextOut` once it's node has been run. */
@@ -1516,17 +1985,29 @@ export class EmbedTextOut extends Future<Object> {
 export class EmbedTextItem extends Future<Object> {
   /** Text to embed. */
   get text() {
-    return new Future<string>(this._directive.next("text"));
+    // @ts-ignore
+    const future = new Future<string>(this._directive.next("text"));
+    // @ts-ignore
+    future._runtimeHint = "string";
+    return future;
   }
 
   /** (Optional) Metadata that can be used to query the vector store. Ignored if `collection_name` is unset. */
   get metadata() {
-    return new Future<Object>(this._directive.next("metadata"));
+    // @ts-ignore
+    const future = new Future<Object>(this._directive.next("metadata"));
+    // @ts-ignore
+    future._runtimeHint = "object";
+    return future;
   }
 
   /** (Optional) Vector store document ID. Ignored if `collection_name` is unset. */
   get doc_id() {
-    return new Future<string>(this._directive.next("doc_id"));
+    // @ts-ignore
+    const future = new Future<string>(this._directive.next("doc_id"));
+    // @ts-ignore
+    future._runtimeHint = "string";
+    return future;
   }
 
   /** @internal returns the result for `EmbedTextItem` once it's node has been run. */
@@ -1539,7 +2020,13 @@ export class EmbedTextItem extends Future<Object> {
 export class MultiEmbedTextOut extends Future<Object> {
   /** Generated embeddings. */
   get embeddings() {
-    return new MultiEmbedTextOutEmbeddings(this._directive.next("embeddings"));
+    // @ts-ignore
+    const future = new MultiEmbedTextOutEmbeddings(
+      this._directive.next("embeddings"),
+    );
+    // @ts-ignore
+    future._runtimeHint = "array";
+    return future;
   }
 
   /** @internal returns the result for `MultiEmbedTextOut` once it's node has been run. */
@@ -1552,7 +2039,11 @@ export class MultiEmbedTextOut extends Future<Object> {
 export class JinaV2Out extends Future<Object> {
   /** Generated embeddings. */
   get embeddings() {
-    return new JinaV2OutEmbeddings(this._directive.next("embeddings"));
+    // @ts-ignore
+    const future = new JinaV2OutEmbeddings(this._directive.next("embeddings"));
+    // @ts-ignore
+    future._runtimeHint = "array";
+    return future;
   }
 
   /** @internal returns the result for `JinaV2Out` once it's node has been run. */
@@ -1565,7 +2056,11 @@ export class JinaV2Out extends Future<Object> {
 export class EmbedImageOut extends Future<Object> {
   /** Generated embedding. */
   get embedding() {
-    return new Embedding(this._directive.next("embedding"));
+    // @ts-ignore
+    const future = new Embedding(this._directive.next("embedding"));
+    // @ts-ignore
+    future._runtimeHint = "object";
+    return future;
   }
 
   /** @internal returns the result for `EmbedImageOut` once it's node has been run. */
@@ -1578,12 +2073,20 @@ export class EmbedImageOut extends Future<Object> {
 export class EmbedImageItem extends Future<Object> {
   /** Image to embed. */
   get image_uri() {
-    return new Future<string>(this._directive.next("image_uri"));
+    // @ts-ignore
+    const future = new Future<string>(this._directive.next("image_uri"));
+    // @ts-ignore
+    future._runtimeHint = "string";
+    return future;
   }
 
   /** (Optional) Vector store document ID. Ignored if `collection_name` is unset. */
   get doc_id() {
-    return new Future<string>(this._directive.next("doc_id"));
+    // @ts-ignore
+    const future = new Future<string>(this._directive.next("doc_id"));
+    // @ts-ignore
+    future._runtimeHint = "string";
+    return future;
   }
 
   /** @internal returns the result for `EmbedImageItem` once it's node has been run. */
@@ -1596,22 +2099,38 @@ export class EmbedImageItem extends Future<Object> {
 export class EmbedTextOrImageItem extends Future<Object> {
   /** Image to embed. */
   get image_uri() {
-    return new Future<string>(this._directive.next("image_uri"));
+    // @ts-ignore
+    const future = new Future<string>(this._directive.next("image_uri"));
+    // @ts-ignore
+    future._runtimeHint = "string";
+    return future;
   }
 
   /** Text to embed. */
   get text() {
-    return new Future<string>(this._directive.next("text"));
+    // @ts-ignore
+    const future = new Future<string>(this._directive.next("text"));
+    // @ts-ignore
+    future._runtimeHint = "string";
+    return future;
   }
 
   /** Metadata that can be used to query the vector store. Ignored if `collection_name` is unset. */
   get metadata() {
-    return new Future<Object>(this._directive.next("metadata"));
+    // @ts-ignore
+    const future = new Future<Object>(this._directive.next("metadata"));
+    // @ts-ignore
+    future._runtimeHint = "object";
+    return future;
   }
 
   /** Vector store document ID. Ignored if `collection_name` is unset. */
   get doc_id() {
-    return new Future<string>(this._directive.next("doc_id"));
+    // @ts-ignore
+    const future = new Future<string>(this._directive.next("doc_id"));
+    // @ts-ignore
+    future._runtimeHint = "string";
+    return future;
   }
 
   /** @internal returns the result for `EmbedTextOrImageItem` once it's node has been run. */
@@ -1624,7 +2143,13 @@ export class EmbedTextOrImageItem extends Future<Object> {
 export class MultiEmbedImageOut extends Future<Object> {
   /** Generated embeddings. */
   get embeddings() {
-    return new MultiEmbedImageOutEmbeddings(this._directive.next("embeddings"));
+    // @ts-ignore
+    const future = new MultiEmbedImageOutEmbeddings(
+      this._directive.next("embeddings"),
+    );
+    // @ts-ignore
+    future._runtimeHint = "array";
+    return future;
   }
 
   /** @internal returns the result for `MultiEmbedImageOut` once it's node has been run. */
@@ -1637,7 +2162,11 @@ export class MultiEmbedImageOut extends Future<Object> {
 export class CLIPOut extends Future<Object> {
   /** Generated embeddings. */
   get embeddings() {
-    return new CLIPOutEmbeddings(this._directive.next("embeddings"));
+    // @ts-ignore
+    const future = new CLIPOutEmbeddings(this._directive.next("embeddings"));
+    // @ts-ignore
+    future._runtimeHint = "array";
+    return future;
   }
 
   /** @internal returns the result for `CLIPOut` once it's node has been run. */
@@ -1650,12 +2179,20 @@ export class CLIPOut extends Future<Object> {
 export class FindOrCreateVectorStoreOut extends Future<Object> {
   /** Vector store name. */
   get collection_name() {
-    return new Future<string>(this._directive.next("collection_name"));
+    // @ts-ignore
+    const future = new Future<string>(this._directive.next("collection_name"));
+    // @ts-ignore
+    future._runtimeHint = "string";
+    return future;
   }
 
   /** Selected embedding model. */
   get model() {
-    return new Future<string>(this._directive.next("model"));
+    // @ts-ignore
+    const future = new Future<string>(this._directive.next("model"));
+    // @ts-ignore
+    future._runtimeHint = "string";
+    return future;
   }
 
   /** @internal returns the result for `FindOrCreateVectorStoreOut` once it's node has been run. */
@@ -1668,7 +2205,11 @@ export class FindOrCreateVectorStoreOut extends Future<Object> {
 export class ListVectorStoresOut extends Future<Object> {
   /** List of vector stores. */
   get items() {
-    return new ListVectorStoresOutItems(this._directive.next("items"));
+    // @ts-ignore
+    const future = new ListVectorStoresOutItems(this._directive.next("items"));
+    // @ts-ignore
+    future._runtimeHint = "array";
+    return future;
   }
 
   /** @internal returns the result for `ListVectorStoresOut` once it's node has been run. */
@@ -1681,12 +2222,20 @@ export class ListVectorStoresOut extends Future<Object> {
 export class DeleteVectorStoreOut extends Future<Object> {
   /** Vector store name. */
   get collection_name() {
-    return new Future<string>(this._directive.next("collection_name"));
+    // @ts-ignore
+    const future = new Future<string>(this._directive.next("collection_name"));
+    // @ts-ignore
+    future._runtimeHint = "string";
+    return future;
   }
 
   /** Selected embedding model. */
   get model() {
-    return new Future<string>(this._directive.next("model"));
+    // @ts-ignore
+    const future = new Future<string>(this._directive.next("model"));
+    // @ts-ignore
+    future._runtimeHint = "string";
+    return future;
   }
 
   /** @internal returns the result for `DeleteVectorStoreOut` once it's node has been run. */
@@ -1699,17 +2248,29 @@ export class DeleteVectorStoreOut extends Future<Object> {
 export class Vector extends Future<Object> {
   /** Document ID. */
   get id() {
-    return new Future<string>(this._directive.next("id"));
+    // @ts-ignore
+    const future = new Future<string>(this._directive.next("id"));
+    // @ts-ignore
+    future._runtimeHint = "string";
+    return future;
   }
 
   /** Embedding vector. */
   get vector() {
-    return new VectorVector(this._directive.next("vector"));
+    // @ts-ignore
+    const future = new VectorVector(this._directive.next("vector"));
+    // @ts-ignore
+    future._runtimeHint = "array";
+    return future;
   }
 
   /** Document metadata. */
   get metadata() {
-    return new Future<Object>(this._directive.next("metadata"));
+    // @ts-ignore
+    const future = new Future<Object>(this._directive.next("metadata"));
+    // @ts-ignore
+    future._runtimeHint = "object";
+    return future;
   }
 
   /** @internal returns the result for `Vector` once it's node has been run. */
@@ -1722,7 +2283,11 @@ export class Vector extends Future<Object> {
 export class FetchVectorsOut extends Future<Object> {
   /** Retrieved vectors. */
   get vectors() {
-    return new FetchVectorsOutVectors(this._directive.next("vectors"));
+    // @ts-ignore
+    const future = new FetchVectorsOutVectors(this._directive.next("vectors"));
+    // @ts-ignore
+    future._runtimeHint = "array";
+    return future;
   }
 
   /** @internal returns the result for `FetchVectorsOut` once it's node has been run. */
@@ -1735,7 +2300,11 @@ export class FetchVectorsOut extends Future<Object> {
 export class UpdateVectorsOut extends Future<Object> {
   /** Number of vectors modified. */
   get count() {
-    return new Future<number>(this._directive.next("count"));
+    // @ts-ignore
+    const future = new Future<number>(this._directive.next("count"));
+    // @ts-ignore
+    future._runtimeHint = "number";
+    return future;
   }
 
   /** @internal returns the result for `UpdateVectorsOut` once it's node has been run. */
@@ -1748,7 +2317,11 @@ export class UpdateVectorsOut extends Future<Object> {
 export class DeleteVectorsOut extends Future<Object> {
   /** Number of vectors modified. */
   get count() {
-    return new Future<number>(this._directive.next("count"));
+    // @ts-ignore
+    const future = new Future<number>(this._directive.next("count"));
+    // @ts-ignore
+    future._runtimeHint = "number";
+    return future;
   }
 
   /** @internal returns the result for `DeleteVectorsOut` once it's node has been run. */
@@ -1761,17 +2334,29 @@ export class DeleteVectorsOut extends Future<Object> {
 export class UpdateVectorParams extends Future<Object> {
   /** Document ID. */
   get id() {
-    return new Future<string>(this._directive.next("id"));
+    // @ts-ignore
+    const future = new Future<string>(this._directive.next("id"));
+    // @ts-ignore
+    future._runtimeHint = "string";
+    return future;
   }
 
   /** (Optional) Embedding vector. */
   get vector() {
-    return new UpdateVectorParamsVector(this._directive.next("vector"));
+    // @ts-ignore
+    const future = new UpdateVectorParamsVector(this._directive.next("vector"));
+    // @ts-ignore
+    future._runtimeHint = "array";
+    return future;
   }
 
   /** (Optional) Document metadata. */
   get metadata() {
-    return new Future<Object>(this._directive.next("metadata"));
+    // @ts-ignore
+    const future = new Future<Object>(this._directive.next("metadata"));
+    // @ts-ignore
+    future._runtimeHint = "object";
+    return future;
   }
 
   /** @internal returns the result for `UpdateVectorParams` once it's node has been run. */
@@ -1784,22 +2369,40 @@ export class UpdateVectorParams extends Future<Object> {
 export class VectorStoreQueryResult extends Future<Object> {
   /** Document ID. */
   get id() {
-    return new Future<string>(this._directive.next("id"));
+    // @ts-ignore
+    const future = new Future<string>(this._directive.next("id"));
+    // @ts-ignore
+    future._runtimeHint = "string";
+    return future;
   }
 
   /** Similarity score. */
   get distance() {
-    return new Future<number>(this._directive.next("distance"));
+    // @ts-ignore
+    const future = new Future<number>(this._directive.next("distance"));
+    // @ts-ignore
+    future._runtimeHint = "number";
+    return future;
   }
 
   /** (Optional) Embedding vector. */
   get vector() {
-    return new VectorStoreQueryResultVector(this._directive.next("vector"));
+    // @ts-ignore
+    const future = new VectorStoreQueryResultVector(
+      this._directive.next("vector"),
+    );
+    // @ts-ignore
+    future._runtimeHint = "array";
+    return future;
   }
 
   /** (Optional) Document metadata. */
   get metadata() {
-    return new Future<Object>(this._directive.next("metadata"));
+    // @ts-ignore
+    const future = new Future<Object>(this._directive.next("metadata"));
+    // @ts-ignore
+    future._runtimeHint = "object";
+    return future;
   }
 
   /** @internal returns the result for `VectorStoreQueryResult` once it's node has been run. */
@@ -1812,17 +2415,31 @@ export class VectorStoreQueryResult extends Future<Object> {
 export class QueryVectorStoreOut extends Future<Object> {
   /** Query results. */
   get results() {
-    return new QueryVectorStoreOutResults(this._directive.next("results"));
+    // @ts-ignore
+    const future = new QueryVectorStoreOutResults(
+      this._directive.next("results"),
+    );
+    // @ts-ignore
+    future._runtimeHint = "array";
+    return future;
   }
 
   /** (Optional) Vector store name. */
   get collection_name() {
-    return new Future<string>(this._directive.next("collection_name"));
+    // @ts-ignore
+    const future = new Future<string>(this._directive.next("collection_name"));
+    // @ts-ignore
+    future._runtimeHint = "string";
+    return future;
   }
 
   /** (Optional) Selected embedding model. */
   get model() {
-    return new Future<string>(this._directive.next("model"));
+    // @ts-ignore
+    const future = new Future<string>(this._directive.next("model"));
+    // @ts-ignore
+    future._runtimeHint = "string";
+    return future;
   }
 
   /** @internal returns the result for `QueryVectorStoreOut` once it's node has been run. */

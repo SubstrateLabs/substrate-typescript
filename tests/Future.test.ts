@@ -85,6 +85,8 @@ describe("Future", () => {
     test(".toJSON", () => {
       const s = new Future<string>(new Trace([], node()), "123");
       const n = new Future<number>(new Trace([], node()), "456");
+      // @ts-ignore (protected prop: _runtimeHint)0
+      n._runtimeHint = "number"; // using runtimeHint to specify we'd like to access via "item"
       const d = new Trace(["a", 1, s, n], node("NodeId"));
 
       expect(d.toJSON()).toEqual({
@@ -94,8 +96,7 @@ describe("Future", () => {
           Trace.Operation.key("attr", "a"),
           Trace.Operation.key("item", 1),
           Trace.Operation.future("attr", "123"),
-          Trace.Operation.future("attr", "456"), // TODO(liam): there isn't a way to distinguish at runtime using static types
-          // Trace.Operation.future("item", "456"),
+          Trace.Operation.future("item", "456"),
         ],
       });
     });

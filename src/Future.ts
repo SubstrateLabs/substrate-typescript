@@ -84,17 +84,13 @@ export class Trace extends Directive {
       origin_node_id: this.originNode.id,
       op_stack: this.items.map((item) => {
         if (item instanceof Future) {
+          // @ts-expect-error (accessing protected prop: _runtimeHint)
+          if (item._runtimeHint === "number") {
+            // @ts-expect-error (accessing protected prop: _id)
+            return Trace.Operation.future("item", item._id);
+          }
           // @ts-expect-error (accessing protected prop: _id)
           return Trace.Operation.future("attr", item._id);
-
-          // TODO(liam): we'll need some runtime information here to behave different depending on the type parameter.
-
-          // if (item instanceof FutureString) {
-          //   // @ts-expect-error (accessing protected prop: _id)
-          //   return Trace.Operation.future("attr", item._id);
-          // } else if (item instanceof FutureNumber) {
-          //   // @ts-expect-error (accessing protected prop: _id)
-          //   return Trace.Operation.future("item", item._id);
         } else if (typeof item === "string") {
           return Trace.Operation.key("attr", item);
         }
@@ -194,6 +190,13 @@ export class StringConcat extends Directive {
 export class Future<T> {
   protected _directive: Directive;
   protected _id: string = "";
+  protected _runtimeHint:
+    | "string"
+    | "number"
+    | "object"
+    | "array"
+    | "boolean"
+    | undefined;
 
   constructor(directive: Directive, id: string = newFutureId()) {
     this._directive = directive;
@@ -279,6 +282,9 @@ export const get = <T = unknown>(
   future: Future<Object>,
   path: string | Future<string>,
 ) => {
+  // @ts-ignore (protected _runtimeHint)
+  if (path instanceof Future) index._runtimeHint = "string";
+
   const d =
     typeof path === "string"
       ? // @ts-ignore (protected _directive)
@@ -297,6 +303,8 @@ export const get = <T = unknown>(
  *
  */
 export const at = <T>(future: Future<T[]>, index: number | Future<number>) => {
+  // @ts-ignore (protected _runtimeHint)
+  if (index instanceof Future) index._runtimeHint = "number";
   // @ts-ignore (protected _directive)
   return new Future<T>(future._directive.next(index));
 };
