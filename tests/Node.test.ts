@@ -1,6 +1,6 @@
 import { expect, describe, test } from "vitest";
 import { Node } from "substrate/Node";
-import { FutureString, Trace, StringConcat } from "substrate/Future";
+import { Future, Trace, StringConcat, get } from "substrate/Future";
 
 class FooNode extends Node {}
 
@@ -13,10 +13,10 @@ describe("Node", () => {
   });
 
   test(".toJSON", () => {
-    const a = new FutureString(new Trace([], new FooNode({})));
-    const b = new FutureString(new Trace([], new FooNode({})));
-    const c = new FutureString(new StringConcat([a, b]));
-    const d = new FutureString(new StringConcat([c, "d"]));
+    const a = new Future<string>(new Trace([], new FooNode({})));
+    const b = new Future<string>(new Trace([], new FooNode({})));
+    const c = new Future<string>(new StringConcat([a, b]));
+    const d = new Future<string>(new StringConcat([c, "d"]));
     const n = new FooNode({ prompt: d });
 
     expect(n.toJSON()).toEqual({
@@ -31,13 +31,13 @@ describe("Node", () => {
   });
 
   test(".references", () => {
-    const a = new FooNode({ x: "x" }, { id: "a" });
-    const f1 = a.future.get("x");
-    const f2 = a.future.get("y");
-    const b = new FooNode({ x: f1, z: f2 }, { id: "b" });
-    const f3 = b.future.get("x");
-    const c = new FooNode({ x: f3 }, { id: "c" });
-    const d = new FooNode({}, { id: "d", depends: [c] });
+    const a = new FooNode({ x: "x" });
+    const f1 = get(a.future, "x");
+    const f2 = get(a.future, "y");
+    const b = new FooNode({ x: f1, z: f2 });
+    const f3 = get(b.future, "x");
+    const c = new FooNode({ x: f3 });
+    const d = new FooNode({}, { depends: [c] });
 
     // @ts-ignore (protected)
     const { nodes, futures } = d.references();

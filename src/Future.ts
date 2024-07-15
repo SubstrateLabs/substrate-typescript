@@ -8,16 +8,11 @@ type TraceOperation = {
   accessor: Accessor;
 };
 
-type TraceProp = string | FutureString | number | FutureNumber;
-type Concatable = string | FutureString;
+type TraceProp = string | Future<string> | number | Future<number>;
+type Concatable = string | Future<string>;
 type JQCompatible = Record<string, unknown> | any[] | string | number;
 type JQDirectiveTarget = Future<any> | JQCompatible;
-type FutureTypeMap = {
-  string: FutureString;
-  object: FutureAnyObject;
-  number: FutureNumber;
-  boolean: FutureBoolean;
-};
+
 const parsePath = (path: string): TraceProp[] => {
   // Split the path by dots or brackets, and filter out empty strings
   const parts = path.split(/\.|\[|\]\[?/).filter(Boolean);
@@ -88,12 +83,14 @@ export class Trace extends Directive {
       type: "trace",
       origin_node_id: this.originNode.id,
       op_stack: this.items.map((item) => {
-        if (item instanceof FutureString) {
+        if (item instanceof Future) {
+          // @ts-expect-error (accessing protected prop: _runtimeHint)
+          if (item._runtimeHint === "number") {
+            // @ts-expect-error (accessing protected prop: _id)
+            return Trace.Operation.future("item", item._id);
+          }
           // @ts-expect-error (accessing protected prop: _id)
           return Trace.Operation.future("attr", item._id);
-        } else if (item instanceof FutureNumber) {
-          // @ts-expect-error (accessing protected prop: _id)
-          return Trace.Operation.future("item", item._id);
         } else if (typeof item === "string") {
           return Trace.Operation.key("attr", item);
         }
@@ -187,9 +184,16 @@ export class StringConcat extends Directive {
   }
 }
 
-export abstract class Future<T> {
+export class Future<T> {
   protected _directive: Directive;
   protected _id: string = "";
+  protected _runtimeHint:
+    | "string"
+    | "number"
+    | "object"
+    | "array"
+    | "boolean"
+    | undefined;
 
   constructor(directive: Directive, id: string = newFutureId()) {
     this._directive = directive;
@@ -208,26 +212,6 @@ export abstract class Future<T> {
     return this._directive.result();
   }
 
-  static jq<T extends keyof FutureTypeMap>(
-    future: JQDirectiveTarget,
-    query: string,
-    futureType: keyof FutureTypeMap = "string",
-  ): FutureTypeMap[T] {
-    const directive = new JQ(query, future);
-    switch (futureType) {
-      case "string":
-        return new FutureString(directive) as FutureTypeMap[T];
-      case "number":
-        return new FutureNumber(directive) as FutureTypeMap[T];
-      case "object":
-        return new FutureAnyObject(directive) as FutureTypeMap[T];
-      case "boolean":
-        return new FutureBoolean(directive) as FutureTypeMap[T];
-      default:
-        throw new Error(`Unknown future type: ${futureType}`);
-    }
-  }
-
   toJSON() {
     return {
       id: this._id,
@@ -236,82 +220,88 @@ export abstract class Future<T> {
   }
 }
 
-export class FutureBoolean extends Future<boolean> {}
+/**
+ * `concat` combines multiple `string` or `Future<string>` items together into a new `Future<string>`.
+ *
+ * @example
+ *
+ *    let newFuture = concat("string", node.future.someString, "!")
+ */
+export const concat = (...items: (string | Future<string>)[]) => {
+  return new Future<string>(new StringConcat(items));
+};
 
-export class FutureString extends Future<string> {
-  static concat(...items: (string | FutureString)[]) {
-    return new FutureString(new StringConcat(items));
-  }
+/**
+ * `interpolate` creates a `Future<string>` using interpolate and supports `Future<string>` values.
+ *
+ * @example
+ *
+ *    let newFuture = interpolate`hello ${"world"}, you look ${node.future.niceString} today.`
+ */
+export const interpolate = (
+  strings: TemplateStringsArray,
+  ...exprs: ({ toString(): string } | Future<string>)[]
+) => {
+  return concat(
+    ...strings.flatMap((s: string, i: number) => {
+      const expr = exprs[i];
+      return expr ? [s, expr instanceof Future ? expr : expr.toString()] : [s];
+    }),
+  );
+};
 
-  static interpolate(
-    strings: TemplateStringsArray,
-    ...exprs: ({ toString(): string } | FutureString)[]
-  ): FutureString {
-    return FutureString.concat(
-      ...strings
-        .filter((s) => s !== "") // FIXME: Work around until SubstrateLabs/substrate#514 is live
-        .flatMap((s: string, i: number) => {
-          const expr = exprs[i];
-          return expr
-            ? [s, expr instanceof Future ? expr : expr.toString()]
-            : [s];
-        }),
-    );
-  }
+/**
+ * `jq` supports running [jq](https://jqlang.github.io/jq) operations on a `Future` and returns a new `Future<T>`.
+ *
+ * @example
+ *
+ *    let newFuture = jq<string>(node.future.json_object, ".country")
+ *
+ */
+export const jq = <T = any>(
+  future: JQDirectiveTarget,
+  query: string,
+  _futureType: any = undefined, // @deprecated
+): Future<T> => {
+  const directive = new JQ(query, future);
+  return new Future<T>(directive);
+};
 
-  concat(...items: (string | FutureString)[]) {
-    return FutureString.concat(...[this, ...items]);
-  }
+/**
+ * `get` returns a `Future` by selecting a value by path from a `Future<Object>`.
+ *
+ * @example
+ *
+ *    let newFuture = get<string>(node.future, "choices[0].text")
+ *
+ */
+export const get = <T = any>(
+  future: Future<Object>,
+  path: string | Future<string>,
+) => {
+  // @ts-ignore (protected _runtimeHint)
+  if (path instanceof Future) index._runtimeHint = "string";
 
-  protected override async _result(): Promise<string> {
-    return super._result();
-  }
-}
+  const d =
+    typeof path === "string"
+      ? // @ts-ignore (protected _directive)
+        future._directive.next(...parsePath(path))
+      : // @ts-ignore (protected _directive)
+        future._directive.next(path);
+  return new Future<T>(d);
+};
 
-export class FutureNumber extends Future<number> {}
-
-export abstract class FutureArray extends Future<any[] | FutureArray> {
-  abstract at(index: number): Future<any>;
-
-  protected override async _result(): Promise<any[] | FutureArray> {
-    return super._result();
-  }
-}
-
-export abstract class FutureObject extends Future<Object> {
-  get(path: string): Future<any> {
-    const props = parsePath(path);
-    return props.reduce((future, prop) => {
-      if (future instanceof FutureAnyObject) {
-        return typeof prop === "string"
-          ? future.get(prop as string)
-          : future.at(prop as number);
-      } else {
-        // @ts-ignore
-        return typeof prop === "string" ? future[prop] : future.at(prop);
-      }
-    }, this) as Future<any>;
-  }
-
-  protected override async _result(): Promise<Object> {
-    return super._result();
-  }
-}
-
-export class FutureAnyObject extends Future<Object> {
-  get(path: string | FutureString) {
-    const d =
-      typeof path === "string"
-        ? this._directive.next(...parsePath(path))
-        : this._directive.next(path);
-    return new FutureAnyObject(d);
-  }
-
-  at(index: number | FutureNumber) {
-    return new FutureAnyObject(this._directive.next(index));
-  }
-
-  protected override async _result(): Promise<Object> {
-    return super._result();
-  }
-}
+/**
+ * `at` returns a `Future` item at some index of a `Future` containing an array.
+ *
+ * @example
+ *
+ *    let newFuture = at<string>(node.future.strings, 0);
+ *
+ */
+export const at = <T = any>(future: Future<T[]>, index: number | Future<number>) => {
+  // @ts-ignore (protected _runtimeHint)
+  if (index instanceof Future) index._runtimeHint = "number";
+  // @ts-ignore (protected _directive)
+  return new Future<T>(future._directive.next(index));
+};
