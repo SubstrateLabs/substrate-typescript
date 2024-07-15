@@ -1,5 +1,6 @@
 import { idGenerator } from "substrate/idGenerator";
 import { Node } from "substrate/Node";
+import { unproxy } from "./ProxiedFuture";
 
 type Accessor = "item" | "attr";
 type TraceOperation = {
@@ -8,7 +9,7 @@ type TraceOperation = {
   accessor: Accessor;
 };
 
-type TraceProp = string | Future<string> | number | Future<number>;
+export type TraceProp = string | Future<string> | number | Future<number>;
 type Concatable = string | Future<string>;
 type JQCompatible = Record<string, unknown> | any[] | string | number;
 type JQDirectiveTarget = Future<any> | JQCompatible;
@@ -33,7 +34,11 @@ abstract class Directive {
     // @ts-ignore
     return this.items
       .filter((p) => p instanceof Future)
-      .flatMap((p) => [p, ...p.referencedFutures()]);
+      .map((p) => unproxy(p) as Future<any>)
+      .flatMap((p) => 
+        // @ts-ignore
+        [p, ...p.referencedFutures()]
+      );
   }
 }
 
@@ -92,6 +97,11 @@ export class Trace extends Directive {
           // @ts-expect-error (accessing protected prop: _id)
           return Trace.Operation.future("attr", item._id);
         } else if (typeof item === "string") {
+          if (/^\d+$/.test(item)) {
+            // When item is a number (as a string) we're going to assume it's an array index
+            let index = parseInt(item);
+            return Trace.Operation.key("item", index);
+          }
           return Trace.Operation.key("attr", item);
         }
         return Trace.Operation.key("item", item);
@@ -117,7 +127,7 @@ export class JQ extends Directive {
     rawValue: (val: JQCompatible) => ({ future_id: null, val }),
   };
 
-  override next(...items: TraceProp[]) {
+  override next(..._items: TraceProp[]) {
     return new JQ(this.query, this.target);
   }
 
@@ -184,7 +194,7 @@ export class StringConcat extends Directive {
   }
 }
 
-export class Future<T> {
+export class Future<T = unknown> {
   protected _directive: Directive;
   protected _id: string = "";
   protected _runtimeHint:
@@ -228,7 +238,8 @@ export class Future<T> {
  *    let newFuture = concat("string", node.future.someString, "!")
  */
 export const concat = (...items: (string | Future<string>)[]) => {
-  return new Future<string>(new StringConcat(items));
+  const uitems = items.map((item) => item instanceof Future ? unproxy(item) : item);
+  return new Future<string>(new StringConcat(uitems));
 };
 
 /**
@@ -245,7 +256,13 @@ export const interpolate = (
   return concat(
     ...strings.flatMap((s: string, i: number) => {
       const expr = exprs[i];
-      return expr ? [s, expr instanceof Future ? expr : expr.toString()] : [s];
+      if (expr instanceof Future) {
+        return [s, unproxy(expr)];
+      } else if (!expr) {
+        return [s];
+      } else {
+        return [s, expr.toString()];
+      }
     }),
   );
 };
@@ -279,15 +296,17 @@ export const get = <T = any>(
   future: Future<Object>,
   path: string | Future<string>,
 ) => {
+  const ufuture = unproxy(future);
+  const upath = path instanceof Future ? unproxy(path) : path;
   // @ts-ignore (protected _runtimeHint)
-  if (path instanceof Future) index._runtimeHint = "string";
+  if (upath instanceof Future) upath._runtimeHint = "string";
 
   const d =
-    typeof path === "string"
+    typeof upath === "string"
       ? // @ts-ignore (protected _directive)
-        future._directive.next(...parsePath(path))
+        ufuture._directive.next(...parsePath(upath))
       : // @ts-ignore (protected _directive)
-        future._directive.next(path);
+        ufuture._directive.next(upath);
   return new Future<T>(d);
 };
 
@@ -299,7 +318,10 @@ export const get = <T = any>(
  *    let newFuture = at<string>(node.future.strings, 0);
  *
  */
-export const at = <T = any>(future: Future<T[]>, index: number | Future<number>) => {
+export const at = <T = any>(
+  future: Future<T[]>,
+  index: number | Future<number>,
+) => {
   // @ts-ignore (protected _runtimeHint)
   if (index instanceof Future) index._runtimeHint = "number";
   // @ts-ignore (protected _directive)

@@ -3,6 +3,7 @@ import { Future, Trace } from "substrate/Future";
 import { SubstrateResponse } from "substrate/SubstrateResponse";
 import { NodeError, SubstrateError } from "substrate/Error";
 import { AnyNode } from "substrate/Nodes";
+import { unproxy } from "substrate/ProxiedFuture";
 
 const generator = idGenerator("node");
 
@@ -109,7 +110,7 @@ export abstract class Node {
 
       if (obj instanceof Future) {
         // @ts-expect-error (accessing protected method toPlaceholder)
-        return obj.toPlaceholder();
+        return unproxy(obj).toPlaceholder();
       }
 
       if (obj && typeof obj === "object") {
@@ -161,11 +162,15 @@ export abstract class Node {
       }
 
       if (obj instanceof Future) {
-        futures.add(obj);
+        // Because some Future instances may be proxied, we need to "un-proxy"
+        // them to avoid treating it's methods as property accessors.
+        const future = unproxy(obj);
+
+        futures.add(future);
 
         // @ts-expect-error (accessing protected method referencedFutures)
-        for (let future of obj.referencedFutures()) {
-          futures.add(future);
+        for (let f of future.referencedFutures()) {
+          futures.add(f);
         }
         return;
       }

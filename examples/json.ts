@@ -26,8 +26,8 @@ async function main() {
     max_tokens: 800,
   });
 
-  const name = author.future.json_object.get("name");
-  const bio = author.future.json_object.get("bio");
+  const name = author.future.json_object.name;
+  const bio = author.future.json_object.bio;
 
   const report = new ComputeText({
     prompt: sb.interpolate`Write a short summary about ${name} and make sure to use the following bio: ${bio}`,

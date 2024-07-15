@@ -1,6 +1,6 @@
 #!/usr/bin/env -S npx ts-node --transpileOnly
 
-import { Substrate, ComputeText, GenerateImage } from "substrate";
+import { Substrate, ComputeText, GenerateImage, sb } from "substrate";
 
 async function main() {
   const SUBSTRATE_API_KEY = process.env["SUBSTRATE_API_KEY"];
@@ -22,7 +22,7 @@ async function main() {
 
   const images = styles.map((style) => {
     return new GenerateImage({
-      prompt: scene.future.text.concat(` render in a ((${style})) style`),
+      prompt: sb.concat(scene.future.text, ` render in a "${style}" style`),
       store: "hosted",
     });
   });
