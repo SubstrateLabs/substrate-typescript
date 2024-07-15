@@ -258,7 +258,7 @@ export const interpolate = (
  *    let newFuture = jq<string>(node.future.json_object, ".country")
  *
  */
-export const jq = <T>(
+export const jq = <T = any>(
   future: JQDirectiveTarget,
   query: string,
   _futureType: any = undefined, // @deprecated
@@ -275,7 +275,7 @@ export const jq = <T>(
  *    let newFuture = get<string>(node.future, "choices[0].text")
  *
  */
-export const get = <T = unknown>(
+export const get = <T = any>(
   future: Future<Object>,
   path: string | Future<string>,
 ) => {
@@ -299,7 +299,7 @@ export const get = <T = unknown>(
  *    let newFuture = at<string>(node.future.strings, 0);
  *
  */
-export const at = <T>(future: Future<T[]>, index: number | Future<number>) => {
+export const at = <T = any>(future: Future<T[]>, index: number | Future<number>) => {
   // @ts-ignore (protected _runtimeHint)
   if (index instanceof Future) index._runtimeHint = "number";
   // @ts-ignore (protected _directive)
