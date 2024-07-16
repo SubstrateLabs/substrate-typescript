@@ -7,28 +7,22 @@ async function main() {
 
   const substrate = new Substrate({ apiKey: SUBSTRATE_API_KEY });
 
-  const data = new Box(
-    {
-      value: {
-        letters: ["a", "b"],
-        index: 0,
-      },
-    }
-  );
-
-  const selected = new Box(
-    {
-      value: ob4: sb.get<string>(
-          data.future.value.object,
-          data.future.value.letters[1],
-        ),
-      },
+  const data = new Box({
+    value: {
+      letters: ["a", "b"],
+      index: 0,
     },
-    { id: "selected" },
-  );
+  });
 
-  // console.log(JSON.stringify(Substrate.serialize(selected), null, 2));
-  // return;
+  const selected = new Box({
+    value: {
+      example1: sb.get<string>(
+        data.future.value.object,
+        data.future.value.letters[1],
+      ),
+      example2: data.future.value.letters[data.future.value.index],
+    },
+  });
 
   const res = await substrate.run(selected);
   console.log(JSON.stringify(res.json, null, 2));

@@ -33,6 +33,7 @@ async function main() {
   const result = new Box(
     {
       value: {
+        x: latin.future.value.xyz,
         a: latin.future.value[numbers.future.value[0]],
         b: greek.future.value[latin.future.value[1]],
         ab: sb.concat(greek.future.value.a, greek.future.value.b),
