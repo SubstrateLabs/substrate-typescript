@@ -189,5 +189,21 @@ describe("Future", () => {
       // @ts-expect-error
       expect(i2._result()).resolves.toEqual("~~ texas sun x texas moon ~~");
     });
+
+    test(".interpolate (when there is no space between interpolated items)", async () => {
+      const a = "1";
+      const b = "2";
+      const i1 = FutureString.interpolate`hello${a}${b}`;
+
+      // @ts-expect-error
+      expect(i1._result()).resolves.toEqual("hello12");
+
+      const f1 = FutureString.concat("1");
+      const f2 = FutureString.concat("2");
+      const i2 = FutureString.interpolate`hello${f1}${f2}`;
+
+      // @ts-expect-error
+      expect(i2._result()).resolves.toEqual("hello12");
+    });
   });
 });

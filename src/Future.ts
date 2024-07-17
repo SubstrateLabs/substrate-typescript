@@ -248,14 +248,12 @@ export class FutureString extends Future<string> {
     ...exprs: ({ toString(): string } | FutureString)[]
   ): FutureString {
     return FutureString.concat(
-      ...strings
-        .filter((s) => s !== "") // FIXME: Work around until SubstrateLabs/substrate#514 is live
-        .flatMap((s: string, i: number) => {
-          const expr = exprs[i];
-          return expr
-            ? [s, expr instanceof Future ? expr : expr.toString()]
-            : [s];
-        }),
+      ...strings.flatMap((s: string, i: number) => {
+        const expr = exprs[i];
+        return expr
+          ? [s, expr instanceof Future ? expr : expr.toString()]
+          : [s];
+      }),
     );
   }
 
