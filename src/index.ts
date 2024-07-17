@@ -1,7 +1,7 @@
 /**
  * 𐃏 Substrate TypeScript SDK
  * @generated file
- * 20240617.20240711
+ * 20240617.20240715
  */
 
 export { SubstrateError } from "substrate/Error";
@@ -52,4 +52,8 @@ export {
 export { sb } from "substrate/sb";
 export { Substrate };
 import { Substrate } from "substrate/Substrate";
+
+
+export { Future, Trace } from "substrate/Future";
+export { Node } from "substrate/Node";
 export default Substrate;

@@ -31,8 +31,13 @@ async function main() {
     }, {}),
   });
 
-  const res = await substrate.run(box);
+  const box2 = new Box({
+    value: box.future.value.swedish,
+  });
+
+  const res = await substrate.run(box, box2);
 
   console.log({ box: res.get(box) });
+  console.log({ box2: res.get(box2) });
 }
 main();

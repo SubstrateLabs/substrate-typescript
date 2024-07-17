@@ -1,6 +1,6 @@
 #!/usr/bin/env -S npx ts-node --transpileOnly
 
-import { Substrate, ComputeText } from "substrate";
+import { Substrate, ComputeText, sb } from "substrate";
 
 async function main() {
   const SUBSTRATE_API_KEY = process.env["SUBSTRATE_API_KEY"];
@@ -9,10 +9,10 @@ async function main() {
 
   let nodes = [];
   let prompt: any = "once upon a time...";
-  for (let i = 0; i < 50; i++) {
+  for (let i = 0; i < 25; i++) {
     const node = new ComputeText({ prompt });
     nodes.push(node);
-    prompt = node.future.text.concat(" and then");
+    prompt = sb.concat(node.future.text, " and then");
   }
 
   const res = await substrate.run(...nodes);

@@ -1,12 +1,13 @@
 /**
  * 𐃏 Substrate
  * @generated file
- * 20240617.20240711
+ * 20240617.20240715
  */
 
 import * as OpenAPI from "substrate/OpenAPI";
 import { Node, Options } from "substrate/Node";
 import { Trace, Future } from "substrate/Future";
+import { proxyFactory } from "substrate/ProxiedFuture";
 
 // The following type helpers are used to "expand" Node input types to allow them to also accept
 // instances of their corresponding "Future" types.
@@ -969,14 +970,27 @@ export class QueryVectorStoreOutResultsItem extends Future<
 
 /** ErrorOut */
 export class ErrorOut extends Future<Object> {
+  // prop = type
+  // prop.type = string
+  // prop.ref = None
+  // prop_return_class = Future<string>
+  // use_proxy = False
+
   /** The type of error returned. */
   get type() {
     // @ts-ignore
     const future = new Future<string>(this._directive.next("type"));
     // @ts-ignore
     future._runtimeHint = "string";
+
     return future;
   }
+
+  // prop = message
+  // prop.type = string
+  // prop.ref = None
+  // prop_return_class = Future<string>
+  // use_proxy = False
 
   /** A message providing more details about the error. */
   get message() {
@@ -984,6 +998,7 @@ export class ErrorOut extends Future<Object> {
     const future = new Future<string>(this._directive.next("message"));
     // @ts-ignore
     future._runtimeHint = "string";
+
     return future;
   }
 
@@ -995,13 +1010,20 @@ export class ErrorOut extends Future<Object> {
 
 /** ExperimentalOut */
 export class ExperimentalOut extends Future<Object> {
+  // prop = output
+  // prop.type = object
+  // prop.ref = None
+  // prop_return_class = Future<Object>
+  // use_proxy = True
+
   /** Response. */
   get output() {
     // @ts-ignore
     const future = new Future<Object>(this._directive.next("output"));
     // @ts-ignore
     future._runtimeHint = "object";
-    return future;
+
+    return proxyFactory.makeProxy(future);
   }
 
   /** @internal returns the result for `ExperimentalOut` once it's node has been run. */
@@ -1012,13 +1034,20 @@ export class ExperimentalOut extends Future<Object> {
 
 /** BoxOut */
 export class BoxOut extends Future<Object> {
+  // prop = value
+  // prop.type = None
+  // prop.ref = None
+  // prop_return_class = Future<Object>
+  // use_proxy = True
+
   /** The evaluated result. */
   get value() {
     // @ts-ignore
     const future = new Future<Object>(this._directive.next("value"));
     // @ts-ignore
     future._runtimeHint = "object";
-    return future;
+
+    return proxyFactory.makeProxy(future);
   }
 
   /** @internal returns the result for `BoxOut` once it's node has been run. */
@@ -1029,13 +1058,20 @@ export class BoxOut extends Future<Object> {
 
 /** IfOut */
 export class IfOut extends Future<Object> {
+  // prop = result
+  // prop.type = None
+  // prop.ref = None
+  // prop_return_class = Future<Object>
+  // use_proxy = True
+
   /** Result. Null if `value_if_false` is not provided and `condition` is false. */
   get result() {
     // @ts-ignore
     const future = new Future<Object>(this._directive.next("result"));
     // @ts-ignore
     future._runtimeHint = "object";
-    return future;
+
+    return proxyFactory.makeProxy(future);
   }
 
   /** @internal returns the result for `IfOut` once it's node has been run. */
@@ -1046,12 +1082,19 @@ export class IfOut extends Future<Object> {
 
 /** ComputeTextOut */
 export class ComputeTextOut extends Future<Object> {
+  // prop = text
+  // prop.type = string
+  // prop.ref = None
+  // prop_return_class = Future<string>
+  // use_proxy = False
+
   /** Text response. */
   get text() {
     // @ts-ignore
     const future = new Future<string>(this._directive.next("text"));
     // @ts-ignore
     future._runtimeHint = "string";
+
     return future;
   }
 
@@ -1063,14 +1106,27 @@ export class ComputeTextOut extends Future<Object> {
 
 /** ComputeJSONOut */
 export class ComputeJSONOut extends Future<Object> {
+  // prop = json_object
+  // prop.type = object
+  // prop.ref = None
+  // prop_return_class = Future<Object>
+  // use_proxy = True
+
   /** JSON response. */
   get json_object() {
     // @ts-ignore
     const future = new Future<Object>(this._directive.next("json_object"));
     // @ts-ignore
     future._runtimeHint = "object";
-    return future;
+
+    return proxyFactory.makeProxy(future);
   }
+
+  // prop = text
+  // prop.type = string
+  // prop.ref = None
+  // prop_return_class = Future<string>
+  // use_proxy = False
 
   /** If the model output could not be parsed to JSON, this is the raw text output. */
   get text() {
@@ -1078,6 +1134,7 @@ export class ComputeJSONOut extends Future<Object> {
     const future = new Future<string>(this._directive.next("text"));
     // @ts-ignore
     future._runtimeHint = "string";
+
     return future;
   }
 
@@ -1089,6 +1146,12 @@ export class ComputeJSONOut extends Future<Object> {
 
 /** MultiComputeTextOut */
 export class MultiComputeTextOut extends Future<Object> {
+  // prop = choices
+  // prop.type = array
+  // prop.ref = None
+  // prop_return_class = MultiComputeTextOutChoices
+  // use_proxy = False
+
   /** Response choices. */
   get choices() {
     // @ts-ignore
@@ -1097,6 +1160,7 @@ export class MultiComputeTextOut extends Future<Object> {
     );
     // @ts-ignore
     future._runtimeHint = "array";
+
     return future;
   }
 
@@ -1108,6 +1172,12 @@ export class MultiComputeTextOut extends Future<Object> {
 
 /** BatchComputeTextOut */
 export class BatchComputeTextOut extends Future<Object> {
+  // prop = outputs
+  // prop.type = array
+  // prop.ref = None
+  // prop_return_class = BatchComputeTextOutOutputs
+  // use_proxy = False
+
   /** Batch outputs. */
   get outputs() {
     // @ts-ignore
@@ -1116,6 +1186,7 @@ export class BatchComputeTextOut extends Future<Object> {
     );
     // @ts-ignore
     future._runtimeHint = "array";
+
     return future;
   }
 
@@ -1127,6 +1198,12 @@ export class BatchComputeTextOut extends Future<Object> {
 
 /** MultiComputeJSONOut */
 export class MultiComputeJSONOut extends Future<Object> {
+  // prop = choices
+  // prop.type = array
+  // prop.ref = None
+  // prop_return_class = MultiComputeJSONOutChoices
+  // use_proxy = False
+
   /** Response choices. */
   get choices() {
     // @ts-ignore
@@ -1135,6 +1212,7 @@ export class MultiComputeJSONOut extends Future<Object> {
     );
     // @ts-ignore
     future._runtimeHint = "array";
+
     return future;
   }
 
@@ -1146,6 +1224,12 @@ export class MultiComputeJSONOut extends Future<Object> {
 
 /** BatchComputeJSONOut */
 export class BatchComputeJSONOut extends Future<Object> {
+  // prop = outputs
+  // prop.type = array
+  // prop.ref = None
+  // prop_return_class = BatchComputeJSONOutOutputs
+  // use_proxy = False
+
   /** Batch outputs. */
   get outputs() {
     // @ts-ignore
@@ -1154,6 +1238,7 @@ export class BatchComputeJSONOut extends Future<Object> {
     );
     // @ts-ignore
     future._runtimeHint = "array";
+
     return future;
   }
 
@@ -1165,14 +1250,27 @@ export class BatchComputeJSONOut extends Future<Object> {
 
 /** Mistral7BInstructChoice */
 export class Mistral7BInstructChoice extends Future<Object> {
+  // prop = text
+  // prop.type = string
+  // prop.ref = None
+  // prop_return_class = Future<string>
+  // use_proxy = False
+
   /** Text response, if `json_schema` was not provided. */
   get text() {
     // @ts-ignore
     const future = new Future<string>(this._directive.next("text"));
     // @ts-ignore
     future._runtimeHint = "string";
+
     return future;
   }
+
+  // prop = json_object
+  // prop.type = object
+  // prop.ref = None
+  // prop_return_class = Future<Object>
+  // use_proxy = True
 
   /** JSON response, if `json_schema` was provided. */
   get json_object() {
@@ -1180,7 +1278,8 @@ export class Mistral7BInstructChoice extends Future<Object> {
     const future = new Future<Object>(this._directive.next("json_object"));
     // @ts-ignore
     future._runtimeHint = "object";
-    return future;
+
+    return proxyFactory.makeProxy(future);
   }
 
   /** @internal returns the result for `Mistral7BInstructChoice` once it's node has been run. */
@@ -1191,6 +1290,12 @@ export class Mistral7BInstructChoice extends Future<Object> {
 
 /** Mistral7BInstructOut */
 export class Mistral7BInstructOut extends Future<Object> {
+  // prop = choices
+  // prop.type = array
+  // prop.ref = None
+  // prop_return_class = Mistral7BInstructOutChoices
+  // use_proxy = False
+
   /** Response choices. */
   get choices() {
     // @ts-ignore
@@ -1199,6 +1304,7 @@ export class Mistral7BInstructOut extends Future<Object> {
     );
     // @ts-ignore
     future._runtimeHint = "array";
+
     return future;
   }
 
@@ -1210,14 +1316,27 @@ export class Mistral7BInstructOut extends Future<Object> {
 
 /** Mixtral8x7BChoice */
 export class Mixtral8x7BChoice extends Future<Object> {
+  // prop = text
+  // prop.type = string
+  // prop.ref = None
+  // prop_return_class = Future<string>
+  // use_proxy = False
+
   /** Text response, if `json_schema` was not provided. */
   get text() {
     // @ts-ignore
     const future = new Future<string>(this._directive.next("text"));
     // @ts-ignore
     future._runtimeHint = "string";
+
     return future;
   }
+
+  // prop = json_object
+  // prop.type = object
+  // prop.ref = None
+  // prop_return_class = Future<Object>
+  // use_proxy = True
 
   /** JSON response, if `json_schema` was provided. */
   get json_object() {
@@ -1225,7 +1344,8 @@ export class Mixtral8x7BChoice extends Future<Object> {
     const future = new Future<Object>(this._directive.next("json_object"));
     // @ts-ignore
     future._runtimeHint = "object";
-    return future;
+
+    return proxyFactory.makeProxy(future);
   }
 
   /** @internal returns the result for `Mixtral8x7BChoice` once it's node has been run. */
@@ -1236,6 +1356,12 @@ export class Mixtral8x7BChoice extends Future<Object> {
 
 /** Mixtral8x7BInstructOut */
 export class Mixtral8x7BInstructOut extends Future<Object> {
+  // prop = choices
+  // prop.type = array
+  // prop.ref = None
+  // prop_return_class = Mixtral8x7BInstructOutChoices
+  // use_proxy = False
+
   /** Response choices. */
   get choices() {
     // @ts-ignore
@@ -1244,6 +1370,7 @@ export class Mixtral8x7BInstructOut extends Future<Object> {
     );
     // @ts-ignore
     future._runtimeHint = "array";
+
     return future;
   }
 
@@ -1255,14 +1382,27 @@ export class Mixtral8x7BInstructOut extends Future<Object> {
 
 /** Llama3Instruct8BChoice */
 export class Llama3Instruct8BChoice extends Future<Object> {
+  // prop = text
+  // prop.type = string
+  // prop.ref = None
+  // prop_return_class = Future<string>
+  // use_proxy = False
+
   /** Text response. */
   get text() {
     // @ts-ignore
     const future = new Future<string>(this._directive.next("text"));
     // @ts-ignore
     future._runtimeHint = "string";
+
     return future;
   }
+
+  // prop = json_object
+  // prop.type = object
+  // prop.ref = None
+  // prop_return_class = Future<Object>
+  // use_proxy = True
 
   /** JSON response, if `json_schema` was provided. */
   get json_object() {
@@ -1270,7 +1410,8 @@ export class Llama3Instruct8BChoice extends Future<Object> {
     const future = new Future<Object>(this._directive.next("json_object"));
     // @ts-ignore
     future._runtimeHint = "object";
-    return future;
+
+    return proxyFactory.makeProxy(future);
   }
 
   /** @internal returns the result for `Llama3Instruct8BChoice` once it's node has been run. */
@@ -1281,6 +1422,12 @@ export class Llama3Instruct8BChoice extends Future<Object> {
 
 /** Llama3Instruct8BOut */
 export class Llama3Instruct8BOut extends Future<Object> {
+  // prop = choices
+  // prop.type = array
+  // prop.ref = None
+  // prop_return_class = Llama3Instruct8BOutChoices
+  // use_proxy = False
+
   /** Response choices. */
   get choices() {
     // @ts-ignore
@@ -1289,6 +1436,7 @@ export class Llama3Instruct8BOut extends Future<Object> {
     );
     // @ts-ignore
     future._runtimeHint = "array";
+
     return future;
   }
 
@@ -1300,12 +1448,19 @@ export class Llama3Instruct8BOut extends Future<Object> {
 
 /** Llama3Instruct70BChoice */
 export class Llama3Instruct70BChoice extends Future<Object> {
+  // prop = text
+  // prop.type = string
+  // prop.ref = None
+  // prop_return_class = Future<string>
+  // use_proxy = False
+
   /** Text response. */
   get text() {
     // @ts-ignore
     const future = new Future<string>(this._directive.next("text"));
     // @ts-ignore
     future._runtimeHint = "string";
+
     return future;
   }
 
@@ -1317,6 +1472,12 @@ export class Llama3Instruct70BChoice extends Future<Object> {
 
 /** Llama3Instruct70BOut */
 export class Llama3Instruct70BOut extends Future<Object> {
+  // prop = choices
+  // prop.type = array
+  // prop.ref = None
+  // prop_return_class = Llama3Instruct70BOutChoices
+  // use_proxy = False
+
   /** Response choices. */
   get choices() {
     // @ts-ignore
@@ -1325,6 +1486,7 @@ export class Llama3Instruct70BOut extends Future<Object> {
     );
     // @ts-ignore
     future._runtimeHint = "array";
+
     return future;
   }
 
@@ -1336,12 +1498,19 @@ export class Llama3Instruct70BOut extends Future<Object> {
 
 /** Firellava13BOut */
 export class Firellava13BOut extends Future<Object> {
+  // prop = text
+  // prop.type = string
+  // prop.ref = None
+  // prop_return_class = Future<string>
+  // use_proxy = False
+
   /** Text response. */
   get text() {
     // @ts-ignore
     const future = new Future<string>(this._directive.next("text"));
     // @ts-ignore
     future._runtimeHint = "string";
+
     return future;
   }
 
@@ -1353,12 +1522,19 @@ export class Firellava13BOut extends Future<Object> {
 
 /** GenerateImageOut */
 export class GenerateImageOut extends Future<Object> {
+  // prop = image_uri
+  // prop.type = string
+  // prop.ref = None
+  // prop_return_class = Future<string>
+  // use_proxy = False
+
   /** Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
   get image_uri() {
     // @ts-ignore
     const future = new Future<string>(this._directive.next("image_uri"));
     // @ts-ignore
     future._runtimeHint = "string";
+
     return future;
   }
 
@@ -1370,6 +1546,12 @@ export class GenerateImageOut extends Future<Object> {
 
 /** MultiGenerateImageOut */
 export class MultiGenerateImageOut extends Future<Object> {
+  // prop = outputs
+  // prop.type = array
+  // prop.ref = None
+  // prop_return_class = MultiGenerateImageOutOutputs
+  // use_proxy = False
+
   /** Generated images. */
   get outputs() {
     // @ts-ignore
@@ -1378,6 +1560,7 @@ export class MultiGenerateImageOut extends Future<Object> {
     );
     // @ts-ignore
     future._runtimeHint = "array";
+
     return future;
   }
 
@@ -1389,14 +1572,27 @@ export class MultiGenerateImageOut extends Future<Object> {
 
 /** StableDiffusionImage */
 export class StableDiffusionImage extends Future<Object> {
+  // prop = image_uri
+  // prop.type = string
+  // prop.ref = None
+  // prop_return_class = Future<string>
+  // use_proxy = False
+
   /** Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
   get image_uri() {
     // @ts-ignore
     const future = new Future<string>(this._directive.next("image_uri"));
     // @ts-ignore
     future._runtimeHint = "string";
+
     return future;
   }
+
+  // prop = seed
+  // prop.type = integer
+  // prop.ref = None
+  // prop_return_class = Future<number>
+  // use_proxy = False
 
   /** The random noise seed used for generation. */
   get seed() {
@@ -1404,6 +1600,7 @@ export class StableDiffusionImage extends Future<Object> {
     const future = new Future<number>(this._directive.next("seed"));
     // @ts-ignore
     future._runtimeHint = "number";
+
     return future;
   }
 
@@ -1415,6 +1612,12 @@ export class StableDiffusionImage extends Future<Object> {
 
 /** StableDiffusionXLOut */
 export class StableDiffusionXLOut extends Future<Object> {
+  // prop = outputs
+  // prop.type = array
+  // prop.ref = None
+  // prop_return_class = StableDiffusionXLOutOutputs
+  // use_proxy = False
+
   /** Generated images. */
   get outputs() {
     // @ts-ignore
@@ -1423,6 +1626,7 @@ export class StableDiffusionXLOut extends Future<Object> {
     );
     // @ts-ignore
     future._runtimeHint = "array";
+
     return future;
   }
 
@@ -1434,6 +1638,12 @@ export class StableDiffusionXLOut extends Future<Object> {
 
 /** StableDiffusionXLLightningOut */
 export class StableDiffusionXLLightningOut extends Future<Object> {
+  // prop = outputs
+  // prop.type = array
+  // prop.ref = None
+  // prop_return_class = StableDiffusionXLLightningOutOutputs
+  // use_proxy = False
+
   /** Generated images. */
   get outputs() {
     // @ts-ignore
@@ -1442,6 +1652,7 @@ export class StableDiffusionXLLightningOut extends Future<Object> {
     );
     // @ts-ignore
     future._runtimeHint = "array";
+
     return future;
   }
 
@@ -1453,6 +1664,12 @@ export class StableDiffusionXLLightningOut extends Future<Object> {
 
 /** StableDiffusionXLIPAdapterOut */
 export class StableDiffusionXLIPAdapterOut extends Future<Object> {
+  // prop = outputs
+  // prop.type = array
+  // prop.ref = None
+  // prop_return_class = StableDiffusionXLIPAdapterOutOutputs
+  // use_proxy = False
+
   /** Generated images. */
   get outputs() {
     // @ts-ignore
@@ -1461,6 +1678,7 @@ export class StableDiffusionXLIPAdapterOut extends Future<Object> {
     );
     // @ts-ignore
     future._runtimeHint = "array";
+
     return future;
   }
 
@@ -1472,6 +1690,12 @@ export class StableDiffusionXLIPAdapterOut extends Future<Object> {
 
 /** StableDiffusionXLControlNetOut */
 export class StableDiffusionXLControlNetOut extends Future<Object> {
+  // prop = outputs
+  // prop.type = array
+  // prop.ref = None
+  // prop_return_class = StableDiffusionXLControlNetOutOutputs
+  // use_proxy = False
+
   /** Generated images. */
   get outputs() {
     // @ts-ignore
@@ -1480,6 +1704,7 @@ export class StableDiffusionXLControlNetOut extends Future<Object> {
     );
     // @ts-ignore
     future._runtimeHint = "array";
+
     return future;
   }
 
@@ -1491,12 +1716,19 @@ export class StableDiffusionXLControlNetOut extends Future<Object> {
 
 /** InpaintImageOut */
 export class InpaintImageOut extends Future<Object> {
+  // prop = image_uri
+  // prop.type = string
+  // prop.ref = None
+  // prop_return_class = Future<string>
+  // use_proxy = False
+
   /** Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
   get image_uri() {
     // @ts-ignore
     const future = new Future<string>(this._directive.next("image_uri"));
     // @ts-ignore
     future._runtimeHint = "string";
+
     return future;
   }
 
@@ -1508,6 +1740,12 @@ export class InpaintImageOut extends Future<Object> {
 
 /** MultiInpaintImageOut */
 export class MultiInpaintImageOut extends Future<Object> {
+  // prop = outputs
+  // prop.type = array
+  // prop.ref = None
+  // prop_return_class = MultiInpaintImageOutOutputs
+  // use_proxy = False
+
   /** Generated images. */
   get outputs() {
     // @ts-ignore
@@ -1516,6 +1754,7 @@ export class MultiInpaintImageOut extends Future<Object> {
     );
     // @ts-ignore
     future._runtimeHint = "array";
+
     return future;
   }
 
@@ -1527,6 +1766,12 @@ export class MultiInpaintImageOut extends Future<Object> {
 
 /** StableDiffusionXLInpaintOut */
 export class StableDiffusionXLInpaintOut extends Future<Object> {
+  // prop = outputs
+  // prop.type = array
+  // prop.ref = None
+  // prop_return_class = StableDiffusionXLInpaintOutOutputs
+  // use_proxy = False
+
   /** Generated images. */
   get outputs() {
     // @ts-ignore
@@ -1535,6 +1780,7 @@ export class StableDiffusionXLInpaintOut extends Future<Object> {
     );
     // @ts-ignore
     future._runtimeHint = "array";
+
     return future;
   }
 
@@ -1546,14 +1792,27 @@ export class StableDiffusionXLInpaintOut extends Future<Object> {
 
 /** BoundingBox */
 export class BoundingBox extends Future<Object> {
+  // prop = x1
+  // prop.type = number
+  // prop.ref = None
+  // prop_return_class = Future<number>
+  // use_proxy = False
+
   /** Top left corner x. */
   get x1() {
     // @ts-ignore
     const future = new Future<number>(this._directive.next("x1"));
     // @ts-ignore
     future._runtimeHint = "number";
+
     return future;
   }
+
+  // prop = y1
+  // prop.type = number
+  // prop.ref = None
+  // prop_return_class = Future<number>
+  // use_proxy = False
 
   /** Top left corner y. */
   get y1() {
@@ -1561,8 +1820,15 @@ export class BoundingBox extends Future<Object> {
     const future = new Future<number>(this._directive.next("y1"));
     // @ts-ignore
     future._runtimeHint = "number";
+
     return future;
   }
+
+  // prop = x2
+  // prop.type = number
+  // prop.ref = None
+  // prop_return_class = Future<number>
+  // use_proxy = False
 
   /** Bottom right corner x. */
   get x2() {
@@ -1570,8 +1836,15 @@ export class BoundingBox extends Future<Object> {
     const future = new Future<number>(this._directive.next("x2"));
     // @ts-ignore
     future._runtimeHint = "number";
+
     return future;
   }
+
+  // prop = y2
+  // prop.type = number
+  // prop.ref = None
+  // prop_return_class = Future<number>
+  // use_proxy = False
 
   /** Bottom right corner y. */
   get y2() {
@@ -1579,6 +1852,7 @@ export class BoundingBox extends Future<Object> {
     const future = new Future<number>(this._directive.next("y2"));
     // @ts-ignore
     future._runtimeHint = "number";
+
     return future;
   }
 
@@ -1590,14 +1864,27 @@ export class BoundingBox extends Future<Object> {
 
 /** Point */
 export class Point extends Future<Object> {
+  // prop = x
+  // prop.type = integer
+  // prop.ref = None
+  // prop_return_class = Future<number>
+  // use_proxy = False
+
   /** X position. */
   get x() {
     // @ts-ignore
     const future = new Future<number>(this._directive.next("x"));
     // @ts-ignore
     future._runtimeHint = "number";
+
     return future;
   }
+
+  // prop = y
+  // prop.type = integer
+  // prop.ref = None
+  // prop_return_class = Future<number>
+  // use_proxy = False
 
   /** Y position. */
   get y() {
@@ -1605,6 +1892,7 @@ export class Point extends Future<Object> {
     const future = new Future<number>(this._directive.next("y"));
     // @ts-ignore
     future._runtimeHint = "number";
+
     return future;
   }
 
@@ -1616,12 +1904,19 @@ export class Point extends Future<Object> {
 
 /** EraseImageOut */
 export class EraseImageOut extends Future<Object> {
+  // prop = image_uri
+  // prop.type = string
+  // prop.ref = None
+  // prop_return_class = Future<string>
+  // use_proxy = False
+
   /** Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
   get image_uri() {
     // @ts-ignore
     const future = new Future<string>(this._directive.next("image_uri"));
     // @ts-ignore
     future._runtimeHint = "string";
+
     return future;
   }
 
@@ -1633,12 +1928,19 @@ export class EraseImageOut extends Future<Object> {
 
 /** BigLaMaOut */
 export class BigLaMaOut extends Future<Object> {
+  // prop = image_uri
+  // prop.type = string
+  // prop.ref = None
+  // prop_return_class = Future<string>
+  // use_proxy = False
+
   /** Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
   get image_uri() {
     // @ts-ignore
     const future = new Future<string>(this._directive.next("image_uri"));
     // @ts-ignore
     future._runtimeHint = "string";
+
     return future;
   }
 
@@ -1650,12 +1952,19 @@ export class BigLaMaOut extends Future<Object> {
 
 /** RemoveBackgroundOut */
 export class RemoveBackgroundOut extends Future<Object> {
+  // prop = image_uri
+  // prop.type = string
+  // prop.ref = None
+  // prop_return_class = Future<string>
+  // use_proxy = False
+
   /** Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
   get image_uri() {
     // @ts-ignore
     const future = new Future<string>(this._directive.next("image_uri"));
     // @ts-ignore
     future._runtimeHint = "string";
+
     return future;
   }
 
@@ -1667,12 +1976,19 @@ export class RemoveBackgroundOut extends Future<Object> {
 
 /** DISISNetOut */
 export class DISISNetOut extends Future<Object> {
+  // prop = image_uri
+  // prop.type = string
+  // prop.ref = None
+  // prop_return_class = Future<string>
+  // use_proxy = False
+
   /** Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
   get image_uri() {
     // @ts-ignore
     const future = new Future<string>(this._directive.next("image_uri"));
     // @ts-ignore
     future._runtimeHint = "string";
+
     return future;
   }
 
@@ -1684,12 +2000,19 @@ export class DISISNetOut extends Future<Object> {
 
 /** UpscaleImageOut */
 export class UpscaleImageOut extends Future<Object> {
+  // prop = image_uri
+  // prop.type = string
+  // prop.ref = None
+  // prop_return_class = Future<string>
+  // use_proxy = False
+
   /** Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
   get image_uri() {
     // @ts-ignore
     const future = new Future<string>(this._directive.next("image_uri"));
     // @ts-ignore
     future._runtimeHint = "string";
+
     return future;
   }
 
@@ -1701,12 +2024,19 @@ export class UpscaleImageOut extends Future<Object> {
 
 /** SegmentUnderPointOut */
 export class SegmentUnderPointOut extends Future<Object> {
+  // prop = mask_image_uri
+  // prop.type = string
+  // prop.ref = None
+  // prop_return_class = Future<string>
+  // use_proxy = False
+
   /** Detected segments in 'mask image' format. Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
   get mask_image_uri() {
     // @ts-ignore
     const future = new Future<string>(this._directive.next("mask_image_uri"));
     // @ts-ignore
     future._runtimeHint = "string";
+
     return future;
   }
 
@@ -1718,12 +2048,19 @@ export class SegmentUnderPointOut extends Future<Object> {
 
 /** SegmentAnythingOut */
 export class SegmentAnythingOut extends Future<Object> {
+  // prop = mask_image_uri
+  // prop.type = string
+  // prop.ref = None
+  // prop_return_class = Future<string>
+  // use_proxy = False
+
   /** Detected segments in 'mask image' format. Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
   get mask_image_uri() {
     // @ts-ignore
     const future = new Future<string>(this._directive.next("mask_image_uri"));
     // @ts-ignore
     future._runtimeHint = "string";
+
     return future;
   }
 
@@ -1735,14 +2072,27 @@ export class SegmentAnythingOut extends Future<Object> {
 
 /** TranscribedWord */
 export class TranscribedWord extends Future<Object> {
+  // prop = word
+  // prop.type = string
+  // prop.ref = None
+  // prop_return_class = Future<string>
+  // use_proxy = False
+
   /** Text of word. */
   get word() {
     // @ts-ignore
     const future = new Future<string>(this._directive.next("word"));
     // @ts-ignore
     future._runtimeHint = "string";
+
     return future;
   }
+
+  // prop = start
+  // prop.type = number
+  // prop.ref = None
+  // prop_return_class = Future<number>
+  // use_proxy = False
 
   /** (Optional) Start time of word, in seconds. */
   get start() {
@@ -1750,8 +2100,15 @@ export class TranscribedWord extends Future<Object> {
     const future = new Future<number>(this._directive.next("start"));
     // @ts-ignore
     future._runtimeHint = "number";
+
     return future;
   }
+
+  // prop = end
+  // prop.type = number
+  // prop.ref = None
+  // prop_return_class = Future<number>
+  // use_proxy = False
 
   /** (Optional) End time of word, in seconds. */
   get end() {
@@ -1759,8 +2116,15 @@ export class TranscribedWord extends Future<Object> {
     const future = new Future<number>(this._directive.next("end"));
     // @ts-ignore
     future._runtimeHint = "number";
+
     return future;
   }
+
+  // prop = speaker
+  // prop.type = string
+  // prop.ref = None
+  // prop_return_class = Future<string>
+  // use_proxy = False
 
   /** (Optional) ID of speaker, if `diarize` is enabled. */
   get speaker() {
@@ -1768,6 +2132,7 @@ export class TranscribedWord extends Future<Object> {
     const future = new Future<string>(this._directive.next("speaker"));
     // @ts-ignore
     future._runtimeHint = "string";
+
     return future;
   }
 
@@ -1779,14 +2144,27 @@ export class TranscribedWord extends Future<Object> {
 
 /** TranscribedSegment */
 export class TranscribedSegment extends Future<Object> {
+  // prop = text
+  // prop.type = string
+  // prop.ref = None
+  // prop_return_class = Future<string>
+  // use_proxy = False
+
   /** Text of segment. */
   get text() {
     // @ts-ignore
     const future = new Future<string>(this._directive.next("text"));
     // @ts-ignore
     future._runtimeHint = "string";
+
     return future;
   }
+
+  // prop = start
+  // prop.type = number
+  // prop.ref = None
+  // prop_return_class = Future<number>
+  // use_proxy = False
 
   /** Start time of segment, in seconds. */
   get start() {
@@ -1794,8 +2172,15 @@ export class TranscribedSegment extends Future<Object> {
     const future = new Future<number>(this._directive.next("start"));
     // @ts-ignore
     future._runtimeHint = "number";
+
     return future;
   }
+
+  // prop = end
+  // prop.type = number
+  // prop.ref = None
+  // prop_return_class = Future<number>
+  // use_proxy = False
 
   /** End time of segment, in seconds. */
   get end() {
@@ -1803,8 +2188,15 @@ export class TranscribedSegment extends Future<Object> {
     const future = new Future<number>(this._directive.next("end"));
     // @ts-ignore
     future._runtimeHint = "number";
+
     return future;
   }
+
+  // prop = speaker
+  // prop.type = string
+  // prop.ref = None
+  // prop_return_class = Future<string>
+  // use_proxy = False
 
   /** (Optional) ID of speaker, if `diarize` is enabled. */
   get speaker() {
@@ -1812,8 +2204,15 @@ export class TranscribedSegment extends Future<Object> {
     const future = new Future<string>(this._directive.next("speaker"));
     // @ts-ignore
     future._runtimeHint = "string";
+
     return future;
   }
+
+  // prop = words
+  // prop.type = array
+  // prop.ref = None
+  // prop_return_class = TranscribedSegmentWords
+  // use_proxy = False
 
   /** (Optional) Aligned words, if `align` is enabled. */
   get words() {
@@ -1821,6 +2220,7 @@ export class TranscribedSegment extends Future<Object> {
     const future = new TranscribedSegmentWords(this._directive.next("words"));
     // @ts-ignore
     future._runtimeHint = "array";
+
     return future;
   }
 
@@ -1832,14 +2232,27 @@ export class TranscribedSegment extends Future<Object> {
 
 /** ChapterMarker */
 export class ChapterMarker extends Future<Object> {
+  // prop = title
+  // prop.type = string
+  // prop.ref = None
+  // prop_return_class = Future<string>
+  // use_proxy = False
+
   /** Chapter title. */
   get title() {
     // @ts-ignore
     const future = new Future<string>(this._directive.next("title"));
     // @ts-ignore
     future._runtimeHint = "string";
+
     return future;
   }
+
+  // prop = start
+  // prop.type = number
+  // prop.ref = None
+  // prop_return_class = Future<number>
+  // use_proxy = False
 
   /** Start time of chapter, in seconds. */
   get start() {
@@ -1847,6 +2260,7 @@ export class ChapterMarker extends Future<Object> {
     const future = new Future<number>(this._directive.next("start"));
     // @ts-ignore
     future._runtimeHint = "number";
+
     return future;
   }
 
@@ -1858,14 +2272,27 @@ export class ChapterMarker extends Future<Object> {
 
 /** TranscribeSpeechOut */
 export class TranscribeSpeechOut extends Future<Object> {
+  // prop = text
+  // prop.type = string
+  // prop.ref = None
+  // prop_return_class = Future<string>
+  // use_proxy = False
+
   /** Transcribed text. */
   get text() {
     // @ts-ignore
     const future = new Future<string>(this._directive.next("text"));
     // @ts-ignore
     future._runtimeHint = "string";
+
     return future;
   }
+
+  // prop = segments
+  // prop.type = array
+  // prop.ref = None
+  // prop_return_class = TranscribeSpeechOutSegments
+  // use_proxy = False
 
   /** (Optional) Transcribed segments, if `segment` is enabled. */
   get segments() {
@@ -1875,8 +2302,15 @@ export class TranscribeSpeechOut extends Future<Object> {
     );
     // @ts-ignore
     future._runtimeHint = "array";
+
     return future;
   }
+
+  // prop = chapters
+  // prop.type = array
+  // prop.ref = None
+  // prop_return_class = TranscribeSpeechOutChapters
+  // use_proxy = False
 
   /** (Optional) Chapter markers, if `suggest_chapters` is enabled. */
   get chapters() {
@@ -1886,6 +2320,7 @@ export class TranscribeSpeechOut extends Future<Object> {
     );
     // @ts-ignore
     future._runtimeHint = "array";
+
     return future;
   }
 
@@ -1897,12 +2332,19 @@ export class TranscribeSpeechOut extends Future<Object> {
 
 /** GenerateSpeechOut */
 export class GenerateSpeechOut extends Future<Object> {
+  // prop = audio_uri
+  // prop.type = string
+  // prop.ref = None
+  // prop_return_class = Future<string>
+  // use_proxy = False
+
   /** Base 64-encoded WAV audio bytes, or a hosted audio url if `store` is provided. */
   get audio_uri() {
     // @ts-ignore
     const future = new Future<string>(this._directive.next("audio_uri"));
     // @ts-ignore
     future._runtimeHint = "string";
+
     return future;
   }
 
@@ -1914,12 +2356,19 @@ export class GenerateSpeechOut extends Future<Object> {
 
 /** XTTSV2Out */
 export class XTTSV2Out extends Future<Object> {
+  // prop = audio_uri
+  // prop.type = string
+  // prop.ref = None
+  // prop_return_class = Future<string>
+  // use_proxy = False
+
   /** Base 64-encoded WAV audio bytes, or a hosted audio url if `store` is provided. */
   get audio_uri() {
     // @ts-ignore
     const future = new Future<string>(this._directive.next("audio_uri"));
     // @ts-ignore
     future._runtimeHint = "string";
+
     return future;
   }
 
@@ -1931,14 +2380,27 @@ export class XTTSV2Out extends Future<Object> {
 
 /** Embedding */
 export class Embedding extends Future<Object> {
+  // prop = vector
+  // prop.type = array
+  // prop.ref = None
+  // prop_return_class = EmbeddingVector
+  // use_proxy = False
+
   /** Embedding vector. */
   get vector() {
     // @ts-ignore
     const future = new EmbeddingVector(this._directive.next("vector"));
     // @ts-ignore
     future._runtimeHint = "array";
+
     return future;
   }
+
+  // prop = doc_id
+  // prop.type = string
+  // prop.ref = None
+  // prop_return_class = Future<string>
+  // use_proxy = False
 
   /** (Optional) Vector store document ID. */
   get doc_id() {
@@ -1946,8 +2408,15 @@ export class Embedding extends Future<Object> {
     const future = new Future<string>(this._directive.next("doc_id"));
     // @ts-ignore
     future._runtimeHint = "string";
+
     return future;
   }
+
+  // prop = metadata
+  // prop.type = object
+  // prop.ref = None
+  // prop_return_class = Future<Object>
+  // use_proxy = True
 
   /** (Optional) Vector store document metadata. */
   get metadata() {
@@ -1955,7 +2424,8 @@ export class Embedding extends Future<Object> {
     const future = new Future<Object>(this._directive.next("metadata"));
     // @ts-ignore
     future._runtimeHint = "object";
-    return future;
+
+    return proxyFactory.makeProxy(future);
   }
 
   /** @internal returns the result for `Embedding` once it's node has been run. */
@@ -1966,12 +2436,19 @@ export class Embedding extends Future<Object> {
 
 /** EmbedTextOut */
 export class EmbedTextOut extends Future<Object> {
+  // prop = embedding
+  // prop.type = object
+  // prop.ref = #/components/schemas/Embedding
+  // prop_return_class = Embedding
+  // use_proxy = False
+
   /** Generated embedding. */
   get embedding() {
     // @ts-ignore
     const future = new Embedding(this._directive.next("embedding"));
     // @ts-ignore
     future._runtimeHint = "object";
+
     return future;
   }
 
@@ -1983,14 +2460,27 @@ export class EmbedTextOut extends Future<Object> {
 
 /** EmbedTextItem */
 export class EmbedTextItem extends Future<Object> {
+  // prop = text
+  // prop.type = string
+  // prop.ref = None
+  // prop_return_class = Future<string>
+  // use_proxy = False
+
   /** Text to embed. */
   get text() {
     // @ts-ignore
     const future = new Future<string>(this._directive.next("text"));
     // @ts-ignore
     future._runtimeHint = "string";
+
     return future;
   }
+
+  // prop = metadata
+  // prop.type = object
+  // prop.ref = None
+  // prop_return_class = Future<Object>
+  // use_proxy = True
 
   /** (Optional) Metadata that can be used to query the vector store. Ignored if `collection_name` is unset. */
   get metadata() {
@@ -1998,8 +2488,15 @@ export class EmbedTextItem extends Future<Object> {
     const future = new Future<Object>(this._directive.next("metadata"));
     // @ts-ignore
     future._runtimeHint = "object";
-    return future;
+
+    return proxyFactory.makeProxy(future);
   }
+
+  // prop = doc_id
+  // prop.type = string
+  // prop.ref = None
+  // prop_return_class = Future<string>
+  // use_proxy = False
 
   /** (Optional) Vector store document ID. Ignored if `collection_name` is unset. */
   get doc_id() {
@@ -2007,6 +2504,7 @@ export class EmbedTextItem extends Future<Object> {
     const future = new Future<string>(this._directive.next("doc_id"));
     // @ts-ignore
     future._runtimeHint = "string";
+
     return future;
   }
 
@@ -2018,6 +2516,12 @@ export class EmbedTextItem extends Future<Object> {
 
 /** MultiEmbedTextOut */
 export class MultiEmbedTextOut extends Future<Object> {
+  // prop = embeddings
+  // prop.type = array
+  // prop.ref = None
+  // prop_return_class = MultiEmbedTextOutEmbeddings
+  // use_proxy = False
+
   /** Generated embeddings. */
   get embeddings() {
     // @ts-ignore
@@ -2026,6 +2530,7 @@ export class MultiEmbedTextOut extends Future<Object> {
     );
     // @ts-ignore
     future._runtimeHint = "array";
+
     return future;
   }
 
@@ -2037,12 +2542,19 @@ export class MultiEmbedTextOut extends Future<Object> {
 
 /** JinaV2Out */
 export class JinaV2Out extends Future<Object> {
+  // prop = embeddings
+  // prop.type = array
+  // prop.ref = None
+  // prop_return_class = JinaV2OutEmbeddings
+  // use_proxy = False
+
   /** Generated embeddings. */
   get embeddings() {
     // @ts-ignore
     const future = new JinaV2OutEmbeddings(this._directive.next("embeddings"));
     // @ts-ignore
     future._runtimeHint = "array";
+
     return future;
   }
 
@@ -2054,12 +2566,19 @@ export class JinaV2Out extends Future<Object> {
 
 /** EmbedImageOut */
 export class EmbedImageOut extends Future<Object> {
+  // prop = embedding
+  // prop.type = object
+  // prop.ref = #/components/schemas/Embedding
+  // prop_return_class = Embedding
+  // use_proxy = False
+
   /** Generated embedding. */
   get embedding() {
     // @ts-ignore
     const future = new Embedding(this._directive.next("embedding"));
     // @ts-ignore
     future._runtimeHint = "object";
+
     return future;
   }
 
@@ -2071,14 +2590,27 @@ export class EmbedImageOut extends Future<Object> {
 
 /** EmbedImageItem */
 export class EmbedImageItem extends Future<Object> {
+  // prop = image_uri
+  // prop.type = string
+  // prop.ref = None
+  // prop_return_class = Future<string>
+  // use_proxy = False
+
   /** Image to embed. */
   get image_uri() {
     // @ts-ignore
     const future = new Future<string>(this._directive.next("image_uri"));
     // @ts-ignore
     future._runtimeHint = "string";
+
     return future;
   }
+
+  // prop = doc_id
+  // prop.type = string
+  // prop.ref = None
+  // prop_return_class = Future<string>
+  // use_proxy = False
 
   /** (Optional) Vector store document ID. Ignored if `collection_name` is unset. */
   get doc_id() {
@@ -2086,6 +2618,7 @@ export class EmbedImageItem extends Future<Object> {
     const future = new Future<string>(this._directive.next("doc_id"));
     // @ts-ignore
     future._runtimeHint = "string";
+
     return future;
   }
 
@@ -2097,14 +2630,27 @@ export class EmbedImageItem extends Future<Object> {
 
 /** EmbedTextOrImageItem */
 export class EmbedTextOrImageItem extends Future<Object> {
+  // prop = image_uri
+  // prop.type = string
+  // prop.ref = None
+  // prop_return_class = Future<string>
+  // use_proxy = False
+
   /** Image to embed. */
   get image_uri() {
     // @ts-ignore
     const future = new Future<string>(this._directive.next("image_uri"));
     // @ts-ignore
     future._runtimeHint = "string";
+
     return future;
   }
+
+  // prop = text
+  // prop.type = string
+  // prop.ref = None
+  // prop_return_class = Future<string>
+  // use_proxy = False
 
   /** Text to embed. */
   get text() {
@@ -2112,8 +2658,15 @@ export class EmbedTextOrImageItem extends Future<Object> {
     const future = new Future<string>(this._directive.next("text"));
     // @ts-ignore
     future._runtimeHint = "string";
+
     return future;
   }
+
+  // prop = metadata
+  // prop.type = object
+  // prop.ref = None
+  // prop_return_class = Future<Object>
+  // use_proxy = True
 
   /** Metadata that can be used to query the vector store. Ignored if `collection_name` is unset. */
   get metadata() {
@@ -2121,8 +2674,15 @@ export class EmbedTextOrImageItem extends Future<Object> {
     const future = new Future<Object>(this._directive.next("metadata"));
     // @ts-ignore
     future._runtimeHint = "object";
-    return future;
+
+    return proxyFactory.makeProxy(future);
   }
+
+  // prop = doc_id
+  // prop.type = string
+  // prop.ref = None
+  // prop_return_class = Future<string>
+  // use_proxy = False
 
   /** Vector store document ID. Ignored if `collection_name` is unset. */
   get doc_id() {
@@ -2130,6 +2690,7 @@ export class EmbedTextOrImageItem extends Future<Object> {
     const future = new Future<string>(this._directive.next("doc_id"));
     // @ts-ignore
     future._runtimeHint = "string";
+
     return future;
   }
 
@@ -2141,6 +2702,12 @@ export class EmbedTextOrImageItem extends Future<Object> {
 
 /** MultiEmbedImageOut */
 export class MultiEmbedImageOut extends Future<Object> {
+  // prop = embeddings
+  // prop.type = array
+  // prop.ref = None
+  // prop_return_class = MultiEmbedImageOutEmbeddings
+  // use_proxy = False
+
   /** Generated embeddings. */
   get embeddings() {
     // @ts-ignore
@@ -2149,6 +2716,7 @@ export class MultiEmbedImageOut extends Future<Object> {
     );
     // @ts-ignore
     future._runtimeHint = "array";
+
     return future;
   }
 
@@ -2160,12 +2728,19 @@ export class MultiEmbedImageOut extends Future<Object> {
 
 /** CLIPOut */
 export class CLIPOut extends Future<Object> {
+  // prop = embeddings
+  // prop.type = array
+  // prop.ref = None
+  // prop_return_class = CLIPOutEmbeddings
+  // use_proxy = False
+
   /** Generated embeddings. */
   get embeddings() {
     // @ts-ignore
     const future = new CLIPOutEmbeddings(this._directive.next("embeddings"));
     // @ts-ignore
     future._runtimeHint = "array";
+
     return future;
   }
 
@@ -2177,14 +2752,27 @@ export class CLIPOut extends Future<Object> {
 
 /** FindOrCreateVectorStoreOut */
 export class FindOrCreateVectorStoreOut extends Future<Object> {
+  // prop = collection_name
+  // prop.type = string
+  // prop.ref = None
+  // prop_return_class = Future<string>
+  // use_proxy = False
+
   /** Vector store name. */
   get collection_name() {
     // @ts-ignore
     const future = new Future<string>(this._directive.next("collection_name"));
     // @ts-ignore
     future._runtimeHint = "string";
+
     return future;
   }
+
+  // prop = model
+  // prop.type = string
+  // prop.ref = None
+  // prop_return_class = Future<string>
+  // use_proxy = False
 
   /** Selected embedding model. */
   get model() {
@@ -2192,6 +2780,7 @@ export class FindOrCreateVectorStoreOut extends Future<Object> {
     const future = new Future<string>(this._directive.next("model"));
     // @ts-ignore
     future._runtimeHint = "string";
+
     return future;
   }
 
@@ -2203,12 +2792,19 @@ export class FindOrCreateVectorStoreOut extends Future<Object> {
 
 /** ListVectorStoresOut */
 export class ListVectorStoresOut extends Future<Object> {
+  // prop = items
+  // prop.type = array
+  // prop.ref = None
+  // prop_return_class = ListVectorStoresOutItems
+  // use_proxy = False
+
   /** List of vector stores. */
   get items() {
     // @ts-ignore
     const future = new ListVectorStoresOutItems(this._directive.next("items"));
     // @ts-ignore
     future._runtimeHint = "array";
+
     return future;
   }
 
@@ -2220,14 +2816,27 @@ export class ListVectorStoresOut extends Future<Object> {
 
 /** DeleteVectorStoreOut */
 export class DeleteVectorStoreOut extends Future<Object> {
+  // prop = collection_name
+  // prop.type = string
+  // prop.ref = None
+  // prop_return_class = Future<string>
+  // use_proxy = False
+
   /** Vector store name. */
   get collection_name() {
     // @ts-ignore
     const future = new Future<string>(this._directive.next("collection_name"));
     // @ts-ignore
     future._runtimeHint = "string";
+
     return future;
   }
+
+  // prop = model
+  // prop.type = string
+  // prop.ref = None
+  // prop_return_class = Future<string>
+  // use_proxy = False
 
   /** Selected embedding model. */
   get model() {
@@ -2235,6 +2844,7 @@ export class DeleteVectorStoreOut extends Future<Object> {
     const future = new Future<string>(this._directive.next("model"));
     // @ts-ignore
     future._runtimeHint = "string";
+
     return future;
   }
 
@@ -2246,14 +2856,27 @@ export class DeleteVectorStoreOut extends Future<Object> {
 
 /** Canonical representation of document with embedding vector. */
 export class Vector extends Future<Object> {
+  // prop = id
+  // prop.type = string
+  // prop.ref = None
+  // prop_return_class = Future<string>
+  // use_proxy = False
+
   /** Document ID. */
   get id() {
     // @ts-ignore
     const future = new Future<string>(this._directive.next("id"));
     // @ts-ignore
     future._runtimeHint = "string";
+
     return future;
   }
+
+  // prop = vector
+  // prop.type = array
+  // prop.ref = None
+  // prop_return_class = VectorVector
+  // use_proxy = False
 
   /** Embedding vector. */
   get vector() {
@@ -2261,8 +2884,15 @@ export class Vector extends Future<Object> {
     const future = new VectorVector(this._directive.next("vector"));
     // @ts-ignore
     future._runtimeHint = "array";
+
     return future;
   }
+
+  // prop = metadata
+  // prop.type = object
+  // prop.ref = None
+  // prop_return_class = Future<Object>
+  // use_proxy = True
 
   /** Document metadata. */
   get metadata() {
@@ -2270,7 +2900,8 @@ export class Vector extends Future<Object> {
     const future = new Future<Object>(this._directive.next("metadata"));
     // @ts-ignore
     future._runtimeHint = "object";
-    return future;
+
+    return proxyFactory.makeProxy(future);
   }
 
   /** @internal returns the result for `Vector` once it's node has been run. */
@@ -2281,12 +2912,19 @@ export class Vector extends Future<Object> {
 
 /** FetchVectorsOut */
 export class FetchVectorsOut extends Future<Object> {
+  // prop = vectors
+  // prop.type = array
+  // prop.ref = None
+  // prop_return_class = FetchVectorsOutVectors
+  // use_proxy = False
+
   /** Retrieved vectors. */
   get vectors() {
     // @ts-ignore
     const future = new FetchVectorsOutVectors(this._directive.next("vectors"));
     // @ts-ignore
     future._runtimeHint = "array";
+
     return future;
   }
 
@@ -2298,12 +2936,19 @@ export class FetchVectorsOut extends Future<Object> {
 
 /** UpdateVectorsOut */
 export class UpdateVectorsOut extends Future<Object> {
+  // prop = count
+  // prop.type = integer
+  // prop.ref = None
+  // prop_return_class = Future<number>
+  // use_proxy = False
+
   /** Number of vectors modified. */
   get count() {
     // @ts-ignore
     const future = new Future<number>(this._directive.next("count"));
     // @ts-ignore
     future._runtimeHint = "number";
+
     return future;
   }
 
@@ -2315,12 +2960,19 @@ export class UpdateVectorsOut extends Future<Object> {
 
 /** DeleteVectorsOut */
 export class DeleteVectorsOut extends Future<Object> {
+  // prop = count
+  // prop.type = integer
+  // prop.ref = None
+  // prop_return_class = Future<number>
+  // use_proxy = False
+
   /** Number of vectors modified. */
   get count() {
     // @ts-ignore
     const future = new Future<number>(this._directive.next("count"));
     // @ts-ignore
     future._runtimeHint = "number";
+
     return future;
   }
 
@@ -2332,14 +2984,27 @@ export class DeleteVectorsOut extends Future<Object> {
 
 /** UpdateVectorParams */
 export class UpdateVectorParams extends Future<Object> {
+  // prop = id
+  // prop.type = string
+  // prop.ref = None
+  // prop_return_class = Future<string>
+  // use_proxy = False
+
   /** Document ID. */
   get id() {
     // @ts-ignore
     const future = new Future<string>(this._directive.next("id"));
     // @ts-ignore
     future._runtimeHint = "string";
+
     return future;
   }
+
+  // prop = vector
+  // prop.type = array
+  // prop.ref = None
+  // prop_return_class = UpdateVectorParamsVector
+  // use_proxy = False
 
   /** (Optional) Embedding vector. */
   get vector() {
@@ -2347,8 +3012,15 @@ export class UpdateVectorParams extends Future<Object> {
     const future = new UpdateVectorParamsVector(this._directive.next("vector"));
     // @ts-ignore
     future._runtimeHint = "array";
+
     return future;
   }
+
+  // prop = metadata
+  // prop.type = object
+  // prop.ref = None
+  // prop_return_class = Future<Object>
+  // use_proxy = True
 
   /** (Optional) Document metadata. */
   get metadata() {
@@ -2356,7 +3028,8 @@ export class UpdateVectorParams extends Future<Object> {
     const future = new Future<Object>(this._directive.next("metadata"));
     // @ts-ignore
     future._runtimeHint = "object";
-    return future;
+
+    return proxyFactory.makeProxy(future);
   }
 
   /** @internal returns the result for `UpdateVectorParams` once it's node has been run. */
@@ -2367,14 +3040,27 @@ export class UpdateVectorParams extends Future<Object> {
 
 /** VectorStoreQueryResult */
 export class VectorStoreQueryResult extends Future<Object> {
+  // prop = id
+  // prop.type = string
+  // prop.ref = None
+  // prop_return_class = Future<string>
+  // use_proxy = False
+
   /** Document ID. */
   get id() {
     // @ts-ignore
     const future = new Future<string>(this._directive.next("id"));
     // @ts-ignore
     future._runtimeHint = "string";
+
     return future;
   }
+
+  // prop = distance
+  // prop.type = number
+  // prop.ref = None
+  // prop_return_class = Future<number>
+  // use_proxy = False
 
   /** Similarity score. */
   get distance() {
@@ -2382,8 +3068,15 @@ export class VectorStoreQueryResult extends Future<Object> {
     const future = new Future<number>(this._directive.next("distance"));
     // @ts-ignore
     future._runtimeHint = "number";
+
     return future;
   }
+
+  // prop = vector
+  // prop.type = array
+  // prop.ref = None
+  // prop_return_class = VectorStoreQueryResultVector
+  // use_proxy = False
 
   /** (Optional) Embedding vector. */
   get vector() {
@@ -2393,8 +3086,15 @@ export class VectorStoreQueryResult extends Future<Object> {
     );
     // @ts-ignore
     future._runtimeHint = "array";
+
     return future;
   }
+
+  // prop = metadata
+  // prop.type = object
+  // prop.ref = None
+  // prop_return_class = Future<Object>
+  // use_proxy = True
 
   /** (Optional) Document metadata. */
   get metadata() {
@@ -2402,7 +3102,8 @@ export class VectorStoreQueryResult extends Future<Object> {
     const future = new Future<Object>(this._directive.next("metadata"));
     // @ts-ignore
     future._runtimeHint = "object";
-    return future;
+
+    return proxyFactory.makeProxy(future);
   }
 
   /** @internal returns the result for `VectorStoreQueryResult` once it's node has been run. */
@@ -2413,6 +3114,12 @@ export class VectorStoreQueryResult extends Future<Object> {
 
 /** QueryVectorStoreOut */
 export class QueryVectorStoreOut extends Future<Object> {
+  // prop = results
+  // prop.type = array
+  // prop.ref = None
+  // prop_return_class = QueryVectorStoreOutResults
+  // use_proxy = False
+
   /** Query results. */
   get results() {
     // @ts-ignore
@@ -2421,8 +3128,15 @@ export class QueryVectorStoreOut extends Future<Object> {
     );
     // @ts-ignore
     future._runtimeHint = "array";
+
     return future;
   }
+
+  // prop = collection_name
+  // prop.type = string
+  // prop.ref = None
+  // prop_return_class = Future<string>
+  // use_proxy = False
 
   /** (Optional) Vector store name. */
   get collection_name() {
@@ -2430,8 +3144,15 @@ export class QueryVectorStoreOut extends Future<Object> {
     const future = new Future<string>(this._directive.next("collection_name"));
     // @ts-ignore
     future._runtimeHint = "string";
+
     return future;
   }
+
+  // prop = model
+  // prop.type = string
+  // prop.ref = None
+  // prop_return_class = Future<string>
+  // use_proxy = False
 
   /** (Optional) Selected embedding model. */
   get model() {
@@ -2439,6 +3160,7 @@ export class QueryVectorStoreOut extends Future<Object> {
     const future = new Future<string>(this._directive.next("model"));
     // @ts-ignore
     future._runtimeHint = "string";
+
     return future;
   }
 

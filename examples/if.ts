@@ -30,8 +30,7 @@ async function main() {
   });
 
   const [jupiter, mars] = sizes as [ComputeJSON, ComputeJSON];
-  const radius = (p: ComputeJSON) =>
-    p.future.json_object.get("radius") as unknown as number;
+  const radius = (p: ComputeJSON) => p.future.json_object.radius;
 
   const comparison = new ComputeJSON({
     prompt: sb.interpolate`Is ${radius(jupiter)} > ${radius(mars)}?`,
@@ -45,16 +44,14 @@ async function main() {
     },
   });
 
-  const result = new If({
-    condition: comparison.future.json_object.get("isGreaterThan") as any,
-    value_if_true: jupiter.future.json_object,
-    value_if_false: mars.future.json_object,
+  const planetName = new If({
+    condition: comparison.future.json_object.isGreaterThan,
+    value_if_true: jupiter.future.json_object.planetName,
+    value_if_false: mars.future.json_object.planetName,
   });
 
   const output = new Box({
-    value: sb.interpolate`The bigger planet is ${result.future.result.get(
-      "planetName",
-    )}!`,
+    value: sb.interpolate`The bigger planet is ${planetName.future.result}!`,
   });
 
   const res = await substrate.run(output);
