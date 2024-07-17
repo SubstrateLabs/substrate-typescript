@@ -249,7 +249,6 @@ export class FutureString extends Future<string> {
   ): FutureString {
     return FutureString.concat(
       ...strings
-        .filter((s) => s !== "") // FIXME: Work around until SubstrateLabs/substrate#514 is live
         .flatMap((s: string, i: number) => {
           const expr = exprs[i];
           return expr
