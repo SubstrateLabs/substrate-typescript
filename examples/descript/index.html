@@ -141,15 +141,16 @@
           }
         }
 
-        let currentChapter = chapters[0];
-        for (let i = 0; i < chapters.length; i++) {
-          const chapter = chapters[i];
-          if (currentTime >= chapter.start) {
-            currentChapter = chapter;
+        if (Array.isArray(chapters)) {
+          let currentChapter = chapters[0];
+          for (let i = 0; i < chapters.length; i++) {
+            const chapter = chapters[i];
+            if (currentTime >= chapter.start) {
+              currentChapter = chapter;
+            }
           }
+          chapterTitle.innerText = currentChapter.section || "";
         }
-        chapterTitle.innerText = currentChapter.section;
-
 
         // If no current segment found, display the last segment
         if (!segmentToDisplay && segments.length > 0) {
