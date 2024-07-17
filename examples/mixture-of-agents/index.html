@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Paragraph Viewer</title>
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #f0f4f8;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        color: #333;
+      }
+      .container {
+        display: flex;
+        align-items: center;
+      }
+      .main-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: -40px;
+      }
+      .card {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        width: 600px;
+        margin-bottom: 20px;
+      }
+      .content {
+        background-color: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 4px;
+        padding: 16px;
+        margin-bottom: 16px;
+        min-height: 300px;
+        max-height: 300px;
+        overflow-y: auto;
+        white-space: pre-wrap;
+      }
+      .controls {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 16px;
+      }
+      button {
+        background-color: #4a5568;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 8px 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        margin: 4px;
+      }
+      button:hover:not(:disabled) {
+        background-color: #2d3748;
+        color: white;
+      }
+      button:disabled {
+        background-color: #cbd5e0;
+        cursor: not-allowed;
+      }
+      .view-toggle {
+        display: flex;
+        margin-bottom: 16px;
+      }
+      .view-toggle button {
+        background-color: #e2e8f0;
+        color: #4a5568;
+      }
+      .view-toggle button.active {
+        background-color: #4a5568;
+        color: white;
+      }
+      .question-txt {
+        text-align: center;
+        font-size: 15px;
+        color: #718096;
+        margin-bottom: 24px;
+        margin-top: -32px;
+        font-style: italic;
+        opacity: 0.6;
+        max-width: 500px;
+      }
+      .model-name {
+        text-align: center;
+        margin-top: -4px;
+        margin-bottom: 10px;
+        font-size: 14px;
+        color: #718096;
+      }
+      .vertical-controls {
+        display: flex;
+        flex-direction: column;
+        margin-left: 20px;
+      }
+      .dot-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 10px;
+      }
+      .dot-container.vertical {
+        flex-direction: column;
+        position: absolute;
+        left: calc(50% - 380px);
+        top: 50%;
+        transform: translateY(-50%);
+      }
+      .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: #cbd5e0;
+        margin: 0 5px;
+      }
+      .dot-container.vertical .dot {
+        margin: 5px 0;
+      }
+      .dot.active {
+        background-color: #4a5568;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div id="layerDots" class="dot-container vertical"></div>
+      <div class="main-content">
+        <div id="question" class="question-txt"></div>
+        <div class="view-toggle">
+          <button id="paragraphsBtn">Individual</button>
+          <button id="summariesBtn">Aggregate</button>
+        </div>
+        <div class="card">
+          <div id="cardTitle" class="model-name">Mistral</div>
+          <div class="content" id="contentArea"></div>
+          <div id="paragraphDots" class="dot-container horizontal"></div>
+        </div>
+        <div class="controls">
+          <button id="prevBtn">◀</button>
+          <button id="nextBtn">▶</button>
+        </div>
+      </div>
+      <div class="vertical-controls">
+        <button id="upBtn">▲</button>
+        <button id="downBtn">▼</button>
+      </div>
+    </div>
+
+    <script>
+      const question = "{{ question }}"
+      const modelNames = [
+        "Mistral7BInstruct",
+        "Mixtral8x7BInstruct",
+        "Llama3Instruct8B",
+        "Llama3Instruct70B",
+      ];
+      const individualResults = "{{ individual }}";
+      const aggResults = "{{ summaries }}";
+
+      let currentIndex = 0;
+      let currentLayer = 0;
+      let showingIndividual = true;
+
+      const contentArea = document.getElementById("contentArea");
+      const cardTitle = document.getElementById("cardTitle");
+      const questionDiv = document.getElementById("question");
+      const prevBtn = document.getElementById("prevBtn");
+      const nextBtn = document.getElementById("nextBtn");
+      const summariesBtn = document.getElementById("summariesBtn");
+      const paragraphsBtn = document.getElementById("paragraphsBtn");
+      const upBtn = document.getElementById("upBtn");
+      const downBtn = document.getElementById("downBtn");
+      const paragraphDots = document.getElementById("paragraphDots");
+      const layerDots = document.getElementById("layerDots");
+
+      function updateContent() {
+        if (showingIndividual) {
+          contentArea.textContent =
+            individualResults[currentLayer][currentIndex].trim();
+          cardTitle.textContent = modelNames[currentIndex];
+        } else {
+          contentArea.textContent = aggResults[currentLayer].trim();
+          cardTitle.textContent = `MoA Layer ${currentLayer + 1}`;
+        }
+        questionDiv.textContent = question;
+        summariesBtn.classList.toggle("active", !showingIndividual);
+        paragraphsBtn.classList.toggle("active", showingIndividual);
+        updateButtonStates();
+        updateDots();
+      }
+
+      function updateDots() {
+        paragraphDots.innerHTML = "";
+        layerDots.innerHTML = "";
+        if (showingIndividual) {
+          for (let i = 0; i < individualResults[currentLayer].length; i++) {
+            const dot = document.createElement("div");
+            dot.classList.add("dot");
+            if (i === currentIndex) dot.classList.add("active");
+            paragraphDots.appendChild(dot);
+          }
+        } else {
+          const dot = document.createElement("div");
+          dot.classList.add("dot");
+          paragraphDots.appendChild(dot);
+        }
+        const totalLayers = showingIndividual
+          ? individualResults.length
+          : aggResults.length;
+        for (let i = 0; i < totalLayers; i++) {
+          const dot = document.createElement("div");
+          dot.classList.add("dot");
+          if (i === currentLayer) dot.classList.add("active");
+          layerDots.appendChild(dot);
+        }
+      }
+
+      function updateButtonStates() {
+        if (showingIndividual) {
+          prevBtn.disabled = currentIndex === 0;
+          nextBtn.disabled =
+            currentIndex === individualResults[currentLayer].length - 1;
+        } else {
+          prevBtn.disabled = true;
+          nextBtn.disabled = true;
+        }
+        upBtn.disabled = currentLayer === 0;
+        downBtn.disabled =
+          currentLayer ===
+          (showingIndividual
+            ? individualResults.length - 1
+            : aggResults.length - 1);
+      }
+
+      function toggleView(showParagraphs) {
+        showingIndividual = showParagraphs;
+        currentIndex = 0;
+        currentLayer = 0;
+        updateContent();
+      }
+
+      summariesBtn.addEventListener("click", () => toggleView(false));
+      paragraphsBtn.addEventListener("click", () => toggleView(true));
+      prevBtn.addEventListener("click", () => {
+        if (showingIndividual && currentIndex > 0) {
+          currentIndex--;
+          updateContent();
+        }
+      });
+
+      nextBtn.addEventListener("click", () => {
+        if (
+          showingIndividual &&
+          currentIndex < individualResults[currentLayer].length - 1
+        ) {
+          currentIndex++;
+          updateContent();
+        }
+      });
+
+      upBtn.addEventListener("click", () => {
+        if (currentLayer > 0) {
+          currentLayer--;
+          updateContent();
+        }
+      });
+
+      downBtn.addEventListener("click", () => {
+        const maxLayer = showingIndividual
+          ? individualResults.length - 1
+          : aggResults.length - 1;
+        if (currentLayer < maxLayer) {
+          currentLayer++;
+          updateContent();
+        }
+      });
+
+      document.addEventListener("keydown", (event) => {
+        switch (event.key) {
+          case "ArrowUp":
+            if (!upBtn.disabled) {
+              upBtn.click();
+            }
+            break;
+          case "ArrowDown":
+            if (!downBtn.disabled) {
+              downBtn.click();
+            }
+            break;
+          case "ArrowLeft":
+            if (!prevBtn.disabled) {
+              prevBtn.click();
+            }
+            break;
+          case "ArrowRight":
+            if (!nextBtn.disabled) {
+              nextBtn.click();
+            }
+            break;
+          case " ": // space
+            event.preventDefault(); // Prevent page scrolling
+            toggleView(!showingIndividual);
+            break;
+        }
+      });
+
+      updateContent();
+    </script>
+  </body>
+</html>

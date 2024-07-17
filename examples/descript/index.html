@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap"
+      rel="stylesheet"
+    />
+
+    <title>Audio Transcript Karaoke</title>
+    <style>
+      @keyframes punchIn {
+        0% {
+          transform: scale(1.1);
+          background-color: rgba(205, 92, 92, 0.7);
+          color: white;
+        }
+        92% {
+          transform: scale(0.97);
+          background-color: indianred;
+          color: white;
+        }
+        100% {
+          transform: scale(1);
+          background-color: indianred;
+          color: white;
+        }
+      }
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: burlywood;
+      }
+      #container {
+        text-align: center;
+      }
+      #text-display {
+        font-size: 24px;
+        margin: -148px auto 0;
+        padding: 0 20px;
+        min-height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        max-width: 600px;
+        flex-wrap: wrap;
+        line-height: 1.4;
+        text-shadow: 1px 1px 3px rgba(20, 20, 20, 0.15);
+      }
+      #text-display span {
+        display: inline-block;
+        padding: 3px 2px;
+        font-family: "Roboto", "Helvetica Neue", Arial, sans-serif;
+        border-radius: 5px;
+        transition: all 0.14s ease-out;
+        color: rgba(255, 255, 255, 0.7);
+      }
+      #text-display span.highlight {
+        background-color: indianred;
+        color: white;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+      }
+      #text-display span.highlight-animate {
+        background-color: indianred;
+        color: white;
+        animation: punchIn 0.14s ease-out;
+      }
+      audio {
+        position: fixed;
+        bottom: 40px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 50%;
+        max-width: 600px;
+      }
+      #made-with {
+        position: fixed;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 12px;
+        color: rgba(0, 0, 0, 0.3);
+        font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <audio id="audio-player" controls>
+        <source src="{{ audioUrl }}" type="audio/mpeg" />
+        Your browser does not support the audio element.
+      </audio>
+      <div id="text-display"></div>
+      <a id="made-with" href="https://substrate.run" target="_blank"
+        >made with substrate</a
+      >
+    </div>
+
+    <script>
+      // Placeholder for your JSON data
+      const transcriptData = "{{ transcriptData }}";
+
+      const audioPlayer = document.getElementById("audio-player");
+      const textDisplay = document.getElementById("text-display");
+
+      let currentSegmentIndex = 0;
+      let lastHighlightedWord = null;
+      let lastSegmentIndex = -1;
+
+      function updateText() {
+        const currentTime = audioPlayer.currentTime;
+        let segmentToDisplay = null;
+
+        // Find the current segment to display
+        for (let i = 0; i < transcriptData.segments.length; i++) {
+          const segment = transcriptData.segments[i];
+          if (currentTime < segment.end) {
+            segmentToDisplay = segment;
+            currentSegmentIndex = i;
+            break;
+          }
+        }
+
+        // If no current segment found, display the last segment
+        if (!segmentToDisplay && transcriptData.segments.length > 0) {
+          segmentToDisplay =
+            transcriptData.segments[transcriptData.segments.length - 1];
+          currentSegmentIndex = transcriptData.segments.length - 1;
+        }
+
+        if (segmentToDisplay) {
+          // Only update the DOM if we've moved to a new segment
+          if (currentSegmentIndex !== lastSegmentIndex) {
+            let html = "";
+            segmentToDisplay.words.forEach((word) => {
+              html += `<span data-word-id="${word.start}">${word.word}</span>`;
+            });
+            textDisplay.innerHTML = html;
+            lastSegmentIndex = currentSegmentIndex;
+          }
+
+          // Highlight words
+          let currentHighlightedWord = null;
+
+          segmentToDisplay.words.forEach((word, index) => {
+            const nextWord = segmentToDisplay.words[index + 1];
+            const wordEndTime = nextWord ? nextWord.start : word.end;
+
+            const span = textDisplay.querySelector(
+              `[data-word-id="${word.start}"]`,
+            );
+
+            if (currentTime >= word.start && currentTime < wordEndTime) {
+              if (span && !span.classList.contains("highlight")) {
+                span.classList.add("highlight");
+                // Only add the animation class if this is a newly highlighted word
+                if (word.start !== lastHighlightedWord) {
+                  span.classList.add("highlight-animate");
+                  setTimeout(
+                    () => span.classList.remove("highlight-animate"),
+                    140,
+                  );
+                }
+              }
+              currentHighlightedWord = word.start;
+            } else if (span && span.classList.contains("highlight")) {
+              span.classList.remove("highlight", "highlight-animate");
+            }
+          });
+
+          // Remove highlight from the previous word if it changed
+          if (
+            lastHighlightedWord &&
+            lastHighlightedWord !== currentHighlightedWord
+          ) {
+            const lastSpan = textDisplay.querySelector(
+              `[data-word-id="${lastHighlightedWord}"]`,
+            );
+            if (lastSpan) {
+              lastSpan.classList.remove("highlight", "highlight-animate");
+            }
+          }
+
+          lastHighlightedWord = currentHighlightedWord;
+        }
+      }
+
+      updateText();
+
+      let animationFrameId;
+      let lastUpdateTime = 0;
+      const updateInterval = 1000 / 40;
+
+      function updateLoop(timestamp) {
+        if (timestamp - lastUpdateTime > updateInterval) {
+          updateText();
+          lastUpdateTime = timestamp;
+        }
+        animationFrameId = requestAnimationFrame(updateLoop);
+      }
+      audioPlayer.addEventListener("play", () => {
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = requestAnimationFrame(updateLoop);
+      });
+
+      audioPlayer.addEventListener("pause", () => {
+        cancelAnimationFrame(animationFrameId);
+      });
+
+      audioPlayer.addEventListener("ended", () => {
+        cancelAnimationFrame(animationFrameId);
+      });
+      // audioPlayer.addEventListener("timeupdate", updateText);
+    </script>
+  </body>
+</html>
