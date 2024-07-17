@@ -1,22 +1,24 @@
 #!/usr/bin/env -S npx ts-node --transpileOnly --esm
 import fs from "fs";
-import { fileURLToPath } from "url";
-import { dirname } from "path";
 import { ComputeJSON, sb, Substrate, TranscribeSpeech } from "substrate";
-import { listChapters, proposedSchema } from "./util";
+import {
+  currentDir,
+  listChapters,
+  proposedSchema,
+  timestampedSchema,
+  timestampPrompt,
+} from "./util";
 
-// @ts-ignore
-const dir = dirname(fileURLToPath(import.meta.url));
 /**
  * Other hosted audio files:
  * https://media.substrate.run/federer-dartmouth.m4a
  * https://media.substrate.run/kaufman-bafta-short.mp3
  * https://media.substrate.run/dfw-clip.m4a
  */
-const audio_uri = "https://media.substrate.run/my-dinner-andre.m4a";
+// const audio_uri = "https://media.substrate.run/my-dinner-andre.m4a";
+const audio_uri = "https://media.substrate.run/federer-dartmouth.m4a";
 const substrate = new Substrate({
   apiKey: process.env["SUBSTRATE_API_KEY"],
-  additionalHeaders: { "x-substrate-debug": "1" },
 });
 
 const outfile = process.argv[2] || "descript.html";
@@ -26,16 +28,34 @@ async function main() {
     { cache_age: 60 * 60 * 24 * 7 },
   );
   const chapters = new ComputeJSON({
-    prompt: sb.interpolate`${listChapters}TRANSCRIPT:${transcribe.future.text}`,
+    prompt: sb.concat(
+      listChapters,
+      "\n\nTRANSCRIPT:\n\n",
+      transcribe.future.text,
+    ),
     json_schema: proposedSchema,
     model: "Mixtral8x7BInstruct",
   });
-  const res = await substrate.run(transcribe, chapters);
-  console.log(JSON.stringify(res.get(chapters), null, 2));
+  const timestamps = new ComputeJSON({
+    prompt: sb.concat(
+      timestampPrompt,
+      "SECTIONS: ",
+      sb.jq<"string">(chapters.future.json_object, ".chapters | @json"),
+      "\n\nTRANSCRIPT:\n\n",
+      transcribe.future.text,
+    ),
+    json_schema: timestampedSchema,
+    model: "Mixtral8x7BInstruct",
+  });
+  const res = await substrate.run(transcribe, chapters, timestamps);
+  console.log(JSON.stringify(res.get(timestamps), null, 2));
   const transcript = res.get(transcribe);
-  const htmlTemplate = fs.readFileSync(`${dir}/index.html`, "utf8");
+  // @ts-ignore
+  const timestampedChapters = res.get(timestamps).json_object?.chapters;
+  const htmlTemplate = fs.readFileSync(`${currentDir}/index.html`, "utf8");
   const html = htmlTemplate
-    .replace('"{{ transcriptData }}"', JSON.stringify(transcript, null, 2))
+    .replace('"{{ segments }}"', JSON.stringify(transcript.segments, null, 2))
+    .replace('"{{ chapters }}"', JSON.stringify(timestampedChapters, null, 2))
     .replace("{{ audioUrl }}", audio_uri);
   fs.writeFileSync(outfile, html);
 }

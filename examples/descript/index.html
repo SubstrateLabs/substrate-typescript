@@ -8,7 +8,7 @@
       rel="stylesheet"
     />
 
-    <title>Audio Transcript Karaoke</title>
+    <title>Substrate - Descript</title>
     <style>
       @keyframes punchIn {
         0% {
@@ -72,7 +72,7 @@
       }
       audio {
         position: fixed;
-        bottom: 40px;
+        bottom: 42px;
         left: 50%;
         transform: translateX(-50%);
         width: 50%;
@@ -80,13 +80,25 @@
       }
       #made-with {
         position: fixed;
-        bottom: 10px;
-        left: 50%;
-        transform: translateX(-50%);
+        opacity: 0.7;
         font-size: 12px;
-        color: rgba(0, 0, 0, 0.3);
+        color: darkslategray;
         font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
         text-decoration: none;
+        top: 12px;
+        right: 12px;
+      }
+      #chapter-title {
+        position: fixed;
+        bottom: 124px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 13px;
+        color: darkslategray;
+        opacity: 0.5;
+        font-weight: bold;
+        font-style: italic;
+        font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
       }
     </style>
   </head>
@@ -97,17 +109,19 @@
         Your browser does not support the audio element.
       </audio>
       <div id="text-display"></div>
+      <div id="chapter-title"></div>
       <a id="made-with" href="https://substrate.run" target="_blank"
         >made with substrate</a
       >
     </div>
 
     <script>
-      // Placeholder for your JSON data
-      const transcriptData = "{{ transcriptData }}";
+      const segments = "{{ segments }}";
+      const chapters = "{{ chapters }}";
 
       const audioPlayer = document.getElementById("audio-player");
       const textDisplay = document.getElementById("text-display");
+      const chapterTitle = document.getElementById("chapter-title");
 
       let currentSegmentIndex = 0;
       let lastHighlightedWord = null;
@@ -118,8 +132,8 @@
         let segmentToDisplay = null;
 
         // Find the current segment to display
-        for (let i = 0; i < transcriptData.segments.length; i++) {
-          const segment = transcriptData.segments[i];
+        for (let i = 0; i < segments.length; i++) {
+          const segment = segments[i];
           if (currentTime < segment.end) {
             segmentToDisplay = segment;
             currentSegmentIndex = i;
@@ -127,11 +141,20 @@
           }
         }
 
+        let currentChapter = chapters[0];
+        for (let i = 0; i < chapters.length; i++) {
+          const chapter = chapters[i];
+          if (currentTime >= chapter.start) {
+            currentChapter = chapter;
+          }
+        }
+        chapterTitle.innerText = currentChapter.section;
+
+
         // If no current segment found, display the last segment
-        if (!segmentToDisplay && transcriptData.segments.length > 0) {
-          segmentToDisplay =
-            transcriptData.segments[transcriptData.segments.length - 1];
-          currentSegmentIndex = transcriptData.segments.length - 1;
+        if (!segmentToDisplay && segments.length > 0) {
+          segmentToDisplay = segments[segments.length - 1];
+          currentSegmentIndex = segments.length - 1;
         }
 
         if (segmentToDisplay) {
@@ -159,7 +182,6 @@
             if (currentTime >= word.start && currentTime < wordEndTime) {
               if (span && !span.classList.contains("highlight")) {
                 span.classList.add("highlight");
-                // Only add the animation class if this is a newly highlighted word
                 if (word.start !== lastHighlightedWord) {
                   span.classList.add("highlight-animate");
                   setTimeout(
@@ -174,7 +196,7 @@
             }
           });
 
-          // Remove highlight from the previous word if it changed
+          // Remove highlight from the previous word
           if (
             lastHighlightedWord &&
             lastHighlightedWord !== currentHighlightedWord
@@ -216,7 +238,6 @@
       audioPlayer.addEventListener("ended", () => {
         cancelAnimationFrame(animationFrameId);
       });
-      // audioPlayer.addEventListener("timeupdate", updateText);
     </script>
   </body>
 </html>

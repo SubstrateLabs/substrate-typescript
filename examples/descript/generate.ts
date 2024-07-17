@@ -1,11 +1,8 @@
 #!/usr/bin/env -S npx ts-node --transpileOnly
 import fs from "fs";
-import { fileURLToPath } from "url";
-import { dirname } from "path";
 import { Substrate, TranscribeSpeech } from "substrate";
+import { currentDir } from "./util";
 
-// @ts-ignore
-const dir = dirname(fileURLToPath(import.meta.url));
 /**
  * Other hosted audio files:
  * https://media.substrate.run/federer-dartmouth.m4a
@@ -23,7 +20,7 @@ async function main() {
   );
   const res = await substrate.run(transcribe);
   const transcript = res.get(transcribe);
-  const htmlTemplate = fs.readFileSync(`${dir}/index.html`, "utf8");
+  const htmlTemplate = fs.readFileSync(`${currentDir}/index.html`, "utf8");
   const html = htmlTemplate
     .replace('"{{ transcriptData }}"', JSON.stringify(transcript, null, 2))
     .replace("{{ audioUrl }}", audio_uri);
