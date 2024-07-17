@@ -1,6 +1,6 @@
 import { idGenerator } from "substrate/idGenerator";
 import { Node } from "substrate/Node";
-import { unproxy } from "./ProxiedFuture";
+import { unproxy, proxyFactory } from "./ProxiedFuture";
 
 type Accessor = "item" | "attr";
 type TraceOperation = {
@@ -220,6 +220,15 @@ export class Future<T = unknown> {
 
   protected async _result(): Promise<T> {
     return this._directive.result();
+  }
+
+  [Symbol.toPrimitive]() {
+    // Because we would like to use `Future` values as accessors with bracket-notation on proxied `Future` values
+    // we need to ensure that when a `Future` instance is being converted into a primitive (as all values are when
+    // used with bracket-access are) we track a reference to the value and use a special ID that can be used
+    // later on in the proxy to look up and use the original `Future` when constructing the `Trace` used in the
+    // resulting proxied `Future`.
+    return proxyFactory.futureToPrimitive(this);
   }
 
   toJSON() {

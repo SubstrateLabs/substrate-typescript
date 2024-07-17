@@ -52,4 +52,8 @@ export {
 export { sb } from "substrate/sb";
 export { Substrate };
 import { Substrate } from "substrate/Substrate";
+
+
+export { Future, Trace } from "substrate/Future";
+export { Node } from "substrate/Node";
 export default Substrate;

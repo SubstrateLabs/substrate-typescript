@@ -16,11 +16,11 @@ async function main() {
 
   const selected = new Box({
     value: {
-      example1: sb.get<string>(
-        data.future.value.object,
+      example1: sb.concat(
+        data.future.value.letters[0],
         data.future.value.letters[1],
       ),
-      example2: data.future.value.letters[data.future.value.index],
+      // example2: data.future.value.letters[data.future.value.index],
     },
   });
 

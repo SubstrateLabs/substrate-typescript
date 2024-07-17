@@ -9,11 +9,21 @@ export const GET_TARGET = "$$GET_TARGET";
 /**
  * @internal
  */
-export const makeProxyFactory = (futureTable: FutureTable = {}) => {
+const makeProxyFactory = (futureTable: FutureTable = {}) => {
+  // Converts a future into an internal-ID that we use in the `FutureTable`. We're using this special
+  // format to mitigate potential conflicts with actual user-provided strings.
   const futureId = (future: Future<any>): string => {
     // @ts-ignore (accessing protected property: _id)
     return `${ID_PREFIX}${future._id}`;
   };
+
+  // Transforms a `Future` into an internal-ID to be used in the `FutureTable` and stores the `Future`
+  // in this table as a side-effect. Should be called when a `[Symbol.toPrimitive]()` is called on a `Future`.
+  const futureToPrimitive = (future: Future<any>): string => {
+    const id = futureId(future);
+    futureTable[id] = future; // store in lookup table
+    return id;
+  }
 
   const makeProxy = <T = unknown>(future: Future<T>): any => {
     return new Proxy(future, {
@@ -32,30 +42,19 @@ export const makeProxyFactory = (futureTable: FutureTable = {}) => {
         if (prop === GET_TARGET) return target;
 
         if (prop === Symbol.toPrimitive) {
-          // When the prop is not a primitive (number, string, Symbol) it will be attempted
-          // to be converted into one. This case will happen when the prop is a Future.
-          //
-          // Because only primitive types can be used as property accessors, what we're doing
-          // here is returning a Future ID, which is a string. We use this specially formatted
-          // ID to store the original Future in a lookup table we maintain as some hidden
-          // state in the SDK.
-          //
-          // When the prop (Future ID) is used as an accessor (eg. in the case of "bracket"
-          // access) we will use the returned Future ID here and look up the referenced Future
-          // when constructing new proxied Futures (in it's TraceProps).
-          return () => {
-            const utarget = unproxy(target);
-            const id = futureId(utarget);
-            futureTable[id] = utarget; // store in lookup table
-            return id;
-          };
+          // Because we would like to use `Future` values as accessors with bracket-notation on proxied `Future` values
+          // we need to ensure that when a `Future` instance is being converted into a primitive (as all values are when
+          // used with bracket-access are) we track a reference to the value and use a special ID that can be used
+          // later on in the proxy to look up and use the original `Future` when constructing the `Trace` used in the
+          // resulting proxied `Future`.
+          return () => futureToPrimitive(unproxy(target));
         }
 
         const nextProp = prop.startsWith(ID_PREFIX)
           ? // When the prop is a Future ID, we will lookup the corresponding Future
             // so that we can use it as a TraceProp in the resulting new Future.
             futureTable[prop]!
-          : // Otherwise the prop is not a future (always converted to string)
+          : // Otherwise the prop is not a future (converted to string at this point)
             (prop as string);
 
         // @ts-ignore (access protected prop: _directive)
@@ -69,6 +68,7 @@ export const makeProxyFactory = (futureTable: FutureTable = {}) => {
 
   return {
     makeProxy,
+    futureToPrimitive,
   };
 };
 

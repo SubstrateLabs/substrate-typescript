@@ -1,7 +1,7 @@
 import { expect, describe, test } from "vitest";
 import { Future, Trace } from "substrate/Future";
 import { Node } from "substrate/Node";
-import { makeProxyFactory, isProxy, unproxy } from "substrate/ProxiedFuture";
+import { proxyFactory, isProxy, unproxy } from "substrate/ProxiedFuture";
 
 class FooFuture extends Future<any> {}
 class FooNode extends Node {}
@@ -11,7 +11,6 @@ const node = (id: string = "") => new FooNode({}, { id });
 describe("ProxiedFuture", () => {
   describe("ProxyFactory", () => {
     test("makeProxy", () => {
-      const proxyFactory = makeProxyFactory();
       const f = new FooFuture(new Trace([], node()));
       const p = proxyFactory.makeProxy(f);
       // Proxy is an instance of Future
@@ -19,7 +18,6 @@ describe("ProxiedFuture", () => {
     });
 
     test("isProxy", () => {
-      const proxyFactory = makeProxyFactory();
       const f = new FooFuture(new Trace([], node()));
       const p = proxyFactory.makeProxy(f);
       // We can detect whether the proxied Future is a proxy
@@ -30,7 +28,6 @@ describe("ProxiedFuture", () => {
 
   describe("Proxy", () => {
     test("unproxy (returns unproxied Future)", () => {
-      const proxyFactory = makeProxyFactory();
       const f = new FooFuture(new Trace([], node()));
       const p = proxyFactory.makeProxy(f);
       const up = unproxy(p);
@@ -39,16 +36,13 @@ describe("ProxiedFuture", () => {
     });
 
     test("arbitrary property access (. notation)", () => {
-      const proxyFactory = makeProxyFactory();
       const f = new FooFuture(new Trace([], node("123")));
       const p = proxyFactory.makeProxy(f);
 
-      // @ts-ignore (properties don't exist)
       const f1 = p.a.b.c;
       expect(f1).instanceof(Future);
       expect(isProxy(f1)).toEqual(true);
 
-      // @ts-ignore ("virtual property" doesn't exist)
       const up = unproxy(f1);
       const json = up.toJSON();
 
@@ -64,7 +58,6 @@ describe("ProxiedFuture", () => {
     });
 
     test("arbitrary property and index access (brackets)", () => {
-      const proxyFactory = makeProxyFactory();
       const f = new FooFuture(new Trace([], node("123")));
       const p = proxyFactory.makeProxy(f);
 
@@ -86,27 +79,28 @@ describe("ProxiedFuture", () => {
       });
     });
 
-    // TODO(liam): I'm not sure why this test doesn't work yet, but it does work in example code
-    test.skip("using Future values as proxy accessors", () => {
-      const proxyFactory = makeProxyFactory();
+    test("using Future values as proxy accessors", () => {
       const f = new FooFuture(new Trace([], node("123")));
       const p = proxyFactory.makeProxy(f);
 
       const a = new FooFuture(new Trace([], node("456")));
+      const b = new FooFuture(new Trace([], node("789")));
 
-      // non index-types are illegal in the type system, so we're casting to any here.
-      const f1 = p[a as any];
+      const f1 = p[a as any][b as any];
 
       expect(f1).instanceof(Future);
       expect(isProxy(f1)).toEqual(true);
 
       const up = unproxy(f1);
+
       const json = up.toJSON();
 
       expect(json.directive).toEqual({
         op_stack: [
           // @ts-ignore
           { accessor: "attr", future_id: a._id, key: null },
+          // @ts-ignore
+          { accessor: "attr", future_id: b._id, key: null },
         ],
         origin_node_id: "123",
         type: "trace",
