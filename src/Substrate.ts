@@ -73,8 +73,7 @@ export class Substrate {
    *  @throws {Error} when the client encounters an error making the request.
    */
   async run(...nodes: Node[]): Promise<SubstrateResponse> {
-    const serialized = Substrate.serialize(...nodes);
-    return this.runSerialized(serialized, nodes);
+    return this.runSerialized(nodes);
   }
 
   /**
@@ -93,10 +92,10 @@ export class Substrate {
    *  @throws {Error} when the client encounters an error making the request.
    */
   async runSerialized(
-    serialized: any,
-    nodes: Node[] | null = null,
+    nodes: Node[],
     endpoint: string = "/compose",
   ): Promise<SubstrateResponse> {
+    const serialized = Substrate.serialize(...nodes);
     const url = this.baseUrl + endpoint;
     const req = { dag: serialized };
     // NOTE: we're creating the signal this way instead of AbortController.timeout because it is only very
@@ -114,10 +113,9 @@ export class Substrate {
         const json = await apiResponse.json();
         const res = new SubstrateResponse(request, apiResponse, json);
         /** TODO stop setting output on node */
-        if (nodes) {
-          // @ts-expect-error (accessing protected)
-          for (let node of nodes) node.response = res;
-        }
+
+        // @ts-expect-error (accessing protected)
+        for (let node of Substrate.findAllNodes(nodes)) node.response = res;
 
         return res;
       } else {
@@ -181,23 +179,41 @@ export class Substrate {
   }
 
   /**
-   *  Transform an array of nodes into JSON for the Substrate API
+   *  Return a set of all nodes and their dependent nodes.
    */
-  static serialize(...nodes: Node[]): any {
+  static findAllNodes(fromNodes: Node[]): Set<Node> {
     const allNodes = new Set<Node>();
-    const allFutures = new Set<Future<any>>();
-
-    for (let node of nodes) {
+    for (let node of fromNodes) {
       // @ts-ignore: .references() is protected
       const refs = node.references();
       for (let n of refs.nodes) {
         allNodes.add(n);
       }
+    }
+    return allNodes;
+  }
+
+  /**
+   *  Return a set of all futures and their dependent futures.
+   */
+  static findAllFutures(fromNodes: Node[]): Set<Future<any>> {
+    const allFutures = new Set<Future<any>>();
+    for (let node of fromNodes) {
+      // @ts-ignore: .references() is protected
+      const refs = node.references();
       for (let f of refs.futures) {
         allFutures.add(f);
       }
     }
+    return allFutures;
+  }
 
+  /**
+   *  Transform an array of nodes into JSON for the Substrate API
+   */
+  static serialize(...nodes: Node[]): any {
+    const allFutures = this.findAllFutures(nodes);
+    const allNodes = this.findAllNodes(nodes);
     const allEdges: Record<string, Set<string>> = {};
     for (let n of allNodes) {
       allEdges[n.id] = new Set<string>();
@@ -205,7 +221,6 @@ export class Substrate {
         allEdges[n.id]!.add(d.id);
       }
     }
-
     return {
       nodes: Array.from(allNodes).map((node) => node.toJSON()),
       futures: Array.from(allFutures).map((future) => future.toJSON()),
