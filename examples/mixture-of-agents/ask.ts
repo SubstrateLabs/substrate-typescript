@@ -2,12 +2,8 @@
 
 import { Substrate, Box, sb, ComputeText } from "substrate";
 import fs from "fs";
-const question =
-  "What was Arendt's notion of Freedom? How did she distinguish it from Action?";
-const aggregate = `You have been provided with a set of responses from various open-source models to the latest user query. Your task is to synthesize these responses into a single, high-quality response. It is crucial to critically evaluate the information provided in these responses, recognizing that some of it may be biased or incorrect. Your response should not simply replicate the given answers but should offer a refined, accurate, and comprehensive reply to the instruction. Ensure your response is well-structured, well-considered, and adheres to the highest standards of accuracy and reliability. Do not respond as if we're having a conversation, just output an objective response.`;
-const jqList = (offset: number) =>
-  `to_entries | map(((.key + ${offset} + 1) | tostring) + ". " + .value) | join("\n")`;
-const numLayers = 3;
+import { currentDir, sampleQuestion, aggregate, jqList } from "./util";
+
 const models = [
   "Mistral7BInstruct",
   "Mixtral8x7BInstruct",
@@ -17,6 +13,8 @@ const models = [
 const max_tokens = 800;
 const opts = { cache_age: 60 * 60 * 24 * 7 };
 
+const numLayers = 3;
+const question = process.argv[2] || sampleQuestion;
 async function main() {
   const SUBSTRATE_API_KEY = process.env["SUBSTRATE_API_KEY"];
   const substrate = new Substrate({ apiKey: SUBSTRATE_API_KEY });
@@ -37,7 +35,7 @@ async function main() {
 
   const final = new ComputeText(
     {
-      prompt: sb.interpolate`${aggregate}\n\n${getPrev()}`,
+      prompt: sb.concat(aggregate, "\n\n", getPrev()),
       model: "Llama3Instruct70B",
       max_tokens,
     },
@@ -53,13 +51,12 @@ async function main() {
   const res = await substrate.run(box);
   const jsonOut: any = res.get(box).value;
 
-  const htmlTemplate = fs.readFileSync("moe.html", "utf8");
+  const htmlTemplate = fs.readFileSync(`${currentDir}/index.html`, "utf8");
   const html = htmlTemplate
     .replace('"{{ individual }}"', JSON.stringify(jsonOut.layers, null, 2))
     .replace('"{{ question }}"', JSON.stringify(question))
     .replace('"{{ summaries }}"', `[${JSON.stringify(jsonOut.final)}]`);
-  fs.writeFileSync("moe.json", JSON.stringify(jsonOut, null, 2));
-  fs.writeFileSync("moe-result.html", html);
+  fs.writeFileSync("moa.html", html);
 
   const visualize = Substrate.visualize(box);
   console.log(visualize);
@@ -67,7 +64,7 @@ async function main() {
 
 function getMixture(q: string, prev: any = null) {
   const prompt = prev
-    ? sb.interpolate`${aggregate}\n\nquestion: ${q}\n\nprevious:\n\n${prev}`
+    ? sb.concat(aggregate, "\n\nquestion: ", q, "\n\nprevious:\n\n", prev)
     : q;
   const answers = models.map(
     (model) => new ComputeText({ prompt, model, max_tokens }, opts),
@@ -75,4 +72,4 @@ function getMixture(q: string, prev: any = null) {
   return new Box({ value: answers.map((a) => a.future.text) });
 }
 
-main();
+main().then(() => console.log(`꩜ Done. View by running \`open moa.html\``));
