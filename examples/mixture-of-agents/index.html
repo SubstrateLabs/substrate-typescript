@@ -7,7 +7,7 @@
     <style>
       body {
         font-family: "Inter", sans-serif;
-        background-color: #f0f4f8;
+        background-color: rgba(250, 235, 215, 0.7);
         display: flex;
         justify-content: center;
         align-items: center;
@@ -30,7 +30,7 @@
         border-radius: 8px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         padding: 20px;
-        width: 600px;
+        width: 660px;
         margin-bottom: 20px;
       }
       .content {
@@ -39,8 +39,8 @@
         border-radius: 4px;
         padding: 16px;
         margin-bottom: 16px;
-        min-height: 300px;
-        max-height: 300px;
+        min-height: 310px;
+        max-height: 310px;
         overflow-y: auto;
         white-space: pre-wrap;
       }
@@ -51,7 +51,7 @@
         margin-bottom: 16px;
       }
       button {
-        background-color: #4a5568;
+        background-color: #5f5695;
         color: white;
         border: none;
         border-radius: 4px;
@@ -61,11 +61,12 @@
         margin: 4px;
       }
       button:hover:not(:disabled) {
-        background-color: #2d3748;
+        background-color: #5f5695;
         color: white;
+        opacity: 0.8;
       }
       button:disabled {
-        background-color: #cbd5e0;
+        opacity: 0.3;
         cursor: not-allowed;
       }
       .view-toggle {
@@ -73,12 +74,13 @@
         margin-bottom: 16px;
       }
       .view-toggle button {
-        background-color: #e2e8f0;
-        color: #4a5568;
+        background-color: #5f5695;
+        opacity: 0.3;
       }
       .view-toggle button.active {
-        background-color: #4a5568;
+        background-color: #5f5695;
         color: white;
+        opacity: 1;
       }
       .question-txt {
         text-align: center;
@@ -87,7 +89,7 @@
         margin-bottom: 24px;
         margin-top: -32px;
         font-style: italic;
-        opacity: 0.6;
+        opacity: 0.85;
         max-width: 500px;
       }
       .model-name {
@@ -110,7 +112,7 @@
       .dot-container.vertical {
         flex-direction: column;
         position: absolute;
-        left: calc(50% - 380px);
+        left: calc(50% - 412px);
         top: 50%;
         transform: translateY(-50%);
       }
@@ -125,7 +127,7 @@
         margin: 5px 0;
       }
       .dot.active {
-        background-color: #4a5568;
+        background-color: #5f5695;
       }
     </style>
   </head>
