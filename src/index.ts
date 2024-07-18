@@ -1,7 +1,7 @@
 /**
  * 𐃏 Substrate TypeScript SDK
  * @generated file
- * 20240617.20240621
+ * 20240617.20240718
  */
 
 export { SubstrateError } from "substrate/Error";
@@ -34,6 +34,7 @@ export {
   UpscaleImage,
   SegmentUnderPoint,
   SegmentAnything,
+  SplitDocument,
   EmbedText,
   MultiEmbedText,
   EmbedImage,
