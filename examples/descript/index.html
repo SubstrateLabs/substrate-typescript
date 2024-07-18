@@ -116,7 +116,6 @@
         align-items: center;
         padding: 0 20px;
       }
-
       .chapter-title-txt {
         font-size: 13px;
         color: darkslategray;
@@ -128,23 +127,21 @@
         border-radius: 4px;
         box-shadow: 0 2px 2px rgba(0, 0, 0, 0.15);
         user-select: none;
+        cursor: pointer;
       }
 
       #current-chapter-title {
         z-index: 2;
         margin: 0 24px;
       }
-
       .side-chapter {
         opacity: 0.5;
         font-size: 11px;
         transition: opacity 0.3s ease;
       }
-
       #prev-chapter-title {
         left: 20px;
       }
-
       #next-chapter-title {
         right: 20px;
       }
@@ -179,10 +176,17 @@
 
       const audioPlayer = document.getElementById("audio-player");
       const textDisplay = document.getElementById("text-display");
+      const currentChapterTitle = document.getElementById(
+        "current-chapter-title",
+      );
+      const prevChapterTitle = document.getElementById("prev-chapter-title");
+      const nextChapterTitle = document.getElementById("next-chapter-title");
 
       let currentSegmentIndex = 0;
       let lastHighlightedWord = null;
       let lastSegmentIndex = -1;
+
+      let currentChapterIndex = 0;
 
       function updateText() {
         const currentTime = audioPlayer.currentTime;
@@ -199,25 +203,15 @@
         }
 
         if (Array.isArray(chapters)) {
-          let currentChapterIndex = 0;
           for (let i = 0; i < chapters.length; i++) {
             const chapter = chapters[i];
             if (currentTime >= chapter.start) {
               currentChapterIndex = i;
             }
           }
-
           const currentChapter = chapters[currentChapterIndex];
           const prevChapter = chapters[currentChapterIndex - 1];
           const nextChapter = chapters[currentChapterIndex + 1];
-
-          const currentChapterTitle = document.getElementById(
-            "current-chapter-title",
-          );
-          const prevChapterTitle =
-            document.getElementById("prev-chapter-title");
-          const nextChapterTitle =
-            document.getElementById("next-chapter-title");
 
           if (currentChapter && currentChapter.section) {
             currentChapterTitle.innerText = currentChapter.section;
@@ -320,13 +314,29 @@
         cancelAnimationFrame(animationFrameId);
         animationFrameId = requestAnimationFrame(updateLoop);
       });
-
       audioPlayer.addEventListener("pause", () => {
         cancelAnimationFrame(animationFrameId);
       });
-
       audioPlayer.addEventListener("ended", () => {
         cancelAnimationFrame(animationFrameId);
+      });
+      currentChapterTitle.addEventListener("click", () => {
+        const section = chapters[currentChapterIndex];
+        audioPlayer.currentTime = section.start;
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = requestAnimationFrame(updateLoop);
+      });
+      prevChapterTitle.addEventListener("click", () => {
+        const section = chapters[currentChapterIndex - 1];
+        audioPlayer.currentTime = section.start;
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = requestAnimationFrame(updateLoop);
+      });
+      nextChapterTitle.addEventListener("click", () => {
+        const section = chapters[currentChapterIndex + 1];
+        audioPlayer.currentTime = section.start;
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = requestAnimationFrame(updateLoop);
       });
     </script>
   </body>
