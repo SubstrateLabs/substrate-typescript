@@ -207,6 +207,13 @@ export interface paths {
      */
     post: operations["SegmentAnything"];
   };
+  "/SplitDocument": {
+    /**
+     * SplitDocument
+     * @description Split document into text segments.
+     */
+    post: operations["SplitDocument"];
+  };
   "/EmbedText": {
     /**
      * EmbedText
@@ -313,6 +320,11 @@ export interface components {
       type: "api_error" | "invalid_request_error" | "dependency_error";
       /** @description A message providing more details about the error. */
       message: string;
+      /**
+       * @description The HTTP status code for the error.
+       * @default 500
+       */
+      status_code?: number;
     };
     /** ExperimentalIn */
     ExperimentalIn: {
@@ -1222,6 +1234,11 @@ export interface components {
        * @default false
        */
       return_mask?: boolean;
+      /**
+       * @description Invert the mask image. Only takes effect if `return_mask` is true.
+       * @default false
+       */
+      invert_mask?: boolean;
       /** @description Hex value background color. Transparent if unset. */
       background_color?: string;
       /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
@@ -1758,6 +1775,8 @@ export interface components {
        * @enum {string}
        */
       model: "jina-v2" | "clip";
+      /** @description Number of leaves in the vector store. */
+      num_leaves?: number;
     };
     /** ListVectorStoresIn */
     ListVectorStoresIn: Record<string, never>;
@@ -1772,6 +1791,8 @@ export interface components {
          * @enum {string}
          */
         model: "jina-v2" | "clip";
+        /** @description Number of leaves in the vector store. */
+        num_leaves?: number;
       }[];
     };
     /** DeleteVectorStoreIn */
@@ -1916,6 +1937,11 @@ export interface components {
        */
       ef_search?: number;
       /**
+       * @description The number of leaves in the index tree to search.
+       * @default 40
+       */
+      num_leaves_to_search?: number;
+      /**
        * @description Include the values of the vectors in the response.
        * @default false
        */
@@ -1971,6 +1997,35 @@ export interface components {
        * @enum {string}
        */
       model?: "jina-v2" | "clip";
+    };
+    /** SplitDocumentIn */
+    SplitDocumentIn: {
+      /** @description URI of the document. */
+      uri: string;
+      /** @description Document ID. */
+      doc_id?: string;
+      /** @description Document metadata. */
+      metadata?: {
+        [key: string]: unknown;
+      };
+      /** @description Maximum number of units per chunk. Defaults to 1024 tokens for text or 40 lines for code. */
+      chunk_size?: number;
+      /** @description Number of units to overlap between chunks. Defaults to 200 tokens for text or 15 lines for code. */
+      chunk_overlap?: number;
+    };
+    /** SplitDocumentOut */
+    SplitDocumentOut: {
+      /** @description Document chunks */
+      items: {
+        /** @description Text to embed. */
+        text: string;
+        /** @description Metadata that can be used to query the vector store. Ignored if `collection_name` is unset. */
+        metadata?: {
+          [key: string]: unknown;
+        };
+        /** @description Vector store document ID. Ignored if `collection_name` is unset. */
+        doc_id?: string;
+      }[];
     };
   };
   responses: never;
@@ -3429,6 +3484,11 @@ export interface operations {
            * @default false
            */
           return_mask?: boolean;
+          /**
+           * @description Invert the mask image. Only takes effect if `return_mask` is true.
+           * @default false
+           */
+          invert_mask?: boolean;
           /** @description Hex value background color. Transparent if unset. */
           background_color?: string;
           /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
@@ -3633,6 +3693,59 @@ export interface operations {
           "application/json": {
             /** @description Detected segments in 'mask image' format. Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
             mask_image_uri: string;
+          };
+        };
+      };
+    };
+  };
+  /**
+   * SplitDocument
+   * @description Split document into text segments.
+   */
+  SplitDocument: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "doc_id": "example_pdf",
+         *   "uri": "https://arxiv.org/pdf/2405.07945",
+         *   "metadata": {
+         *     "title": "GRASS II: Simulations of Potential Granulation Noise Mitigation Methods"
+         *   }
+         * }
+         */
+        "application/json": {
+          /** @description URI of the document. */
+          uri: string;
+          /** @description Document ID. */
+          doc_id?: string;
+          /** @description Document metadata. */
+          metadata?: {
+            [key: string]: unknown;
+          };
+          /** @description Maximum number of units per chunk. Defaults to 1024 tokens for text or 40 lines for code. */
+          chunk_size?: number;
+          /** @description Number of units to overlap between chunks. Defaults to 200 tokens for text or 15 lines for code. */
+          chunk_overlap?: number;
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": {
+            /** @description Document chunks */
+            items: {
+              /** @description Text to embed. */
+              text: string;
+              /** @description Metadata that can be used to query the vector store. Ignored if `collection_name` is unset. */
+              metadata?: {
+                [key: string]: unknown;
+              };
+              /** @description Vector store document ID. Ignored if `collection_name` is unset. */
+              doc_id?: string;
+            }[];
           };
         };
       };
@@ -4054,6 +4167,8 @@ export interface operations {
              * @enum {string}
              */
             model: "jina-v2" | "clip";
+            /** @description Number of leaves in the vector store. */
+            num_leaves?: number;
           };
         };
       };
@@ -4084,6 +4199,8 @@ export interface operations {
                * @enum {string}
                */
               model: "jina-v2" | "clip";
+              /** @description Number of leaves in the vector store. */
+              num_leaves?: number;
             }[];
           };
         };
@@ -4176,6 +4293,11 @@ export interface operations {
            * @default 40
            */
           ef_search?: number;
+          /**
+           * @description The number of leaves in the index tree to search.
+           * @default 40
+           */
+          num_leaves_to_search?: number;
           /**
            * @description Include the values of the vectors in the response.
            * @default false

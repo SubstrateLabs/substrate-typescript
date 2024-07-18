@@ -37,6 +37,7 @@ import {
   Mixtral8x7BInstruct,
   Llama3Instruct8B,
   Llama3Instruct70B,
+  SplitDocument,
   If,
   Box,
 } from "substrate";
@@ -52,6 +53,13 @@ const ALL_ENVS = [STAGING, PRODUCTION];
 const VECTOR_STORE = "kitchen-sink";
 
 const examples = [
+  new SplitDocument({
+    uri: "https://news.ycombinator.com/",
+    doc_id: "test",
+    metadata: {
+      test: "asd",
+    },
+  }),
   new Box({
     value: {
       a: 1,

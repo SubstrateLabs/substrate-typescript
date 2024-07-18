@@ -1,7 +1,7 @@
 /**
  * 𐃏 Substrate
  * @generated file
- * 20240617.20240621
+ * 20240617.20240718
  */
 
 import * as OpenAPI from "substrate/OpenAPI";
@@ -712,6 +712,18 @@ export class QueryVectorStoreOutResultsItem extends FutureArray {
     return super._result() as Promise<VectorStoreQueryResult[]>;
   }
 }
+export class SplitDocumentInMetadata extends FutureAnyObject {}
+/** Document chunks */
+export class SplitDocumentOutItems extends FutureArray {
+  /** Returns `EmbedTextItem` at given index. */
+  override at(index: number) {
+    return new EmbedTextItem(this._directive.next(index));
+  }
+  /** Returns the result for `SplitDocumentOutItems` once it's node has been run. */
+  protected override async _result(): Promise<EmbedTextItem[]> {
+    return super._result() as Promise<EmbedTextItem[]>;
+  }
+}
 /** ErrorOut */
 export class ErrorOut extends FutureObject {
   /** The type of error returned. */
@@ -721,6 +733,10 @@ export class ErrorOut extends FutureObject {
   /** A message providing more details about the error. */
   get message() {
     return new FutureString(this._directive.next("message"));
+  }
+  /** (Optional) The HTTP status code for the error. */
+  get status_code() {
+    return new FutureNumber(this._directive.next("status_code"));
   }
   /** returns the result for `ErrorOut` once it's node has been run. */
   protected override async _result(): Promise<ErrorOut> {
@@ -1891,6 +1907,10 @@ export class RemoveBackgroundIn extends FutureObject {
   get return_mask() {
     return new FutureBoolean(this._directive.next("return_mask"));
   }
+  /** (Optional) Invert the mask image. Only takes effect if `return_mask` is true. */
+  get invert_mask() {
+    return new FutureBoolean(this._directive.next("invert_mask"));
+  }
   /** (Optional) Hex value background color. Transparent if unset. */
   get background_color() {
     return new FutureString(this._directive.next("background_color"));
@@ -2538,6 +2558,10 @@ export class FindOrCreateVectorStoreOut extends FutureObject {
   get model() {
     return new FutureString(this._directive.next("model"));
   }
+  /** (Optional) Number of leaves in the vector store. */
+  get num_leaves() {
+    return new FutureNumber(this._directive.next("num_leaves"));
+  }
   /** returns the result for `FindOrCreateVectorStoreOut` once it's node has been run. */
   protected override async _result(): Promise<FindOrCreateVectorStoreOut> {
     return super._result() as Promise<FindOrCreateVectorStoreOut>;
@@ -2768,6 +2792,10 @@ export class QueryVectorStoreIn extends FutureObject {
   get ef_search() {
     return new FutureNumber(this._directive.next("ef_search"));
   }
+  /** (Optional) The number of leaves in the index tree to search. */
+  get num_leaves_to_search() {
+    return new FutureNumber(this._directive.next("num_leaves_to_search"));
+  }
   /** (Optional) Include the values of the vectors in the response. */
   get include_values() {
     return new FutureBoolean(this._directive.next("include_values"));
@@ -2826,6 +2854,44 @@ export class QueryVectorStoreOut extends FutureObject {
   /** returns the result for `QueryVectorStoreOut` once it's node has been run. */
   protected override async _result(): Promise<QueryVectorStoreOut> {
     return super._result() as Promise<QueryVectorStoreOut>;
+  }
+}
+/** SplitDocumentIn */
+export class SplitDocumentIn extends FutureObject {
+  /** URI of the document. */
+  get uri() {
+    return new FutureString(this._directive.next("uri"));
+  }
+  /** (Optional) Document ID. */
+  get doc_id() {
+    return new FutureString(this._directive.next("doc_id"));
+  }
+  /** (Optional) Document metadata. */
+  get metadata() {
+    return new FutureAnyObject(this._directive.next("metadata"));
+  }
+  /** (Optional) Maximum number of units per chunk. Defaults to 1024 tokens for text or 40 lines for code. */
+  get chunk_size() {
+    return new FutureNumber(this._directive.next("chunk_size"));
+  }
+  /** (Optional) Number of units to overlap between chunks. Defaults to 200 tokens for text or 15 lines for code. */
+  get chunk_overlap() {
+    return new FutureNumber(this._directive.next("chunk_overlap"));
+  }
+  /** returns the result for `SplitDocumentIn` once it's node has been run. */
+  protected override async _result(): Promise<SplitDocumentIn> {
+    return super._result() as Promise<SplitDocumentIn>;
+  }
+}
+/** SplitDocumentOut */
+export class SplitDocumentOut extends FutureObject {
+  /** Document chunks */
+  get items() {
+    return new SplitDocumentOutItems(this._directive.next("items"));
+  }
+  /** returns the result for `SplitDocumentOut` once it's node has been run. */
+  protected override async _result(): Promise<SplitDocumentOut> {
+    return super._result() as Promise<SplitDocumentOut>;
   }
 }
 export namespace Experimental {
@@ -4432,7 +4498,7 @@ export namespace RemoveBackground {
  */
 export class RemoveBackground extends Node {
   /**
-   * Input arguments: `image_uri`, `return_mask` (optional), `background_color` (optional), `store` (optional)
+   * Input arguments: `image_uri`, `return_mask` (optional), `invert_mask` (optional), `background_color` (optional), `store` (optional)
    *
    * Output fields: `image_uri`
    *
@@ -4748,6 +4814,73 @@ export class SegmentAnything extends Node {
 
   protected override output(): OpenAPI.components["schemas"]["SegmentAnythingOut"] {
     return super.output() as OpenAPI.components["schemas"]["SegmentAnythingOut"];
+  }
+}
+export namespace SplitDocument {
+  /**
+   * SplitDocument Input
+   * https://www.substrate.run/nodes#SplitDocument
+   */
+  export type Input = FutureExpandAny<
+    OpenAPI.components["schemas"]["SplitDocumentIn"]
+  >;
+
+  /**
+   * SplitDocument Output
+   * https://www.substrate.run/nodes#SplitDocument
+   */
+  export type Output = OpenAPI.components["schemas"]["SplitDocumentOut"];
+}
+
+/**
+ * Split document into text segments.
+ *
+ * https://www.substrate.run/nodes#SplitDocument
+ */
+export class SplitDocument extends Node {
+  /**
+   * Input arguments: `uri`, `doc_id` (optional), `metadata` (optional), `chunk_size` (optional), `chunk_overlap` (optional)
+   *
+   * Output fields: `items`
+   *
+   * https://www.substrate.run/nodes#SplitDocument
+   */
+  constructor(
+    args: FutureExpandAny<OpenAPI.components["schemas"]["SplitDocumentIn"]>,
+    options?: Options,
+  ) {
+    super(args, options);
+    this.node = "SplitDocument";
+  }
+
+  /**
+   * Retrieve this node's output from a response.
+   *
+   * Output fields: `items`
+   *
+   * https://www.substrate.run/nodes#SplitDocument
+   */
+  protected override async result(): Promise<
+    OpenAPI.components["schemas"]["SplitDocumentOut"] | undefined
+  > {
+    return Promise.resolve(
+      this._response ? this._response.get(this) : undefined,
+    ) as Promise<OpenAPI.components["schemas"]["SplitDocumentOut"] | undefined>;
+  }
+
+  /**
+   * Future reference to this node's output.
+   *
+   * Output fields: `items`
+   *
+   * https://www.substrate.run/nodes#SplitDocument
+   */
+  override get future(): SplitDocumentOut {
+    return new SplitDocumentOut(new Trace([], this));
+  }
+
+  protected override output(): OpenAPI.components["schemas"]["SplitDocumentOut"] {
+    return super.output() as OpenAPI.components["schemas"]["SplitDocumentOut"];
   }
 }
 export namespace EmbedText {
@@ -5180,7 +5313,7 @@ export class FindOrCreateVectorStore extends Node {
   /**
    * Input arguments: `collection_name`, `model`
    *
-   * Output fields: `collection_name`, `model`
+   * Output fields: `collection_name`, `model`, `num_leaves` (optional)
    *
    * https://www.substrate.run/nodes#FindOrCreateVectorStore
    */
@@ -5197,7 +5330,7 @@ export class FindOrCreateVectorStore extends Node {
   /**
    * Retrieve this node's output from a response.
    *
-   * Output fields: `collection_name`, `model`
+   * Output fields: `collection_name`, `model`, `num_leaves` (optional)
    *
    * https://www.substrate.run/nodes#FindOrCreateVectorStore
    */
@@ -5214,7 +5347,7 @@ export class FindOrCreateVectorStore extends Node {
   /**
    * Future reference to this node's output.
    *
-   * Output fields: `collection_name`, `model`
+   * Output fields: `collection_name`, `model`, `num_leaves` (optional)
    *
    * https://www.substrate.run/nodes#FindOrCreateVectorStore
    */
@@ -5387,7 +5520,7 @@ export namespace QueryVectorStore {
  */
 export class QueryVectorStore extends Node {
   /**
-   * Input arguments: `collection_name`, `model`, `query_strings` (optional), `query_image_uris` (optional), `query_vectors` (optional), `query_ids` (optional), `top_k` (optional), `ef_search` (optional), `include_values` (optional), `include_metadata` (optional), `filters` (optional)
+   * Input arguments: `collection_name`, `model`, `query_strings` (optional), `query_image_uris` (optional), `query_vectors` (optional), `query_ids` (optional), `top_k` (optional), `ef_search` (optional), `num_leaves_to_search` (optional), `include_values` (optional), `include_metadata` (optional), `filters` (optional)
    *
    * Output fields: `results`, `collection_name` (optional), `model` (optional)
    *
@@ -5663,6 +5796,7 @@ export type AnyNode =
   | UpscaleImage
   | SegmentUnderPoint
   | SegmentAnything
+  | SplitDocument
   | EmbedText
   | MultiEmbedText
   | EmbedImage
@@ -5733,30 +5867,32 @@ export type NodeOutput<T> = T extends Experimental
                                                       ? OpenAPI.components["schemas"]["SegmentUnderPointOut"]
                                                       : T extends SegmentAnything
                                                         ? OpenAPI.components["schemas"]["SegmentAnythingOut"]
-                                                        : T extends EmbedText
-                                                          ? OpenAPI.components["schemas"]["EmbedTextOut"]
-                                                          : T extends MultiEmbedText
-                                                            ? OpenAPI.components["schemas"]["MultiEmbedTextOut"]
-                                                            : T extends EmbedImage
-                                                              ? OpenAPI.components["schemas"]["EmbedImageOut"]
-                                                              : T extends MultiEmbedImage
-                                                                ? OpenAPI.components["schemas"]["MultiEmbedImageOut"]
-                                                                : T extends JinaV2
-                                                                  ? OpenAPI.components["schemas"]["JinaV2Out"]
-                                                                  : T extends CLIP
-                                                                    ? OpenAPI.components["schemas"]["CLIPOut"]
-                                                                    : T extends FindOrCreateVectorStore
-                                                                      ? OpenAPI.components["schemas"]["FindOrCreateVectorStoreOut"]
-                                                                      : T extends ListVectorStores
-                                                                        ? OpenAPI.components["schemas"]["ListVectorStoresOut"]
-                                                                        : T extends DeleteVectorStore
-                                                                          ? OpenAPI.components["schemas"]["DeleteVectorStoreOut"]
-                                                                          : T extends QueryVectorStore
-                                                                            ? OpenAPI.components["schemas"]["QueryVectorStoreOut"]
-                                                                            : T extends FetchVectors
-                                                                              ? OpenAPI.components["schemas"]["FetchVectorsOut"]
-                                                                              : T extends UpdateVectors
-                                                                                ? OpenAPI.components["schemas"]["UpdateVectorsOut"]
-                                                                                : T extends DeleteVectors
-                                                                                  ? OpenAPI.components["schemas"]["DeleteVectorsOut"]
-                                                                                  : never;
+                                                        : T extends SplitDocument
+                                                          ? OpenAPI.components["schemas"]["SplitDocumentOut"]
+                                                          : T extends EmbedText
+                                                            ? OpenAPI.components["schemas"]["EmbedTextOut"]
+                                                            : T extends MultiEmbedText
+                                                              ? OpenAPI.components["schemas"]["MultiEmbedTextOut"]
+                                                              : T extends EmbedImage
+                                                                ? OpenAPI.components["schemas"]["EmbedImageOut"]
+                                                                : T extends MultiEmbedImage
+                                                                  ? OpenAPI.components["schemas"]["MultiEmbedImageOut"]
+                                                                  : T extends JinaV2
+                                                                    ? OpenAPI.components["schemas"]["JinaV2Out"]
+                                                                    : T extends CLIP
+                                                                      ? OpenAPI.components["schemas"]["CLIPOut"]
+                                                                      : T extends FindOrCreateVectorStore
+                                                                        ? OpenAPI.components["schemas"]["FindOrCreateVectorStoreOut"]
+                                                                        : T extends ListVectorStores
+                                                                          ? OpenAPI.components["schemas"]["ListVectorStoresOut"]
+                                                                          : T extends DeleteVectorStore
+                                                                            ? OpenAPI.components["schemas"]["DeleteVectorStoreOut"]
+                                                                            : T extends QueryVectorStore
+                                                                              ? OpenAPI.components["schemas"]["QueryVectorStoreOut"]
+                                                                              : T extends FetchVectors
+                                                                                ? OpenAPI.components["schemas"]["FetchVectorsOut"]
+                                                                                : T extends UpdateVectors
+                                                                                  ? OpenAPI.components["schemas"]["UpdateVectorsOut"]
+                                                                                  : T extends DeleteVectors
+                                                                                    ? OpenAPI.components["schemas"]["DeleteVectorsOut"]
+                                                                                    : never;

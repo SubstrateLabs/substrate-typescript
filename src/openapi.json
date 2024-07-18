@@ -28,6 +28,11 @@
           "message": {
             "type": "string",
             "description": "A message providing more details about the error."
+          },
+          "status_code": {
+            "type": "integer",
+            "default": 500,
+            "description": "The HTTP status code for the error."
           }
         },
         "required": ["type", "message"]
@@ -97,7 +102,7 @@
           "condition": {
             "type": "boolean",
             "description": "Condition.",
-            "x-loggable": true
+            "x-loggable": false
           },
           "value_if_true": {
             "description": "Result when condition is true.",
@@ -1614,6 +1619,11 @@
             "description": "Return a mask image instead of the original content.",
             "default": false
           },
+          "invert_mask": {
+            "type": "boolean",
+            "description": "Invert the mask image. Only takes effect if `return_mask` is true.",
+            "default": false
+          },
           "background_color": {
             "type": "string",
             "description": "Hex value background color. Transparent if unset.",
@@ -2349,6 +2359,11 @@
             "type": "string",
             "description": "Selected embedding model.",
             "enum": ["jina-v2", "clip"]
+          },
+          "num_leaves": {
+            "type": "integer",
+            "description": "Number of leaves in the vector store.",
+            "minimum": 1
           }
         },
         "required": ["collection_name", "model"]
@@ -2626,6 +2641,14 @@
             "description": "The size of the dynamic candidate list for searching the index graph.",
             "x-loggable": true
           },
+          "num_leaves_to_search": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 1000,
+            "default": 40,
+            "description": "The number of leaves in the index tree to search.",
+            "x-loggable": true
+          },
           "include_values": {
             "type": "boolean",
             "default": false,
@@ -2702,6 +2725,50 @@
           }
         },
         "required": ["results"]
+      },
+      "SplitDocumentIn": {
+        "title": "SplitDocumentIn",
+        "type": "object",
+        "properties": {
+          "uri": {
+            "type": "string",
+            "description": "URI of the document."
+          },
+          "doc_id": {
+            "type": "string",
+            "description": "Document ID."
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Document metadata.",
+            "additionalProperties": true
+          },
+          "chunk_size": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Maximum number of units per chunk. Defaults to 1024 tokens for text or 40 lines for code."
+          },
+          "chunk_overlap": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Number of units to overlap between chunks. Defaults to 200 tokens for text or 15 lines for code."
+          }
+        },
+        "required": ["uri"]
+      },
+      "SplitDocumentOut": {
+        "title": "SplitDocumentOut",
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "description": "Document chunks",
+            "items": {
+              "$ref": "#/components/schemas/EmbedTextItem"
+            }
+          }
+        },
+        "required": ["items"]
       }
     }
   },
@@ -2720,7 +2787,9 @@
               },
               "example": {
                 "name": "some_name",
-                "args": { "foo": "bar" }
+                "args": {
+                  "foo": "bar"
+                }
               }
             }
           }
@@ -2734,7 +2803,9 @@
                   "$ref": "#/components/schemas/ExperimentalOut"
                 },
                 "example": {
-                  "output": { "foo": "bar" }
+                  "output": {
+                    "foo": "bar"
+                  }
                 }
               }
             }
@@ -3977,6 +4048,62 @@
                 },
                 "example": {
                   "mask_image_uri": "https://assets.substrate.run/84848484.jpg"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/SplitDocument": {
+      "post": {
+        "summary": "SplitDocument",
+        "operationId": "SplitDocument",
+        "tags": ["category:embedding"],
+        "description": "Split document into text segments.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SplitDocumentIn"
+              },
+              "example": {
+                "doc_id": "example_pdf",
+                "uri": "https://arxiv.org/pdf/2405.07945",
+                "metadata": {
+                  "title": "GRASS II: Simulations of Potential Granulation Noise Mitigation Methods"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SplitDocumentOut"
+                },
+                "example": {
+                  "items": [
+                    {
+                      "text": "This is the first chunk of the pdf",
+                      "metadata": {
+                        "title": "GRASS II: Simulations of Potential Granulation Noise Mitigation Methods",
+                        "chunk_id": "chk_asd897asdhnad0j8qd8qnd98"
+                      },
+                      "doc_id": "example_pdf"
+                    },
+                    {
+                      "text": "This is the second chunk of the pdf",
+                      "metadata": {
+                        "title": "GRASS II: Simulations of Potential Granulation Noise Mitigation Methods",
+                        "chunk_id": "chk_nvsiusd89adsy89dahd9abs8"
+                      },
+                      "doc_id": "example_pdf"
+                    }
+                  ]
                 }
               }
             }
