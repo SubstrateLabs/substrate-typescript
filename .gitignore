@@ -11,3 +11,5 @@ tmp/
 
 # scratch
 examples/scratch.ts
+**/moa.html
+**/descript.html

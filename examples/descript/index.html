@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap"
+      rel="stylesheet"
+    />
+
+    <title>Substrate - Descript</title>
+    <style>
+      @keyframes punchIn {
+        0% {
+          transform: scale(1.08);
+          background-color: rgba(205, 92, 92, 0.7);
+          color: white;
+        }
+        93% {
+          transform: scale(0.97);
+          background-color: indianred;
+          color: white;
+        }
+        100% {
+          transform: scale(1);
+          background-color: indianred;
+          color: white;
+        }
+      }
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: burlywood;
+      }
+      #container {
+        text-align: center;
+      }
+      #text-display {
+        font-size: 24px;
+        margin: -148px auto 0;
+        padding: 0 20px;
+        min-height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        max-width: 600px;
+        flex-wrap: wrap;
+        line-height: 1.4;
+        text-shadow: 1px 1px 3px rgba(20, 20, 20, 0.15);
+      }
+      #text-display span {
+        display: inline-block;
+        padding: 3px 2px;
+        font-family: "Roboto", "Helvetica Neue", Arial, sans-serif;
+        border-radius: 5px;
+        transition: all 0.14s ease-out;
+        color: rgba(255, 255, 255, 0.7);
+      }
+      #text-display span.highlight {
+        background-color: indianred;
+        color: white;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+      }
+      #text-display span.highlight-animate {
+        background-color: indianred;
+        color: white;
+        animation: punchIn 0.14s ease-out;
+      }
+      audio {
+        position: fixed;
+        bottom: 42px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 50%;
+        max-width: 600px;
+      }
+      #made-with {
+        position: fixed;
+        opacity: 0.7;
+        font-size: 12px;
+        color: darkslategray;
+        font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+        text-decoration: none;
+        top: 12px;
+        right: 12px;
+      }
+      #chapter-title {
+        position: fixed;
+        bottom: 124px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      .chapter-title-txt {
+        font-size: 13px;
+        color: darkslategray;
+        font-weight: bold;
+        font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+        text-transform: uppercase;
+        background: rgba(240, 240, 240, 0.65);
+        padding: 4px 7px;
+        border-radius: 4px;
+        box-shadow: 0 2px 2px rgba(0, 0, 0, 0.15);
+        user-select: none;
+      }
+      #chapter-title-container {
+        position: fixed;
+        bottom: 124px;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0 20px;
+      }
+      .chapter-title-txt {
+        font-size: 13px;
+        color: darkslategray;
+        font-weight: bold;
+        font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+        text-transform: uppercase;
+        background: rgba(240, 240, 240, 0.65);
+        padding: 4px 7px;
+        border-radius: 4px;
+        box-shadow: 0 2px 2px rgba(0, 0, 0, 0.15);
+        user-select: none;
+        cursor: pointer;
+      }
+
+      #current-chapter-title {
+        z-index: 2;
+        margin: 0 24px;
+        display: none;
+      }
+      .side-chapter {
+        opacity: 0.5;
+        font-size: 11px;
+        transition: opacity 0.3s ease;
+      }
+      #prev-chapter-title {
+        left: 20px;
+        display: none;
+      }
+      #next-chapter-title {
+        right: 20px;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <audio id="audio-player" controls>
+        <source src="{{ audioUrl }}" type="audio/mpeg" />
+        Your browser does not support the audio element.
+      </audio>
+      <div id="text-display"></div>
+      <div id="chapter-title-container">
+        <div
+          id="prev-chapter-title"
+          class="chapter-title-txt side-chapter"
+        ></div>
+        <div id="current-chapter-title" class="chapter-title-txt"></div>
+        <div
+          id="next-chapter-title"
+          class="chapter-title-txt side-chapter"
+        ></div>
+      </div>
+      <a id="made-with" href="https://substrate.run" target="_blank"
+        >made with substrate</a
+      >
+    </div>
+
+    <script>
+      const segments = "{{ segments }}";
+      const chapters = "{{ chapters }}";
+
+      const audioPlayer = document.getElementById("audio-player");
+      const textDisplay = document.getElementById("text-display");
+      const currentChapterTitle = document.getElementById(
+        "current-chapter-title",
+      );
+      const prevChapterTitle = document.getElementById("prev-chapter-title");
+      const nextChapterTitle = document.getElementById("next-chapter-title");
+
+      let currentSegmentIndex = 0;
+      let lastHighlightedWord = null;
+      let lastSegmentIndex = -1;
+
+      let currentChapterIndex = 0;
+
+      function updateText() {
+        const currentTime = audioPlayer.currentTime;
+        let segmentToDisplay = null;
+
+        // Find the current segment to display
+        for (let i = 0; i < segments.length; i++) {
+          const segment = segments[i];
+          if (currentTime < segment.end) {
+            segmentToDisplay = segment;
+            currentSegmentIndex = i;
+            break;
+          }
+        }
+
+        if (Array.isArray(chapters)) {
+          for (let i = 0; i < chapters.length; i++) {
+            const chapter = chapters[i];
+            if (currentTime >= chapter.start) {
+              currentChapterIndex = i;
+            }
+          }
+          const currentChapter = chapters[currentChapterIndex];
+          const prevChapter = chapters[currentChapterIndex - 1];
+          const nextChapter = chapters[currentChapterIndex + 1];
+
+          if (currentChapter && currentChapter.section) {
+            currentChapterTitle.innerText = currentChapter.section;
+            currentChapterTitle.style.display = "block";
+          } else {
+            currentChapterTitle.style.display = "none";
+          }
+
+          if (prevChapter && prevChapter.section) {
+            prevChapterTitle.innerText = prevChapter.section;
+            prevChapterTitle.style.display = "block";
+          } else {
+            prevChapterTitle.style.display = "none";
+          }
+
+          if (nextChapter && nextChapter.section && currentChapterIndex > 0) {
+            nextChapterTitle.innerText = nextChapter.section;
+            nextChapterTitle.style.display = "block";
+          } else {
+            nextChapterTitle.style.display = "none";
+          }
+        }
+
+        // If no current segment found, display the last segment
+        if (!segmentToDisplay && segments.length > 0) {
+          segmentToDisplay = segments[segments.length - 1];
+          currentSegmentIndex = segments.length - 1;
+        }
+
+        if (segmentToDisplay) {
+          // Only update the DOM if we've moved to a new segment
+          if (currentSegmentIndex !== lastSegmentIndex) {
+            let html = "";
+            segmentToDisplay.words.forEach((word) => {
+              html += `<span data-word-id="${word.start}">${word.word}</span>`;
+            });
+            textDisplay.innerHTML = html;
+            lastSegmentIndex = currentSegmentIndex;
+          }
+
+          // Highlight words
+          let currentHighlightedWord = null;
+
+          segmentToDisplay.words.forEach((word, index) => {
+            const nextWord = segmentToDisplay.words[index + 1];
+            const wordEndTime = nextWord ? nextWord.start : word.end;
+
+            const span = textDisplay.querySelector(
+              `[data-word-id="${word.start}"]`,
+            );
+
+            if (currentTime >= word.start && currentTime < wordEndTime) {
+              if (span && !span.classList.contains("highlight")) {
+                span.classList.add("highlight");
+                if (word.start !== lastHighlightedWord) {
+                  span.classList.add("highlight-animate");
+                  setTimeout(
+                    () => span.classList.remove("highlight-animate"),
+                    140,
+                  );
+                }
+              }
+              currentHighlightedWord = word.start;
+            } else if (span && span.classList.contains("highlight")) {
+              span.classList.remove("highlight", "highlight-animate");
+            }
+          });
+
+          // Remove highlight from the previous word
+          if (
+            lastHighlightedWord &&
+            lastHighlightedWord !== currentHighlightedWord
+          ) {
+            const lastSpan = textDisplay.querySelector(
+              `[data-word-id="${lastHighlightedWord}"]`,
+            );
+            if (lastSpan) {
+              lastSpan.classList.remove("highlight", "highlight-animate");
+            }
+          }
+
+          lastHighlightedWord = currentHighlightedWord;
+        }
+      }
+
+      updateText();
+
+      let animationFrameId;
+      let lastUpdateTime = 0;
+      const updateInterval = 1000 / 40;
+
+      function updateLoop(timestamp) {
+        if (timestamp - lastUpdateTime > updateInterval) {
+          updateText();
+          lastUpdateTime = timestamp;
+        }
+        animationFrameId = requestAnimationFrame(updateLoop);
+      }
+      audioPlayer.addEventListener("play", () => {
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = requestAnimationFrame(updateLoop);
+      });
+      audioPlayer.addEventListener("pause", () => {
+        cancelAnimationFrame(animationFrameId);
+      });
+      audioPlayer.addEventListener("ended", () => {
+        cancelAnimationFrame(animationFrameId);
+      });
+      currentChapterTitle.addEventListener("click", () => {
+        const section = chapters[currentChapterIndex];
+        audioPlayer.currentTime = section.start;
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = requestAnimationFrame(updateLoop);
+      });
+      prevChapterTitle.addEventListener("click", () => {
+        const section = chapters[currentChapterIndex - 1];
+        audioPlayer.currentTime = section.start;
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = requestAnimationFrame(updateLoop);
+      });
+      nextChapterTitle.addEventListener("click", () => {
+        const section = chapters[currentChapterIndex + 1];
+        audioPlayer.currentTime = section.start;
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = requestAnimationFrame(updateLoop);
+      });
+    </script>
+  </body>
+</html>

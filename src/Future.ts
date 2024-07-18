@@ -35,10 +35,12 @@ abstract class Directive {
   abstract result(): Promise<any>;
 
   referencedFutures() {
-    // @ts-ignore
-    return this.items
-      .filter((p) => p instanceof Future)
-      .flatMap((p) => [p, ...p.referencedFutures()]);
+    return (
+      this.items
+        .filter((p) => p instanceof Future)
+        // @ts-ignore
+        .flatMap((p) => [p, ...p.referencedFutures()])
+    );
   }
 }
 
