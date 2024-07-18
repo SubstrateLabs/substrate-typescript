@@ -58,7 +58,7 @@ const examples = [
     doc_id: "test",
     metadata: {
       test: "asd",
-    }
+    },
   }),
   new Box({
     value: {
