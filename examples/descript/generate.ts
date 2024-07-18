@@ -9,7 +9,7 @@ import { currentDir } from "./util";
  * https://media.substrate.run/kaufman-bafta-short.mp3
  * https://media.substrate.run/dfw-clip.m4a
  */
-const sample = "https://media.substrate.run/my-dinner-andre.m4a";
+const sample = "https://media.substrate.run/my-dinner-andre.m4a"; // NB: this is a ~2hr long file
 const substrate = new Substrate({ apiKey: process.env["SUBSTRATE_API_KEY"] });
 
 const audio_uri = process.argv[2] || sample;
