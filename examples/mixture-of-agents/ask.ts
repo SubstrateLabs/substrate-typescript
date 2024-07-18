@@ -63,9 +63,6 @@ async function main() {
     .replace('"{{ question }}"', JSON.stringify(question))
     .replace('"{{ summaries }}"', `[${JSON.stringify(jsonOut.final)}]`);
   fs.writeFileSync("moa.html", html);
-
-  const visualize = Substrate.visualize(box);
-  console.log(visualize);
 }
 
 main().then(() => console.log(`꩜ Done. View by running \`open moa.html\``));
