@@ -15,27 +15,33 @@ const opts = { cache_age: 60 * 60 * 24 * 7 };
 
 const numLayers = 3;
 const question = process.argv[2] || sampleQuestion;
+
+function getMixture(q: string, prev: any = null) {
+  const prompt = prev
+    ? sb.concat(aggregate, "\n\nquestion: ", q, "\n\nprevious:\n\n", prev)
+    : q;
+  return new Box({
+    value: models.map(
+      (model) =>
+        new ComputeText({ prompt, model, max_tokens }, opts).future.text,
+    ),
+  });
+}
+
 async function main() {
   const SUBSTRATE_API_KEY = process.env["SUBSTRATE_API_KEY"];
   const substrate = new Substrate({ apiKey: SUBSTRATE_API_KEY });
   const layers: Box[] = [getMixture(question)];
-  const getPrev = () =>
-    sb.concat(
-      ...layers
-        .map((l, i) =>
-          sb.jq<"string">(l.future.value, jqList(i * models.length)),
-        )
-        .flatMap((x) => [x, "\n"])
-        .slice(0, -1),
-    );
+  const lastLayer = () =>
+    sb.jq<"string">(layers[layers.length - 1]!.future.value, jqList);
 
   for (let i = 0; i < numLayers - 1; i++) {
-    layers.push(getMixture(question, getPrev()));
+    layers.push(getMixture(question, lastLayer()));
   }
 
   const final = new ComputeText(
     {
-      prompt: sb.concat(aggregate, "\n\n", getPrev()),
+      prompt: sb.concat(aggregate, "\n\n", lastLayer()),
       model: "Llama3Instruct70B",
       max_tokens,
     },
@@ -60,16 +66,6 @@ async function main() {
 
   const visualize = Substrate.visualize(box);
   console.log(visualize);
-}
-
-function getMixture(q: string, prev: any = null) {
-  const prompt = prev
-    ? sb.concat(aggregate, "\n\nquestion: ", q, "\n\nprevious:\n\n", prev)
-    : q;
-  const answers = models.map(
-    (model) => new ComputeText({ prompt, model, max_tokens }, opts),
-  );
-  return new Box({ value: answers.map((a) => a.future.text) });
 }
 
 main().then(() => console.log(`꩜ Done. View by running \`open moa.html\``));
