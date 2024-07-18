@@ -44,7 +44,7 @@ export const getPlatformProperties = (): PlatformProperties => {
       runtimeVersion:
         typeof Deno.version === "string"
           ? Deno.version
-          : Deno.version?.deno ?? "unknown",
+          : (Deno.version?.deno ?? "unknown"),
     };
   }
   if (typeof EdgeRuntime !== "undefined") {
