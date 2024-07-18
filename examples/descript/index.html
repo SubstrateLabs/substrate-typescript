@@ -93,6 +93,8 @@
         bottom: 124px;
         left: 50%;
         transform: translateX(-50%);
+      }
+      .chapter-title-txt {
         font-size: 13px;
         color: darkslategray;
         font-weight: bold;
@@ -104,6 +106,48 @@
         box-shadow: 0 2px 2px rgba(0, 0, 0, 0.15);
         user-select: none;
       }
+      #chapter-title-container {
+        position: fixed;
+        bottom: 124px;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0 20px;
+      }
+
+      .chapter-title-txt {
+        font-size: 13px;
+        color: darkslategray;
+        font-weight: bold;
+        font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+        text-transform: uppercase;
+        background: rgba(240, 240, 240, 0.65);
+        padding: 4px 7px;
+        border-radius: 4px;
+        box-shadow: 0 2px 2px rgba(0, 0, 0, 0.15);
+        user-select: none;
+      }
+
+      #current-chapter-title {
+        z-index: 2;
+        margin: 0 24px;
+      }
+
+      .side-chapter {
+        opacity: 0.5;
+        font-size: 11px;
+        transition: opacity 0.3s ease;
+      }
+
+      #prev-chapter-title {
+        left: 20px;
+      }
+
+      #next-chapter-title {
+        right: 20px;
+      }
     </style>
   </head>
   <body>
@@ -113,7 +157,17 @@
         Your browser does not support the audio element.
       </audio>
       <div id="text-display"></div>
-      <div id="chapter-title"></div>
+      <div id="chapter-title-container">
+        <div
+          id="prev-chapter-title"
+          class="chapter-title-txt side-chapter"
+        ></div>
+        <div id="current-chapter-title" class="chapter-title-txt"></div>
+        <div
+          id="next-chapter-title"
+          class="chapter-title-txt side-chapter"
+        ></div>
+      </div>
       <a id="made-with" href="https://substrate.run" target="_blank"
         >made with substrate</a
       >
@@ -125,7 +179,6 @@
 
       const audioPlayer = document.getElementById("audio-player");
       const textDisplay = document.getElementById("text-display");
-      const chapterTitle = document.getElementById("chapter-title");
 
       let currentSegmentIndex = 0;
       let lastHighlightedWord = null;
@@ -146,14 +199,46 @@
         }
 
         if (Array.isArray(chapters)) {
-          let currentChapter = chapters[0];
+          let currentChapterIndex = 0;
           for (let i = 0; i < chapters.length; i++) {
             const chapter = chapters[i];
             if (currentTime >= chapter.start) {
-              currentChapter = chapter;
+              currentChapterIndex = i;
             }
           }
-          chapterTitle.innerText = currentChapter.section || "";
+
+          const currentChapter = chapters[currentChapterIndex];
+          const prevChapter = chapters[currentChapterIndex - 1];
+          const nextChapter = chapters[currentChapterIndex + 1];
+
+          const currentChapterTitle = document.getElementById(
+            "current-chapter-title",
+          );
+          const prevChapterTitle =
+            document.getElementById("prev-chapter-title");
+          const nextChapterTitle =
+            document.getElementById("next-chapter-title");
+
+          if (currentChapter && currentChapter.section) {
+            currentChapterTitle.innerText = currentChapter.section;
+            currentChapterTitle.style.display = "block";
+          } else {
+            currentChapterTitle.style.display = "none";
+          }
+
+          if (prevChapter && prevChapter.section) {
+            prevChapterTitle.innerText = prevChapter.section;
+            prevChapterTitle.style.display = "block";
+          } else {
+            prevChapterTitle.style.display = "none";
+          }
+
+          if (nextChapter && nextChapter.section && currentChapterIndex > 0) {
+            nextChapterTitle.innerText = nextChapter.section;
+            nextChapterTitle.style.display = "block";
+          } else {
+            nextChapterTitle.style.display = "none";
+          }
         }
 
         // If no current segment found, display the last segment
