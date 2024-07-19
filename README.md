@@ -23,7 +23,7 @@ npm install substrate
 ## Usage
 
 ```typescript
-import { Substrate, GenerateText, sb } from "substrate";
+import { Substrate, ComputeText, sb } from "substrate";
 ```
 
 Initialize the Substrate client.
@@ -32,16 +32,16 @@ Initialize the Substrate client.
 const substrate = new Substrate({ apiKey: SUBSTRATE_API_KEY });
 ```
 
-Generate a story using the [`GenerateText`](https://www.substrate.run/nodes#GenerateText) node.
+Generate a story using the [`ComputeText`](https://www.substrate.run/nodes#ComputeText) node.
 
 ```typescript
-const story = new GenerateText({ prompt: "tell me a story" });
+const story = new ComputeText({ prompt: "tell me a story" });
 ```
 
-Summarize the output of the `story` node using another `GenerateText` node. Because `story` has not yet been run, we use `sb.interpolate` to work with its future output.
+Summarize the output of the `story` node using another `ComputeText` node. Because `story` has not yet been run, we use `sb.interpolate` to work with its future output.
 
 ```typescript
-const summary = new GenerateText({
+const summary = new ComputeText({
   prompt: sb.interpolate`summarize this story in one sentence: ${story.future.text}`,
 });
 ```
