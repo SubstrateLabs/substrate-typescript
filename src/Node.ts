@@ -1,5 +1,10 @@
 import { idGenerator } from "substrate/idGenerator";
-import { Future, FutureAnyObject, Trace, replaceWithPlaceholders } from "substrate/Future";
+import {
+  Future,
+  FutureAnyObject,
+  Trace,
+  replaceWithPlaceholders,
+} from "substrate/Future";
 import { SubstrateResponse } from "substrate/SubstrateResponse";
 import { NodeError, SubstrateError } from "substrate/Error";
 import { AnyNode } from "substrate/Nodes";
