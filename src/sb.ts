@@ -5,6 +5,7 @@ export const sb = {
   concat: FutureString.concat,
   jq: FutureAnyObject.jq,
   interpolate: FutureString.interpolate,
+  jinja: FutureString.jinja,
   streaming: {
     fromSSEResponse: StreamingResponse.fromReponse,
   },
