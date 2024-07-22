@@ -244,7 +244,7 @@ export class Jinja extends Directive {
       }
     };
     collectFutures([template, variables]);
-    this.items = Array.from(futures)
+    this.items = Array.from(futures);
   }
 
   override next(..._items: any[]) {

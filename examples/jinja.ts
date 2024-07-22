@@ -13,11 +13,14 @@ async function main() {
   const a = new Box({ value: ["a", "b"] });
   const b = new Box({ value: { x: "x" } });
 
-  const f = sb.jinja('as=[{% for a in as %}{{a}},{% endfor%}], b={{b["x"]}}, c={{c}}', {
-    as: a.future.value,
-    b: b.future.value,
-    c: "1234",
-  });
+  const f = sb.jinja(
+    'as=[{% for a in as %}{{a}},{% endfor%}], b={{b["x"]}}, c={{c}}',
+    {
+      as: a.future.value,
+      b: b.future.value,
+      c: "1234",
+    },
+  );
 
   const c = new Box({ value: f });
 
