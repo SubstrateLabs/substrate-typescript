@@ -1,7 +1,7 @@
 /**
  * 𐃏 Substrate
  * @generated file
- * 20240617.20240718
+ * 20240617.20240724
  */
 
 import * as OpenAPI from "substrate/OpenAPI";
@@ -1381,7 +1381,7 @@ export class GenerateImageIn extends FutureObject {
   get prompt() {
     return new FutureString(this._directive.next("prompt"));
   }
-  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
   get store() {
     return new FutureString(this._directive.next("store"));
   }
@@ -1411,7 +1411,7 @@ export class MultiGenerateImageIn extends FutureObject {
   get num_images() {
     return new FutureNumber(this._directive.next("num_images"));
   }
-  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
   get store() {
     return new FutureString(this._directive.next("store"));
   }
@@ -1449,7 +1449,7 @@ export class StableDiffusionXLIn extends FutureObject {
   get num_images() {
     return new FutureNumber(this._directive.next("num_images"));
   }
-  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
   get store() {
     return new FutureString(this._directive.next("store"));
   }
@@ -1515,7 +1515,7 @@ export class StableDiffusionXLLightningIn extends FutureObject {
   get num_images() {
     return new FutureNumber(this._directive.next("num_images"));
   }
-  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
   get store() {
     return new FutureString(this._directive.next("store"));
   }
@@ -1572,7 +1572,7 @@ export class StableDiffusionXLIPAdapterIn extends FutureObject {
   get negative_prompt() {
     return new FutureString(this._directive.next("negative_prompt"));
   }
-  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
   get store() {
     return new FutureString(this._directive.next("store"));
   }
@@ -1633,7 +1633,7 @@ export class StableDiffusionXLControlNetIn extends FutureObject {
   get negative_prompt() {
     return new FutureString(this._directive.next("negative_prompt"));
   }
-  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
   get store() {
     return new FutureString(this._directive.next("store"));
   }
@@ -1684,7 +1684,7 @@ export class InpaintImageIn extends FutureObject {
   get mask_image_uri() {
     return new FutureString(this._directive.next("mask_image_uri"));
   }
-  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
   get store() {
     return new FutureString(this._directive.next("store"));
   }
@@ -1722,7 +1722,7 @@ export class MultiInpaintImageIn extends FutureObject {
   get num_images() {
     return new FutureNumber(this._directive.next("num_images"));
   }
-  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
   get store() {
     return new FutureString(this._directive.next("store"));
   }
@@ -1768,7 +1768,7 @@ export class StableDiffusionXLInpaintIn extends FutureObject {
   get negative_prompt() {
     return new FutureString(this._directive.next("negative_prompt"));
   }
-  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
   get store() {
     return new FutureString(this._directive.next("store"));
   }
@@ -1847,7 +1847,7 @@ export class EraseImageIn extends FutureObject {
   get mask_image_uri() {
     return new FutureString(this._directive.next("mask_image_uri"));
   }
-  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
   get store() {
     return new FutureString(this._directive.next("store"));
   }
@@ -1877,7 +1877,7 @@ export class BigLaMaIn extends FutureObject {
   get mask_image_uri() {
     return new FutureString(this._directive.next("mask_image_uri"));
   }
-  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
   get store() {
     return new FutureString(this._directive.next("store"));
   }
@@ -1915,7 +1915,7 @@ export class RemoveBackgroundIn extends FutureObject {
   get background_color() {
     return new FutureString(this._directive.next("background_color"));
   }
-  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
   get store() {
     return new FutureString(this._directive.next("store"));
   }
@@ -1941,7 +1941,7 @@ export class DISISNetIn extends FutureObject {
   get image_uri() {
     return new FutureString(this._directive.next("image_uri"));
   }
-  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
   get store() {
     return new FutureString(this._directive.next("store"));
   }
@@ -1975,7 +1975,7 @@ export class UpscaleImageIn extends FutureObject {
   get output_resolution() {
     return new FutureNumber(this._directive.next("output_resolution"));
   }
-  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
   get store() {
     return new FutureString(this._directive.next("store"));
   }
@@ -2005,7 +2005,7 @@ export class SegmentUnderPointIn extends FutureObject {
   get point() {
     return new Point(this._directive.next("point"));
   }
-  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
   get store() {
     return new FutureString(this._directive.next("store"));
   }
@@ -2043,7 +2043,7 @@ export class SegmentAnythingIn extends FutureObject {
   get box_prompts() {
     return new SegmentAnythingInBoxPrompts(this._directive.next("box_prompts"));
   }
-  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+  /** (Optional) Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
   get store() {
     return new FutureString(this._directive.next("store"));
   }
@@ -2191,7 +2191,7 @@ export class GenerateSpeechIn extends FutureObject {
   get text() {
     return new FutureString(this._directive.next("text"));
   }
-  /** (Optional) Use "hosted" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the audio data will be returned as a base64-encoded string. */
+  /** (Optional) Use "hosted" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the audio data will be returned as a base64-encoded string. */
   get store() {
     return new FutureString(this._directive.next("store"));
   }
@@ -2225,7 +2225,7 @@ export class XTTSV2In extends FutureObject {
   get language() {
     return new FutureString(this._directive.next("language"));
   }
-  /** (Optional) Use "hosted" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the audio data will be returned as a base64-encoded string. */
+  /** (Optional) Use "hosted" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the audio data will be returned as a base64-encoded string. */
   get store() {
     return new FutureString(this._directive.next("store"));
   }
