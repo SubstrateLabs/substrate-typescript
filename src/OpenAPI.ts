@@ -419,7 +419,10 @@ export interface components {
         | "Mixtral8x7BInstruct"
         | "Llama3Instruct8B"
         | "Llama3Instruct70B"
-        | "Firellava13B";
+        | "Firellava13B"
+        | "gpt-4o"
+        | "gpt-4o-mini"
+        | "claude-3-5-sonnet-20240620";
     };
     /** ComputeTextOut */
     ComputeTextOut: {
@@ -874,7 +877,7 @@ export interface components {
     GenerateImageIn: {
       /** @description Text prompt. */
       prompt: string;
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
     };
     /** GenerateImageOut */
@@ -891,7 +894,7 @@ export interface components {
        * @default 2
        */
       num_images: number;
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
     };
     /** MultiGenerateImageOut */
@@ -918,7 +921,7 @@ export interface components {
        * @default 1
        */
       num_images: number;
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
       /**
        * @description Height of output image, in pixels.
@@ -967,7 +970,7 @@ export interface components {
        * @default 1
        */
       num_images?: number;
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
       /**
        * @description Height of output image, in pixels.
@@ -1011,7 +1014,7 @@ export interface components {
       ip_adapter_scale?: number;
       /** @description Negative input prompt. */
       negative_prompt?: string;
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
       /**
        * @description Width of output image, in pixels.
@@ -1059,7 +1062,7 @@ export interface components {
       output_resolution?: number;
       /** @description Negative input prompt. */
       negative_prompt?: string;
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
       /**
        * Format: float
@@ -1094,7 +1097,7 @@ export interface components {
       prompt: string;
       /** @description Mask image that controls which pixels are inpainted. If unset, the entire image is edited (image-to-image). */
       mask_image_uri?: string;
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
     };
     /** InpaintImageOut */
@@ -1115,7 +1118,7 @@ export interface components {
        * @default 2
        */
       num_images: number;
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
     };
     /** MultiInpaintImageOut */
@@ -1146,7 +1149,7 @@ export interface components {
       output_resolution?: number;
       /** @description Negative input prompt. */
       negative_prompt?: string;
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
       /**
        * Format: float
@@ -1203,7 +1206,7 @@ export interface components {
       image_uri: string;
       /** @description Mask image that controls which pixels are inpainted. */
       mask_image_uri: string;
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
     };
     /** EraseImageOut */
@@ -1217,7 +1220,7 @@ export interface components {
       image_uri: string;
       /** @description Mask image that controls which pixels are inpainted. */
       mask_image_uri: string;
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
     };
     /** BigLaMaOut */
@@ -1241,7 +1244,7 @@ export interface components {
       invert_mask?: boolean;
       /** @description Hex value background color. Transparent if unset. */
       background_color?: string;
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
     };
     /** RemoveBackgroundOut */
@@ -1253,7 +1256,7 @@ export interface components {
     DISISNetIn: {
       /** @description Input image. */
       image_uri: string;
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
     };
     /** DISISNetOut */
@@ -1272,7 +1275,7 @@ export interface components {
        * @default 1024
        */
       output_resolution?: number;
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
     };
     /** UpscaleImageOut */
@@ -1291,7 +1294,7 @@ export interface components {
         /** @description Y position. */
         y: number;
       };
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
     };
     /** SegmentUnderPointOut */
@@ -1333,7 +1336,7 @@ export interface components {
          */
         y2: number;
       }[];
-      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
     };
     /** SegmentAnythingOut */
@@ -1487,7 +1490,7 @@ export interface components {
     GenerateSpeechIn: {
       /** @description Input text. */
       text: string;
-      /** @description Use "hosted" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the audio data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the audio data will be returned as a base64-encoded string. */
       store?: string;
     };
     /** GenerateSpeechOut */
@@ -1506,7 +1509,7 @@ export interface components {
        * @default en
        */
       language?: string;
-      /** @description Use "hosted" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the audio data will be returned as a base64-encoded string. */
+      /** @description Use "hosted" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the audio data will be returned as a base64-encoded string. */
       store?: string;
     };
     /** XTTSV2Out */
@@ -2244,7 +2247,10 @@ export interface operations {
             | "Mixtral8x7BInstruct"
             | "Llama3Instruct8B"
             | "Llama3Instruct70B"
-            | "Firellava13B";
+            | "Firellava13B"
+            | "gpt-4o"
+            | "gpt-4o-mini"
+            | "claude-3-5-sonnet-20240620";
         };
       };
     };
@@ -2964,7 +2970,7 @@ export interface operations {
         "application/json": {
           /** @description Text prompt. */
           prompt: string;
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
         };
       };
@@ -3003,7 +3009,7 @@ export interface operations {
            * @default 2
            */
           num_images: number;
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
         };
       };
@@ -3045,7 +3051,7 @@ export interface operations {
           prompt: string;
           /** @description Mask image that controls which pixels are inpainted. If unset, the entire image is edited (image-to-image). */
           mask_image_uri?: string;
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
         };
       };
@@ -3090,7 +3096,7 @@ export interface operations {
            * @default 2
            */
           num_images: number;
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
         };
       };
@@ -3139,7 +3145,7 @@ export interface operations {
            * @default 1
            */
           num_images?: number;
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
           /**
            * @description Height of output image, in pixels.
@@ -3214,7 +3220,7 @@ export interface operations {
           output_resolution?: number;
           /** @description Negative input prompt. */
           negative_prompt?: string;
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
           /**
            * Format: float
@@ -3288,7 +3294,7 @@ export interface operations {
           output_resolution?: number;
           /** @description Negative input prompt. */
           negative_prompt?: string;
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
           /**
            * Format: float
@@ -3446,7 +3452,7 @@ export interface operations {
         "application/json": {
           /** @description Input text. */
           text: string;
-          /** @description Use "hosted" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the audio data will be returned as a base64-encoded string. */
+          /** @description Use "hosted" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the audio data will be returned as a base64-encoded string. */
           store?: string;
         };
       };
@@ -3491,7 +3497,7 @@ export interface operations {
           invert_mask?: boolean;
           /** @description Hex value background color. Transparent if unset. */
           background_color?: string;
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
         };
       };
@@ -3527,7 +3533,7 @@ export interface operations {
           image_uri: string;
           /** @description Mask image that controls which pixels are inpainted. */
           mask_image_uri: string;
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
         };
       };
@@ -3568,7 +3574,7 @@ export interface operations {
            * @default 1024
            */
           output_resolution?: number;
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
         };
       };
@@ -3612,7 +3618,7 @@ export interface operations {
             /** @description Y position. */
             y: number;
           };
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
         };
       };
@@ -3681,7 +3687,7 @@ export interface operations {
              */
             y2: number;
           }[];
-          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://guides.substrate.run/guides/external-file-storage). If unset, the image data will be returned as a base64-encoded string. */
+          /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
           store?: string;
         };
       };

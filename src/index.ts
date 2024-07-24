@@ -1,7 +1,7 @@
 /**
  * 𐃏 Substrate TypeScript SDK
  * @generated file
- * 20240617.20240718
+ * 20240617.20240724
  */
 
 export { SubstrateError } from "substrate/Error";
