@@ -120,9 +120,7 @@ describe("Future", () => {
           origin_node_id: null,
           // @ts-ignore
           origin_future_id: f._id,
-          op_stack: [
-            Trace.Operation.key("attr", "x"),
-          ],
+          op_stack: [Trace.Operation.key("attr", "x")],
         });
       });
 
