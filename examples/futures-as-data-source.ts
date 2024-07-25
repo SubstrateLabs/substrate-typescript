@@ -9,10 +9,12 @@ async function main() {
 
   const f = sb.jq<"object">({ foo: { bar: "baz" } }, ".", "object");
 
-  const a = new Box({ value: {
-    x: f,
-    y: f.get("foo.bar"),
-  }});
+  const a = new Box({
+    value: {
+      x: f,
+      y: f.get("foo.bar"),
+    },
+  });
 
   const res = await substrate.run(a);
   console.log(JSON.stringify(res.json.data, null, 2));
