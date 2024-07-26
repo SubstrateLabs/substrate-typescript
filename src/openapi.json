@@ -214,6 +214,7 @@
               "Mixtral8x7BInstruct",
               "Llama3Instruct8B",
               "Llama3Instruct70B",
+              "Llama3Instruct405B",
               "Firellava13B",
               "gpt-4o",
               "gpt-4o-mini",
@@ -1353,6 +1354,64 @@
           }
         },
         "required": ["outputs"]
+      },
+      "StableVideoDiffusionIn": {
+        "title": "StableVideoDiffusionIn",
+        "type": "object",
+        "properties": {
+          "image_uri": {
+            "type": "string",
+            "description": "Original image."
+          },
+          "store": {
+            "type": "string",
+            "description": "Use \"hosted\" to return a video URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the video data will be returned as a base64-encoded string.",
+            "x-loggable": true
+          },
+          "output_format": {
+            "type": "string",
+            "enum": ["gif", "mp4"],
+            "description": "Output video format.",
+            "default": "gif",
+            "x-loggable": true
+          },
+          "seed": {
+            "type": "integer",
+            "description": "Seed for deterministic generation. Default is a random seed.",
+            "x-loggable": true
+          },
+          "fps": {
+            "type": "integer",
+            "description": "Frames per second of the generated video.",
+            "default": 7,
+            "x-loggable": true
+          },
+          "motion_bucket_id": {
+            "type": "integer",
+            "description": "The motion bucket id to use for the generated video. This can be used to control the motion of the generated video. Increasing the motion bucket id increases the motion of the generated video.",
+            "default": 180,
+            "x-loggable": true
+          },
+          "noise": {
+            "type": "number",
+            "format": "float",
+            "description": "The amount of noise added to the conditioning image. The higher the values the less the video resembles the conditioning image. Increasing this value also increases the motion of the generated video.",
+            "default": 0.1,
+            "x-loggable": true
+          }
+        },
+        "required": ["image_uri"]
+      },
+      "StableVideoDiffusionOut": {
+        "title": "StableVideoDiffusionOut",
+        "type": "object",
+        "properties": {
+          "video_uri": {
+            "type": "string",
+            "description": "Generated video."
+          }
+        },
+        "required": ["video_uri"]
       },
       "InpaintImageIn": {
         "title": "InpaintImageIn",
@@ -3751,6 +3810,42 @@
                       "seed": 1720398
                     }
                   ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/StableVideoDiffusion": {
+      "post": {
+        "summary": "StableVideoDiffusion",
+        "operationId": "StableVideoDiffusion",
+        "tags": ["category:image", "type:low-level"],
+        "description": "Generates a video using a still image as conditioning frame.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StableVideoDiffusionIn"
+              },
+              "example": {
+                "image_uri": "https://media.substrate.run/apple-forest.jpeg",
+                "store": "hosted"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StableVideoDiffusionOut"
+                },
+                "example": {
+                  "video_uri": "https://assets.substrate.run/84848484.mp4"
                 }
               }
             }

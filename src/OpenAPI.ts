@@ -5,310 +5,887 @@
 
 export interface paths {
   "/Experimental": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Experimental
      * @description Experimental node.
      */
     post: operations["Experimental"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/Box": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Box
      * @description Combine multiple values into a single output.
      */
     post: operations["Box"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/If": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * If
      * @description Return one of two options based on a condition.
      */
     post: operations["If"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/RunPython": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * RunPython
      * @description Run code using a Python interpreter.
      */
     post: operations["RunPython"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/ComputeText": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * ComputeText
      * @description Compute text using a language model.
      */
     post: operations["ComputeText"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/MultiComputeText": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * MultiComputeText
      * @description Generate multiple text choices using a language model.
      */
     post: operations["MultiComputeText"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/BatchComputeText": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * BatchComputeText
      * @description Compute text for multiple prompts in batch using a language model.
      */
     post: operations["BatchComputeText"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/BatchComputeJSON": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * BatchComputeJSON
      * @description Compute JSON for multiple prompts in batch using a language model.
      */
     post: operations["BatchComputeJSON"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/ComputeJSON": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * ComputeJSON
      * @description Compute JSON using a language model.
      */
     post: operations["ComputeJSON"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/MultiComputeJSON": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * MultiComputeJSON
      * @description Compute multiple JSON choices using a language model.
      */
     post: operations["MultiComputeJSON"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/Mistral7BInstruct": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Mistral7BInstruct
      * @description Compute text using [Mistral 7B Instruct](https://mistral.ai/news/announcing-mistral-7b).
      */
     post: operations["Mistral7BInstruct"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/Mixtral8x7BInstruct": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Mixtral8x7BInstruct
      * @description Compute text using instruct-tuned [Mixtral 8x7B](https://mistral.ai/news/mixtral-of-experts/).
      */
     post: operations["Mixtral8x7BInstruct"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/Llama3Instruct8B": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Llama3Instruct8B
      * @description Compute text using instruct-tuned [Llama 3 8B](https://llama.meta.com/llama3/).
      */
     post: operations["Llama3Instruct8B"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/Llama3Instruct70B": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Llama3Instruct70B
      * @description Compute text using instruct-tuned [Llama 3 70B](https://llama.meta.com/llama3/).
      */
     post: operations["Llama3Instruct70B"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/Firellava13B": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * Firellava13B
      * @description Compute text with image input using [FireLLaVA 13B](https://fireworks.ai/blog/firellava-the-first-commercially-permissive-oss-llava-model).
      */
     post: operations["Firellava13B"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/GenerateImage": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * GenerateImage
      * @description Generate an image.
      */
     post: operations["GenerateImage"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/MultiGenerateImage": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * MultiGenerateImage
      * @description Generate multiple images.
      */
     post: operations["MultiGenerateImage"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/InpaintImage": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * InpaintImage
      * @description Edit an image using image generation inside part of the image or the full image.
      */
     post: operations["InpaintImage"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/MultiInpaintImage": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * MultiInpaintImage
      * @description Edit multiple images using image generation.
      */
     post: operations["MultiInpaintImage"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/StableDiffusionXLLightning": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * StableDiffusionXLLightning
      * @description Generate an image using [Stable Diffusion XL Lightning](https://arxiv.org/abs/2402.13929).
      */
     post: operations["StableDiffusionXLLightning"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/StableDiffusionXLInpaint": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * StableDiffusionXLInpaint
      * @description Edit an image using [Stable Diffusion XL](https://arxiv.org/abs/2307.01952). Supports inpainting (edit part of the image with a mask) and image-to-image (edit the full image).
      */
     post: operations["StableDiffusionXLInpaint"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/StableDiffusionXLControlNet": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * StableDiffusionXLControlNet
      * @description Generate an image with generation structured by an input image, using Stable Diffusion XL with [ControlNet](https://arxiv.org/abs/2302.05543).
      */
     post: operations["StableDiffusionXLControlNet"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/StableVideoDiffusion": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * StableVideoDiffusion
+     * @description Generates a video using a still image as conditioning frame.
+     */
+    post: operations["StableVideoDiffusion"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/TranscribeSpeech": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * TranscribeSpeech
      * @description Transcribe speech in an audio or video file.
      */
     post: operations["TranscribeSpeech"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/GenerateSpeech": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * GenerateSpeech
      * @description Generate speech from text.
      */
     post: operations["GenerateSpeech"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/RemoveBackground": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * RemoveBackground
      * @description Remove the background from an image and return the foreground segment as a cut-out or a mask.
      */
     post: operations["RemoveBackground"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/EraseImage": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * EraseImage
      * @description Erase the masked part of an image, e.g. to remove an object by inpainting.
      */
     post: operations["EraseImage"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/UpscaleImage": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * UpscaleImage
      * @description Upscale an image using image generation.
      */
     post: operations["UpscaleImage"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/SegmentUnderPoint": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * SegmentUnderPoint
      * @description Segment an image under a point and return the segment.
      */
     post: operations["SegmentUnderPoint"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/SegmentAnything": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * SegmentAnything
      * @description Segment an image using [SegmentAnything](https://github.com/facebookresearch/segment-anything).
      */
     post: operations["SegmentAnything"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/SplitDocument": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * SplitDocument
      * @description Split document into text segments.
      */
     post: operations["SplitDocument"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/EmbedText": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * EmbedText
      * @description Generate embedding for a text document.
      */
     post: operations["EmbedText"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/MultiEmbedText": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * MultiEmbedText
      * @description Generate embeddings for multiple text documents.
      */
     post: operations["MultiEmbedText"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/EmbedImage": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * EmbedImage
      * @description Generate embedding for an image.
      */
     post: operations["EmbedImage"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/MultiEmbedImage": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * MultiEmbedImage
      * @description Generate embeddings for multiple images.
      */
     post: operations["MultiEmbedImage"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/JinaV2": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * JinaV2
      * @description Generate embeddings for multiple text documents using [Jina Embeddings 2](https://arxiv.org/abs/2310.19923).
      */
     post: operations["JinaV2"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/CLIP": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * CLIP
      * @description Generate embeddings for text or images using [CLIP](https://openai.com/research/clip).
      */
     post: operations["CLIP"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/FindOrCreateVectorStore": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * FindOrCreateVectorStore
      * @description Find a vector store matching the given collection name, or create a new vector store.
      */
     post: operations["FindOrCreateVectorStore"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/ListVectorStores": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * ListVectorStores
      * @description List all vector stores.
      */
     post: operations["ListVectorStores"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/DeleteVectorStore": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * DeleteVectorStore
      * @description Delete a vector store.
      */
     post: operations["DeleteVectorStore"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/QueryVectorStore": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * QueryVectorStore
      * @description Query a vector store for similar vectors.
      */
     post: operations["QueryVectorStore"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/FetchVectors": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * FetchVectors
      * @description Fetch vectors from a vector store.
      */
     post: operations["FetchVectors"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/UpdateVectors": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * UpdateVectors
      * @description Update vectors in a vector store.
      */
     post: operations["UpdateVectors"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
   "/DeleteVectors": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     /**
      * DeleteVectors
      * @description Delete vectors in a vector store.
      */
     post: operations["DeleteVectors"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
   };
 }
-
 export type webhooks = Record<string, never>;
-
 export interface components {
   schemas: {
     /** ErrorOut */
@@ -324,7 +901,7 @@ export interface components {
        * @description The HTTP status code for the error.
        * @default 500
        */
-      status_code?: number;
+      status_code: number;
     };
     /** ExperimentalIn */
     ExperimentalIn: {
@@ -338,7 +915,7 @@ export interface components {
        * @description Timeout in seconds.
        * @default 60
        */
-      timeout?: number;
+      timeout: number;
     };
     /** ExperimentalOut */
     ExperimentalOut: {
@@ -406,7 +983,7 @@ export interface components {
        * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
        * @default 0.4
        */
-      temperature?: number;
+      temperature: number;
       /** @description Maximum number of tokens to generate. */
       max_tokens?: number;
       /**
@@ -414,7 +991,7 @@ export interface components {
        * @default Llama3Instruct8B
        * @enum {string}
        */
-      model?:
+      model:
         | "Mistral7BInstruct"
         | "Mixtral8x7BInstruct"
         | "Llama3Instruct8B"
@@ -442,7 +1019,7 @@ export interface components {
        * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
        * @default 0.4
        */
-      temperature?: number;
+      temperature: number;
       /** @description Maximum number of tokens to generate. */
       max_tokens?: number;
       /**
@@ -450,7 +1027,7 @@ export interface components {
        * @default Llama3Instruct8B
        * @enum {string}
        */
-      model?: "Mistral7BInstruct" | "Mixtral8x7BInstruct" | "Llama3Instruct8B";
+      model: "Mistral7BInstruct" | "Mixtral8x7BInstruct" | "Llama3Instruct8B";
     };
     /** ComputeJSONOut */
     ComputeJSONOut: {
@@ -475,7 +1052,7 @@ export interface components {
        * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
        * @default 0.4
        */
-      temperature?: number;
+      temperature: number;
       /** @description Maximum number of tokens to generate. */
       max_tokens?: number;
       /**
@@ -483,7 +1060,7 @@ export interface components {
        * @default Llama3Instruct8B
        * @enum {string}
        */
-      model?:
+      model:
         | "Mistral7BInstruct"
         | "Mixtral8x7BInstruct"
         | "Llama3Instruct8B"
@@ -506,7 +1083,7 @@ export interface components {
        * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
        * @default 0.4
        */
-      temperature?: number;
+      temperature: number;
       /** @description Maximum number of tokens to generate. */
       max_tokens?: number;
       /**
@@ -514,7 +1091,7 @@ export interface components {
        * @default Llama3Instruct8B
        * @enum {string}
        */
-      model?: "Mistral7BInstruct" | "Llama3Instruct8B";
+      model: "Mistral7BInstruct" | "Llama3Instruct8B";
     };
     /** BatchComputeTextOut */
     BatchComputeTextOut: {
@@ -542,7 +1119,7 @@ export interface components {
        * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
        * @default 0.4
        */
-      temperature?: number;
+      temperature: number;
       /** @description Maximum number of tokens to generate. */
       max_tokens?: number;
       /**
@@ -550,7 +1127,7 @@ export interface components {
        * @default Llama3Instruct8B
        * @enum {string}
        */
-      model?: "Mistral7BInstruct" | "Mixtral8x7BInstruct" | "Llama3Instruct8B";
+      model: "Mistral7BInstruct" | "Mixtral8x7BInstruct" | "Llama3Instruct8B";
     };
     /** MultiComputeJSONOut */
     MultiComputeJSONOut: {
@@ -577,7 +1154,7 @@ export interface components {
        * @description Sampling temperature to use. Higher values make the output more random, lower values make the output more deterministic.
        * @default 0.4
        */
-      temperature?: number;
+      temperature: number;
       /** @description Maximum number of tokens to generate. */
       max_tokens?: number;
       /**
@@ -585,7 +1162,7 @@ export interface components {
        * @default Llama3Instruct8B
        * @enum {string}
        */
-      model?: "Mistral7BInstruct" | "Llama3Instruct8B";
+      model: "Mistral7BInstruct" | "Llama3Instruct8B";
     };
     /** BatchComputeJSONOut */
     BatchComputeJSONOut: {
@@ -609,7 +1186,7 @@ export interface components {
        * @description Number of choices to generate.
        * @default 1
        */
-      num_choices?: number;
+      num_choices: number;
       /** @description JSON schema to guide response. */
       json_schema?: {
         [key: string]: unknown;
@@ -624,25 +1201,25 @@ export interface components {
        * @description Higher values decrease the likelihood of repeating previous tokens.
        * @default 0
        */
-      frequency_penalty?: number;
+      frequency_penalty: number;
       /**
        * Format: float
        * @description Higher values decrease the likelihood of repeated sequences.
        * @default 1
        */
-      repetition_penalty?: number;
+      repetition_penalty: number;
       /**
        * Format: float
        * @description Higher values increase the likelihood of new topics appearing.
        * @default 1.1
        */
-      presence_penalty?: number;
+      presence_penalty: number;
       /**
        * Format: float
        * @description Probability below which less likely tokens are filtered out.
        * @default 0.95
        */
-      top_p?: number;
+      top_p: number;
       /** @description Maximum number of tokens to generate. */
       max_tokens?: number;
     };
@@ -677,7 +1254,7 @@ export interface components {
        * @description Number of choices to generate.
        * @default 1
        */
-      num_choices?: number;
+      num_choices: number;
       /** @description JSON schema to guide response. */
       json_schema?: {
         [key: string]: unknown;
@@ -692,25 +1269,25 @@ export interface components {
        * @description Higher values decrease the likelihood of repeating previous tokens.
        * @default 0
        */
-      frequency_penalty?: number;
+      frequency_penalty: number;
       /**
        * Format: float
        * @description Higher values decrease the likelihood of repeated sequences.
        * @default 1
        */
-      repetition_penalty?: number;
+      repetition_penalty: number;
       /**
        * Format: float
        * @description Higher values increase the likelihood of new topics appearing.
        * @default 1.1
        */
-      presence_penalty?: number;
+      presence_penalty: number;
       /**
        * Format: float
        * @description Probability below which less likely tokens are filtered out.
        * @default 0.95
        */
-      top_p?: number;
+      top_p: number;
       /** @description Maximum number of tokens to generate. */
       max_tokens?: number;
     };
@@ -745,7 +1322,7 @@ export interface components {
        * @description Number of choices to generate.
        * @default 1
        */
-      num_choices?: number;
+      num_choices: number;
       /**
        * Format: float
        * @description Higher values make the output more random, lower values make the output more deterministic.
@@ -756,25 +1333,25 @@ export interface components {
        * @description Higher values decrease the likelihood of repeating previous tokens.
        * @default 0
        */
-      frequency_penalty?: number;
+      frequency_penalty: number;
       /**
        * Format: float
        * @description Higher values decrease the likelihood of repeated sequences.
        * @default 1
        */
-      repetition_penalty?: number;
+      repetition_penalty: number;
       /**
        * Format: float
        * @description Higher values increase the likelihood of new topics appearing.
        * @default 1.1
        */
-      presence_penalty?: number;
+      presence_penalty: number;
       /**
        * Format: float
        * @description Probability below which less likely tokens are filtered out.
        * @default 0.95
        */
-      top_p?: number;
+      top_p: number;
       /** @description Maximum number of tokens to generate. */
       max_tokens?: number;
       /** @description JSON schema to guide response. */
@@ -813,7 +1390,7 @@ export interface components {
        * @description Number of choices to generate.
        * @default 1
        */
-      num_choices?: number;
+      num_choices: number;
       /**
        * Format: float
        * @description Higher values make the output more random, lower values make the output more deterministic.
@@ -824,25 +1401,25 @@ export interface components {
        * @description Higher values decrease the likelihood of repeating previous tokens.
        * @default 0
        */
-      frequency_penalty?: number;
+      frequency_penalty: number;
       /**
        * Format: float
        * @description Higher values decrease the likelihood of repeated sequences.
        * @default 1
        */
-      repetition_penalty?: number;
+      repetition_penalty: number;
       /**
        * Format: float
        * @description Higher values increase the likelihood of new topics appearing.
        * @default 1.1
        */
-      presence_penalty?: number;
+      presence_penalty: number;
       /**
        * Format: float
        * @description Probability below which less likely tokens are filtered out.
        * @default 0.95
        */
-      top_p?: number;
+      top_p: number;
       /** @description Maximum number of tokens to generate. */
       max_tokens?: number;
     };
@@ -915,7 +1492,7 @@ export interface components {
        * @description Number of diffusion steps.
        * @default 30
        */
-      steps?: number;
+      steps: number;
       /**
        * @description Number of images to generate.
        * @default 1
@@ -927,12 +1504,12 @@ export interface components {
        * @description Height of output image, in pixels.
        * @default 1024
        */
-      height?: number;
+      height: number;
       /**
        * @description Width of output image, in pixels.
        * @default 1024
        */
-      width?: number;
+      width: number;
       /** @description Seeds for deterministic generation. Default is a random seed. */
       seeds?: number[];
       /**
@@ -940,7 +1517,7 @@ export interface components {
        * @description Higher values adhere to the text prompt more strongly, typically at the expense of image quality.
        * @default 7
        */
-      guidance_scale?: number;
+      guidance_scale: number;
     };
     /** StableDiffusionImage */
     StableDiffusionImage: {
@@ -969,19 +1546,19 @@ export interface components {
        * @description Number of images to generate.
        * @default 1
        */
-      num_images?: number;
+      num_images: number;
       /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
       /**
        * @description Height of output image, in pixels.
        * @default 1024
        */
-      height?: number;
+      height: number;
       /**
        * @description Width of output image, in pixels.
        * @default 1024
        */
-      width?: number;
+      width: number;
       /** @description Seeds for deterministic generation. Default is a random seed. */
       seeds?: number[];
     };
@@ -1011,7 +1588,7 @@ export interface components {
        * @description Controls the influence of the image prompt on the generated output.
        * @default 0.5
        */
-      ip_adapter_scale?: number;
+      ip_adapter_scale: number;
       /** @description Negative input prompt. */
       negative_prompt?: string;
       /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
@@ -1020,12 +1597,12 @@ export interface components {
        * @description Width of output image, in pixels.
        * @default 1024
        */
-      width?: number;
+      width: number;
       /**
        * @description Height of output image, in pixels.
        * @default 1024
        */
-      height?: number;
+      height: number;
       /** @description Random noise seeds. Default is random seeds for each generation. */
       seeds?: number[];
     };
@@ -1059,7 +1636,7 @@ export interface components {
        * @description Resolution of the output image, in pixels.
        * @default 1024
        */
-      output_resolution?: number;
+      output_resolution: number;
       /** @description Negative input prompt. */
       negative_prompt?: string;
       /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
@@ -1069,13 +1646,13 @@ export interface components {
        * @description Controls the influence of the input image on the generated output.
        * @default 0.5
        */
-      conditioning_scale?: number;
+      conditioning_scale: number;
       /**
        * Format: float
        * @description Controls how much to transform the input image.
        * @default 0.5
        */
-      strength?: number;
+      strength: number;
       /** @description Random noise seeds. Default is random seeds for each generation. */
       seeds?: number[];
     };
@@ -1088,6 +1665,42 @@ export interface components {
         /** @description The random noise seed used for generation. */
         seed: number;
       }[];
+    };
+    /** StableVideoDiffusionIn */
+    StableVideoDiffusionIn: {
+      /** @description Original image. */
+      image_uri: string;
+      /** @description Use "hosted" to return a video URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the video data will be returned as a base64-encoded string. */
+      store?: string;
+      /**
+       * @description Output video format.
+       * @default gif
+       * @enum {string}
+       */
+      output_format: "gif" | "mp4";
+      /** @description Seed for deterministic generation. Default is a random seed. */
+      seed?: number;
+      /**
+       * @description Frames per second of the generated video.
+       * @default 7
+       */
+      fps: number;
+      /**
+       * @description The motion bucket id to use for the generated video. This can be used to control the motion of the generated video. Increasing the motion bucket id increases the motion of the generated video.
+       * @default 180
+       */
+      motion_bucket_id: number;
+      /**
+       * Format: float
+       * @description The amount of noise added to the conditioning image. The higher the values the less the video resembles the conditioning image. Increasing this value also increases the motion of the generated video.
+       * @default 0.1
+       */
+      noise: number;
+    };
+    /** StableVideoDiffusionOut */
+    StableVideoDiffusionOut: {
+      /** @description Generated video. */
+      video_uri: string;
     };
     /** InpaintImageIn */
     InpaintImageIn: {
@@ -1146,7 +1759,7 @@ export interface components {
        * @description Resolution of the output image, in pixels.
        * @default 1024
        */
-      output_resolution?: number;
+      output_resolution: number;
       /** @description Negative input prompt. */
       negative_prompt?: string;
       /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
@@ -1156,7 +1769,7 @@ export interface components {
        * @description Controls the strength of the generation process.
        * @default 0.8
        */
-      strength?: number;
+      strength: number;
       /** @description Random noise seeds. Default is random seeds for each generation. */
       seeds?: number[];
     };
@@ -1236,12 +1849,12 @@ export interface components {
        * @description Return a mask image instead of the original content.
        * @default false
        */
-      return_mask?: boolean;
+      return_mask: boolean;
       /**
        * @description Invert the mask image. Only takes effect if `return_mask` is true.
        * @default false
        */
-      invert_mask?: boolean;
+      invert_mask: boolean;
       /** @description Hex value background color. Transparent if unset. */
       background_color?: string;
       /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
@@ -1274,7 +1887,7 @@ export interface components {
        * @description Resolution of the output image, in pixels.
        * @default 1024
        */
-      output_resolution?: number;
+      output_resolution: number;
       /** @description Use "hosted" to return an image URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the image data will be returned as a base64-encoded string. */
       store?: string;
     };
@@ -1354,27 +1967,27 @@ export interface components {
        * @description Language of input audio in [ISO-639-1](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes) format.
        * @default en
        */
-      language?: string;
+      language: string;
       /**
        * @description Segment the text into sentences with approximate timestamps.
        * @default false
        */
-      segment?: boolean;
+      segment: boolean;
       /**
        * @description Align transcription to produce more accurate sentence-level timestamps and word-level timestamps. An array of word segments will be included in each sentence segment.
        * @default false
        */
-      align?: boolean;
+      align: boolean;
       /**
        * @description Identify speakers for each segment. Speaker IDs will be included in each segment.
        * @default false
        */
-      diarize?: boolean;
+      diarize: boolean;
       /**
        * @description Suggest automatic chapter markers.
        * @default false
        */
-      suggest_chapters?: boolean;
+      suggest_chapters: boolean;
     };
     /** TranscribedWord */
     TranscribedWord: {
@@ -1508,7 +2121,7 @@ export interface components {
        * @description Language of input text. Supported languages: `en, de, fr, es, it, pt, pl, zh, ar, cs, ru, nl, tr, hu, ko`.
        * @default en
        */
-      language?: string;
+      language: string;
       /** @description Use "hosted" to return an audio URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the audio data will be returned as a base64-encoded string. */
       store?: string;
     };
@@ -1547,7 +2160,7 @@ export interface components {
        * @default jina-v2
        * @enum {string}
        */
-      model?: "jina-v2" | "clip";
+      model: "jina-v2" | "clip";
     };
     /** EmbedTextOut */
     EmbedTextOut: {
@@ -1596,7 +2209,7 @@ export interface components {
        * @default jina-v2
        * @enum {string}
        */
-      model?: "jina-v2" | "clip";
+      model: "jina-v2" | "clip";
     };
     /** MultiEmbedTextOut */
     MultiEmbedTextOut: {
@@ -1657,7 +2270,7 @@ export interface components {
        * @default clip
        * @enum {string}
        */
-      model?: "clip";
+      model: "clip";
     };
     /** EmbedImageOut */
     EmbedImageOut: {
@@ -1709,7 +2322,7 @@ export interface components {
        * @default clip
        * @enum {string}
        */
-      model?: "clip";
+      model: "clip";
     };
     /** MultiEmbedImageOut */
     MultiEmbedImageOut: {
@@ -1933,27 +2546,27 @@ export interface components {
        * @description Number of results to return.
        * @default 10
        */
-      top_k?: number;
+      top_k: number;
       /**
        * @description The size of the dynamic candidate list for searching the index graph.
        * @default 40
        */
-      ef_search?: number;
+      ef_search: number;
       /**
        * @description The number of leaves in the index tree to search.
        * @default 40
        */
-      num_leaves_to_search?: number;
+      num_leaves_to_search: number;
       /**
        * @description Include the values of the vectors in the response.
        * @default false
        */
-      include_values?: boolean;
+      include_values: boolean;
       /**
        * @description Include the metadata of the vectors in the response.
        * @default false
        */
-      include_metadata?: boolean;
+      include_metadata: boolean;
       /** @description Filter metadata by key-value pairs. */
       filters?: {
         [key: string]: unknown;
@@ -2037,27 +2650,23 @@ export interface components {
   headers: never;
   pathItems: never;
 }
-
 export type $defs = Record<string, never>;
-
-export type external = Record<string, never>;
-
 export interface operations {
-  /**
-   * Experimental
-   * @description Experimental node.
-   */
   Experimental: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody?: {
       content: {
-        /**
-         * @example {
-         *   "name": "some_name",
-         *   "args": {
-         *     "foo": "bar"
-         *   }
-         * }
-         */
+        /** @example {
+         *       "name": "some_name",
+         *       "args": {
+         *         "foo": "bar"
+         *       }
+         *     } */
         "application/json": {
           /** @description Identifier. */
           name: string;
@@ -2076,6 +2685,9 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": {
             /** @description Response. */
@@ -2087,27 +2699,27 @@ export interface operations {
       };
     };
   };
-  /**
-   * Box
-   * @description Combine multiple values into a single output.
-   */
   Box: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody?: {
       content: {
-        /**
-         * @example {
-         *   "value": {
-         *     "a": "b",
-         *     "c": {
-         *       "d": [
-         *         1,
-         *         2,
-         *         3
-         *       ]
-         *     }
-         *   }
-         * }
-         */
+        /** @example {
+         *       "value": {
+         *         "a": "b",
+         *         "c": {
+         *           "d": [
+         *             1,
+         *             2,
+         *             3
+         *           ]
+         *         }
+         *       }
+         *     } */
         "application/json": {
           /** @description Values to box. */
           value: unknown;
@@ -2117,6 +2729,9 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": {
             /** @description The evaluated result. */
@@ -2126,20 +2741,20 @@ export interface operations {
       };
     };
   };
-  /**
-   * If
-   * @description Return one of two options based on a condition.
-   */
   If: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody?: {
       content: {
-        /**
-         * @example {
-         *   "condition": true,
-         *   "value_if_true": "yes",
-         *   "value_if_false": "no"
-         * }
-         */
+        /** @example {
+         *       "condition": true,
+         *       "value_if_true": "yes",
+         *       "value_if_false": "no"
+         *     } */
         "application/json": {
           /** @description Condition. */
           condition: boolean;
@@ -2153,6 +2768,9 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": {
             /** @description Result. Null if `value_if_false` is not provided and `condition` is false. */
@@ -2162,22 +2780,22 @@ export interface operations {
       };
     };
   };
-  /**
-   * RunPython
-   * @description Run code using a Python interpreter.
-   */
   RunPython: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody?: {
       content: {
-        /**
-         * @example {
-         *   "pkl_function": "g2UjA5fX2t3ZGVmYXVsdHNfX5ROjAxfX2RlZmF1bHRzX1+UTowKX19tb2R1bGVfX5SMCF9fbWFpbl9flIwHX19kb2NfX5ROjAtfX2Nsb3N1cmVfX5ROjBdfY2xvdWRwaWNrbGVfc3VibW9kdWxlc5RdlIwLX19nbG9iYWxzX1+UfZR1hpSGUjAu",
-         *   "kwargs": {},
-         *   "pip_install": [
-         *     "numpy"
-         *   ]
-         * }
-         */
+        /** @example {
+         *       "pkl_function": "g2UjA5fX2t3ZGVmYXVsdHNfX5ROjAxfX2RlZmF1bHRzX1+UTowKX19tb2R1bGVfX5SMCF9fbWFpbl9flIwHX19kb2NfX5ROjAtfX2Nsb3N1cmVfX5ROjBdfY2xvdWRwaWNrbGVfc3VibW9kdWxlc5RdlIwLX19nbG9iYWxzX1+UfZR1hpSGUjAu",
+         *       "kwargs": {},
+         *       "pip_install": [
+         *         "numpy"
+         *       ]
+         *     } */
         "application/json": {
           /** @description Pickled function. */
           pkl_function?: string;
@@ -2195,6 +2813,9 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": {
             /** @description Return value of your function. */
@@ -2210,20 +2831,20 @@ export interface operations {
       };
     };
   };
-  /**
-   * ComputeText
-   * @description Compute text using a language model.
-   */
   ComputeText: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody?: {
       content: {
-        /**
-         * @example {
-         *   "prompt": "Who is Don Quixote?",
-         *   "temperature": 0.4,
-         *   "max_tokens": 800
-         * }
-         */
+        /** @example {
+         *       "prompt": "Who is Don Quixote?",
+         *       "temperature": 0.4,
+         *       "max_tokens": 800
+         *     } */
         "application/json": {
           /** @description Input prompt. */
           prompt: string;
@@ -2257,6 +2878,9 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": {
             /** @description Text response. */
@@ -2266,20 +2890,20 @@ export interface operations {
       };
     };
   };
-  /**
-   * MultiComputeText
-   * @description Generate multiple text choices using a language model.
-   */
   MultiComputeText: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody?: {
       content: {
-        /**
-         * @example {
-         *   "prompt": "Who is Don Quixote?",
-         *   "num_choices": 2,
-         *   "max_tokens": 800
-         * }
-         */
+        /** @example {
+         *       "prompt": "Who is Don Quixote?",
+         *       "num_choices": 2,
+         *       "max_tokens": 800
+         *     } */
         "application/json": {
           /** @description Input prompt. */
           prompt: string;
@@ -2312,6 +2936,9 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": {
             /** @description Response choices. */
@@ -2324,22 +2951,22 @@ export interface operations {
       };
     };
   };
-  /**
-   * BatchComputeText
-   * @description Compute text for multiple prompts in batch using a language model.
-   */
   BatchComputeText: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody?: {
       content: {
-        /**
-         * @example {
-         *   "prompts": [
-         *     "Who is Don Quixote?",
-         *     "Who is Sancho Panza?"
-         *   ],
-         *   "max_tokens": 800
-         * }
-         */
+        /** @example {
+         *       "prompts": [
+         *         "Who is Don Quixote?",
+         *         "Who is Sancho Panza?"
+         *       ],
+         *       "max_tokens": 800
+         *     } */
         "application/json": {
           /** @description Batch input prompts. */
           prompts: string[];
@@ -2363,6 +2990,9 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": {
             /** @description Batch outputs. */
@@ -2375,35 +3005,35 @@ export interface operations {
       };
     };
   };
-  /**
-   * BatchComputeJSON
-   * @description Compute JSON for multiple prompts in batch using a language model.
-   */
   BatchComputeJSON: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody?: {
       content: {
-        /**
-         * @example {
-         *   "prompts": [
-         *     "Who is Don Quixote?",
-         *     "Who is Sancho Panza?"
-         *   ],
-         *   "max_tokens": 800,
-         *   "json_schema": {
-         *     "type": "object",
-         *     "properties": {
-         *       "name": {
-         *         "type": "string",
-         *         "description": "The name of the character."
-         *       },
-         *       "bio": {
-         *         "type": "string",
-         *         "description": "Concise biography of the character."
+        /** @example {
+         *       "prompts": [
+         *         "Who is Don Quixote?",
+         *         "Who is Sancho Panza?"
+         *       ],
+         *       "max_tokens": 800,
+         *       "json_schema": {
+         *         "type": "object",
+         *         "properties": {
+         *           "name": {
+         *             "type": "string",
+         *             "description": "The name of the character."
+         *           },
+         *           "bio": {
+         *             "type": "string",
+         *             "description": "Concise biography of the character."
+         *           }
+         *         }
          *       }
-         *     }
-         *   }
-         * }
-         */
+         *     } */
         "application/json": {
           /** @description Batch input prompts. */
           prompts: string[];
@@ -2431,6 +3061,9 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": {
             /** @description Batch outputs. */
@@ -2447,33 +3080,33 @@ export interface operations {
       };
     };
   };
-  /**
-   * ComputeJSON
-   * @description Compute JSON using a language model.
-   */
   ComputeJSON: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody?: {
       content: {
-        /**
-         * @example {
-         *   "prompt": "Who wrote Don Quixote?",
-         *   "json_schema": {
-         *     "type": "object",
-         *     "properties": {
-         *       "name": {
-         *         "type": "string",
-         *         "description": "The name of the author."
+        /** @example {
+         *       "prompt": "Who wrote Don Quixote?",
+         *       "json_schema": {
+         *         "type": "object",
+         *         "properties": {
+         *           "name": {
+         *             "type": "string",
+         *             "description": "The name of the author."
+         *           },
+         *           "bio": {
+         *             "type": "string",
+         *             "description": "Concise biography of the author."
+         *           }
+         *         }
          *       },
-         *       "bio": {
-         *         "type": "string",
-         *         "description": "Concise biography of the author."
-         *       }
-         *     }
-         *   },
-         *   "temperature": 0.4,
-         *   "max_tokens": 800
-         * }
-         */
+         *       "temperature": 0.4,
+         *       "max_tokens": 800
+         *     } */
         "application/json": {
           /** @description Input prompt. */
           prompt: string;
@@ -2504,6 +3137,9 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": {
             /** @description JSON response. */
@@ -2517,34 +3153,34 @@ export interface operations {
       };
     };
   };
-  /**
-   * MultiComputeJSON
-   * @description Compute multiple JSON choices using a language model.
-   */
   MultiComputeJSON: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody?: {
       content: {
-        /**
-         * @example {
-         *   "prompt": "Who wrote Don Quixote?",
-         *   "json_schema": {
-         *     "type": "object",
-         *     "properties": {
-         *       "name": {
-         *         "type": "string",
-         *         "description": "The name of the author."
+        /** @example {
+         *       "prompt": "Who wrote Don Quixote?",
+         *       "json_schema": {
+         *         "type": "object",
+         *         "properties": {
+         *           "name": {
+         *             "type": "string",
+         *             "description": "The name of the author."
+         *           },
+         *           "bio": {
+         *             "type": "string",
+         *             "description": "Concise biography of the author."
+         *           }
+         *         }
          *       },
-         *       "bio": {
-         *         "type": "string",
-         *         "description": "Concise biography of the author."
-         *       }
-         *     }
-         *   },
-         *   "num_choices": 2,
-         *   "temperature": 0.4,
-         *   "max_tokens": 800
-         * }
-         */
+         *       "num_choices": 2,
+         *       "temperature": 0.4,
+         *       "max_tokens": 800
+         *     } */
         "application/json": {
           /** @description Input prompt. */
           prompt: string;
@@ -2580,6 +3216,9 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": {
             /** @description Response choices. */
@@ -2596,21 +3235,21 @@ export interface operations {
       };
     };
   };
-  /**
-   * Mistral7BInstruct
-   * @description Compute text using [Mistral 7B Instruct](https://mistral.ai/news/announcing-mistral-7b).
-   */
   Mistral7BInstruct: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody?: {
       content: {
-        /**
-         * @example {
-         *   "prompt": "Who is Don Quixote?",
-         *   "num_choices": 2,
-         *   "temperature": 0.4,
-         *   "max_tokens": 800
-         * }
-         */
+        /** @example {
+         *       "prompt": "Who is Don Quixote?",
+         *       "num_choices": 2,
+         *       "temperature": 0.4,
+         *       "max_tokens": 800
+         *     } */
         "application/json": {
           /** @description Input prompt. */
           prompt: string;
@@ -2662,6 +3301,9 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": {
             /** @description Response choices. */
@@ -2678,21 +3320,21 @@ export interface operations {
       };
     };
   };
-  /**
-   * Mixtral8x7BInstruct
-   * @description Compute text using instruct-tuned [Mixtral 8x7B](https://mistral.ai/news/mixtral-of-experts/).
-   */
   Mixtral8x7BInstruct: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody?: {
       content: {
-        /**
-         * @example {
-         *   "prompt": "Who is Don Quixote?",
-         *   "num_choices": 2,
-         *   "temperature": 0.4,
-         *   "max_tokens": 800
-         * }
-         */
+        /** @example {
+         *       "prompt": "Who is Don Quixote?",
+         *       "num_choices": 2,
+         *       "temperature": 0.4,
+         *       "max_tokens": 800
+         *     } */
         "application/json": {
           /** @description Input prompt. */
           prompt: string;
@@ -2744,6 +3386,9 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": {
             /** @description Response choices. */
@@ -2760,21 +3405,21 @@ export interface operations {
       };
     };
   };
-  /**
-   * Llama3Instruct8B
-   * @description Compute text using instruct-tuned [Llama 3 8B](https://llama.meta.com/llama3/).
-   */
   Llama3Instruct8B: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody?: {
       content: {
-        /**
-         * @example {
-         *   "prompt": "Who is Don Quixote?",
-         *   "num_choices": 2,
-         *   "temperature": 0.4,
-         *   "max_tokens": 800
-         * }
-         */
+        /** @example {
+         *       "prompt": "Who is Don Quixote?",
+         *       "num_choices": 2,
+         *       "temperature": 0.4,
+         *       "max_tokens": 800
+         *     } */
         "application/json": {
           /** @description Input prompt. */
           prompt: string;
@@ -2826,6 +3471,9 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": {
             /** @description Response choices. */
@@ -2842,21 +3490,21 @@ export interface operations {
       };
     };
   };
-  /**
-   * Llama3Instruct70B
-   * @description Compute text using instruct-tuned [Llama 3 70B](https://llama.meta.com/llama3/).
-   */
   Llama3Instruct70B: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody?: {
       content: {
-        /**
-         * @example {
-         *   "prompt": "Who is Don Quixote?",
-         *   "num_choices": 2,
-         *   "temperature": 0.4,
-         *   "max_tokens": 800
-         * }
-         */
+        /** @example {
+         *       "prompt": "Who is Don Quixote?",
+         *       "num_choices": 2,
+         *       "temperature": 0.4,
+         *       "max_tokens": 800
+         *     } */
         "application/json": {
           /** @description Input prompt. */
           prompt: string;
@@ -2904,6 +3552,9 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": {
             /** @description Response choices. */
@@ -2916,22 +3567,22 @@ export interface operations {
       };
     };
   };
-  /**
-   * Firellava13B
-   * @description Compute text with image input using [FireLLaVA 13B](https://fireworks.ai/blog/firellava-the-first-commercially-permissive-oss-llava-model).
-   */
   Firellava13B: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody?: {
       content: {
-        /**
-         * @example {
-         *   "prompt": "what are these paintings of and who made them?",
-         *   "image_uris": [
-         *     "https://media.substrate.run/docs-fuji-red.jpg",
-         *     "https://media.substrate.run/docs-fuji-blue.jpg"
-         *   ]
-         * }
-         */
+        /** @example {
+         *       "prompt": "what are these paintings of and who made them?",
+         *       "image_uris": [
+         *         "https://media.substrate.run/docs-fuji-red.jpg",
+         *         "https://media.substrate.run/docs-fuji-blue.jpg"
+         *       ]
+         *     } */
         "application/json": {
           /** @description Text prompt. */
           prompt: string;
@@ -2945,6 +3596,9 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": {
             /** @description Text response. */
@@ -2954,19 +3608,19 @@ export interface operations {
       };
     };
   };
-  /**
-   * GenerateImage
-   * @description Generate an image.
-   */
   GenerateImage: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody?: {
       content: {
-        /**
-         * @example {
-         *   "prompt": "hokusai futuristic supercell spiral cloud with glowing core over turbulent ocean",
-         *   "store": "hosted"
-         * }
-         */
+        /** @example {
+         *       "prompt": "hokusai futuristic supercell spiral cloud with glowing core over turbulent ocean",
+         *       "store": "hosted"
+         *     } */
         "application/json": {
           /** @description Text prompt. */
           prompt: string;
@@ -2978,6 +3632,9 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": {
             /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
@@ -2987,20 +3644,20 @@ export interface operations {
       };
     };
   };
-  /**
-   * MultiGenerateImage
-   * @description Generate multiple images.
-   */
   MultiGenerateImage: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody?: {
       content: {
-        /**
-         * @example {
-         *   "prompt": "hokusai futuristic supercell spiral cloud with glowing core over turbulent ocean",
-         *   "num_images": 2,
-         *   "store": "hosted"
-         * }
-         */
+        /** @example {
+         *       "prompt": "hokusai futuristic supercell spiral cloud with glowing core over turbulent ocean",
+         *       "num_images": 2,
+         *       "store": "hosted"
+         *     } */
         "application/json": {
           /** @description Text prompt. */
           prompt: string;
@@ -3017,6 +3674,9 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": {
             /** @description Generated images. */
@@ -3029,21 +3689,21 @@ export interface operations {
       };
     };
   };
-  /**
-   * InpaintImage
-   * @description Edit an image using image generation inside part of the image or the full image.
-   */
   InpaintImage: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody?: {
       content: {
-        /**
-         * @example {
-         *   "image_uri": "https://media.substrate.run/docs-klimt-park.jpg",
-         *   "mask_image_uri": "https://media.substrate.run/spiral-logo.jpeg",
-         *   "prompt": "large tropical colorful bright anime birds in a dark jungle full of vines, high resolution",
-         *   "store": "hosted"
-         * }
-         */
+        /** @example {
+         *       "image_uri": "https://media.substrate.run/docs-klimt-park.jpg",
+         *       "mask_image_uri": "https://media.substrate.run/spiral-logo.jpeg",
+         *       "prompt": "large tropical colorful bright anime birds in a dark jungle full of vines, high resolution",
+         *       "store": "hosted"
+         *     } */
         "application/json": {
           /** @description Original image. */
           image_uri: string;
@@ -3059,6 +3719,9 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": {
             /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
@@ -3068,22 +3731,22 @@ export interface operations {
       };
     };
   };
-  /**
-   * MultiInpaintImage
-   * @description Edit multiple images using image generation.
-   */
   MultiInpaintImage: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody?: {
       content: {
-        /**
-         * @example {
-         *   "image_uri": "https://media.substrate.run/docs-klimt-park.jpg",
-         *   "mask_image_uri": "https://media.substrate.run/spiral-logo.jpeg",
-         *   "prompt": "large tropical colorful bright anime birds in a dark jungle full of vines, high resolution",
-         *   "num_images": 2,
-         *   "store": "hosted"
-         * }
-         */
+        /** @example {
+         *       "image_uri": "https://media.substrate.run/docs-klimt-park.jpg",
+         *       "mask_image_uri": "https://media.substrate.run/spiral-logo.jpeg",
+         *       "prompt": "large tropical colorful bright anime birds in a dark jungle full of vines, high resolution",
+         *       "num_images": 2,
+         *       "store": "hosted"
+         *     } */
         "application/json": {
           /** @description Original image. */
           image_uri: string;
@@ -3104,6 +3767,9 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": {
             /** @description Generated images. */
@@ -3116,25 +3782,25 @@ export interface operations {
       };
     };
   };
-  /**
-   * StableDiffusionXLLightning
-   * @description Generate an image using [Stable Diffusion XL Lightning](https://arxiv.org/abs/2402.13929).
-   */
   StableDiffusionXLLightning: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody?: {
       content: {
-        /**
-         * @example {
-         *   "prompt": "hokusai futuristic supercell spiral cloud with glowing core over turbulent ocean",
-         *   "negative_prompt": "night, moon",
-         *   "num_images": 2,
-         *   "seeds": [
-         *     330699,
-         *     136464
-         *   ],
-         *   "store": "hosted"
-         * }
-         */
+        /** @example {
+         *       "prompt": "hokusai futuristic supercell spiral cloud with glowing core over turbulent ocean",
+         *       "negative_prompt": "night, moon",
+         *       "num_images": 2,
+         *       "seeds": [
+         *         330699,
+         *         136464
+         *       ],
+         *       "store": "hosted"
+         *     } */
         "application/json": {
           /** @description Text prompt. */
           prompt: string;
@@ -3165,6 +3831,9 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": {
             /** @description Generated images. */
@@ -3179,28 +3848,28 @@ export interface operations {
       };
     };
   };
-  /**
-   * StableDiffusionXLInpaint
-   * @description Edit an image using [Stable Diffusion XL](https://arxiv.org/abs/2307.01952). Supports inpainting (edit part of the image with a mask) and image-to-image (edit the full image).
-   */
   StableDiffusionXLInpaint: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody?: {
       content: {
-        /**
-         * @example {
-         *   "image_uri": "https://media.substrate.run/docs-klimt-park.jpg",
-         *   "mask_image_uri": "https://media.substrate.run/spiral-logo.jpeg",
-         *   "prompt": "large tropical colorful bright birds in a jungle, high resolution oil painting",
-         *   "negative_prompt": "dark, cartoon, anime",
-         *   "strength": 0.8,
-         *   "num_images": 2,
-         *   "store": "hosted",
-         *   "seeds": [
-         *     1607280,
-         *     1720395
-         *   ]
-         * }
-         */
+        /** @example {
+         *       "image_uri": "https://media.substrate.run/docs-klimt-park.jpg",
+         *       "mask_image_uri": "https://media.substrate.run/spiral-logo.jpeg",
+         *       "prompt": "large tropical colorful bright birds in a jungle, high resolution oil painting",
+         *       "negative_prompt": "dark, cartoon, anime",
+         *       "strength": 0.8,
+         *       "num_images": 2,
+         *       "store": "hosted",
+         *       "seeds": [
+         *         1607280,
+         *         1720395
+         *       ]
+         *     } */
         "application/json": {
           /** @description Original image. */
           image_uri: string;
@@ -3236,6 +3905,9 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": {
             /** @description Generated images. */
@@ -3250,28 +3922,28 @@ export interface operations {
       };
     };
   };
-  /**
-   * StableDiffusionXLControlNet
-   * @description Generate an image with generation structured by an input image, using Stable Diffusion XL with [ControlNet](https://arxiv.org/abs/2302.05543).
-   */
   StableDiffusionXLControlNet: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody?: {
       content: {
-        /**
-         * @example {
-         *   "image_uri": "https://media.substrate.run/spiral-logo.jpeg",
-         *   "prompt": "the futuristic solarpunk city of atlantis at sunset, cinematic bokeh HD",
-         *   "control_method": "illusion",
-         *   "conditioning_scale": 1,
-         *   "strength": 1,
-         *   "store": "hosted",
-         *   "num_images": 2,
-         *   "seeds": [
-         *     1607226,
-         *     1720395
-         *   ]
-         * }
-         */
+        /** @example {
+         *       "image_uri": "https://media.substrate.run/spiral-logo.jpeg",
+         *       "prompt": "the futuristic solarpunk city of atlantis at sunset, cinematic bokeh HD",
+         *       "control_method": "illusion",
+         *       "conditioning_scale": 1,
+         *       "strength": 1,
+         *       "store": "hosted",
+         *       "num_images": 2,
+         *       "seeds": [
+         *         1607226,
+         *         1720395
+         *       ]
+         *     } */
         "application/json": {
           /** @description Input image. */
           image_uri: string;
@@ -3316,6 +3988,9 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": {
             /** @description Generated images. */
@@ -3330,23 +4005,83 @@ export interface operations {
       };
     };
   };
-  /**
-   * TranscribeSpeech
-   * @description Transcribe speech in an audio or video file.
-   */
-  TranscribeSpeech: {
+  StableVideoDiffusion: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody?: {
       content: {
-        /**
-         * @example {
-         *   "audio_uri": "https://media.substrate.run/dfw-clip.m4a",
-         *   "prompt": "David Foster Wallace interviewed about US culture, and Infinite Jest",
-         *   "segment": true,
-         *   "align": true,
-         *   "diarize": true,
-         *   "suggest_chapters": true
-         * }
-         */
+        /** @example {
+         *       "image_uri": "https://media.substrate.run/apple-forest.jpeg",
+         *       "store": "hosted"
+         *     } */
+        "application/json": {
+          /** @description Original image. */
+          image_uri: string;
+          /** @description Use "hosted" to return a video URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the video data will be returned as a base64-encoded string. */
+          store?: string;
+          /**
+           * @description Output video format.
+           * @default gif
+           * @enum {string}
+           */
+          output_format?: "gif" | "mp4";
+          /** @description Seed for deterministic generation. Default is a random seed. */
+          seed?: number;
+          /**
+           * @description Frames per second of the generated video.
+           * @default 7
+           */
+          fps?: number;
+          /**
+           * @description The motion bucket id to use for the generated video. This can be used to control the motion of the generated video. Increasing the motion bucket id increases the motion of the generated video.
+           * @default 180
+           */
+          motion_bucket_id?: number;
+          /**
+           * Format: float
+           * @description The amount of noise added to the conditioning image. The higher the values the less the video resembles the conditioning image. Increasing this value also increases the motion of the generated video.
+           * @default 0.1
+           */
+          noise?: number;
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description Generated video. */
+            video_uri: string;
+          };
+        };
+      };
+    };
+  };
+  TranscribeSpeech: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: {
+      content: {
+        /** @example {
+         *       "audio_uri": "https://media.substrate.run/dfw-clip.m4a",
+         *       "prompt": "David Foster Wallace interviewed about US culture, and Infinite Jest",
+         *       "segment": true,
+         *       "align": true,
+         *       "diarize": true,
+         *       "suggest_chapters": true
+         *     } */
         "application/json": {
           /** @description Input audio. */
           audio_uri: string;
@@ -3383,6 +4118,9 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": {
             /** @description Transcribed text. */
@@ -3436,19 +4174,19 @@ export interface operations {
       };
     };
   };
-  /**
-   * GenerateSpeech
-   * @description Generate speech from text.
-   */
   GenerateSpeech: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody?: {
       content: {
-        /**
-         * @example {
-         *   "text": "Substrate: an underlying substance or layer.",
-         *   "store": "hosted"
-         * }
-         */
+        /** @example {
+         *       "text": "Substrate: an underlying substance or layer.",
+         *       "store": "hosted"
+         *     } */
         "application/json": {
           /** @description Input text. */
           text: string;
@@ -3460,6 +4198,9 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": {
             /** @description Base 64-encoded WAV audio bytes, or a hosted audio url if `store` is provided. */
@@ -3469,19 +4210,19 @@ export interface operations {
       };
     };
   };
-  /**
-   * RemoveBackground
-   * @description Remove the background from an image and return the foreground segment as a cut-out or a mask.
-   */
   RemoveBackground: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody?: {
       content: {
-        /**
-         * @example {
-         *   "image_uri": "https://media.substrate.run/apple-forest.jpeg",
-         *   "store": "hosted"
-         * }
-         */
+        /** @example {
+         *       "image_uri": "https://media.substrate.run/apple-forest.jpeg",
+         *       "store": "hosted"
+         *     } */
         "application/json": {
           /** @description Input image. */
           image_uri: string;
@@ -3505,6 +4246,9 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": {
             /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
@@ -3514,20 +4258,20 @@ export interface operations {
       };
     };
   };
-  /**
-   * EraseImage
-   * @description Erase the masked part of an image, e.g. to remove an object by inpainting.
-   */
   EraseImage: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody?: {
       content: {
-        /**
-         * @example {
-         *   "image_uri": "https://media.substrate.run/apple-forest.jpeg",
-         *   "mask_image_uri": "https://media.substrate.run/apple-forest-mask.jpeg",
-         *   "store": "hosted"
-         * }
-         */
+        /** @example {
+         *       "image_uri": "https://media.substrate.run/apple-forest.jpeg",
+         *       "mask_image_uri": "https://media.substrate.run/apple-forest-mask.jpeg",
+         *       "store": "hosted"
+         *     } */
         "application/json": {
           /** @description Input image. */
           image_uri: string;
@@ -3541,6 +4285,9 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": {
             /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
@@ -3550,20 +4297,20 @@ export interface operations {
       };
     };
   };
-  /**
-   * UpscaleImage
-   * @description Upscale an image using image generation.
-   */
   UpscaleImage: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody?: {
       content: {
-        /**
-         * @example {
-         *   "prompt": "high resolution detailed spiral shell",
-         *   "image_uri": "https://media.substrate.run/docs-shell-emoji.jpg",
-         *   "store": "hosted"
-         * }
-         */
+        /** @example {
+         *       "prompt": "high resolution detailed spiral shell",
+         *       "image_uri": "https://media.substrate.run/docs-shell-emoji.jpg",
+         *       "store": "hosted"
+         *     } */
         "application/json": {
           /** @description Prompt to guide model on the content of image to upscale. */
           prompt?: string;
@@ -3582,6 +4329,9 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": {
             /** @description Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
@@ -3591,23 +4341,23 @@ export interface operations {
       };
     };
   };
-  /**
-   * SegmentUnderPoint
-   * @description Segment an image under a point and return the segment.
-   */
   SegmentUnderPoint: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody?: {
       content: {
-        /**
-         * @example {
-         *   "image_uri": "https://media.substrate.run/docs-vg-bedroom.jpg",
-         *   "point": {
-         *     "x": 189,
-         *     "y": 537
-         *   },
-         *   "store": "hosted"
-         * }
-         */
+        /** @example {
+         *       "image_uri": "https://media.substrate.run/docs-vg-bedroom.jpg",
+         *       "point": {
+         *         "x": 189,
+         *         "y": 537
+         *       },
+         *       "store": "hosted"
+         *     } */
         "application/json": {
           /** @description Input image. */
           image_uri: string;
@@ -3626,6 +4376,9 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": {
             /** @description Detected segments in 'mask image' format. Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
@@ -3635,25 +4388,25 @@ export interface operations {
       };
     };
   };
-  /**
-   * SegmentAnything
-   * @description Segment an image using [SegmentAnything](https://github.com/facebookresearch/segment-anything).
-   */
   SegmentAnything: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody?: {
       content: {
-        /**
-         * @example {
-         *   "image_uri": "https://media.substrate.run/docs-vg-bedroom.jpg",
-         *   "point_prompts": [
-         *     {
-         *       "x": 189,
-         *       "y": 537
-         *     }
-         *   ],
-         *   "store": "hosted"
-         * }
-         */
+        /** @example {
+         *       "image_uri": "https://media.substrate.run/docs-vg-bedroom.jpg",
+         *       "point_prompts": [
+         *         {
+         *           "x": 189,
+         *           "y": 537
+         *         }
+         *       ],
+         *       "store": "hosted"
+         *     } */
         "application/json": {
           /** @description Input image. */
           image_uri: string;
@@ -3695,6 +4448,9 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": {
             /** @description Detected segments in 'mask image' format. Base 64-encoded JPEG image bytes, or a hosted image url if `store` is provided. */
@@ -3704,22 +4460,22 @@ export interface operations {
       };
     };
   };
-  /**
-   * SplitDocument
-   * @description Split document into text segments.
-   */
   SplitDocument: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody?: {
       content: {
-        /**
-         * @example {
-         *   "doc_id": "example_pdf",
-         *   "uri": "https://arxiv.org/pdf/2405.07945",
-         *   "metadata": {
-         *     "title": "GRASS II: Simulations of Potential Granulation Noise Mitigation Methods"
-         *   }
-         * }
-         */
+        /** @example {
+         *       "doc_id": "example_pdf",
+         *       "uri": "https://arxiv.org/pdf/2405.07945",
+         *       "metadata": {
+         *         "title": "GRASS II: Simulations of Potential Granulation Noise Mitigation Methods"
+         *       }
+         *     } */
         "application/json": {
           /** @description URI of the document. */
           uri: string;
@@ -3739,6 +4495,9 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": {
             /** @description Document chunks */
@@ -3757,26 +4516,26 @@ export interface operations {
       };
     };
   };
-  /**
-   * EmbedText
-   * @description Generate embedding for a text document.
-   */
   EmbedText: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody?: {
       content: {
-        /**
-         * @example {
-         *   "text": "Argon is the third most abundant gas in Earth's atmosphere, at 0.934% (9340 ppmv). It is more than twice as abundant as water vapor.",
-         *   "model": "jina-v2",
-         *   "collection_name": "smoke_tests",
-         *   "metadata": {
-         *     "group": "18"
-         *   },
-         *   "embedded_metadata_keys": [
-         *     "group"
-         *   ]
-         * }
-         */
+        /** @example {
+         *       "text": "Argon is the third most abundant gas in Earth's atmosphere, at 0.934% (9340 ppmv). It is more than twice as abundant as water vapor.",
+         *       "model": "jina-v2",
+         *       "collection_name": "smoke_tests",
+         *       "metadata": {
+         *         "group": "18"
+         *       },
+         *       "embedded_metadata_keys": [
+         *         "group"
+         *       ]
+         *     } */
         "application/json": {
           /** @description Text to embed. */
           text: string;
@@ -3802,6 +4561,9 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": {
             /** Embedding */
@@ -3820,36 +4582,36 @@ export interface operations {
       };
     };
   };
-  /**
-   * MultiEmbedText
-   * @description Generate embeddings for multiple text documents.
-   */
   MultiEmbedText: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody?: {
       content: {
-        /**
-         * @example {
-         *   "model": "jina-v2",
-         *   "items": [
-         *     {
-         *       "text": "Osmium is the densest naturally occurring element. When experimentally measured using X-ray crystallography, it has a density of 22.59 g/cm3. Manufacturers use its alloys with platinum, iridium, and other platinum-group metals to make fountain pen nib tipping, electrical contacts, and in other applications that require extreme durability and hardness.",
-         *       "metadata": {
-         *         "group": "8"
-         *       }
-         *     },
-         *     {
-         *       "text": "Despite its abundant presence in the universe and Solar System—ranking fifth in cosmic abundance following hydrogen, helium, oxygen, and carbon—neon is comparatively scarce on Earth.",
-         *       "metadata": {
-         *         "group": "18"
-         *       }
-         *     }
-         *   ],
-         *   "collection_name": "smoke_tests",
-         *   "embedded_metadata_keys": [
-         *     "group"
-         *   ]
-         * }
-         */
+        /** @example {
+         *       "model": "jina-v2",
+         *       "items": [
+         *         {
+         *           "text": "Osmium is the densest naturally occurring element. When experimentally measured using X-ray crystallography, it has a density of 22.59 g/cm3. Manufacturers use its alloys with platinum, iridium, and other platinum-group metals to make fountain pen nib tipping, electrical contacts, and in other applications that require extreme durability and hardness.",
+         *           "metadata": {
+         *             "group": "8"
+         *           }
+         *         },
+         *         {
+         *           "text": "Despite its abundant presence in the universe and Solar System—ranking fifth in cosmic abundance following hydrogen, helium, oxygen, and carbon—neon is comparatively scarce on Earth.",
+         *           "metadata": {
+         *             "group": "18"
+         *           }
+         *         }
+         *       ],
+         *       "collection_name": "smoke_tests",
+         *       "embedded_metadata_keys": [
+         *         "group"
+         *       ]
+         *     } */
         "application/json": {
           /** @description Items to embed. */
           items: {
@@ -3878,6 +4640,9 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": {
             /** @description Generated embeddings. */
@@ -3896,19 +4661,19 @@ export interface operations {
       };
     };
   };
-  /**
-   * EmbedImage
-   * @description Generate embedding for an image.
-   */
   EmbedImage: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody?: {
       content: {
-        /**
-         * @example {
-         *   "image_uri": "https://media.substrate.run/docs-fuji-red.jpg",
-         *   "collection_name": "smoke_tests"
-         * }
-         */
+        /** @example {
+         *       "image_uri": "https://media.substrate.run/docs-fuji-red.jpg",
+         *       "collection_name": "smoke_tests"
+         *     } */
         "application/json": {
           /** @description Image to embed. */
           image_uri: string;
@@ -3928,6 +4693,9 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": {
             /** Embedding */
@@ -3946,26 +4714,26 @@ export interface operations {
       };
     };
   };
-  /**
-   * MultiEmbedImage
-   * @description Generate embeddings for multiple images.
-   */
   MultiEmbedImage: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody?: {
       content: {
-        /**
-         * @example {
-         *   "items": [
-         *     {
-         *       "image_uri": "https://media.substrate.run/docs-fuji-red.jpg"
-         *     },
-         *     {
-         *       "image_uri": "https://media.substrate.run/docs-fuji-blue.jpg"
-         *     }
-         *   ],
-         *   "collection_name": "smoke_tests"
-         * }
-         */
+        /** @example {
+         *       "items": [
+         *         {
+         *           "image_uri": "https://media.substrate.run/docs-fuji-red.jpg"
+         *         },
+         *         {
+         *           "image_uri": "https://media.substrate.run/docs-fuji-blue.jpg"
+         *         }
+         *       ],
+         *       "collection_name": "smoke_tests"
+         *     } */
         "application/json": {
           /** @description Items to embed. */
           items: {
@@ -3988,6 +4756,9 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": {
             /** @description Generated embeddings. */
@@ -4006,35 +4777,35 @@ export interface operations {
       };
     };
   };
-  /**
-   * JinaV2
-   * @description Generate embeddings for multiple text documents using [Jina Embeddings 2](https://arxiv.org/abs/2310.19923).
-   */
   JinaV2: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody?: {
       content: {
-        /**
-         * @example {
-         *   "items": [
-         *     {
-         *       "text": "Hassium is a superheavy element; it has been produced in a laboratory only in very small quantities by fusing heavy nuclei with lighter ones. Natural occurrences of the element have been hypothesised but never found.",
-         *       "metadata": {
-         *         "group": "8"
-         *       }
-         *     },
-         *     {
-         *       "text": "Xenon is also used to search for hypothetical weakly interacting massive particles and as a propellant for ion thrusters in spacecraft.",
-         *       "metadata": {
-         *         "group": "18"
-         *       }
-         *     }
-         *   ],
-         *   "collection_name": "smoke_tests",
-         *   "embedded_metadata_keys": [
-         *     "group"
-         *   ]
-         * }
-         */
+        /** @example {
+         *       "items": [
+         *         {
+         *           "text": "Hassium is a superheavy element; it has been produced in a laboratory only in very small quantities by fusing heavy nuclei with lighter ones. Natural occurrences of the element have been hypothesised but never found.",
+         *           "metadata": {
+         *             "group": "8"
+         *           }
+         *         },
+         *         {
+         *           "text": "Xenon is also used to search for hypothetical weakly interacting massive particles and as a propellant for ion thrusters in spacecraft.",
+         *           "metadata": {
+         *             "group": "18"
+         *           }
+         *         }
+         *       ],
+         *       "collection_name": "smoke_tests",
+         *       "embedded_metadata_keys": [
+         *         "group"
+         *       ]
+         *     } */
         "application/json": {
           /** @description Items to embed. */
           items: {
@@ -4057,6 +4828,9 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": {
             /** @description Generated embeddings. */
@@ -4075,26 +4849,26 @@ export interface operations {
       };
     };
   };
-  /**
-   * CLIP
-   * @description Generate embeddings for text or images using [CLIP](https://openai.com/research/clip).
-   */
   CLIP: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody?: {
       content: {
-        /**
-         * @example {
-         *   "items": [
-         *     {
-         *       "image_uri": "https://media.substrate.run/docs-fuji-red.jpg"
-         *     },
-         *     {
-         *       "image_uri": "https://media.substrate.run/docs-fuji-blue.jpg"
-         *     }
-         *   ],
-         *   "collection_name": "smoke_tests"
-         * }
-         */
+        /** @example {
+         *       "items": [
+         *         {
+         *           "image_uri": "https://media.substrate.run/docs-fuji-red.jpg"
+         *         },
+         *         {
+         *           "image_uri": "https://media.substrate.run/docs-fuji-blue.jpg"
+         *         }
+         *       ],
+         *       "collection_name": "smoke_tests"
+         *     } */
         "application/json": {
           /** @description Items to embed. */
           items: {
@@ -4119,6 +4893,9 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": {
             /** @description Generated embeddings. */
@@ -4137,19 +4914,19 @@ export interface operations {
       };
     };
   };
-  /**
-   * FindOrCreateVectorStore
-   * @description Find a vector store matching the given collection name, or create a new vector store.
-   */
   FindOrCreateVectorStore: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody?: {
       content: {
-        /**
-         * @example {
-         *   "collection_name": "smoke_tests",
-         *   "model": "jina-v2"
-         * }
-         */
+        /** @example {
+         *       "collection_name": "smoke_tests",
+         *       "model": "jina-v2"
+         *     } */
         "application/json": {
           /** @description Vector store name. */
           collection_name: string;
@@ -4164,6 +4941,9 @@ export interface operations {
     responses: {
       /** @description Vector store created. */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": {
             /** @description Vector store name. */
@@ -4180,11 +4960,13 @@ export interface operations {
       };
     };
   };
-  /**
-   * ListVectorStores
-   * @description List all vector stores.
-   */
   ListVectorStores: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody?: {
       content: {
         /** @example {} */
@@ -4194,6 +4976,9 @@ export interface operations {
     responses: {
       /** @description List of vector stores. */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": {
             /** @description List of vector stores. */
@@ -4213,19 +4998,19 @@ export interface operations {
       };
     };
   };
-  /**
-   * DeleteVectorStore
-   * @description Delete a vector store.
-   */
   DeleteVectorStore: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody?: {
       content: {
-        /**
-         * @example {
-         *   "collection_name": "fake_store",
-         *   "model": "jina-v2"
-         * }
-         */
+        /** @example {
+         *       "collection_name": "fake_store",
+         *       "model": "jina-v2"
+         *     } */
         "application/json": {
           /** @description Vector store name. */
           collection_name: string;
@@ -4240,6 +5025,9 @@ export interface operations {
     responses: {
       /** @description OK */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": {
             /** @description Vector store name. */
@@ -4254,25 +5042,25 @@ export interface operations {
       };
     };
   };
-  /**
-   * QueryVectorStore
-   * @description Query a vector store for similar vectors.
-   */
   QueryVectorStore: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody?: {
       content: {
-        /**
-         * @example {
-         *   "collection_name": "smoke_tests",
-         *   "model": "jina-v2",
-         *   "query_strings": [
-         *     "gas",
-         *     "metal"
-         *   ],
-         *   "top_k": 1,
-         *   "include_metadata": true
-         * }
-         */
+        /** @example {
+         *       "collection_name": "smoke_tests",
+         *       "model": "jina-v2",
+         *       "query_strings": [
+         *         "gas",
+         *         "metal"
+         *       ],
+         *       "top_k": 1,
+         *       "include_metadata": true
+         *     } */
         "application/json": {
           /** @description Vector store to query against. */
           collection_name: string;
@@ -4324,6 +5112,9 @@ export interface operations {
     responses: {
       /** @description Query results. */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": {
             /** @description Query results. */
@@ -4354,22 +5145,22 @@ export interface operations {
       };
     };
   };
-  /**
-   * FetchVectors
-   * @description Fetch vectors from a vector store.
-   */
   FetchVectors: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody?: {
       content: {
-        /**
-         * @example {
-         *   "collection_name": "smoke_tests",
-         *   "model": "jina-v2",
-         *   "ids": [
-         *     "dd8f3774e05d42caa53cfbaa7389c08f"
-         *   ]
-         * }
-         */
+        /** @example {
+         *       "collection_name": "smoke_tests",
+         *       "model": "jina-v2",
+         *       "ids": [
+         *         "dd8f3774e05d42caa53cfbaa7389c08f"
+         *       ]
+         *     } */
         "application/json": {
           /** @description Vector store name. */
           collection_name: string;
@@ -4386,6 +5177,9 @@ export interface operations {
     responses: {
       /** @description Vector data. */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": {
             /** @description Retrieved vectors. */
@@ -4404,27 +5198,27 @@ export interface operations {
       };
     };
   };
-  /**
-   * UpdateVectors
-   * @description Update vectors in a vector store.
-   */
   UpdateVectors: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody?: {
       content: {
-        /**
-         * @example {
-         *   "collection_name": "smoke_tests",
-         *   "model": "jina-v2",
-         *   "vectors": [
-         *     {
-         *       "id": "dd8f3774e05d42caa53cfbaa7389c08f",
-         *       "metadata": {
-         *         "appearance": "silvery, blue cast"
-         *       }
-         *     }
-         *   ]
-         * }
-         */
+        /** @example {
+         *       "collection_name": "smoke_tests",
+         *       "model": "jina-v2",
+         *       "vectors": [
+         *         {
+         *           "id": "dd8f3774e05d42caa53cfbaa7389c08f",
+         *           "metadata": {
+         *             "appearance": "silvery, blue cast"
+         *           }
+         *         }
+         *       ]
+         *     } */
         "application/json": {
           /** @description Vector store name. */
           collection_name: string;
@@ -4450,6 +5244,9 @@ export interface operations {
     responses: {
       /** @description Count of updated vectors. */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": {
             /** @description Number of vectors modified. */
@@ -4459,23 +5256,23 @@ export interface operations {
       };
     };
   };
-  /**
-   * DeleteVectors
-   * @description Delete vectors in a vector store.
-   */
   DeleteVectors: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
     requestBody?: {
       content: {
-        /**
-         * @example {
-         *   "collection_name": "smoke_tests",
-         *   "model": "jina-v2",
-         *   "ids": [
-         *     "ac32b9a133dd4e3689004f6e8f0fd6cd",
-         *     "629df177c7644062a68bceeff223cefa"
-         *   ]
-         * }
-         */
+        /** @example {
+         *       "collection_name": "smoke_tests",
+         *       "model": "jina-v2",
+         *       "ids": [
+         *         "ac32b9a133dd4e3689004f6e8f0fd6cd",
+         *         "629df177c7644062a68bceeff223cefa"
+         *       ]
+         *     } */
         "application/json": {
           /** @description Vector store name. */
           collection_name: string;
@@ -4492,6 +5289,9 @@ export interface operations {
     responses: {
       /** @description Count of deleted vectors. */
       200: {
+        headers: {
+          [name: string]: unknown;
+        };
         content: {
           "application/json": {
             /** @description Number of vectors modified. */
