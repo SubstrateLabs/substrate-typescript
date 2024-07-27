@@ -158,6 +158,13 @@ export interface paths {
      */
     post: operations["StableDiffusionXLControlNet"];
   };
+  "/StableVideoDiffusion": {
+    /**
+     * StableVideoDiffusion
+     * @description Generates a video using a still image as conditioning frame.
+     */
+    post: operations["StableVideoDiffusion"];
+  };
   "/TranscribeSpeech": {
     /**
      * TranscribeSpeech
@@ -419,6 +426,7 @@ export interface components {
         | "Mixtral8x7BInstruct"
         | "Llama3Instruct8B"
         | "Llama3Instruct70B"
+        | "Llama3Instruct405B"
         | "Firellava13B"
         | "gpt-4o"
         | "gpt-4o-mini"
@@ -1088,6 +1096,42 @@ export interface components {
         /** @description The random noise seed used for generation. */
         seed: number;
       }[];
+    };
+    /** StableVideoDiffusionIn */
+    StableVideoDiffusionIn: {
+      /** @description Original image. */
+      image_uri: string;
+      /** @description Use "hosted" to return a video URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the video data will be returned as a base64-encoded string. */
+      store?: string;
+      /**
+       * @description Output video format.
+       * @default gif
+       * @enum {string}
+       */
+      output_format?: "gif" | "mp4";
+      /** @description Seed for deterministic generation. Default is a random seed. */
+      seed?: number;
+      /**
+       * @description Frames per second of the generated video.
+       * @default 7
+       */
+      fps?: number;
+      /**
+       * @description The motion bucket id to use for the generated video. This can be used to control the motion of the generated video. Increasing the motion bucket id increases the motion of the generated video.
+       * @default 180
+       */
+      motion_bucket_id?: number;
+      /**
+       * Format: float
+       * @description The amount of noise added to the conditioning image. The higher the values the less the video resembles the conditioning image. Increasing this value also increases the motion of the generated video.
+       * @default 0.1
+       */
+      noise?: number;
+    };
+    /** StableVideoDiffusionOut */
+    StableVideoDiffusionOut: {
+      /** @description Generated video. */
+      video_uri: string;
     };
     /** InpaintImageIn */
     InpaintImageIn: {
@@ -2247,6 +2291,7 @@ export interface operations {
             | "Mixtral8x7BInstruct"
             | "Llama3Instruct8B"
             | "Llama3Instruct70B"
+            | "Llama3Instruct405B"
             | "Firellava13B"
             | "gpt-4o"
             | "gpt-4o-mini"
@@ -3325,6 +3370,63 @@ export interface operations {
               /** @description The random noise seed used for generation. */
               seed: number;
             }[];
+          };
+        };
+      };
+    };
+  };
+  /**
+   * StableVideoDiffusion
+   * @description Generates a video using a still image as conditioning frame.
+   */
+  StableVideoDiffusion: {
+    requestBody?: {
+      content: {
+        /**
+         * @example {
+         *   "image_uri": "https://media.substrate.run/apple-forest.jpeg",
+         *   "store": "hosted"
+         * }
+         */
+        "application/json": {
+          /** @description Original image. */
+          image_uri: string;
+          /** @description Use "hosted" to return a video URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the video data will be returned as a base64-encoded string. */
+          store?: string;
+          /**
+           * @description Output video format.
+           * @default gif
+           * @enum {string}
+           */
+          output_format?: "gif" | "mp4";
+          /** @description Seed for deterministic generation. Default is a random seed. */
+          seed?: number;
+          /**
+           * @description Frames per second of the generated video.
+           * @default 7
+           */
+          fps?: number;
+          /**
+           * @description The motion bucket id to use for the generated video. This can be used to control the motion of the generated video. Increasing the motion bucket id increases the motion of the generated video.
+           * @default 180
+           */
+          motion_bucket_id?: number;
+          /**
+           * Format: float
+           * @description The amount of noise added to the conditioning image. The higher the values the less the video resembles the conditioning image. Increasing this value also increases the motion of the generated video.
+           * @default 0.1
+           */
+          noise?: number;
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": {
+            /** @description Generated video. */
+            video_uri: string;
           };
         };
       };
