@@ -4,15 +4,11 @@
 
 The Substrate TypeScript SDK is the recommended way to interact with the Substrate API from server-side TypeScript or JavaScript.
 
-<img src="https://guides.substrate.run/unified-diagram.svg"/>
-
 ## Documentation
 
-If you're just getting started, head to [guides.substrate.run](https://guides.substrate.run/).
+If you're just getting started, head to [docs.substrate.run](https://docs.substrate.run/).
 
 For a detailed API reference covering the nodes available on Substrate, see [substrate.run/nodes](https://www.substrate.run/nodes).
-
-For an interactive reference, check out [explore.substrate.run](https://explore.substrate.run/). You can call `Substrate.visualize(...nodes...)` to generate an [interactive visualization](https://explore.substrate.run/s/eNqNUstOwzAQ_BXLyjGVaEEFcgNKy0uiakEcULUyyZKaOnawN4UQ5d-xmwpVohLc1rOe2fGsG65Nho4nzw2XGU82xz5cwvC9nPeGPN4AHp-gRisIH_CTPCps7kkNL60pSvJ9QqVYgUwwR8bWvI05uKWpVAamorIiyJV5EUrVPCFbYRvvDBzA7al-Gn307v49sOEAUTQ_h8nsbHoF91O4HkURgGe-VlRZPIRZf_x4MC7fePunmUW8Ze0k8Usm5pm0mJJcY5hPdRl8OrJS573U6FQEo5Kw6FQ6AQhiulIq5muhAqEqCmHlFzJaStfFxaRmRiNzqAl1ignjIaAdhW09gN7N8exodHLBt3pBul20P3nuubfPNlmRou8ZK3OpIYQO-z-AKcGRSFf737TCerP9bklpis4Z6xFBZHnw5aPFLN8E60upJUmhYLvOtv0GiZraBQ) of any graph.
 
 ## Installation
 
@@ -59,3 +55,9 @@ const summaryOut = response.get(summary);
 console.log(summaryOut.text);
 // Princess Lily, a kind-hearted young princess, discovers a book of spells and uses it to grant her family and kingdom happiness.
 ```
+
+## Examples
+
+We're always creating new JS examples on [val.town](https://www.val.town/u/substrate/folders/Examples?folderId=61e21628-4209-11ef-bf47-de64eea55b61).
+
+Many examples are also included in the `examples` directory.
