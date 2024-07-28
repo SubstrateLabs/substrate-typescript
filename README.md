@@ -2,7 +2,9 @@
 
 [![NPM version](https://img.shields.io/npm/v/substrate.svg)](https://npmjs.org/package/substrate)
 
-The Substrate TypeScript SDK is the recommended way to interact with the Substrate API from server-side TypeScript or JavaScript.
+Substrate is a **powerful SDK** for building with AI, with [batteries included](https://substrate.run/nodes): language models, image generation, built-in vector storage, sandboxed code execution, and more. To use Substrate, you simply connect tasks, and then run the workflow. With this simple approach, we can create AI systems (from RAG, to agents, to multi-modal generative experiences) by simply describing the computation, with **zero additional abstractions**.
+
+Substrate is also a **workflow execution** and **inference** engine, optimized for running compound AI workloads. Wiring together multiple inference APIs is inherently slow – whether you do it yourself, or use a framework like LangChain. Substrate lets you ditch the framework, write less code, and run compound AI fast.
 
 ## Documentation
 
