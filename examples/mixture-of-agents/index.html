@@ -159,11 +159,13 @@
     <script>
       const question = "{{ question }}";
       const modelNames = [
-        "Mistral7BInstruct",
-        "Mixtral8x7BInstruct",
-        "Llama3Instruct8B",
-        "Llama3Instruct70B",
-      ];
+        "Llama 3.1 405B",
+        "Claude 3.5",
+        "Llama 3.1 70B",
+        "GPT-4o Mini",
+        "Llama 3.1 8B",
+        "Mixtral 8x7B",
+      ]
       const individualResults = "{{ individual }}";
       const aggResults = "{{ summaries }}";
 
@@ -187,7 +189,8 @@
         if (showingIndividual) {
           contentArea.textContent =
             individualResults[currentLayer][currentIndex].trim();
-          cardTitle.textContent = modelNames[currentIndex];
+
+          cardTitle.textContent = `${modelNames[currentIndex]} - Layer ${ currentLayer + 1 }`;
         } else {
           contentArea.textContent = aggResults[currentLayer].trim();
           cardTitle.textContent = `MoA Layer ${currentLayer + 1}`;

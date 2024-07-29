@@ -4,46 +4,64 @@ import { Substrate, Box, sb, ComputeText } from "substrate";
 import fs from "fs";
 import { currentDir, sampleQuestion, aggregate, jqList } from "./util";
 
+const SUBSTRATE_API_KEY = process.env["SUBSTRATE_API_KEY"];
+const substrate = new Substrate({ apiKey: SUBSTRATE_API_KEY });
+
 const models = [
-  "Mistral7BInstruct",
-  "Mixtral8x7BInstruct",
-  "Llama3Instruct8B",
+  "Llama3Instruct405B",
+  "claude-3-5-sonnet-20240620",
   "Llama3Instruct70B",
+  "gpt-4o-mini",
+  "Llama3Instruct8B",
+  "Mixtral8x7BInstruct",
 ];
-const max_tokens = 800;
+const aggregatorModel = "claude-3-5-sonnet-20240620";
+const max_tokens = 400;
+const temperature = 0.4;
 const opts = { cache_age: 60 * 60 * 24 * 7 };
 
 const numLayers = 3;
 const question = process.argv[2] || sampleQuestion;
 
-function getMixture(q: string, prev: any = null) {
-  const prompt = prev
-    ? sb.concat(aggregate, "\n\nquestion: ", q, "\n\nprevious:\n\n", prev)
-    : q;
+function getPrompt(prev: any = null) {
+  return prev
+    ? sb.concat(
+        aggregate,
+        "\n\nuser query: ",
+        question,
+        "\n\nprevious responses:\n\n",
+        prev,
+      )
+    : question;
+}
+
+function getMixture(prev: any = null) {
   return new Box({
     value: models.map(
       (model) =>
-        new ComputeText({ prompt, model, max_tokens }, opts).future.text,
+        new ComputeText(
+          { prompt: getPrompt(prev), model, max_tokens, temperature },
+          opts,
+        ).future.text,
     ),
   });
 }
 
+function getLastLayer(layers: Box[]) {
+  return sb.jq<"string">(layers[layers.length - 1]!.future.value, jqList);
+}
+
 async function main() {
-  const SUBSTRATE_API_KEY = process.env["SUBSTRATE_API_KEY"];
-  const substrate = new Substrate({ apiKey: SUBSTRATE_API_KEY });
   const layers: Box[] = [getMixture(question)];
-  const lastLayer = () =>
-    sb.jq<"string">(layers[layers.length - 1]!.future.value, jqList);
-
   for (let i = 0; i < numLayers - 1; i++) {
-    layers.push(getMixture(question, lastLayer()));
+    layers.push(getMixture(getLastLayer(layers)));
   }
-
   const final = new ComputeText(
     {
-      prompt: sb.concat(aggregate, "\n\n", lastLayer()),
-      model: "Llama3Instruct70B",
-      max_tokens,
+      prompt: getPrompt(getLastLayer(layers)),
+      model: aggregatorModel,
+      max_tokens: 800,
+      temperature,
     },
     opts,
   );

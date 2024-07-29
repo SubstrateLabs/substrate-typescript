@@ -1,6 +1,6 @@
 #!/usr/bin/env -S npx ts-node --transpileOnly
 import fs from "fs";
-import { Substrate, TranscribeSpeech } from "substrate";
+import { ComputeText, sb, Substrate, TranscribeSpeech } from "substrate";
 import { currentDir } from "./util";
 
 /**
@@ -9,7 +9,8 @@ import { currentDir } from "./util";
  * https://media.substrate.run/kaufman-bafta-short.mp3
  * https://media.substrate.run/dfw-clip.m4a
  */
-const sample = "https://media.substrate.run/my-dinner-andre.m4a"; // NB: this is a ~2hr long file
+// const sample = "https://media.substrate.run/my-dinner-andre.m4a"; // NB: this is a ~2hr long file
+const sample = "https://media.substrate.run/federer-dartmouth.m4a";
 const substrate = new Substrate({ apiKey: process.env["SUBSTRATE_API_KEY"] });
 
 const audio_uri = process.argv[2] || sample;
@@ -19,6 +20,12 @@ async function main() {
     { audio_uri, segment: true, align: true },
     { cache_age: 60 * 60 * 24 * 7 },
   );
+  // const summarize = new ComputeText({
+  //   model: "Llama3Instruct70B",
+  //   prompt: sb.interpolate`summarize this transcript: <TRANSCRIPT>${transcribe.future.text}</TRANSCRIPT>`,
+  //   max_tokens: 800,
+  // });
+
   const res = await substrate.run(transcribe);
   const transcript = res.get(transcribe);
 
