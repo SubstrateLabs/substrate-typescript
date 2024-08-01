@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Character Relationship Graph</title>
+    <title>{{ title }} - Relationships</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <style>
       body {
@@ -41,11 +41,22 @@
         fill: #555;
         pointer-events: none;
       }
+      #book-title {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 20px;
+        text-transform: uppercase;
+        position: absolute;
+        top: 18px;
+        color: darkgray;
+        text-align: center;
+        font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+      }
     </style>
   </head>
   <body>
+    <div id="book-title">{{ title }}</div>
     <div id="graph-container"></div>
-
     <script>
       const graphData = "{{ graphData }}";
 
