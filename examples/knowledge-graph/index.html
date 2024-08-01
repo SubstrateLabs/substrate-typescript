@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Character Relationship Graph</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+      body {
+        font-family: "Arial", sans-serif;
+        background-color: #f0f4f8;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+      #graph-container {
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        width: 90vw;
+        height: 80vh;
+      }
+      .node {
+        stroke: #fff;
+        stroke-width: 2px;
+      }
+      .link {
+        fill: none;
+        stroke-opacity: 0.6;
+      }
+      .node-label {
+        font-size: 12px;
+        font-weight: bold;
+        pointer-events: none;
+      }
+      .link-label {
+        font-size: 10px;
+        fill: #555;
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="graph-container"></div>
+
+    <script>
+      const graphData = "{{ graphData }}";
+
+      const colorPalette = {
+        "Soft Sage": "#CCD5AE",
+        "Dusty Blue": "#A2B5BB",
+        "Pale Peach": "#E9DAC1",
+        "Muted Lavender": "#9F86C0",
+        "Light Teal": "#A4C3B2",
+        "Warm Sand": "#EEE0C9",
+        "Faded Denim": "#6E85B7",
+        "Dusty Rose": "#D7B8AC",
+        "Soft Mint": "#B5D5C5",
+        "Muted Coral": "#E6BEAE",
+      };
+
+      const edgeColorPalette = {
+        "Charcoal Gray": "#36454F",
+        "Deep Olive": "#3C341F",
+        "Navy Blue": "#000080",
+        Burgundy: "#800020",
+        "Forest Green": "#228B22",
+        "Dark Taupe": "#483C32",
+        "Slate Blue": "#6A5ACD",
+        "Deep Plum": "#4B0082",
+        "Moss Green": "#8A9A5B",
+        "Dark Sienna": "#3C1414",
+      };
+      const container = document.getElementById("graph-container");
+      const width = container.clientWidth - 40;
+      const height = container.clientHeight - 40;
+
+      const svg = d3
+        .select("#graph-container")
+        .append("svg")
+        .attr("width", "100%")
+        .attr("height", "100%");
+
+      const g = svg.append("g").attr("transform", "translate(20,20)");
+
+      const zoom = d3
+        .zoom()
+        .scaleExtent([0.1, 4])
+        .on("zoom", (event) => {
+          g.attr("transform", event.transform);
+        });
+
+      svg.call(zoom);
+
+      const simulation = d3
+        .forceSimulation(graphData.nodes)
+        .force(
+          "link",
+          d3
+            .forceLink(graphData.edges)
+            .id((d) => d.id)
+            .distance(200),
+        )
+        .force("charge", d3.forceManyBody().strength(-1000))
+        .force("center", d3.forceCenter(width / 2, height / 2))
+        .force("collision", d3.forceCollide().radius(60));
+
+      const link = g
+        .append("g")
+        .selectAll("path")
+        .data(graphData.edges)
+        .join("path")
+        .attr("class", "link")
+        .attr("stroke", (d) => edgeColorPalette[d.color]);
+
+      const node = g
+        .append("g")
+        .selectAll("circle")
+        .data(graphData.nodes)
+        .join("circle")
+        .attr("class", "node")
+        .attr("r", 20)
+        .attr("fill", (d) => colorPalette[d.color])
+        .call(
+          d3
+            .drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended),
+        );
+
+      const nodeLabel = g
+        .append("g")
+        .selectAll("text")
+        .data(graphData.nodes)
+        .join("text")
+        .attr("class", "node-label")
+        .text((d) => d.label)
+        .attr("text-anchor", "middle")
+        .attr("dy", 30);
+
+      const linkLabel = g
+        .append("g")
+        .selectAll("text")
+        .data(graphData.edges)
+        .join("text")
+        .attr("class", "link-label")
+        .text((d) => d.label)
+        .attr("text-anchor", "middle");
+
+      simulation.on("tick", () => {
+        link.attr("d", linkArc);
+
+        node
+          .attr("cx", (d) => (d.x = Math.max(0, Math.min(width, d.x))))
+          .attr("cy", (d) => (d.y = Math.max(0, Math.min(height, d.y))));
+
+        nodeLabel.attr("x", (d) => d.x).attr("y", (d) => d.y);
+
+        linkLabel
+          .attr("x", (d) => (d.source.x + d.target.x) / 2)
+          .attr("y", (d) => (d.source.y + d.target.y) / 2);
+      });
+
+      function linkArc(d) {
+        const dx = d.target.x - d.source.x,
+          dy = d.target.y - d.source.y,
+          dr = Math.sqrt(dx * dx + dy * dy);
+        return `M${d.source.x},${d.source.y}A${dr},${dr} 0 0,1 ${d.target.x},${d.target.y}`;
+      }
+
+      function dragstarted(event, d) {
+        if (!event.active) simulation.alphaTarget(0.3).restart();
+        d.fx = d.x;
+        d.fy = d.y;
+      }
+
+      function dragged(event, d) {
+        d.fx = event.x;
+        d.fy = event.y;
+      }
+
+      function dragended(event, d) {
+        if (!event.active) simulation.alphaTarget(0);
+        d.fx = null;
+        d.fy = null;
+      }
+
+      function zoomToFit() {
+        const bounds = g.node().getBBox();
+        const scale =
+          0.8 / Math.max(bounds.width / width, bounds.height / height);
+        const translate = [
+          (width - scale * (bounds.x * 2 + bounds.width)) / 2,
+          (height - scale * (bounds.y * 2 + bounds.height)) / 2,
+        ];
+
+        svg
+          .transition()
+          .duration(750)
+          .call(
+            zoom.transform,
+            d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale),
+          );
+      }
+
+      simulation.on("end", zoomToFit);
+    </script>
+  </body>
+</html>
