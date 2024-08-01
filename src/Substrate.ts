@@ -8,6 +8,7 @@ import { Future } from "substrate/Future";
 import { getPlatformProperties } from "substrate/Platform";
 import { deflate } from "pako";
 import { randomString } from "substrate/idGenerator";
+import { ModuleInputs } from "./Module";
 
 type Configuration = {
   /**
@@ -291,4 +292,50 @@ export class Substrate {
 
     return headers;
   }
+
+  module = {
+    /**
+     * Returns an object that represents a publishable "module" or code that can be used to construct 
+     * a `Module` node.
+     */
+    serialize: ({ nodes, inputs }: { nodes: Node[]; inputs: ModuleInputs }) => {
+      const inputIdToName = {};
+      const inputNameToSchema = {};
+
+      for (let name in inputs) {
+        let input = inputs[name];
+        // @ts-ignore
+        inputIdToName[input._id] = name;
+        // @ts-ignore
+        inputNameToSchema[name] = input.schema;
+      }
+
+      const dag = Substrate.serialize(...nodes);
+
+      // update variable name bindings in dag using inputs
+      dag.futures = dag.futures.map((future: any) => {
+        if (future.directive.type === "input" && !future.directive.name) {
+          // @ts-ignore
+          future.directive.name = inputIdToName[future.id];
+        }
+        return future;
+      });
+
+      return {
+        dag,
+        inputs: inputNameToSchema,
+        api_version: this.apiVersion,
+      };
+    },
+
+    /**
+     * Publishes a module on substrate.run
+     * A successful response will contain the module id and web uri
+     */
+    publish: async (_publishable: any) => {
+      console.log("not implemented yet");
+      let publication;
+      return publication;
+    },
+  };
 }

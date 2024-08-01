@@ -1,5 +1,6 @@
 import { idGenerator } from "substrate/idGenerator";
 import { Node } from "substrate/Node";
+import { type JSONSchema7 } from "json-schema";
 
 type Accessor = "item" | "attr";
 type TraceOperation = {
@@ -26,6 +27,7 @@ const parsePath = (path: string): TraceProp[] => {
 };
 
 const newFutureId = idGenerator("future");
+const newInputId = idGenerator("input");
 
 abstract class Directive {
   abstract items: any[];
@@ -122,7 +124,7 @@ export class JQ extends Directive {
     rawValue: (val: JQCompatible) => ({ future_id: null, val }),
   };
 
-  override next(...items: TraceProp[]) {
+  override next(..._items: TraceProp[]) {
     return new JQ(this.query, this.target);
   }
 
@@ -314,4 +316,54 @@ export class FutureAnyObject extends Future<Object> {
   protected override async _result(): Promise<Object> {
     return super._result();
   }
+}
+
+export class Input extends Directive {
+  items: any[]; // NOTE: unused field (will remove this from direcitve in a later refactor)
+  name: string | null;
+
+  constructor(items: any[]) {
+    super();
+    this.items = items;
+  }
+
+  override next(...args: any[]) {
+    return new Input(args);
+  }
+
+  override async result(): Promise<any> {
+    return;
+  }
+
+  override toJSON() {
+    return {
+      type: "input",
+      name: this.name,
+    };
+  }
+}
+
+export class FutureInput extends Future<any> {
+  declare _directive: Input;
+  schema: JSONSchema7;
+
+  constructor(schema?: JSONSchema7, id: string = newInputId()) {
+    super(new Input([]), id);
+    this.schema = schema ?? {};
+  }
+}
+
+/**
+ * Specify an `input` future that can be assigned a name when create a new module.
+ * Input types and validation paramters may optionally be described using a JSON Schema object.
+ *
+ * Default values may also be specified here and will be used if user input is not provided for this input.
+ */
+export function input(schema?: FutureInput["schema"]) {
+  // NOTE: using `any` as the return type here for now to ease using
+  // this in general node input args or helper functions.
+  //
+  // Once we ship our Future type reorganization work, we can just
+  // use this as-is (Future<any>)
+  return new FutureInput(schema) as any;
 }

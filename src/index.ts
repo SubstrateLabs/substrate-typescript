@@ -51,6 +51,8 @@ export {
   DeleteVectors,
 } from "substrate/Nodes";
 
+export { Module } from "substrate/Module";
+
 export { sb } from "substrate/sb";
 export { Substrate };
 import { Substrate } from "substrate/Substrate";
