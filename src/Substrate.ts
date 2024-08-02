@@ -38,7 +38,7 @@ type Configuration = {
   additionalHeaders?: Record<string, string>;
 };
 
-export class Secrets {
+export type Secrets = {
   openai?: string;
   anthropic?: string;
 }
