@@ -41,7 +41,7 @@ type Configuration = {
 export type Secrets = {
   openai?: string;
   anthropic?: string;
-}
+};
 
 /**
  * [docs/introduction](https://docs.substrate.run)
