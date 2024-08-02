@@ -80,7 +80,8 @@ export class Substrate {
         this.additionalHeaders["x-substrate-openai-api-key"] = secrets.openai;
       }
       if (secrets.anthropic) {
-        this.additionalHeaders["x-substrate-anthropic-api-key"] = secrets.anthropic;
+        this.additionalHeaders["x-substrate-anthropic-api-key"] =
+          secrets.anthropic;
       }
     }
   }
