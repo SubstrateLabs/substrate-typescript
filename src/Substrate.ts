@@ -51,7 +51,6 @@ export class Substrate {
   baseUrl: NonNullable<Configuration["baseUrl"]>;
   apiVersion: NonNullable<Configuration["apiVersion"]>;
   timeout: NonNullable<Configuration["timeout"]>;
-  secrets: NonNullable<Configuration["secrets"]>;
   additionalHeaders: NonNullable<Configuration["additionalHeaders"]>;
 
   /**
