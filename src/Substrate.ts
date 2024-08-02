@@ -28,10 +28,20 @@ type Configuration = {
   timeout?: number;
 
   /**
+   * Secrets for third party services.
+   */
+  secrets?: Secrets;
+
+  /**
    * Add additional headers to each request. These may override headers set by the Substrate client.
    */
   additionalHeaders?: Record<string, string>;
 };
+
+export class Secrets {
+  openai?: string;
+  anthropic?: string;
+}
 
 /**
  * [docs/introduction](https://docs.substrate.run)
@@ -41,6 +51,7 @@ export class Substrate {
   baseUrl: NonNullable<Configuration["baseUrl"]>;
   apiVersion: NonNullable<Configuration["apiVersion"]>;
   timeout: NonNullable<Configuration["timeout"]>;
+  secrets: NonNullable<Configuration["secrets"]>;
   additionalHeaders: NonNullable<Configuration["additionalHeaders"]>;
 
   /**
@@ -51,6 +62,7 @@ export class Substrate {
     baseUrl,
     apiVersion,
     timeout,
+    secrets,
     additionalHeaders,
   }: Configuration) {
     if (!apiKey) {
@@ -63,6 +75,14 @@ export class Substrate {
     this.apiVersion = apiVersion ?? OpenAPIjson["info"]["version"];
     this.timeout = timeout ?? 300_000;
     this.additionalHeaders = additionalHeaders ?? {};
+    if (secrets) {
+      if (secrets.openai) {
+        this.additionalHeaders["x-substrate-openai-api-key"] = secrets.openai;
+      }
+      if (secrets.anthropic) {
+        this.additionalHeaders["x-substrate-anthropic-api-key"] = secrets.anthropic;
+      }
+    }
   }
 
   /**
