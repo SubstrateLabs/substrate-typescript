@@ -165,7 +165,7 @@
         "GPT-4o Mini",
         "Llama 3.1 8B",
         "Mixtral 8x7B",
-      ]
+      ];
       const individualResults = "{{ individual }}";
       const aggResults = "{{ summaries }}";
 
@@ -190,7 +190,7 @@
           contentArea.textContent =
             individualResults[currentLayer][currentIndex].trim();
 
-          cardTitle.textContent = `${modelNames[currentIndex]} - Layer ${ currentLayer + 1 }`;
+          cardTitle.textContent = `${modelNames[currentIndex]} - Layer ${currentLayer + 1}`;
         } else {
           contentArea.textContent = aggResults[currentLayer].trim();
           cardTitle.textContent = `MoA Layer ${currentLayer + 1}`;

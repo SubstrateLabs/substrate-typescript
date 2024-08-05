@@ -295,7 +295,7 @@ export class Substrate {
 
   module = {
     /**
-     * Returns an object that represents a publishable "module" or code that can be used to construct 
+     * Returns an object that represents a publishable "module" or code that can be used to construct
      * a `Module` node.
      */
     serialize: ({ nodes, inputs }: { nodes: Node[]; inputs: ModuleInputs }) => {

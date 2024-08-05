@@ -1,6 +1,5 @@
 #!/usr/bin/env -S npx ts-node --transpileOnly
 
-
 class Foo<F extends (...args: any[]) => any> {
   f: F;
 
