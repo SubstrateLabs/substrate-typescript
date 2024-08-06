@@ -1418,7 +1418,8 @@
               "type": "string"
             }
           }
-        }
+        },
+        "required": []
       },
       "InterpolateFramesIn": {
         "title": "InterpolateFramesIn",
@@ -1476,7 +1477,8 @@
               "type": "string"
             }
           }
-        }
+        },
+        "required": []
       },
       "InpaintImageIn": {
         "title": "InpaintImageIn",
