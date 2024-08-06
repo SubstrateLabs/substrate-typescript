@@ -40,6 +40,7 @@ import {
   SplitDocument,
   If,
   Box,
+  InterpolateFrames,
 } from "substrate";
 
 const STAGING = "https://api-staging.substrate.run";
@@ -329,6 +330,13 @@ const examples = [
   }),
   new Llama3Instruct8B({
     prompt: "what does quixotic mean?",
+  }),
+  new InterpolateFrames({
+    frame_uris: [
+      "https://media.substrate.run/apple-forest2.jpeg",
+      "https://media.substrate.run/apple-forest3.jpeg",
+    ],
+    store: "hosted",
   }),
 ];
 
