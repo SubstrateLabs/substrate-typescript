@@ -1,7 +1,7 @@
 /**
  * 𐃏 Substrate
  * @generated file
- * 20240617.20240727
+ * 20240617.20240806
  */
 
 import * as OpenAPI from "substrate/OpenAPI";
@@ -294,6 +294,42 @@ export class StableDiffusionXLControlNetOutOutputs extends FutureArray {
     return super._result() as Promise<StableDiffusionImage[]>;
   }
 }
+/** Generated frames. */
+export class StableVideoDiffusionOutFrameUris extends FutureArray {
+  /** Returns `FutureString` at given index. */
+  override at(index: number) {
+    return new FutureString(this._directive.next(index));
+  }
+  /** Returns the result for `StableVideoDiffusionOutFrameUris` once it's node has been run. */
+  protected override async _result(): Promise<FutureString[]> {
+    return super._result() as Promise<FutureString[]>;
+  }
+}
+export class StableVideoDiffusionOutFrameUrisItem extends FutureString {}
+/** Frames. */
+export class InterpolateFramesInFrameUris extends FutureArray {
+  /** Returns `FutureString` at given index. */
+  override at(index: number) {
+    return new FutureString(this._directive.next(index));
+  }
+  /** Returns the result for `InterpolateFramesInFrameUris` once it's node has been run. */
+  protected override async _result(): Promise<FutureString[]> {
+    return super._result() as Promise<FutureString[]>;
+  }
+}
+export class InterpolateFramesInFrameUrisItem extends FutureString {}
+/** Output frames. */
+export class InterpolateFramesOutFrameUris extends FutureArray {
+  /** Returns `FutureString` at given index. */
+  override at(index: number) {
+    return new FutureString(this._directive.next(index));
+  }
+  /** Returns the result for `InterpolateFramesOutFrameUris` once it's node has been run. */
+  protected override async _result(): Promise<FutureString[]> {
+    return super._result() as Promise<FutureString[]>;
+  }
+}
+export class InterpolateFramesOutFrameUrisItem extends FutureString {}
 /** Generated images. */
 export class MultiInpaintImageOutOutputs extends FutureArray {
   /** Returns `InpaintImageOut` at given index. */
@@ -1688,7 +1724,7 @@ export class StableVideoDiffusionIn extends FutureObject {
   get seed() {
     return new FutureNumber(this._directive.next("seed"));
   }
-  /** (Optional) Frames per second of the generated video. */
+  /** (Optional) Frames per second of the generated video. Ignored if output format is `frames`. */
   get fps() {
     return new FutureNumber(this._directive.next("fps"));
   }
@@ -1711,9 +1747,61 @@ export class StableVideoDiffusionOut extends FutureObject {
   get video_uri() {
     return new FutureString(this._directive.next("video_uri"));
   }
+
+  /** Generated frames. */
+  get frame_uris() {
+    return new StableVideoDiffusionOutFrameUris(
+      this._directive.next("frame_uris"),
+    );
+  }
   /** returns the result for `StableVideoDiffusionOut` once it's node has been run. */
   protected override async _result(): Promise<StableVideoDiffusionOut> {
     return super._result() as Promise<StableVideoDiffusionOut>;
+  }
+}
+/** InterpolateFramesIn */
+export class InterpolateFramesIn extends FutureObject {
+  /** Frames. */
+  get frame_uris() {
+    return new InterpolateFramesInFrameUris(this._directive.next("frame_uris"));
+  }
+  /** (Optional) Use "hosted" to return a video URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the video data will be returned as a base64-encoded string. */
+  get store() {
+    return new FutureString(this._directive.next("store"));
+  }
+  /** (Optional) Output video format. */
+  get output_format() {
+    return new FutureString(this._directive.next("output_format"));
+  }
+  /** (Optional) Frames per second of the generated video. Ignored if output format is `frames`. */
+  get fps() {
+    return new FutureNumber(this._directive.next("fps"));
+  }
+  /** (Optional) Number of interpolation steps. Each step adds an interpolated frame between adjacent frames. For example, 2 steps over 2 frames produces 5 frames. */
+  get num_steps() {
+    return new FutureNumber(this._directive.next("num_steps"));
+  }
+  /** returns the result for `InterpolateFramesIn` once it's node has been run. */
+  protected override async _result(): Promise<InterpolateFramesIn> {
+    return super._result() as Promise<InterpolateFramesIn>;
+  }
+}
+/** InterpolateFramesOut */
+export class InterpolateFramesOut extends FutureObject {
+  /** Generated video. */
+  get video_uri() {
+    return new FutureString(this._directive.next("video_uri"));
+  }
+
+  /** Output frames. */
+  get frame_uris() {
+    return new InterpolateFramesOutFrameUris(
+      this._directive.next("frame_uris"),
+    );
+  }
+  /** returns the result for `InterpolateFramesOut` once it's node has been run. */
+  protected override async _result(): Promise<InterpolateFramesOut> {
+    return super._result() as Promise<InterpolateFramesOut>;
   }
 }
 /** InpaintImageIn */
@@ -4408,7 +4496,7 @@ export class StableVideoDiffusion extends Node {
   /**
    * Input arguments: `image_uri`, `store` (optional), `output_format` (optional), `seed` (optional), `fps` (optional), `motion_bucket_id` (optional), `noise` (optional)
    *
-   * Output fields: `video_uri`
+   * Output fields: `video_uri` (optional), `frame_uris` (optional)
    *
    * https://www.substrate.run/nodes#StableVideoDiffusion
    */
@@ -4425,7 +4513,7 @@ export class StableVideoDiffusion extends Node {
   /**
    * Retrieve this node's output from a response.
    *
-   * Output fields: `video_uri`
+   * Output fields: `video_uri` (optional), `frame_uris` (optional)
    *
    * https://www.substrate.run/nodes#StableVideoDiffusion
    */
@@ -4442,7 +4530,7 @@ export class StableVideoDiffusion extends Node {
   /**
    * Future reference to this node's output.
    *
-   * Output fields: `video_uri`
+   * Output fields: `video_uri` (optional), `frame_uris` (optional)
    *
    * https://www.substrate.run/nodes#StableVideoDiffusion
    */
@@ -4452,6 +4540,75 @@ export class StableVideoDiffusion extends Node {
 
   protected override output(): OpenAPI.components["schemas"]["StableVideoDiffusionOut"] {
     return super.output() as OpenAPI.components["schemas"]["StableVideoDiffusionOut"];
+  }
+}
+export namespace InterpolateFrames {
+  /**
+   * InterpolateFrames Input
+   * https://www.substrate.run/nodes#InterpolateFrames
+   */
+  export type Input = FutureExpandAny<
+    OpenAPI.components["schemas"]["InterpolateFramesIn"]
+  >;
+
+  /**
+   * InterpolateFrames Output
+   * https://www.substrate.run/nodes#InterpolateFrames
+   */
+  export type Output = OpenAPI.components["schemas"]["InterpolateFramesOut"];
+}
+
+/**
+ * Generates a interpolation frames between each adjacent frames.
+ *
+ * https://www.substrate.run/nodes#InterpolateFrames
+ */
+export class InterpolateFrames extends Node {
+  /**
+   * Input arguments: `frame_uris`, `store` (optional), `output_format` (optional), `fps` (optional), `num_steps` (optional)
+   *
+   * Output fields: `video_uri` (optional), `frame_uris` (optional)
+   *
+   * https://www.substrate.run/nodes#InterpolateFrames
+   */
+  constructor(
+    args: FutureExpandAny<OpenAPI.components["schemas"]["InterpolateFramesIn"]>,
+    options?: Options,
+  ) {
+    super(args, options);
+    this.node = "InterpolateFrames";
+  }
+
+  /**
+   * Retrieve this node's output from a response.
+   *
+   * Output fields: `video_uri` (optional), `frame_uris` (optional)
+   *
+   * https://www.substrate.run/nodes#InterpolateFrames
+   */
+  protected override async result(): Promise<
+    OpenAPI.components["schemas"]["InterpolateFramesOut"] | undefined
+  > {
+    return Promise.resolve(
+      this._response ? this._response.get(this) : undefined,
+    ) as Promise<
+      OpenAPI.components["schemas"]["InterpolateFramesOut"] | undefined
+    >;
+  }
+
+  /**
+   * Future reference to this node's output.
+   *
+   * Output fields: `video_uri` (optional), `frame_uris` (optional)
+   *
+   * https://www.substrate.run/nodes#InterpolateFrames
+   */
+  override get future(): InterpolateFramesOut {
+    return new InterpolateFramesOut(new Trace([], this));
+  }
+
+  protected override output(): OpenAPI.components["schemas"]["InterpolateFramesOut"] {
+    return super.output() as OpenAPI.components["schemas"]["InterpolateFramesOut"];
   }
 }
 export namespace TranscribeSpeech {
@@ -5907,6 +6064,7 @@ export type AnyNode =
   | StableDiffusionXLInpaint
   | StableDiffusionXLControlNet
   | StableVideoDiffusion
+  | InterpolateFrames
   | TranscribeSpeech
   | GenerateSpeech
   | RemoveBackground
@@ -5973,46 +6131,48 @@ export type NodeOutput<T> = T extends Experimental
                                           ? OpenAPI.components["schemas"]["StableDiffusionXLControlNetOut"]
                                           : T extends StableVideoDiffusion
                                             ? OpenAPI.components["schemas"]["StableVideoDiffusionOut"]
-                                            : T extends TranscribeSpeech
-                                              ? OpenAPI.components["schemas"]["TranscribeSpeechOut"]
-                                              : T extends GenerateSpeech
-                                                ? OpenAPI.components["schemas"]["GenerateSpeechOut"]
-                                                : T extends RemoveBackground
-                                                  ? OpenAPI.components["schemas"]["RemoveBackgroundOut"]
-                                                  : T extends EraseImage
-                                                    ? OpenAPI.components["schemas"]["EraseImageOut"]
-                                                    : T extends UpscaleImage
-                                                      ? OpenAPI.components["schemas"]["UpscaleImageOut"]
-                                                      : T extends SegmentUnderPoint
-                                                        ? OpenAPI.components["schemas"]["SegmentUnderPointOut"]
-                                                        : T extends SegmentAnything
-                                                          ? OpenAPI.components["schemas"]["SegmentAnythingOut"]
-                                                          : T extends SplitDocument
-                                                            ? OpenAPI.components["schemas"]["SplitDocumentOut"]
-                                                            : T extends EmbedText
-                                                              ? OpenAPI.components["schemas"]["EmbedTextOut"]
-                                                              : T extends MultiEmbedText
-                                                                ? OpenAPI.components["schemas"]["MultiEmbedTextOut"]
-                                                                : T extends EmbedImage
-                                                                  ? OpenAPI.components["schemas"]["EmbedImageOut"]
-                                                                  : T extends MultiEmbedImage
-                                                                    ? OpenAPI.components["schemas"]["MultiEmbedImageOut"]
-                                                                    : T extends JinaV2
-                                                                      ? OpenAPI.components["schemas"]["JinaV2Out"]
-                                                                      : T extends CLIP
-                                                                        ? OpenAPI.components["schemas"]["CLIPOut"]
-                                                                        : T extends FindOrCreateVectorStore
-                                                                          ? OpenAPI.components["schemas"]["FindOrCreateVectorStoreOut"]
-                                                                          : T extends ListVectorStores
-                                                                            ? OpenAPI.components["schemas"]["ListVectorStoresOut"]
-                                                                            : T extends DeleteVectorStore
-                                                                              ? OpenAPI.components["schemas"]["DeleteVectorStoreOut"]
-                                                                              : T extends QueryVectorStore
-                                                                                ? OpenAPI.components["schemas"]["QueryVectorStoreOut"]
-                                                                                : T extends FetchVectors
-                                                                                  ? OpenAPI.components["schemas"]["FetchVectorsOut"]
-                                                                                  : T extends UpdateVectors
-                                                                                    ? OpenAPI.components["schemas"]["UpdateVectorsOut"]
-                                                                                    : T extends DeleteVectors
-                                                                                      ? OpenAPI.components["schemas"]["DeleteVectorsOut"]
-                                                                                      : never;
+                                            : T extends InterpolateFrames
+                                              ? OpenAPI.components["schemas"]["InterpolateFramesOut"]
+                                              : T extends TranscribeSpeech
+                                                ? OpenAPI.components["schemas"]["TranscribeSpeechOut"]
+                                                : T extends GenerateSpeech
+                                                  ? OpenAPI.components["schemas"]["GenerateSpeechOut"]
+                                                  : T extends RemoveBackground
+                                                    ? OpenAPI.components["schemas"]["RemoveBackgroundOut"]
+                                                    : T extends EraseImage
+                                                      ? OpenAPI.components["schemas"]["EraseImageOut"]
+                                                      : T extends UpscaleImage
+                                                        ? OpenAPI.components["schemas"]["UpscaleImageOut"]
+                                                        : T extends SegmentUnderPoint
+                                                          ? OpenAPI.components["schemas"]["SegmentUnderPointOut"]
+                                                          : T extends SegmentAnything
+                                                            ? OpenAPI.components["schemas"]["SegmentAnythingOut"]
+                                                            : T extends SplitDocument
+                                                              ? OpenAPI.components["schemas"]["SplitDocumentOut"]
+                                                              : T extends EmbedText
+                                                                ? OpenAPI.components["schemas"]["EmbedTextOut"]
+                                                                : T extends MultiEmbedText
+                                                                  ? OpenAPI.components["schemas"]["MultiEmbedTextOut"]
+                                                                  : T extends EmbedImage
+                                                                    ? OpenAPI.components["schemas"]["EmbedImageOut"]
+                                                                    : T extends MultiEmbedImage
+                                                                      ? OpenAPI.components["schemas"]["MultiEmbedImageOut"]
+                                                                      : T extends JinaV2
+                                                                        ? OpenAPI.components["schemas"]["JinaV2Out"]
+                                                                        : T extends CLIP
+                                                                          ? OpenAPI.components["schemas"]["CLIPOut"]
+                                                                          : T extends FindOrCreateVectorStore
+                                                                            ? OpenAPI.components["schemas"]["FindOrCreateVectorStoreOut"]
+                                                                            : T extends ListVectorStores
+                                                                              ? OpenAPI.components["schemas"]["ListVectorStoresOut"]
+                                                                              : T extends DeleteVectorStore
+                                                                                ? OpenAPI.components["schemas"]["DeleteVectorStoreOut"]
+                                                                                : T extends QueryVectorStore
+                                                                                  ? OpenAPI.components["schemas"]["QueryVectorStoreOut"]
+                                                                                  : T extends FetchVectors
+                                                                                    ? OpenAPI.components["schemas"]["FetchVectorsOut"]
+                                                                                    : T extends UpdateVectors
+                                                                                      ? OpenAPI.components["schemas"]["UpdateVectorsOut"]
+                                                                                      : T extends DeleteVectors
+                                                                                        ? OpenAPI.components["schemas"]["DeleteVectorsOut"]
+                                                                                        : never;
