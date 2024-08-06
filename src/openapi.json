@@ -1370,7 +1370,7 @@
           },
           "output_format": {
             "type": "string",
-            "enum": ["gif", "mp4"],
+            "enum": ["gif", "webp", "mp4", "frames"],
             "description": "Output video format.",
             "default": "gif",
             "x-loggable": true
@@ -1382,9 +1382,10 @@
           },
           "fps": {
             "type": "integer",
-            "description": "Frames per second of the generated video.",
+            "description": "Frames per second of the generated video. Ignored if output format is `frames`.",
             "default": 7,
-            "x-loggable": true
+            "x-loggable": true,
+            "minimum": 1
           },
           "motion_bucket_id": {
             "type": "integer",
@@ -1409,9 +1410,73 @@
           "video_uri": {
             "type": "string",
             "description": "Generated video."
+          },
+          "frame_uris": {
+            "type": "array",
+            "description": "Generated frames.",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "InterpolateFramesIn": {
+        "title": "InterpolateFramesIn",
+        "type": "object",
+        "properties": {
+          "frame_uris": {
+            "type": "array",
+            "description": "Frames.",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 2
+          },
+          "store": {
+            "type": "string",
+            "description": "Use \"hosted\" to return a video URL hosted on Substrate. You can also provide a URL to a registered [file store](https://docs.substrate.run/reference/external-files). If unset, the video data will be returned as a base64-encoded string.",
+            "x-loggable": true
+          },
+          "output_format": {
+            "type": "string",
+            "enum": ["gif", "webp", "mp4", "frames"],
+            "description": "Output video format.",
+            "default": "gif",
+            "x-loggable": true
+          },
+          "fps": {
+            "type": "integer",
+            "description": "Frames per second of the generated video. Ignored if output format is `frames`.",
+            "default": 7,
+            "minimum": 1,
+            "x-loggable": true
+          },
+          "num_steps": {
+            "type": "integer",
+            "description": "Number of interpolation steps. Each step adds an interpolated frame between adjacent frames. For example, 2 steps over 2 frames produces 5 frames.",
+            "default": 2,
+            "minimum": 1,
+            "x-loggable": true
           }
         },
-        "required": ["video_uri"]
+        "required": ["frame_uris"]
+      },
+      "InterpolateFramesOut": {
+        "title": "InterpolateFramesOut",
+        "type": "object",
+        "properties": {
+          "video_uri": {
+            "type": "string",
+            "description": "Generated video."
+          },
+          "frame_uris": {
+            "type": "array",
+            "description": "Output frames.",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
       },
       "InpaintImageIn": {
         "title": "InpaintImageIn",
@@ -3843,6 +3908,45 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/StableVideoDiffusionOut"
+                },
+                "example": {
+                  "video_uri": "https://assets.substrate.run/84848484.mp4"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/InterpolateFrames": {
+      "post": {
+        "summary": "InterpolateFrames",
+        "operationId": "InterpolateFrames",
+        "tags": ["category:image", "type:low-level"],
+        "description": "Generates a interpolation frames between each adjacent frames.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InterpolateFramesIn"
+              },
+              "example": {
+                "frame_uris": [
+                  "https://media.substrate.run/apple-forest2.jpeg",
+                  "https://media.substrate.run/apple-forest3.jpeg"
+                ],
+                "store": "hosted"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InterpolateFramesOut"
                 },
                 "example": {
                   "video_uri": "https://assets.substrate.run/84848484.mp4"
