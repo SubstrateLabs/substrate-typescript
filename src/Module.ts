@@ -1,6 +1,21 @@
 import { Node, Options } from "substrate/Node";
 import { FutureInput } from "substrate/Future";
 
+type ModuleId = `mod_${string}`;
+
+export type SerializableModule = {
+  nodes: Node[];
+  inputs: ModuleInputs;
+};
+
+export type NewModule = SerializableModule & { name: string };
+export type UpdateModule = NewModule & { id: ModuleId };
+export type PublishableModule = NewModule; // | UpdateModule; (TODO: implement update module)
+export type PublishedModule = {
+  id: ModuleId;
+  uri: string;
+};
+
 export type ModuleInputs = Record<string, FutureInput>;
 
 type ModuleIn =
@@ -9,7 +24,7 @@ type ModuleIn =
       inputs: Record<string, any>;
     }
   | {
-      module_id: any;
+      module_id: ModuleId;
       inputs: Record<string, any>;
     }
   | {

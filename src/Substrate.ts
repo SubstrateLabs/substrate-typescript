@@ -1,14 +1,17 @@
 import { SubstrateError, RequestTimeoutError } from "substrate/Error";
 import { VERSION } from "substrate/version";
 import OpenAPIjson from "substrate/openapi.json";
-import { SubstrateResponse } from "substrate/SubstrateResponse";
+import {
+  asSubstratePublishedModuleResponse,
+  SubstrateResponse,
+} from "substrate/SubstrateResponse";
 import { SubstrateStreamingResponse } from "substrate/SubstrateStreamingResponse";
 import { Node } from "substrate/Node";
 import { Future } from "substrate/Future";
 import { getPlatformProperties } from "substrate/Platform";
 import { deflate } from "pako";
 import { randomString } from "substrate/idGenerator";
-import { ModuleInputs } from "./Module";
+import { SerializableModule, PublishableModule } from "substrate/Module";
 
 type Configuration = {
   /**
@@ -298,7 +301,7 @@ export class Substrate {
      * Returns an object that represents a publishable "module" or code that can be used to construct
      * a `Module` node.
      */
-    serialize: ({ nodes, inputs }: { nodes: Node[]; inputs: ModuleInputs }) => {
+    serialize: ({ nodes, inputs }: SerializableModule) => {
       const inputIdToName = {};
       const inputNameToSchema = {};
 
@@ -330,12 +333,41 @@ export class Substrate {
 
     /**
      * Publishes a module on substrate.run
-     * A successful response will contain the module id and web uri
      */
-    publish: async (_publishable: any) => {
-      console.log("not implemented yet");
-      let publication;
-      return publication;
+    publish: async (
+      publishable: PublishableModule,
+      // endpoint: string = "https://substrate.run/api/modules",
+      endpoint: string = "http://localhost:3000/api/modules",
+    ) => {
+      const serialized = this.module.serialize({
+        nodes: publishable.nodes,
+        inputs: publishable.inputs,
+      });
+
+      const body = {
+        module: { name: publishable.name },
+        module_version: serialized,
+      };
+
+      const requestOptions = {
+        method: "POST",
+        headers: this.headers(),
+        body: JSON.stringify(body),
+      };
+
+      const request = new Request(endpoint, requestOptions);
+      const requestId = request.headers.get("x-substrate-request-id");
+      const apiResponse = await fetch(request);
+
+      if (apiResponse.ok) {
+        const json = await apiResponse.json();
+        const res = new SubstrateResponse(request, apiResponse, json);
+        return asSubstratePublishedModuleResponse(res);
+      } else {
+        throw new SubstrateError(
+          `[Request failed] status=${apiResponse.status} statusText=${apiResponse.statusText} requestId=${requestId}`,
+        );
+      }
     },
   };
 }
