@@ -112,7 +112,7 @@ export class Substrate {
    *  @throws {Error} when the client encounters an error making the request.
    */
   async runSerialized(
-    nodes: Node[],
+    nodes: Node[] = [],
     endpoint: string = "/compose",
   ): Promise<SubstrateResponse> {
     const serialized = Substrate.serialize(...nodes);
