@@ -53,58 +53,83 @@ describe("Future", () => {
   });
 
   describe("Trace (Directive)", () => {
-    test(".next", () => {
-      const s = new FutureString(new Trace([], node("123")));
-      const n = new FutureNumber(new Trace([], node("456")));
-      const d = new Trace(["a", 1, s, n], node("NodeId"));
-      const d2 = d.next("b", 2);
+    describe("when target is a Node", () => {
+      test(".next", () => {
+        const s = new FutureString(new Trace([], node("123")));
+        const n = new FutureNumber(new Trace([], node("456")));
+        const d = new Trace(["a", 1, s, n], node("NodeId"));
+        const d2 = d.next("b", 2);
 
-      expect(d2.items).toEqual(["a", 1, s, n, "b", 2]);
-      expect(d2.originNode.id).toEqual("NodeId");
-    });
+        expect(d2.items).toEqual(["a", 1, s, n, "b", 2]);
+        expect((d2.target as Node).id).toEqual("NodeId");
+      });
 
-    test(".result", async () => {
-      // when the trace is empty, it resovles to the node's output
-      const n0 = staticNode("hello");
-      const t0 = new Trace([], n0);
-      expect(t0.result()).resolves.toEqual("hello");
+      test(".result", async () => {
+        // when the trace is empty, it resovles to the node's output
+        const n0 = staticNode("hello");
+        const t0 = new Trace([], n0);
+        expect(t0.result()).resolves.toEqual("hello");
 
-      // when the trace only includes primitive values
-      const n1 = staticNode({ a: ["result1"] });
-      const t1 = new Trace(["a", 0], n1);
-      expect(t1.result()).resolves.toEqual("result1");
+        // when the trace only includes primitive values
+        const n1 = staticNode({ a: ["result1"] });
+        const t1 = new Trace(["a", 0], n1);
+        expect(t1.result()).resolves.toEqual("result1");
 
-      // when the trace contains futures, they get resolved
-      const fs = new FutureString(new Trace([], staticNode("b")));
-      const fn = new FutureNumber(new Trace([], staticNode(1)));
-      const n2 = staticNode({ a: [{ b: [undefined, "result2"] }] });
-      const t2 = new Trace(["a", 0, fs, fn], n2);
-      expect(t2.result()).resolves.toEqual("result2");
-    });
+        // when the trace contains futures, they get resolved
+        const fs = new FutureString(new Trace([], staticNode("b")));
+        const fn = new FutureNumber(new Trace([], staticNode(1)));
+        const n2 = staticNode({ a: [{ b: [undefined, "result2"] }] });
+        const t2 = new Trace(["a", 0, fs, fn], n2);
+        expect(t2.result()).resolves.toEqual("result2");
+      });
 
-    test(".toJSON", () => {
-      const s = new FutureString(new Trace([], node()), "123");
-      const n = new FutureNumber(new Trace([], node()), "456");
-      const d = new Trace(["a", 1, s, n], node("NodeId"));
+      test(".toJSON", () => {
+        const s = new FutureString(new Trace([], node()), "123");
+        const n = new FutureNumber(new Trace([], node()), "456");
+        const d = new Trace(["a", 1, s, n], node("NodeId"));
 
-      expect(d.toJSON()).toEqual({
-        type: "trace",
-        origin_node_id: "NodeId",
-        op_stack: [
-          Trace.Operation.key("attr", "a"),
-          Trace.Operation.key("item", 1),
-          Trace.Operation.future("attr", "123"),
-          Trace.Operation.future("item", "456"),
-        ],
+        expect(d.toJSON()).toEqual({
+          type: "trace",
+          origin_node_id: "NodeId",
+          op_stack: [
+            Trace.Operation.key("attr", "a"),
+            Trace.Operation.key("item", 1),
+            Trace.Operation.future("attr", "123"),
+            Trace.Operation.future("item", "456"),
+          ],
+        });
+      });
+
+      test(".referencedFutures", () => {
+        const s = new FutureString(new Trace([], node()));
+        const n = new FutureNumber(new Trace([], node()));
+        const d = new Trace(["a", 1, s, n], node("NodeId"));
+
+        expect(d.referencedFutures()).toEqual([s, n]);
       });
     });
 
-    test(".referencedFutures", () => {
-      const s = new FutureString(new Trace([], node()));
-      const n = new FutureNumber(new Trace([], node()));
-      const d = new Trace(["a", 1, s, n], node("NodeId"));
+    describe("when target is a Future", () => {
+      test(".toJSON", () => {
+        const n = staticNode({ x: 123 });
+        const f = Future.jq<"object">(n.future, ".", "object"); // => { x: 123 }
+        const t = new Trace(["x"], f);
 
-      expect(d.referencedFutures()).toEqual([s, n]);
+        expect(t.toJSON()).toEqual({
+          type: "trace",
+          origin_node_id: null,
+          // @ts-ignore
+          origin_future_id: f._id,
+          op_stack: [Trace.Operation.key("attr", "x")],
+        });
+      });
+
+      test(".referencedFutures", () => {
+        const n = staticNode({ x: 123 });
+        const f = Future.jq<"object">(n.future, ".", "object"); // => { x: 123 }
+        const t = new Trace(["x"], f);
+        expect(t.referencedFutures()).toEqual([f]);
+      });
     });
   });
 
