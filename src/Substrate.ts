@@ -317,7 +317,7 @@ export class Substrate {
 
       // update variable name bindings in dag using inputs
       dag.futures = dag.futures.map((future: any) => {
-        if (future.directive.type === "input" && !future.directive.name) {
+        if (future.directive.type === "variable" && !future.directive.name) {
           // @ts-ignore
           future.directive.name = inputIdToName[future.id];
         }

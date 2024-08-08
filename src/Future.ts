@@ -27,7 +27,6 @@ const parsePath = (path: string): TraceProp[] => {
 };
 
 const newFutureId = idGenerator("future");
-const newInputId = idGenerator("input");
 
 abstract class Directive {
   abstract items: any[];
@@ -318,7 +317,7 @@ export class FutureAnyObject extends Future<Object> {
   }
 }
 
-export class Input extends Directive {
+export class Variable extends Directive {
   items: any[]; // NOTE: unused field (will remove this from direcitve in a later refactor)
   name: string | null;
 
@@ -328,7 +327,7 @@ export class Input extends Directive {
   }
 
   override next(...args: any[]) {
-    return new Input(args);
+    return new Variable(args);
   }
 
   override async result(): Promise<any> {
@@ -337,33 +336,19 @@ export class Input extends Directive {
 
   override toJSON() {
     return {
-      type: "input",
+      type: "variable",
+      source: "input",
       name: this.name,
     };
   }
 }
 
-export class FutureInput extends Future<any> {
-  declare _directive: Input;
+export class FutureVariable extends Future<any> {
+  declare _directive: Variable;
   schema: JSONSchema7;
 
-  constructor(schema?: JSONSchema7, id: string = newInputId()) {
-    super(new Input([]), id);
+  constructor(schema?: JSONSchema7, id: string = newFutureId()) {
+    super(new Variable([]), id);
     this.schema = schema ?? {};
   }
-}
-
-/**
- * Specify an `input` future that can be assigned a name when create a new module.
- * Input types and validation paramters may optionally be described using a JSON Schema object.
- *
- * Default values may also be specified here and will be used if user input is not provided for this input.
- */
-export function input(schema?: FutureInput["schema"]) {
-  // NOTE: using `any` as the return type here for now to ease using
-  // this in general node input args or helper functions.
-  //
-  // Once we ship our Future type reorganization work, we can just
-  // use this as-is (Future<any>)
-  return new FutureInput(schema) as any;
 }

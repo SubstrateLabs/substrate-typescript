@@ -1,5 +1,5 @@
 import { Node, Options } from "substrate/Node";
-import { FutureInput } from "substrate/Future";
+import { FutureVariable } from "substrate/Future";
 
 type ModuleId = `mod_${string}`;
 
@@ -16,7 +16,7 @@ export type PublishedModule = {
   uri: string;
 };
 
-export type ModuleInputs = Record<string, FutureInput>;
+export type ModuleInputs = Record<string, FutureVariable>;
 
 type ModuleIn =
   | {
