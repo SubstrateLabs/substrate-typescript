@@ -1,5 +1,6 @@
 import { idGenerator } from "substrate/idGenerator";
 import { Node } from "substrate/Node";
+import { type JSONSchema7 } from "json-schema";
 
 type Accessor = "item" | "attr";
 type TraceOperation = {
@@ -122,7 +123,7 @@ export class JQ extends Directive {
     rawValue: (val: JQCompatible) => ({ future_id: null, val }),
   };
 
-  override next(...items: TraceProp[]) {
+  override next(..._items: TraceProp[]) {
     return new JQ(this.query, this.target);
   }
 
@@ -313,5 +314,41 @@ export class FutureAnyObject extends Future<Object> {
 
   protected override async _result(): Promise<Object> {
     return super._result();
+  }
+}
+
+export class Variable extends Directive {
+  items: any[]; // NOTE: unused field (will remove this from direcitve in a later refactor)
+  name: string | null;
+
+  constructor(items: any[]) {
+    super();
+    this.items = items;
+  }
+
+  override next(...args: any[]) {
+    return new Variable(args);
+  }
+
+  override async result(): Promise<any> {
+    return;
+  }
+
+  override toJSON() {
+    return {
+      type: "variable",
+      source: "input",
+      name: this.name,
+    };
+  }
+}
+
+export class FutureVariable extends Future<any> {
+  declare _directive: Variable;
+  schema: JSONSchema7;
+
+  constructor(schema?: JSONSchema7, id: string = newFutureId()) {
+    super(new Variable([]), id);
+    this.schema = schema ?? {};
   }
 }

@@ -43,6 +43,7 @@
     "vitest": "^1.0.4"
   },
   "dependencies": {
+    "@types/json-schema": "^7.0.15",
     "@types/node-fetch": "^2.6.11",
     "node-fetch": "2.7.0",
     "pako": "^2.1.0"
