@@ -204,6 +204,26 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/GenerateCode": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * GenerateCode
+     * @description Generate code in the specified language.
+     */
+    post: operations["GenerateCode"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/Mistral7BInstruct": {
     parameters: {
       query?: never;
@@ -1048,7 +1068,12 @@ export interface components {
        * @default Llama3Instruct8B
        * @enum {string}
        */
-      model: "Mistral7BInstruct" | "Mixtral8x7BInstruct" | "Llama3Instruct8B";
+      model:
+        | "Mistral7BInstruct"
+        | "Mixtral8x7BInstruct"
+        | "Llama3Instruct8B"
+        | "Llama3Instruct70B"
+        | "gpt-4o";
     };
     /** ComputeJSONOut */
     ComputeJSONOut: {
@@ -1058,6 +1083,40 @@ export interface components {
       };
       /** @description If the model output could not be parsed to JSON, this is the raw text output. */
       text?: string;
+    };
+    /** GenerateCodeIn */
+    GenerateCodeIn: {
+      /** @description Input prompt. */
+      prompt: string;
+      /**
+       * @description Language of the code.
+       * @enum {string}
+       */
+      language:
+        | "python"
+        | "java"
+        | "c++"
+        | "javascript"
+        | "typescript"
+        | "php"
+        | "html"
+        | "c#"
+        | "sql"
+        | "ruby"
+        | "tex"
+        | "shell";
+      /**
+       * Format: float
+       * @description Higher values make the output more random, lower values make the output more deterministic.
+       */
+      temperature?: number;
+      /** @description Maximum number of tokens to generate. */
+      max_tokens?: number;
+    };
+    /** GenerateCodeOut */
+    GenerateCodeOut: {
+      /** @description Code response. */
+      code: string;
     };
     /** MultiComputeTextIn */
     MultiComputeTextIn: {
@@ -3184,7 +3243,9 @@ export interface operations {
           model?:
             | "Mistral7BInstruct"
             | "Mixtral8x7BInstruct"
-            | "Llama3Instruct8B";
+            | "Llama3Instruct8B"
+            | "Llama3Instruct70B"
+            | "gpt-4o";
         };
       };
     };
@@ -3284,6 +3345,64 @@ export interface operations {
               /** @description If the model output could not be parsed to JSON, this is the raw text output. */
               text?: string;
             }[];
+          };
+        };
+      };
+    };
+  };
+  GenerateCode: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: {
+      content: {
+        /** @example {
+         *       "prompt": "Write a function that prints 'Hello, World!'",
+         *       "language": "python"
+         *     } */
+        "application/json": {
+          /** @description Input prompt. */
+          prompt: string;
+          /**
+           * @description Language of the code.
+           * @enum {string}
+           */
+          language:
+            | "python"
+            | "java"
+            | "c++"
+            | "javascript"
+            | "typescript"
+            | "php"
+            | "html"
+            | "c#"
+            | "sql"
+            | "ruby"
+            | "tex"
+            | "shell";
+          /**
+           * Format: float
+           * @description Higher values make the output more random, lower values make the output more deterministic.
+           */
+          temperature?: number;
+          /** @description Maximum number of tokens to generate. */
+          max_tokens?: number;
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description Code response. */
+            code: string;
           };
         };
       };

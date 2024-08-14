@@ -270,7 +270,9 @@
             "enum": [
               "Mistral7BInstruct",
               "Mixtral8x7BInstruct",
-              "Llama3Instruct8B"
+              "Llama3Instruct8B",
+              "Llama3Instruct70B",
+              "gpt-4o"
             ],
             "description": "Selected model.",
             "default": "Llama3Instruct8B",
@@ -294,6 +296,59 @@
           }
         },
         "required": []
+      },
+      "GenerateCodeIn": {
+        "title": "GenerateCodeIn",
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "Input prompt."
+          },
+          "language": {
+            "type": "string",
+            "description": "Language of the code.",
+            "enum": [
+              "python",
+              "java",
+              "c++",
+              "javascript",
+              "typescript",
+              "php",
+              "html",
+              "c#",
+              "sql",
+              "ruby",
+              "tex",
+              "shell"
+            ]
+          },
+          "temperature": {
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "Higher values make the output more random, lower values make the output more deterministic.",
+            "x-loggable": true
+          },
+          "max_tokens": {
+            "type": "integer",
+            "description": "Maximum number of tokens to generate.",
+            "x-loggable": true
+          }
+        },
+        "required": ["prompt", "language"]
+      },
+      "GenerateCodeOut": {
+        "title": "GenerateCodeOut",
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Code response."
+          }
+        },
+        "required": ["code"]
       },
       "MultiComputeTextIn": {
         "title": "MultiComputeTextIn",
@@ -1418,7 +1473,8 @@
               "type": "string"
             }
           }
-        }
+        },
+        "required": []
       },
       "InterpolateFramesIn": {
         "title": "InterpolateFramesIn",
@@ -1476,7 +1532,8 @@
               "type": "string"
             }
           }
-        }
+        },
+        "required": []
       },
       "InpaintImageIn": {
         "title": "InpaintImageIn",
@@ -3342,6 +3399,42 @@
                       "json_object": {}
                     }
                   ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/GenerateCode": {
+      "post": {
+        "summary": "GenerateCode",
+        "operationId": "GenerateCode",
+        "tags": ["category:language"],
+        "description": "Generate code in the specified language.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateCodeIn"
+              },
+              "example": {
+                "prompt": "Write a function that prints 'Hello, World!'",
+                "language": "python"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenerateCodeOut"
+                },
+                "example": {
+                  "code": "def hello_world():\n    print('Hello, World!')\n"
                 }
               }
             }
