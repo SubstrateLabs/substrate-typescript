@@ -13,7 +13,7 @@
  * Creates a new EventSource parser.
  * @example
  *
- *    // create a parser and read start reading a string
+ *    // create a parser and start reading a string
  *    let parser = createParser()
  *    for (const message of parser.getMessages(str)) {
  *      // ...
@@ -52,7 +52,7 @@ export function createParser() {
     buffer = buffer ? buffer + chunk : chunk;
 
     // Strip any UTF8 byte order mark (BOM) at the start of the stream.
-    // Note that we do not strip any non - UTF8 BOM, as eventsource streams are
+    // Note that we do not strip any non-UTF8 BOM, as EventSource streams are
     // always decoded as UTF8 as per the specification.
     if (isFirstChunk && hasBom(buffer)) {
       buffer = buffer.slice(BOM.length);
@@ -121,11 +121,10 @@ export function createParser() {
     }
 
     if (position === length) {
-      // If we consumed the entire buffer to read the event, reset the buffer
+      // If we consumed the entire buffer, reset the buffer
       buffer = "";
     } else if (position > 0) {
-      // If there are bytes left to process, set the buffer to the unprocessed
-      // portion of the buffer only
+      // If there are bytes left to process, set the buffer to the unprocessed portion only
       buffer = buffer.slice(position);
     }
   }
@@ -137,7 +136,7 @@ export function createParser() {
     lineLength: number,
   ) {
     if (lineLength === 0) {
-      // We reached the last line of this event
+      // We reached the end of this event
       if (data.length > 0) {
         yield {
           type: "event",
