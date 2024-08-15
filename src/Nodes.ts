@@ -1,7 +1,7 @@
 /**
  * 𐃏 Substrate
  * @generated file
- * 20240617.20240806
+ * 20240617.20240814
  */
 
 import * as OpenAPI from "substrate/OpenAPI";
@@ -942,6 +942,40 @@ export class ComputeJSONOut extends FutureObject {
   /** returns the result for `ComputeJSONOut` once it's node has been run. */
   protected override async _result(): Promise<ComputeJSONOut> {
     return super._result() as Promise<ComputeJSONOut>;
+  }
+}
+/** GenerateCodeIn */
+export class GenerateCodeIn extends FutureObject {
+  /** Input prompt. */
+  get prompt() {
+    return new FutureString(this._directive.next("prompt"));
+  }
+  /** Language of the code. */
+  get language() {
+    return new FutureString(this._directive.next("language"));
+  }
+  /** (Optional) Higher values make the output more random, lower values make the output more deterministic. */
+  get temperature() {
+    return new FutureNumber(this._directive.next("temperature"));
+  }
+  /** (Optional) Maximum number of tokens to generate. */
+  get max_tokens() {
+    return new FutureNumber(this._directive.next("max_tokens"));
+  }
+  /** returns the result for `GenerateCodeIn` once it's node has been run. */
+  protected override async _result(): Promise<GenerateCodeIn> {
+    return super._result() as Promise<GenerateCodeIn>;
+  }
+}
+/** GenerateCodeOut */
+export class GenerateCodeOut extends FutureObject {
+  /** Code response. */
+  get code() {
+    return new FutureString(this._directive.next("code"));
+  }
+  /** returns the result for `GenerateCodeOut` once it's node has been run. */
+  protected override async _result(): Promise<GenerateCodeOut> {
+    return super._result() as Promise<GenerateCodeOut>;
   }
 }
 /** MultiComputeTextIn */
@@ -3635,6 +3669,73 @@ export class MultiComputeJSON extends Node {
     return super.output() as OpenAPI.components["schemas"]["MultiComputeJSONOut"];
   }
 }
+export namespace GenerateCode {
+  /**
+   * GenerateCode Input
+   * https://www.substrate.run/nodes#GenerateCode
+   */
+  export type Input = FutureExpandAny<
+    OpenAPI.components["schemas"]["GenerateCodeIn"]
+  >;
+
+  /**
+   * GenerateCode Output
+   * https://www.substrate.run/nodes#GenerateCode
+   */
+  export type Output = OpenAPI.components["schemas"]["GenerateCodeOut"];
+}
+
+/**
+ * Generate code in the specified language.
+ *
+ * https://www.substrate.run/nodes#GenerateCode
+ */
+export class GenerateCode extends Node {
+  /**
+   * Input arguments: `prompt`, `language`, `temperature` (optional), `max_tokens` (optional)
+   *
+   * Output fields: `code`
+   *
+   * https://www.substrate.run/nodes#GenerateCode
+   */
+  constructor(
+    args: FutureExpandAny<OpenAPI.components["schemas"]["GenerateCodeIn"]>,
+    options?: Options,
+  ) {
+    super(args, options);
+    this.node = "GenerateCode";
+  }
+
+  /**
+   * Retrieve this node's output from a response.
+   *
+   * Output fields: `code`
+   *
+   * https://www.substrate.run/nodes#GenerateCode
+   */
+  protected override async result(): Promise<
+    OpenAPI.components["schemas"]["GenerateCodeOut"] | undefined
+  > {
+    return Promise.resolve(
+      this._response ? this._response.get(this) : undefined,
+    ) as Promise<OpenAPI.components["schemas"]["GenerateCodeOut"] | undefined>;
+  }
+
+  /**
+   * Future reference to this node's output.
+   *
+   * Output fields: `code`
+   *
+   * https://www.substrate.run/nodes#GenerateCode
+   */
+  override get future(): GenerateCodeOut {
+    return new GenerateCodeOut(new Trace([], this));
+  }
+
+  protected override output(): OpenAPI.components["schemas"]["GenerateCodeOut"] {
+    return super.output() as OpenAPI.components["schemas"]["GenerateCodeOut"];
+  }
+}
 export namespace Mistral7BInstruct {
   /**
    * Mistral7BInstruct Input
@@ -6051,6 +6152,7 @@ export type AnyNode =
   | BatchComputeJSON
   | ComputeJSON
   | MultiComputeJSON
+  | GenerateCode
   | Mistral7BInstruct
   | Mixtral8x7BInstruct
   | Llama3Instruct8B
@@ -6105,74 +6207,76 @@ export type NodeOutput<T> = T extends Experimental
                 ? OpenAPI.components["schemas"]["ComputeJSONOut"]
                 : T extends MultiComputeJSON
                   ? OpenAPI.components["schemas"]["MultiComputeJSONOut"]
-                  : T extends Mistral7BInstruct
-                    ? OpenAPI.components["schemas"]["Mistral7BInstructOut"]
-                    : T extends Mixtral8x7BInstruct
-                      ? OpenAPI.components["schemas"]["Mixtral8x7BInstructOut"]
-                      : T extends Llama3Instruct8B
-                        ? OpenAPI.components["schemas"]["Llama3Instruct8BOut"]
-                        : T extends Llama3Instruct70B
-                          ? OpenAPI.components["schemas"]["Llama3Instruct70BOut"]
-                          : T extends Firellava13B
-                            ? OpenAPI.components["schemas"]["Firellava13BOut"]
-                            : T extends GenerateImage
-                              ? OpenAPI.components["schemas"]["GenerateImageOut"]
-                              : T extends MultiGenerateImage
-                                ? OpenAPI.components["schemas"]["MultiGenerateImageOut"]
-                                : T extends InpaintImage
-                                  ? OpenAPI.components["schemas"]["InpaintImageOut"]
-                                  : T extends MultiInpaintImage
-                                    ? OpenAPI.components["schemas"]["MultiInpaintImageOut"]
-                                    : T extends StableDiffusionXLLightning
-                                      ? OpenAPI.components["schemas"]["StableDiffusionXLLightningOut"]
-                                      : T extends StableDiffusionXLInpaint
-                                        ? OpenAPI.components["schemas"]["StableDiffusionXLInpaintOut"]
-                                        : T extends StableDiffusionXLControlNet
-                                          ? OpenAPI.components["schemas"]["StableDiffusionXLControlNetOut"]
-                                          : T extends StableVideoDiffusion
-                                            ? OpenAPI.components["schemas"]["StableVideoDiffusionOut"]
-                                            : T extends InterpolateFrames
-                                              ? OpenAPI.components["schemas"]["InterpolateFramesOut"]
-                                              : T extends TranscribeSpeech
-                                                ? OpenAPI.components["schemas"]["TranscribeSpeechOut"]
-                                                : T extends GenerateSpeech
-                                                  ? OpenAPI.components["schemas"]["GenerateSpeechOut"]
-                                                  : T extends RemoveBackground
-                                                    ? OpenAPI.components["schemas"]["RemoveBackgroundOut"]
-                                                    : T extends EraseImage
-                                                      ? OpenAPI.components["schemas"]["EraseImageOut"]
-                                                      : T extends UpscaleImage
-                                                        ? OpenAPI.components["schemas"]["UpscaleImageOut"]
-                                                        : T extends SegmentUnderPoint
-                                                          ? OpenAPI.components["schemas"]["SegmentUnderPointOut"]
-                                                          : T extends SegmentAnything
-                                                            ? OpenAPI.components["schemas"]["SegmentAnythingOut"]
-                                                            : T extends SplitDocument
-                                                              ? OpenAPI.components["schemas"]["SplitDocumentOut"]
-                                                              : T extends EmbedText
-                                                                ? OpenAPI.components["schemas"]["EmbedTextOut"]
-                                                                : T extends MultiEmbedText
-                                                                  ? OpenAPI.components["schemas"]["MultiEmbedTextOut"]
-                                                                  : T extends EmbedImage
-                                                                    ? OpenAPI.components["schemas"]["EmbedImageOut"]
-                                                                    : T extends MultiEmbedImage
-                                                                      ? OpenAPI.components["schemas"]["MultiEmbedImageOut"]
-                                                                      : T extends JinaV2
-                                                                        ? OpenAPI.components["schemas"]["JinaV2Out"]
-                                                                        : T extends CLIP
-                                                                          ? OpenAPI.components["schemas"]["CLIPOut"]
-                                                                          : T extends FindOrCreateVectorStore
-                                                                            ? OpenAPI.components["schemas"]["FindOrCreateVectorStoreOut"]
-                                                                            : T extends ListVectorStores
-                                                                              ? OpenAPI.components["schemas"]["ListVectorStoresOut"]
-                                                                              : T extends DeleteVectorStore
-                                                                                ? OpenAPI.components["schemas"]["DeleteVectorStoreOut"]
-                                                                                : T extends QueryVectorStore
-                                                                                  ? OpenAPI.components["schemas"]["QueryVectorStoreOut"]
-                                                                                  : T extends FetchVectors
-                                                                                    ? OpenAPI.components["schemas"]["FetchVectorsOut"]
-                                                                                    : T extends UpdateVectors
-                                                                                      ? OpenAPI.components["schemas"]["UpdateVectorsOut"]
-                                                                                      : T extends DeleteVectors
-                                                                                        ? OpenAPI.components["schemas"]["DeleteVectorsOut"]
-                                                                                        : never;
+                  : T extends GenerateCode
+                    ? OpenAPI.components["schemas"]["GenerateCodeOut"]
+                    : T extends Mistral7BInstruct
+                      ? OpenAPI.components["schemas"]["Mistral7BInstructOut"]
+                      : T extends Mixtral8x7BInstruct
+                        ? OpenAPI.components["schemas"]["Mixtral8x7BInstructOut"]
+                        : T extends Llama3Instruct8B
+                          ? OpenAPI.components["schemas"]["Llama3Instruct8BOut"]
+                          : T extends Llama3Instruct70B
+                            ? OpenAPI.components["schemas"]["Llama3Instruct70BOut"]
+                            : T extends Firellava13B
+                              ? OpenAPI.components["schemas"]["Firellava13BOut"]
+                              : T extends GenerateImage
+                                ? OpenAPI.components["schemas"]["GenerateImageOut"]
+                                : T extends MultiGenerateImage
+                                  ? OpenAPI.components["schemas"]["MultiGenerateImageOut"]
+                                  : T extends InpaintImage
+                                    ? OpenAPI.components["schemas"]["InpaintImageOut"]
+                                    : T extends MultiInpaintImage
+                                      ? OpenAPI.components["schemas"]["MultiInpaintImageOut"]
+                                      : T extends StableDiffusionXLLightning
+                                        ? OpenAPI.components["schemas"]["StableDiffusionXLLightningOut"]
+                                        : T extends StableDiffusionXLInpaint
+                                          ? OpenAPI.components["schemas"]["StableDiffusionXLInpaintOut"]
+                                          : T extends StableDiffusionXLControlNet
+                                            ? OpenAPI.components["schemas"]["StableDiffusionXLControlNetOut"]
+                                            : T extends StableVideoDiffusion
+                                              ? OpenAPI.components["schemas"]["StableVideoDiffusionOut"]
+                                              : T extends InterpolateFrames
+                                                ? OpenAPI.components["schemas"]["InterpolateFramesOut"]
+                                                : T extends TranscribeSpeech
+                                                  ? OpenAPI.components["schemas"]["TranscribeSpeechOut"]
+                                                  : T extends GenerateSpeech
+                                                    ? OpenAPI.components["schemas"]["GenerateSpeechOut"]
+                                                    : T extends RemoveBackground
+                                                      ? OpenAPI.components["schemas"]["RemoveBackgroundOut"]
+                                                      : T extends EraseImage
+                                                        ? OpenAPI.components["schemas"]["EraseImageOut"]
+                                                        : T extends UpscaleImage
+                                                          ? OpenAPI.components["schemas"]["UpscaleImageOut"]
+                                                          : T extends SegmentUnderPoint
+                                                            ? OpenAPI.components["schemas"]["SegmentUnderPointOut"]
+                                                            : T extends SegmentAnything
+                                                              ? OpenAPI.components["schemas"]["SegmentAnythingOut"]
+                                                              : T extends SplitDocument
+                                                                ? OpenAPI.components["schemas"]["SplitDocumentOut"]
+                                                                : T extends EmbedText
+                                                                  ? OpenAPI.components["schemas"]["EmbedTextOut"]
+                                                                  : T extends MultiEmbedText
+                                                                    ? OpenAPI.components["schemas"]["MultiEmbedTextOut"]
+                                                                    : T extends EmbedImage
+                                                                      ? OpenAPI.components["schemas"]["EmbedImageOut"]
+                                                                      : T extends MultiEmbedImage
+                                                                        ? OpenAPI.components["schemas"]["MultiEmbedImageOut"]
+                                                                        : T extends JinaV2
+                                                                          ? OpenAPI.components["schemas"]["JinaV2Out"]
+                                                                          : T extends CLIP
+                                                                            ? OpenAPI.components["schemas"]["CLIPOut"]
+                                                                            : T extends FindOrCreateVectorStore
+                                                                              ? OpenAPI.components["schemas"]["FindOrCreateVectorStoreOut"]
+                                                                              : T extends ListVectorStores
+                                                                                ? OpenAPI.components["schemas"]["ListVectorStoresOut"]
+                                                                                : T extends DeleteVectorStore
+                                                                                  ? OpenAPI.components["schemas"]["DeleteVectorStoreOut"]
+                                                                                  : T extends QueryVectorStore
+                                                                                    ? OpenAPI.components["schemas"]["QueryVectorStoreOut"]
+                                                                                    : T extends FetchVectors
+                                                                                      ? OpenAPI.components["schemas"]["FetchVectorsOut"]
+                                                                                      : T extends UpdateVectors
+                                                                                        ? OpenAPI.components["schemas"]["UpdateVectorsOut"]
+                                                                                        : T extends DeleteVectors
+                                                                                          ? OpenAPI.components["schemas"]["DeleteVectorsOut"]
+                                                                                          : never;
