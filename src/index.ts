@@ -1,7 +1,7 @@
 /**
  * 𐃏 Substrate TypeScript SDK
  * @generated file
- * 20240617.20240814
+ * 20240617.20240815
  */
 
 export { SubstrateError } from "substrate/Error";
@@ -16,6 +16,7 @@ export {
   ComputeJSON,
   MultiComputeJSON,
   GenerateCode,
+  MultiGenerateCode,
   Mistral7BInstruct,
   Mixtral8x7BInstruct,
   Llama3Instruct8B,
