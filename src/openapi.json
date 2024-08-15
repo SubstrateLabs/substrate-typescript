@@ -297,6 +297,85 @@
         },
         "required": []
       },
+      "DeepseekIn": {
+        "title": "DeepseekIn",
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "Input prompt."
+          },
+          "language": {
+            "type": "string",
+            "description": "Language of the code.",
+            "enum": [
+              "c",
+              "c++",
+              "c#",
+              "css",
+              "go",
+              "html",
+              "java",
+              "javascript",
+              "json",
+              "python",
+              "r",
+              "ruby",
+              "shell",
+              "sql",
+              "tex",
+              "typescript"
+            ]
+          },
+          "num_choices": {
+            "type": "integer",
+            "description": "Number of choices to generate.",
+            "minimum": 1,
+            "maximum": 8,
+            "default": 1,
+            "x-loggable": true
+          },
+          "temperature": {
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "Higher values make the output more random, lower values make the output more deterministic.",
+            "x-loggable": true
+          },
+          "max_tokens": {
+            "type": "integer",
+            "description": "Maximum number of tokens to generate.",
+            "x-loggable": true
+          }
+        },
+        "required": ["prompt", "language"]
+      },
+      "DeepseekOut": {
+        "title": "DeepseekOut",
+        "type": "object",
+        "properties": {
+          "choices": {
+            "type": "array",
+            "description": "Code response choices.",
+            "items": {
+              "$ref": "#/components/schemas/GenerateCodeChoice"
+            }
+          }
+        },
+        "required": ["choices"]
+      },
+      "GenerateCodeChoice": {
+        "title": "GenerateCodeChoice",
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Code response."
+          }
+        },
+        "required": ["code"]
+      },
       "GenerateCodeIn": {
         "title": "GenerateCodeIn",
         "type": "object",
@@ -309,18 +388,22 @@
             "type": "string",
             "description": "Language of the code.",
             "enum": [
-              "python",
-              "java",
+              "c",
               "c++",
-              "javascript",
-              "typescript",
-              "php",
-              "html",
               "c#",
-              "sql",
+              "css",
+              "go",
+              "html",
+              "java",
+              "javascript",
+              "json",
+              "python",
+              "r",
               "ruby",
+              "shell",
+              "sql",
               "tex",
-              "shell"
+              "typescript"
             ]
           },
           "temperature": {
@@ -349,6 +432,74 @@
           }
         },
         "required": ["code"]
+      },
+      "MultiGenerateCodeIn": {
+        "title": "MultiGenerateCodeIn",
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string",
+            "description": "Input prompt."
+          },
+          "language": {
+            "type": "string",
+            "description": "Language of the code.",
+            "enum": [
+              "c",
+              "c++",
+              "c#",
+              "css",
+              "go",
+              "html",
+              "java",
+              "javascript",
+              "json",
+              "python",
+              "r",
+              "ruby",
+              "shell",
+              "sql",
+              "tex",
+              "typescript"
+            ]
+          },
+          "num_choices": {
+            "type": "integer",
+            "description": "Number of choices to generate.",
+            "minimum": 1,
+            "maximum": 8,
+            "default": 1,
+            "x-loggable": true
+          },
+          "temperature": {
+            "type": "number",
+            "format": "float",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "Higher values make the output more random, lower values make the output more deterministic.",
+            "x-loggable": true
+          },
+          "max_tokens": {
+            "type": "integer",
+            "description": "Maximum number of tokens to generate.",
+            "x-loggable": true
+          }
+        },
+        "required": ["prompt", "language"]
+      },
+      "MultiGenerateCodeOut": {
+        "title": "MultiGenerateCodeOut",
+        "type": "object",
+        "properties": {
+          "choices": {
+            "type": "array",
+            "description": "Code response choices.",
+            "items": {
+              "$ref": "#/components/schemas/GenerateCodeChoice"
+            }
+          }
+        },
+        "required": ["choices"]
       },
       "MultiComputeTextIn": {
         "title": "MultiComputeTextIn",
@@ -3411,7 +3562,7 @@
         "summary": "GenerateCode",
         "operationId": "GenerateCode",
         "tags": ["category:language"],
-        "description": "Generate code in the specified language.",
+        "description": "Generate code in the specified language based on the prompt.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -3435,6 +3586,49 @@
                 },
                 "example": {
                   "code": "def hello_world():\n    print('Hello, World!')\n"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/MultiGenerateCode": {
+      "post": {
+        "summary": "MultiGenerateCode",
+        "operationId": "MultiGenerateCode",
+        "tags": ["category:language"],
+        "description": "Generate multiple choices of code in the specified language based on the prompt.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MultiGenerateCodeIn"
+              },
+              "example": {
+                "prompt": "Write a function that prints 'Hello, World!'",
+                "language": "python"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MultiGenerateCodeOut"
+                },
+                "example": {
+                  "choices": [
+                    {
+                      "code": "def hello_world():\n    print('Hello, World!')\n"
+                    },
+                    {
+                      "code": "def hello_world():\n    print(\"Hello, World!\")\n"
+                    }
+                  ]
                 }
               }
             }

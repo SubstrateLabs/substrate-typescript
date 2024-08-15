@@ -215,9 +215,29 @@ export interface paths {
     put?: never;
     /**
      * GenerateCode
-     * @description Generate code in the specified language.
+     * @description Generate code in the specified language based on the prompt.
      */
     post: operations["GenerateCode"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/MultiGenerateCode": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * MultiGenerateCode
+     * @description Generate multiple choices of code in the specified language based on the prompt.
+     */
+    post: operations["MultiGenerateCode"];
     delete?: never;
     options?: never;
     head?: never;
@@ -1084,6 +1104,57 @@ export interface components {
       /** @description If the model output could not be parsed to JSON, this is the raw text output. */
       text?: string;
     };
+    /** DeepseekIn */
+    DeepseekIn: {
+      /** @description Input prompt. */
+      prompt: string;
+      /**
+       * @description Language of the code.
+       * @enum {string}
+       */
+      language:
+        | "c"
+        | "c++"
+        | "c#"
+        | "css"
+        | "go"
+        | "html"
+        | "java"
+        | "javascript"
+        | "json"
+        | "python"
+        | "r"
+        | "ruby"
+        | "shell"
+        | "sql"
+        | "tex"
+        | "typescript";
+      /**
+       * @description Number of choices to generate.
+       * @default 1
+       */
+      num_choices: number;
+      /**
+       * Format: float
+       * @description Higher values make the output more random, lower values make the output more deterministic.
+       */
+      temperature?: number;
+      /** @description Maximum number of tokens to generate. */
+      max_tokens?: number;
+    };
+    /** DeepseekOut */
+    DeepseekOut: {
+      /** @description Code response choices. */
+      choices: {
+        /** @description Code response. */
+        code: string;
+      }[];
+    };
+    /** GenerateCodeChoice */
+    GenerateCodeChoice: {
+      /** @description Code response. */
+      code: string;
+    };
     /** GenerateCodeIn */
     GenerateCodeIn: {
       /** @description Input prompt. */
@@ -1093,18 +1164,22 @@ export interface components {
        * @enum {string}
        */
       language:
-        | "python"
-        | "java"
+        | "c"
         | "c++"
-        | "javascript"
-        | "typescript"
-        | "php"
-        | "html"
         | "c#"
-        | "sql"
+        | "css"
+        | "go"
+        | "html"
+        | "java"
+        | "javascript"
+        | "json"
+        | "python"
+        | "r"
         | "ruby"
+        | "shell"
+        | "sql"
         | "tex"
-        | "shell";
+        | "typescript";
       /**
        * Format: float
        * @description Higher values make the output more random, lower values make the output more deterministic.
@@ -1117,6 +1192,52 @@ export interface components {
     GenerateCodeOut: {
       /** @description Code response. */
       code: string;
+    };
+    /** MultiGenerateCodeIn */
+    MultiGenerateCodeIn: {
+      /** @description Input prompt. */
+      prompt: string;
+      /**
+       * @description Language of the code.
+       * @enum {string}
+       */
+      language:
+        | "c"
+        | "c++"
+        | "c#"
+        | "css"
+        | "go"
+        | "html"
+        | "java"
+        | "javascript"
+        | "json"
+        | "python"
+        | "r"
+        | "ruby"
+        | "shell"
+        | "sql"
+        | "tex"
+        | "typescript";
+      /**
+       * @description Number of choices to generate.
+       * @default 1
+       */
+      num_choices: number;
+      /**
+       * Format: float
+       * @description Higher values make the output more random, lower values make the output more deterministic.
+       */
+      temperature?: number;
+      /** @description Maximum number of tokens to generate. */
+      max_tokens?: number;
+    };
+    /** MultiGenerateCodeOut */
+    MultiGenerateCodeOut: {
+      /** @description Code response choices. */
+      choices: {
+        /** @description Code response. */
+        code: string;
+      }[];
     };
     /** MultiComputeTextIn */
     MultiComputeTextIn: {
@@ -3371,18 +3492,22 @@ export interface operations {
            * @enum {string}
            */
           language:
-            | "python"
-            | "java"
+            | "c"
             | "c++"
-            | "javascript"
-            | "typescript"
-            | "php"
-            | "html"
             | "c#"
-            | "sql"
+            | "css"
+            | "go"
+            | "html"
+            | "java"
+            | "javascript"
+            | "json"
+            | "python"
+            | "r"
             | "ruby"
+            | "shell"
+            | "sql"
             | "tex"
-            | "shell";
+            | "typescript";
           /**
            * Format: float
            * @description Higher values make the output more random, lower values make the output more deterministic.
@@ -3403,6 +3528,76 @@ export interface operations {
           "application/json": {
             /** @description Code response. */
             code: string;
+          };
+        };
+      };
+    };
+  };
+  MultiGenerateCode: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: {
+      content: {
+        /** @example {
+         *       "prompt": "Write a function that prints 'Hello, World!'",
+         *       "language": "python"
+         *     } */
+        "application/json": {
+          /** @description Input prompt. */
+          prompt: string;
+          /**
+           * @description Language of the code.
+           * @enum {string}
+           */
+          language:
+            | "c"
+            | "c++"
+            | "c#"
+            | "css"
+            | "go"
+            | "html"
+            | "java"
+            | "javascript"
+            | "json"
+            | "python"
+            | "r"
+            | "ruby"
+            | "shell"
+            | "sql"
+            | "tex"
+            | "typescript";
+          /**
+           * @description Number of choices to generate.
+           * @default 1
+           */
+          num_choices?: number;
+          /**
+           * Format: float
+           * @description Higher values make the output more random, lower values make the output more deterministic.
+           */
+          temperature?: number;
+          /** @description Maximum number of tokens to generate. */
+          max_tokens?: number;
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": {
+            /** @description Code response choices. */
+            choices: {
+              /** @description Code response. */
+              code: string;
+            }[];
           };
         };
       };
