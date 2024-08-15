@@ -60,17 +60,6 @@ export class ComputeTextInImageUrisItem extends FutureString {}
 export class ComputeJSONInJsonSchema extends FutureAnyObject {}
 export class ComputeJSONOutJsonObject extends FutureAnyObject {}
 /** Code response choices. */
-export class DeepseekOutChoices extends FutureArray {
-  /** Returns `GenerateCodeChoice` at given index. */
-  override at(index: number) {
-    return new GenerateCodeChoice(this._directive.next(index));
-  }
-  /** Returns the result for `DeepseekOutChoices` once it's node has been run. */
-  protected override async _result(): Promise<GenerateCodeChoice[]> {
-    return super._result() as Promise<GenerateCodeChoice[]>;
-  }
-}
-/** Code response choices. */
 export class MultiGenerateCodeOutChoices extends FutureArray {
   /** Returns `GenerateCodeChoice` at given index. */
   override at(index: number) {
@@ -964,44 +953,6 @@ export class ComputeJSONOut extends FutureObject {
   /** returns the result for `ComputeJSONOut` once it's node has been run. */
   protected override async _result(): Promise<ComputeJSONOut> {
     return super._result() as Promise<ComputeJSONOut>;
-  }
-}
-/** DeepseekIn */
-export class DeepseekIn extends FutureObject {
-  /** Input prompt. */
-  get prompt() {
-    return new FutureString(this._directive.next("prompt"));
-  }
-  /** Language of the code. */
-  get language() {
-    return new FutureString(this._directive.next("language"));
-  }
-  /** (Optional) Number of choices to generate. */
-  get num_choices() {
-    return new FutureNumber(this._directive.next("num_choices"));
-  }
-  /** (Optional) Higher values make the output more random, lower values make the output more deterministic. */
-  get temperature() {
-    return new FutureNumber(this._directive.next("temperature"));
-  }
-  /** (Optional) Maximum number of tokens to generate. */
-  get max_tokens() {
-    return new FutureNumber(this._directive.next("max_tokens"));
-  }
-  /** returns the result for `DeepseekIn` once it's node has been run. */
-  protected override async _result(): Promise<DeepseekIn> {
-    return super._result() as Promise<DeepseekIn>;
-  }
-}
-/** DeepseekOut */
-export class DeepseekOut extends FutureObject {
-  /** Code response choices. */
-  get choices() {
-    return new DeepseekOutChoices(this._directive.next("choices"));
-  }
-  /** returns the result for `DeepseekOut` once it's node has been run. */
-  protected override async _result(): Promise<DeepseekOut> {
-    return super._result() as Promise<DeepseekOut>;
   }
 }
 /** GenerateCodeChoice */

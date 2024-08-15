@@ -1104,52 +1104,6 @@ export interface components {
       /** @description If the model output could not be parsed to JSON, this is the raw text output. */
       text?: string;
     };
-    /** DeepseekIn */
-    DeepseekIn: {
-      /** @description Input prompt. */
-      prompt: string;
-      /**
-       * @description Language of the code.
-       * @enum {string}
-       */
-      language:
-        | "c"
-        | "c++"
-        | "c#"
-        | "css"
-        | "go"
-        | "html"
-        | "java"
-        | "javascript"
-        | "json"
-        | "python"
-        | "r"
-        | "ruby"
-        | "shell"
-        | "sql"
-        | "tex"
-        | "typescript";
-      /**
-       * @description Number of choices to generate.
-       * @default 1
-       */
-      num_choices: number;
-      /**
-       * Format: float
-       * @description Higher values make the output more random, lower values make the output more deterministic.
-       */
-      temperature?: number;
-      /** @description Maximum number of tokens to generate. */
-      max_tokens?: number;
-    };
-    /** DeepseekOut */
-    DeepseekOut: {
-      /** @description Code response choices. */
-      choices: {
-        /** @description Code response. */
-        code: string;
-      }[];
-    };
     /** GenerateCodeChoice */
     GenerateCodeChoice: {
       /** @description Code response. */
