@@ -1,4 +1,8 @@
-import { FutureAnyObject, FutureVariable, FutureString } from "substrate/Future";
+import {
+  FutureAnyObject,
+  FutureVariable,
+  FutureString,
+} from "substrate/Future";
 import { StreamingResponse } from "substrate/SubstrateStreamingResponse";
 
 export const sb = {
