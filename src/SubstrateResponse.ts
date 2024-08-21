@@ -1,5 +1,6 @@
 import { AnyNode, NodeOutput } from "substrate/Nodes";
 import { NodeError } from "substrate/Error";
+import { PublishedModule } from "substrate/Module";
 
 /**
  * Response to a run request.
@@ -39,3 +40,19 @@ export class SubstrateResponse {
     return node.output() as NodeOutput<T>;
   }
 }
+
+// TODO: create an alternate SubstrateResponse for non-compose responses
+// For now using a type assertions and modifying the object.
+export type SubstratePublishModuleResponse = Omit<
+  SubstrateResponse,
+  "get" | "getError"
+> & { json: PublishedModule };
+export const asSubstratePublishedModuleResponse = (
+  res: SubstrateResponse,
+): SubstratePublishModuleResponse => {
+  // @ts-ignore
+  delete res.get;
+  // @ts-ignore
+  delete res.getError;
+  return res as SubstratePublishModuleResponse;
+};
