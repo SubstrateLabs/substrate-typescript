@@ -4,12 +4,11 @@ import { Substrate, Box, Module, sb } from "substrate";
 
 async function main() {
   const SUBSTRATE_API_KEY = process.env["SUBSTRATE_API_KEY"];
-
   const substrate = new Substrate({ apiKey: SUBSTRATE_API_KEY });
 
-  const x = sb.input({ type: "string", default: "hello" });
-  const y = sb.input({ type: "string" });
-  const z = sb.input({ type: "object", properties: {} });
+  const x = sb.var({ type: "string", default: "hello" });
+  const y = sb.var({ type: "string" });
+  const z = sb.var({ type: "object", properties: {} });
 
   const a = new Box({ value: { a: x, z: z, array: [x, x, x] } }, { id: "A" });
   const b = new Box(
@@ -18,19 +17,12 @@ async function main() {
   );
 
   // publish the module on substrate.run
-  // const publication = await substrate.module.publish({
-  //   name: "my reusable graph",
-  //   nodes: [a, b],
-  //   inputs: { x, y, z },
-  // });
-
-  // update the module on substrate.run
-  // const updated = await substrate.module.publish({
-  //   id: publication.id,
-  //   name: "my reusable graph (edited)",
-  //   nodes: [a, b],
-  //   inputs: { x, y, z },
-  // });
+  const publication = await substrate.module.publish({
+    name: "my reusable graph",
+    nodes: [a, b],
+    inputs: { x, y, z },
+  });
+  console.log("published:", publication.json);
 
   // using the module from JSON
   const mod = new Module({
@@ -51,12 +43,6 @@ async function main() {
   // using the module from publication/module id
   // const mod = new Module({
   //   module_id: publication.id,
-  //   inputs: { y: "yyy", z: { arr: ["123"] } },
-  // });
-
-  // using the module from publication/module uri
-  // const mod = new Module({
-  //   module_uri: publication.uri,
   //   inputs: { y: "yyy", z: { arr: ["123"] } },
   // });
 

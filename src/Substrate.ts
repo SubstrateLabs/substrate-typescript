@@ -333,12 +333,16 @@ export class Substrate {
 
     /**
      * Publishes a module on substrate.run
+     *
      */
     publish: async (
       publishable: PublishableModule,
-      // endpoint: string = "https://substrate.run/api/modules",
-      endpoint: string = "http://localhost:3000/api/modules",
+      endpoint: string = "https://www.substrate.run/api/modules",
     ) => {
+      /**
+       * NOTE: Because the Module publishing API lives in another app and subdomain, the `baseUrl` configuration
+       * will not be applied to this request like we do with `.run`
+       */
       const serialized = this.module.serialize({
         nodes: publishable.nodes,
         inputs: publishable.inputs,
