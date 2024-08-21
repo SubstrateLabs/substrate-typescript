@@ -26,10 +26,6 @@ type ModuleIn =
   | {
       module_id: ModuleId;
       inputs: Record<string, any>;
-    }
-  | {
-      module_uri: any;
-      inputs: Record<string, any>;
     };
 
 export class Module extends Node {
