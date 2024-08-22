@@ -1,5 +1,10 @@
 import { idGenerator } from "substrate/idGenerator";
-import { Future, FutureAnyObject, Trace } from "substrate/Future";
+import {
+  Future,
+  FutureAnyObject,
+  Trace,
+  replaceWithPlaceholders,
+} from "substrate/Future";
 import { SubstrateResponse } from "substrate/SubstrateResponse";
 import { NodeError, SubstrateError } from "substrate/Error";
 import { AnyNode } from "substrate/Nodes";
@@ -102,30 +107,10 @@ export abstract class Node {
   }
 
   toJSON() {
-    const withPlaceholders = (obj: any): any => {
-      if (Array.isArray(obj)) {
-        return obj.map((item) => withPlaceholders(item));
-      }
-
-      if (obj instanceof Future) {
-        // @ts-expect-error (accessing protected method toPlaceholder)
-        return obj.toPlaceholder();
-      }
-
-      if (obj && typeof obj === "object") {
-        return Object.keys(obj).reduce((acc: any, k: any) => {
-          acc[k] = withPlaceholders(obj[k]);
-          return acc;
-        }, {});
-      }
-
-      return obj;
-    };
-
     return {
       id: this.id,
       node: this.node,
-      args: withPlaceholders(this.args),
+      args: replaceWithPlaceholders(this.args),
       _should_output_globally: !this.hide,
       ...(this.cache_age && { _cache_age: this.cache_age }),
       ...(this.cache_keys && { _cache_keys: this.cache_keys }),

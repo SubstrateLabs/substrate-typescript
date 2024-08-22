@@ -122,7 +122,7 @@ export class JQ extends Directive {
     rawValue: (val: JQCompatible) => ({ future_id: null, val }),
   };
 
-  override next(...items: TraceProp[]) {
+  override next(..._items: TraceProp[]) {
     return new JQ(this.query, this.target);
   }
 
@@ -185,6 +185,84 @@ export class StringConcat extends Directive {
         }
         return StringConcat.Concatable.string(item);
       }),
+    };
+  }
+}
+
+type JinjaTemplate =
+  | {
+      future_id: string;
+      val: null;
+    }
+  | { val: string; future_id: null };
+
+export type JinjaVariables = {
+  [key: string]:
+    | string
+    | number
+    | boolean
+    | (string | number | boolean)[]
+    | JinjaVariables
+    | Future<any>;
+};
+
+export class Jinja extends Directive {
+  template: string | Future<string>;
+  variables: JinjaVariables;
+  items: Future<any>[];
+
+  static templateJSON(template: string | Future<string>): JinjaTemplate {
+    return template instanceof Future
+      ? // @ts-ignore
+        { val: null, future_id: template._id }
+      : { val: template, future_id: null };
+  }
+
+  constructor(template: string | Future<string>, variables: JinjaVariables) {
+    super();
+    this.template = template;
+    this.variables = variables;
+
+    // use items to contain all of the futures from the inputs
+    const futures = new Set<Future<any>>();
+    const collectFutures = (obj: any) => {
+      if (Array.isArray(obj)) {
+        for (let item of obj) {
+          collectFutures(item);
+        }
+      }
+
+      if (obj instanceof Future) {
+        futures.add(obj);
+        return;
+      }
+
+      if (obj && typeof obj === "object") {
+        for (let key of Object.keys(obj)) {
+          collectFutures(obj[key]);
+        }
+      }
+    };
+    collectFutures([template, variables]);
+    this.items = Array.from(futures);
+  }
+
+  override next(..._items: any[]) {
+    return new Jinja(this.template, this.variables);
+  }
+
+  override async result(): Promise<string> {
+    return this.template instanceof Future
+      ? // @ts-ignore
+        await this.template._result()
+      : this.template;
+  }
+
+  override toJSON(): any {
+    return {
+      type: "jinja",
+      template: Jinja.templateJSON(this.template),
+      variables: replaceWithPlaceholders(this.variables),
     };
   }
 }
@@ -263,6 +341,13 @@ export class FutureString extends Future<string> {
     return FutureString.concat(...[this, ...items]);
   }
 
+  static jinja(
+    template: string | FutureString,
+    variables: JinjaVariables,
+  ): FutureString {
+    return new FutureString(new Jinja(template, variables));
+  }
+
   protected override async _result(): Promise<string> {
     return super._result();
   }
@@ -315,3 +400,27 @@ export class FutureAnyObject extends Future<Object> {
     return super._result();
   }
 }
+
+/**
+ * @internal
+ * Given some value, recursively replace `Future` instances with SB Placeholder
+ */
+export const replaceWithPlaceholders = (val: any): any => {
+  if (Array.isArray(val)) {
+    return val.map((item) => replaceWithPlaceholders(item));
+  }
+
+  if (val instanceof Future) {
+    // @ts-expect-error (accessing protected method toPlaceholder)
+    return val.toPlaceholder();
+  }
+
+  if (val && typeof val === "object") {
+    return Object.keys(val).reduce((acc: any, k: any) => {
+      acc[k] = replaceWithPlaceholders(val[k]);
+      return acc;
+    }, {});
+  }
+
+  return val;
+};

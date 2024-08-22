@@ -205,5 +205,31 @@ describe("Future", () => {
       // @ts-expect-error
       expect(i2._result()).resolves.toEqual("hello12");
     });
+
+    describe(".jinja", () => {
+      test(".toJSON", () => {
+        const x = FutureString.concat("1", "2", "3");
+        const f = FutureString.jinja("template: x={{x}} y={{y}}", {
+          x,
+          y: "abc",
+        });
+
+        const json = f.toJSON();
+
+        expect(json).toEqual({
+          // @ts-ignore
+          id: f._id,
+          directive: {
+            type: "jinja",
+            template: { future_id: null, val: "template: x={{x}} y={{y}}" },
+            variables: {
+              // @ts-ignore (_id)
+              x: { __$$SB_GRAPH_OP_ID$$__: x._id },
+              y: "abc",
+            },
+          },
+        });
+      });
+    });
   });
 });
