@@ -2067,13 +2067,13 @@
           "language": {
             "type": "string",
             "default": "en",
-            "description": "Language of input audio in [ISO-639-1](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes) format.",
+            "description": "Language of input audio in [ISO-639-1](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes) format. Use `auto` to automatically detect the language.",
             "x-loggable": true
           },
           "segment": {
             "type": "boolean",
             "default": false,
-            "description": "Segment the text into sentences with approximate timestamps.",
+            "description": "(Deprecated) Segment the text into sentences with approximate timestamps.",
             "x-loggable": true
           },
           "align": {
@@ -2184,6 +2184,10 @@
             "items": {
               "$ref": "#/components/schemas/TranscribedSegment"
             }
+          },
+          "language": {
+            "type": "string",
+            "description": "Language code of transcribed text."
           },
           "chapters": {
             "type": "array",

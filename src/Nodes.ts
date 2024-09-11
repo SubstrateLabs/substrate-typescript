@@ -1,7 +1,7 @@
 /**
  * 𐃏 Substrate
  * @generated file
- * 20240617.20240815
+ * 20240617.20240911
  */
 
 import * as OpenAPI from "substrate/OpenAPI";
@@ -2301,11 +2301,11 @@ export class TranscribeSpeechIn extends FutureObject {
   get prompt() {
     return new FutureString(this._directive.next("prompt"));
   }
-  /** (Optional) Language of input audio in [ISO-639-1](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes) format. */
+  /** (Optional) Language of input audio in [ISO-639-1](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes) format. Use `auto` to automatically detect the language. */
   get language() {
     return new FutureString(this._directive.next("language"));
   }
-  /** (Optional) Segment the text into sentences with approximate timestamps. */
+  /** (Optional) (Deprecated) Segment the text into sentences with approximate timestamps. */
   get segment() {
     return new FutureBoolean(this._directive.next("segment"));
   }
@@ -2402,6 +2402,10 @@ export class TranscribeSpeechOut extends FutureObject {
   /** (Optional) Transcribed segments, if `segment` is enabled. */
   get segments() {
     return new TranscribeSpeechOutSegments(this._directive.next("segments"));
+  }
+  /** (Optional) Language code of transcribed text. */
+  get language() {
+    return new FutureString(this._directive.next("language"));
   }
 
   /** (Optional) Chapter markers, if `suggest_chapters` is enabled. */
@@ -4866,7 +4870,7 @@ export class TranscribeSpeech extends Node {
   /**
    * Input arguments: `audio_uri`, `prompt` (optional), `language` (optional), `segment` (optional), `align` (optional), `diarize` (optional), `suggest_chapters` (optional)
    *
-   * Output fields: `text`, `segments` (optional), `chapters` (optional)
+   * Output fields: `text`, `segments` (optional), `language` (optional), `chapters` (optional)
    *
    * https://www.substrate.run/nodes#TranscribeSpeech
    */
@@ -4881,7 +4885,7 @@ export class TranscribeSpeech extends Node {
   /**
    * Retrieve this node's output from a response.
    *
-   * Output fields: `text`, `segments` (optional), `chapters` (optional)
+   * Output fields: `text`, `segments` (optional), `language` (optional), `chapters` (optional)
    *
    * https://www.substrate.run/nodes#TranscribeSpeech
    */
@@ -4898,7 +4902,7 @@ export class TranscribeSpeech extends Node {
   /**
    * Future reference to this node's output.
    *
-   * Output fields: `text`, `segments` (optional), `chapters` (optional)
+   * Output fields: `text`, `segments` (optional), `language` (optional), `chapters` (optional)
    *
    * https://www.substrate.run/nodes#TranscribeSpeech
    */
