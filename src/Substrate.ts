@@ -41,6 +41,8 @@ type Configuration = {
 export type Secrets = {
   openai?: string;
   anthropic?: string;
+  together?: string;
+  jina?: string;
 };
 
 /**
@@ -81,6 +83,13 @@ export class Substrate {
       if (secrets.anthropic) {
         this.additionalHeaders["x-substrate-anthropic-api-key"] =
           secrets.anthropic;
+      }
+      if (secrets.together) {
+        this.additionalHeaders["x-substrate-together-api-key"] =
+          secrets.together;
+      }
+      if (secrets.jina) {
+        this.additionalHeaders["x-substrate-jina-api-key"] = secrets.jina;
       }
     }
   }
