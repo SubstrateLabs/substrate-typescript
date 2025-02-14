@@ -46,12 +46,12 @@ abstract class Directive {
 
 export class Trace extends Directive {
   items: TraceProp[];
-  originNode: Node;
+  target: Node | Future<any>;
 
-  constructor(items: TraceProp[], originNode: Node) {
+  constructor(items: TraceProp[], target: Node | Future<any>) {
     super();
     this.items = items;
-    this.originNode = originNode;
+    this.target = target;
   }
 
   static Operation = {
@@ -68,12 +68,15 @@ export class Trace extends Directive {
   };
 
   override next(...items: TraceProp[]) {
-    return new Trace([...this.items, ...items], this.originNode);
+    return new Trace([...this.items, ...items], this.target);
   }
 
   override async result(): Promise<any> {
-    // @ts-expect-error (protected result())
-    let result: any = await this.originNode.result();
+    let result: any = await (this.target instanceof Future
+      ? // @ts-expect-error (protected _result())
+        this.target._result()
+      : // @ts-expect-error (protected result())
+        this.target.result());
 
     for (let item of this.items) {
       if (item instanceof Future) {
@@ -85,10 +88,19 @@ export class Trace extends Directive {
     return result;
   }
 
+  override referencedFutures() {
+    if (this.target instanceof Future) {
+      return [...super.referencedFutures(), this.target];
+    }
+    return super.referencedFutures();
+  }
+
   override toJSON() {
     return {
       type: "trace",
-      origin_node_id: this.originNode.id,
+      origin_node_id: this.target instanceof Node ? this.target.id : null,
+      // @ts-ignore (protected _id)
+      origin_future_id: this.target instanceof Node ? null : this.target._id,
       op_stack: this.items.map((item) => {
         if (item instanceof FutureString) {
           // @ts-expect-error (accessing protected prop: _id)
@@ -122,7 +134,7 @@ export class JQ extends Directive {
     rawValue: (val: JQCompatible) => ({ future_id: null, val }),
   };
 
-  override next(...items: TraceProp[]) {
+  override next(..._items: TraceProp[]) {
     return new JQ(this.query, this.target);
   }
 
@@ -300,11 +312,9 @@ export abstract class FutureObject extends Future<Object> {
 
 export class FutureAnyObject extends Future<Object> {
   get(path: string | FutureString) {
-    const d =
-      typeof path === "string"
-        ? this._directive.next(...parsePath(path))
-        : this._directive.next(path);
-    return new FutureAnyObject(d);
+    const traceProps = typeof path === "string" ? parsePath(path) : [path];
+    const trace = new Trace(traceProps, this);
+    return new FutureAnyObject(trace);
   }
 
   at(index: number | FutureNumber) {

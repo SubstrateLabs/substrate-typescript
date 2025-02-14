@@ -182,13 +182,21 @@ export abstract class Node {
       // @ts-ignore protected access
       let directive = future._directive;
       if (directive instanceof Trace) {
-        // @ts-ignore protected access
-        const references = directive.originNode.references();
-        for (let node of references.nodes) {
-          nodes.add(node);
-        }
-        for (let future of references.futures) {
-          futures.add(future);
+        if (directive.target instanceof Node) {
+          // @ts-ignore protected access
+          const references = directive.target.references();
+          for (let node of references.nodes) {
+            nodes.add(node);
+          }
+          for (let future of references.futures) {
+            futures.add(future);
+          }
+        } else if (directive.target instanceof Future) {
+          // @ts-ignore protected access
+          const referencedFutures = directive.target.referencedFutures();
+          for (let future of referencedFutures) {
+            futures.add(future);
+          }
         }
       }
     }
